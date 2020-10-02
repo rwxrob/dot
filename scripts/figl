@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# Set the figlet default font, font directory, and centering as well as
+# defaults to passing it to lolcat for coloring.
+
+figl () {
+  #font=${FIGL_FONT:-ansi-shadow}
+  font=${FIGL_FONT:-future}
+  figlet -d "$HOME/.fonts/figlet" -f "$font" -c -t $* | head -6 | lolcat
+}
+
+figl $*

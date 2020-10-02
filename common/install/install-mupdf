@@ -1,0 +1,16 @@
+#!/bin/sh
+
+## FIXME this 1.14 is way old and has bugs with -I
+#sudo add-apt-repository -y ppa:ubuntuhandbook1/apps
+#sudo apt update
+#sudo apt install mupdf mupdf-tools
+
+echo 'If you want the inverted colors:'
+echo '  First get the dependencies:  sudo apt install xorg-dev freeglut3-dev'
+echo '  Clone it: git clone --recursive git://git.ghostscript.com/mupdf'
+echo '  cd into mupdf repo'
+echo '  Update third-party: git submodule update --init'
+echo '  Build it by hand: `make prefix=/usr/local install`'
+echo 'Otherwise just `sudo apt install mupdf` to get ancient version'
+echo 
+echo 'Keep in mind that you need to alias mupdf-gl or mupdf-xl to mupdf'

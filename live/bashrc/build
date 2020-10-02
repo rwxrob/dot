@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+cat \
+  ../../common/shell/public-domain.sh   \
+  ../../common/shell/detection.sh    \
+  ../../common/shell/git.sh    \
+  ../../common/shell/path.sh    \
+  ../../common/shell/settings.bash    \
+  ../../common/shell/cmd-prompt.bash   \
+  ../../common/shell/vim.bash    \
+  ../../common/shell/python.bash    \
+  ../../common/shell/subprocs-suck.bash    \
+  ../../common/shell/dircolors.sh    \
+  ../../common/shell/trap.sh    \
+  ../../common/shell/completion.bash    \
+  ../../common/shell/colors.bash    \
+  ./golang.bash    \
+  ../../common/shell/source-local.sh    \
+  ../../common/shell/alias-func.bash    \
+  alias-func.bash    \
+  ../../common/shell/source-local.sh    \
+>| bashrc  
+
+

@@ -1,0 +1,18 @@
+#!/bin/bash
+
+curlgl () {
+  declare uri="$1"
+  shift
+  declare q=$(argsorin "$@")
+  q=${q//\"/\\\"} # escape all the double quotes
+  q=${q//$'\n'/ } # force single line
+  q=${q//$'\t'/ } # remove random tabs
+  declare query='{"query": "'$q'"}'
+  curl -s -X POST \
+    -H "Authorization: Bearer $(</tmp/gitstoken)" \
+    -H 'Content-Type: application/json' \
+    -d "$query" "$uri" && echo
+  return $?
+}
+
+curlgl "$@"

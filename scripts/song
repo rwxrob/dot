@@ -1,0 +1,33 @@
+#!/bin/bash
+
+song () {
+  buf=$(
+    dbus-send \
+      --print-reply \
+      --dest=org.mpris.MediaPlayer2.spotify \
+      /org/mpris/MediaPlayer2 \
+      org.freedesktop.DBus.Properties.Get \
+      string:'org.mpris.MediaPlayer2.Player' \
+      string:'Metadata'
+  )
+  buf=${buf##*\"xesam:title\"}
+  buf=${buf#*\"}
+  echo "${buf%%\"*}"
+}
+
+main () {
+  declare last=
+  while true; do 
+    new=$(song)
+    if [[ "$new" != "$last" ]]; then
+      echo $clear
+      last=$new
+      echo -n "Now Playing: "
+      echo "$last" | lolcat
+      wee "Now Playing: $last"
+    fi
+    sleep 1
+  done
+}
+
+main "$@"

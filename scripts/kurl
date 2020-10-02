@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# let's ping to make sure the VPN is up and the IP/host is good
+
+url="$1"
+
+if [[ -z "$url" ]];then
+  echo 'usage: kurl <url>'
+fi
+
+if [[ ! "$url" =~ ^http ]];then
+  url=http://$url
+fi
+
+useragent='Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:74.0) Gecko/20100101 Firefox/74.0'
+filename=${url//\/\//}
+filename=${filename//\//-}
+outfile="curl-$filename.out.$(date "+%s")"
+curl -sv -A "$useragent" "$url" 2>&1 | tee "$outfile" | less -R

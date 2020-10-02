@@ -1,0 +1,2 @@
+#!/bin/sh
+lynx "searx.pofilo.fr/?q=$*"

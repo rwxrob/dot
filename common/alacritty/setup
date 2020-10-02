@@ -1,0 +1,10 @@
+#!/bin/sh
+
+mkdir -p $HOME/.config/alacritty
+fpath="$HOME/.config/alacritty/alacritty.yml"
+if [ -e "$fpath" ]; then
+  preserved="$fpath.$$"
+  mv "$fpath" "$preserved"
+  echo "Preserved $fpath as $preserved"
+fi
+cp alacritty.yml "$fpath"

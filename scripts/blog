@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# Looks for $BLOGDIR and then infers the proper README.md file based on
+# the current year and week.
+
+if [ -z "$BLOGDIR" ]; then
+  echo "BLOGDIR not set"
+  exit 1
+fi
+
+# TODO infer the year and week directory
+
+

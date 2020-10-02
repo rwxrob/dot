@@ -1,0 +1,5 @@
+#!/bin/bash
+red=$[RANDOM%255]
+green=$[RANDOM%255]
+blue=$[RANDOM%255]
+echo -en "\033[38;2;$red;$green;${blue}m"

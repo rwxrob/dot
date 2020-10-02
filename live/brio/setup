@@ -1,0 +1,29 @@
+#!/bin/bash
+
+readonly RED=$'\033[38;2;255;0;0m'
+readonly GREEN=$'\033[38;2;0;255;0m'
+readonly CYAN=$'\033[38;2;0;255;255m'
+readonly X=$'\033[0m'
+
+declare -a values=(
+  brightness=110
+  contrast=170
+  saturation=100
+  white_balance_temperature_auto=0
+  gain=0
+  power_line_frequency=0
+  white_balance_temperature=5000
+  sharpness=3
+  backlight_compensation=0
+  exposure_auto=1
+  exposure_absolute=300
+)
+
+for ctrl in  ${values[@]}; do
+  echo "${GREEN}Attempting to set ${CYAN}${ctrl}${X}"
+  declare out=$(v4l2-ctl "--set-ctrl=${ctrl}" 2>&1)
+  if [[ -n "${out}" ]]; then
+    echo "${RED}FAILED: ${out}${X}" 
+    exit 1
+  fi
+done

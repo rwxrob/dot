@@ -1,0 +1,565 @@
+#!/bin/bash
+
+set -o errexit
+
+# Make sure you get a "User Access Token" (and not an *App* token)
+# because user access is required for channel and user updates.
+#
+# Make sure to set the following environment variables:
+#
+#  TWITCH_LOGIN
+#  TWITCH_ID     (from `twitch userid`)
+#  TWITCH_CHID   (from `twitch channel`)
+
+CLIENTID=$(auth client id twitch.tv)
+TOKEN=$(auth token twitch.tv)
+CLIENTSEC=$(auth client secret twitch.tv)
+GAMEID=509670
+GAME='Science%20%26%20Technology'
+
+####################### Validate base dependencies. ######################
+
+if [ -z "$TWITCH_LOGIN" ]; then
+    echo '$TWITCH_LOGIN environment variable not set.'
+    exit 1
+fi
+
+################################ Helpers ###############################
+
+declare gold=$'\033[38;2;184;138;0m'
+declare red=$'\033[38;2;255;0;0m'
+declare grey=$'\033[38;2;100;100;100m'
+declare cyan=$'\033[38;2;0;255;255m'
+declare green=$'\033[38;2;0;255;0m'
+declare twitch=$'\033[38;2;100;65;165m'
+declare reset=$'\033[0m'
+declare CLEAR=$'\033[H\033[2J'
+
+if [ ! -t 1 ];then
+    gold=
+    red=
+    grey=
+    cyan=
+    green=
+    twitch=
+    reset=
+fi
+
+_usage () {
+    tag=$1; shift
+    echo $grey"usage:$twitch twitch $gold$tag$cyan$*$reset"
+    exit 1;
+}
+
+_fail () { echo "$red$1$reset"; exit 1; }
+_have () { which "$1" &>/dev/null; }
+_proc () { kill -0 "$1" 2>/dev/null; }
+
+################################ Functions ###############################
+
+wee () {
+    declare buf="$*"
+    if [ ! -p "$WEECHAT_FIFO" ]; then
+        echo "WeeChat not running?" >&2
+        return 1
+    fi
+    if [ -n "$buf" ]; then
+        echo "*$buf"  > $WEECHAT_FIFO
+        return 0
+    fi
+    while IFS= read -r line; do
+        echo "*$line" > $WEECHAT_FIFO
+    done
+}
+
+slash () {
+    declare cmd="$1"
+    shift 2>/dev/null
+    wee "/msg $TWITCH_LOGIN /$cmd $*"
+}
+
+log () {
+    [[ -z "$1" ]] && _usage 'log <tag> [...]'
+    [[ -z "$TWITCH_LOG" ]] && _fail 'TWITCH_LOG not set.'
+    declare tag=${1^^}
+    shift
+    echo $(date +%FT%T%z) $tag $* | tee "$TWITCH_LOG" 
+}
+
+############################ Twitch Commands ############################
+
+# Command that don't work or don't make sense (so don't ask):
+#
+#   /poll
+#   /user 
+
+mod () {
+    if [ -z "$1" ]; then
+        echo 'usage: mod <twitchid>'
+        return 1
+    fi
+    slash mod $1
+}
+
+unmod () {
+    if [ -z "$1" ]; then
+        echo 'usage: unmod <twitchid>'
+        return 1
+    fi
+    slash unmod "$1"
+}
+
+raid () {
+    if [ -z "$1" ]; then
+        echo 'usage: raid <twitchid>'
+        return 1
+    fi
+    slash raid $1
+}
+
+unraid() {
+    slash unraid
+}
+
+slow() {
+    if [ -z "$1" ]; then
+        echo 'usage: slowmod <seconds>'
+        return 1
+    fi
+    slash slow "$1"
+}
+
+slowoff() {
+    slash slowoff
+}
+
+vip () {
+    if [ -z "$1" ]; then
+        echo 'usage: vip <twitchid>'
+        return 1
+    fi
+    slash vip $1
+}
+
+ban () {
+    if [ -z "$1" ]; then
+        echo 'usage: ban <twitchid>'
+        return 1
+    fi
+    slash ban $1
+}
+
+unban () {
+    if [ -z "$1" ]; then
+        echo 'usage: unban <twitchid>'
+        return 1
+      fi
+    slash unban $1
+}
+
+timeout () {
+    if [ -z "$1" ]; then
+        echo 'usage: timeout <twitchid>'
+        return 1
+    fi
+    slash timeout $1
+}
+
+untimeout () {
+    if [ -z "$1" ]; then
+        echo 'usage: untimeout <twitchid>'
+        return 1
+    fi
+    slash untimeout $1
+}
+
+unvip () {
+    if [ -z "$1" ]; then
+        echo 'usage: unvip <twitchid>'
+        return 1
+    fi
+    slash unvip $1
+}
+
+host () {
+    if [ -z "$1" ]; then
+        echo 'usage: host <twitchid>'
+        return 1
+    fi
+    slash host $1
+}
+
+unhost () {
+    slash unhost
+}
+
+usage () {
+    echo "Usage: TODO"
+    # TODO
+}
+
+############################# Other Commands ############################
+
+tmux () {
+    exec tmux -L twitch -f ~/.tmux-twitch.conf new -s twitch -n parent \
+        weechat             \;\
+        split-window        \;\
+        send "s /connect twitch" Enter \
+             "s /buffer clear" Enter \
+             "focus" Enter \;\
+        send "unset TMUX; clear; tmux" Enter
+}
+
+chat () {
+    twitch chaton
+    wee /set weechat.bar.input.hidden on
+    wee /set weechat.bar.status.hidden off
+    wee /set weechat.bar.nicklist.hidden on
+    wee /set weechat.look.buffer_time_format \"%H:%M:%S\"
+    clear
+    exec tmux -L twitch resize-pane -y 0
+}
+
+chatoff () {
+    clear
+    touch /tmp/twitch-chat-off
+    exec tmux -L twitch set -g status-left "" \;\
+        break-pane -d -n hidden -s {top}
+}
+
+chaton () {
+    clear
+    [ ! -e /tmp/twitch-chat-off ] && return
+    rm /tmp/twitch-chat-off
+    exec tmux -L twitch set -g status-left ' #(head -1 ~/.status) ' \;\
+        join-pane -b -s :2 -t 1 \;\
+        selectp -t {bottom}
+}
+
+chatnicks () {
+    twitch chaton
+    wee /set weechat.bar.input.hidden on
+    wee /set weechat.bar.status.hidden off
+    wee /set weechat.bar.nicklist.hidden off
+    wee /set weechat.look.buffer_time_format \"%H:%M:%S\"
+    clear
+    exec tmux -L twitch resize-pane -y 0
+}
+
+flowstate () {
+    twitch chaton
+    wee /set weechat.bar.input.hidden on
+    wee /set weechat.bar.status.hidden on
+    wee /set weechat.bar.nicklist.hidden on
+    wee /set weechat.look.buffer_time_format \"\"
+    clear
+    exec tmux -L twitch resize-pane -y 40
+}
+
+focus () {
+    twitch chaton
+    wee /set weechat.bar.input.hidden on
+    wee /set weechat.bar.status.hidden on
+    wee /set weechat.bar.nicklist.hidden on
+    wee /set weechat.look.buffer_time_format \"\"
+    clear
+    exec tmux -L twitch resize-pane -y 28
+}
+
+casual () {
+    twitch chaton
+    wee /set weechat.bar.input.hidden on
+    wee /set weechat.bar.status.hidden on
+    wee /set weechat.bar.nicklist.hidden on
+    wee /set weechat.look.buffer_time_format \"\"
+    clear
+    exec tmux -L twitch resize-pane -y 20
+}
+
+casualstat () {
+    twitch chaton
+    wee /set weechat.bar.status.hidden off
+    wee /set weechat.bar.nicklist.hidden off
+    wee /set weechat.bar.input.hidden off
+    wee /set weechat.bar.status.hidden off
+    wee /set weechat.look.buffer_time_format \"%H:%M:%S\"
+    clear
+    exec tmux -L twitch resize-pane -y 20
+}
+
+urls () {
+    while read line; do
+        declare line=${line:20}
+        declare who=${line%%$'\t'*}
+        declare url=${line##*http}
+        url=${url%% *}
+        printf "%40s  " $magenta$who
+        echo $(crnd)http$url
+    done <<< $(grep "https://" "$WEECHAT_HOME/logs/irc.twitch.#$TWITCH_LOGIN.weechatlog" | tail -10)
+}
+
+ats () {
+    echo ${CLEAR}
+    while read line; do
+        declare line=${line:20}
+        declare who=${line%%$'\t'*}
+        printf "%40s  " $magenta$who
+        echo $(crnd)$line
+    done <<< $(grep "@rwxrob" "$WEECHAT_HOME/logs/irc.twitch.#$TWITCH_LOGIN.weechatlog" | tail -10)
+}
+
+top () {
+<<off
+      curl -s \
+           -H "Client-ID: $CLIENTID" \
+           -H "Authorization: Bearer $TOKEN" \
+           -X GET "https://api.twitch.tv/helix/streams?game_id=$GAMEID" 
+off
+    while read -r line; do
+      if [[ $line =~ Ducks|Dutch|Chicken|eagle ]]; then
+          continue
+      fi
+      declare who=${line##* }
+      declare count=${line%% *}
+      printf "%40s  " $magenta$count$reset
+      echo $(crnd)$who 
+    done <<< $(
+      curl -s \
+           -H "Client-ID: $CLIENTID" \
+           -H "Authorization: Bearer $TOKEN" \
+           -X GET "https://api.twitch.tv/helix/streams?game_id=$GAMEID" | \
+      jq -r '.data[] | "\(.viewer_count) https://twitch.tv/\(.user_name)"'
+    )
+}
+
+channel () {
+    curl -s \
+        -H "Client-ID: $CLIENTID" \
+        -H "Authorization: OAuth $TOKEN" \
+        -H 'Accept: application/vnd.twitchtv.v5+json' \
+        -X GET "https://api.twitch.tv/kraken/channel" |\
+    jq .
+}
+
+status () {
+    declare new="$*"
+    if [[ "$new" == default ]]; then
+        new=$TWITCH_STATUS_DEFAULT
+    fi
+    declare old="$(head -1 $TWITCH_STATUS_FILE)"
+    if [[ -z "$new" || "$new" == "$old" ]]; then
+        echo $old
+        return 0
+    fi
+    declare json='{"channel":{"status":"'"$new"'"}}'
+## curl -s \
+## -H "Client-ID: $CLIENTID" \
+## -H "Authorization: OAuth $TOKEN" \
+## -H 'Accept: application/vnd.twitchtv.v5+json' \
+## -H 'Content-Type: application/json' \
+## -d "$json" \
+## -X PUT "https://api.twitch.tv/kraken/channels/$TWITCH_ID" > /dev/null
+ echo "$new" >| $TWITCH_STATUS_FILE
+##    mark "$new"
+}
+
+restart () {
+    streaming && stop
+    sleep 5
+    start
+}
+
+statusdefault () {
+    status "$TWITCH_STATUS_DEFAULT"
+}
+
+renewtoken () {
+    if [ ! -d "$AUTHDIR/token" ]; then
+        telln "`$AUTHDIR/token` not found."
+        return 1
+    fi
+    declare grant='
+        analytics:read:extensions
+        analytics:read:games
+        bits:read
+        channel_read
+        channel_editor
+        channel:read:subscriptions
+        clips:edit
+        user:edit
+        user:edit:broadcast
+        user:read:broadcast
+        user:read:email
+        moderation:read
+    '
+    grant=${grant// /}
+    grant=${grant//$'\n'/+}
+    grant=${grant#+}
+    grant=${grant%+}
+    declare local=$(mktemp)
+    curl -s \
+        -H "Accept: application/json" \
+        -X GET "https://id.twitch.tv/oauth2/authorize?client_id=$CLIENTID&response_type=token&redirect_uri=https://twitch.rwx.gg&force_verify=false&scope=$grant" > $local.html
+    xdg-open $local.html
+    # FIXME needs to read the html and put into a localhost web page to
+    # click on for authentication
+    # 1. Do the above to create the link to open
+    # 2. Wrap the link in some html and put into file in /tmp
+    # 3. Open the file with a graphic web browser
+    # 4. <wait for the user to click and complete authentication>
+    # 5. Mine the access token from the response and display
+    # 6. Instruct to add to $AUTHDIR/token/twitch.tv
+}
+
+checktoken () {
+    curl -s -H "Authorization: OAuth $TOKEN" https://id.twitch.tv/oauth2/validate | jq .
+}
+
+subs () {
+    declare cursor="$1"
+    declare after=
+    if [ -n "$cursor" ];then
+        after="&after=$cursor"
+    fi
+    declare tmpfile=$(mktemp)
+    curl -s \
+      -H "Client-ID: $CLIENTID" \
+      -H "Authorization: Bearer $TOKEN" \
+      -X GET "https://api.twitch.tv/helix/subscriptions?broadcaster_id=$TWITCH_ID"$after >| $tmpfile
+    declare people=$(jq -jr '.data[] | "\(.user_name) "' $tmpfile)
+    for person in $people; do
+        echo -n "$(crnd)$person  " 
+    done
+    if [ -z "$people" ]; then
+        echo
+        return
+    fi
+    cursor=$(jq -r '.pagination.cursor' $tmpfile)
+    if [ -n "$cursor" ];then
+        subs "$cursor"
+    fi
+}
+
+mods () {
+    curl -s \
+      -H "Client-ID: $CLIENTID" \
+      -H "Authorization: Bearer $TOKEN" \
+      -X GET "https://api.twitch.tv/helix/moderation/moderators?broadcaster_id=$TWITCH_ID"
+}
+
+banned () {
+    while read -r dumbass; do
+        echo -n "$(crnd)$dumbass 💩 "
+    done <<< $(curl -s \
+      -H "Client-ID: $CLIENTID" \
+      -H "Authorization: Bearer $TOKEN" \
+      -X GET "https://api.twitch.tv/helix/moderation/banned?broadcaster_id=$TWITCH_ID" |\
+      jq -r '.data[] | .user_name')
+    echo
+}
+
+description () {
+    declare desc=$(urlencode "$*")
+    curl -s \
+       -H "Client-ID: $CLIENTID" \
+       -H "Authorization: Bearer $TOKEN" \
+       -X PUT "https://api.twitch.tv/helix/users?description=$desc" |\
+    jq .
+}
+
+user () {
+      curl -s \
+        -H "Client-ID: $CLIENTID" \
+        -H "Authorization: Bearer $TOKEN" \
+        -X GET  "https://api.twitch.tv/helix/users" |\
+      jq -a -r .data[0]
+}
+
+streaming () {
+    pgrep obs &>/dev/null # sloppy but just prototyping
+    return $?
+}
+
+# Make sure you don't have "Disconnect Protection" on for this to work.
+stop () {
+    pkill obs
+    status default
+}
+
+latest () {
+    curl -s \
+      -H "Client-ID: $CLIENTID" \
+      -H "Authorization: Bearer $TOKEN" \
+      -X GET  "https://api.twitch.tv/helix/videos?period=day&user_id=$TWITCH_ID&first=10" |\
+    jq -a -r '.data[] | [.created_at,.duration,.id,.title[0:20]]|@tsv '
+}
+
+delete () {
+    for i in "$@"; do
+      curl -s \
+        -H "Client-ID: $CLIENTID" \
+        -H "Authorization: OAuth $TOKEN" \
+        -H 'Accept: application/vnd.twitchtv.v5+json' \
+        -X DELETE  "https://api.twitch.tv/kraken/videos/$i"
+    done
+    echo
+    warnln 'It will take a while for deletes to show in `latest` list.'
+}
+
+mark () {
+    declare what="$*"
+    [[ -z "$what" ]] && what=$(head -1 ~/.status)
+    log mark $(curl -s -H "Client-ID: $CLIENTID" \
+        -H "Authorization: Bearer $TOKEN" \
+        -X POST  'https://api.twitch.tv/helix/streams/markers' \
+        -H 'Content-Type: application/json' \
+        -d '{"user_id":"'"$TWITCH_ID"'","description":"'"$what"'"}' |\
+        jq .data)
+}
+
+afk () { 
+    # TODO usage and arguments (prob time coming back)
+    #figl "$message"
+    exec tmux -L twitch \
+        send "figl" Enter \; \
+        split-pane  
+}
+
+############################## Main Command  #############################
+
+subcommand="${1-usage}"
+shift 2>/dev/null
+
+if [ -z "$subcommand" ]; then
+    usage
+    exit 1
+fi
+
+commands () {
+    echo ${commands[@]}
+}
+
+declare -a commands=(
+ban chat chatnicks chatoff commands chaton flowstate focus casual
+casualstat vip raid mod slow slash slowoff tmux host unban unhost
+unmod unraid unvip urls usage status top renewtoken subs delete
+userid mods banned description checktoken channel streaming
+stop latest timeout untimeout afk mark log ats vips mark
+)
+
+for i in ${commands[@]}; do
+    if [[ "$i" == "$subcommand" ]]; then
+        "$subcommand" "$@"
+        exit 0
+    fi
+done
+
+######################### Tab Completion Context ########################
+
+# remember COMP_LINE is changed by shift
+if [ -n "$COMP_LINE" ]; then
+    for cmd in ${commands[@]}; do 
+        [[ "${cmd:0:${#1}}" == "$1" ]] && echo $cmd
+    done
+    exit 0
+fi

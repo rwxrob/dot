@@ -1,0 +1,4 @@
+#!/bin/sh
+#ncal -M -w $*
+ncal -w $*
+

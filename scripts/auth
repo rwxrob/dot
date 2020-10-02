@@ -1,0 +1,21 @@
+#!/bin/sh
+
+[ -z "$AUTHDIR" ] && telln '`$AUTHDIR` is not set.' && exit 1
+
+case "$1" in 
+  client)
+    dir="$AUTHDIR/client"
+    case "$2" in
+      id) head -1 "$dir/$3" ;;
+      secret) tail -1 "$dir/$3";;
+    esac
+    ;;
+  token)
+    dir="$AUTHDIR/token"
+    if [ -r "$dir/$2.json" ]; then
+      jq -r .access_token "$dir/$2.json"
+    else
+      head -1 "$dir/$2"
+    fi
+    ;;
+esac

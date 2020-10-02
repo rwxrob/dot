@@ -1,0 +1,18 @@
+#!/bin/sh
+
+if [ ! -p "$WEECHAT_FIFO" ]; then
+  echo "WeeChat not running?" >&2
+  exit 1
+fi
+
+buf="$*"
+
+if [ -n "$buf" ]; then
+  echo "*$buf"  > $WEECHAT_FIFO
+  exit 0
+fi
+
+while IFS= read -r line; do
+  echo "*$line" > $WEECHAT_FIFO
+done
+
