@@ -204,6 +204,7 @@ tmux () {
     exec tmux -L twitch -f ~/.tmux-twitch.conf new -s twitch -n parent \
         weechat             \;\
         split-window        \;\
+        swap-pane -s 1 -t 2 \;\
         send "s /connect twitch" Enter \
              "s /buffer clear" Enter \
              "focus" Enter \;\
@@ -263,7 +264,7 @@ focus () {
     wee /set weechat.bar.nicklist.hidden on
     wee /set weechat.look.buffer_time_format \"\"
     clear
-    exec tmux -L twitch resize-pane -y 28
+    exec tmux -L twitch resize-pane -y 32
 }
 
 casual () {
