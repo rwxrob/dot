@@ -225,7 +225,7 @@ chatoff () {
     clear
     touch /tmp/twitch-chat-off
     exec tmux -L twitch set -g status-left "" \;\
-        break-pane -d -n hidden -s {top}
+        break-pane -d -n hidden -s {bottom}
 }
 
 chaton () {
@@ -233,8 +233,10 @@ chaton () {
     [ ! -e /tmp/twitch-chat-off ] && return
     rm /tmp/twitch-chat-off
     exec tmux -L twitch set -g status-left ' #(head -1 ~/.status) ' \;\
-        join-pane -b -s :2 -t 1 \;\
-        selectp -t {bottom}
+        join-pane -s :2 -t 1 \;\
+        selectp -t {top}
+
+    #    join-pane -b -s :2 -t 1 \;\
 }
 
 chatnicks () {
