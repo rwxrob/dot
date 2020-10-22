@@ -29,6 +29,9 @@ set shiftwidth=2
 set smartindent
 set smarttab
 
+" stop vim from silently fucking with files that it shouldn't 
+set nofixendofline
+
 " replace tabs with spaces automatically
 set expandtab
 
@@ -149,6 +152,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   call plug#end()
 
   colorscheme gruvbox
+  "colorscheme elflord
   set cursorline
 
   " pandoc
