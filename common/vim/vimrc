@@ -152,6 +152,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   call plug#end()
 
   colorscheme gruvbox
+  "hi Normal ctermbg=NONE " for transparent background
   "colorscheme elflord
   set cursorline
 
