@@ -1,7 +1,7 @@
 #!/bin/sh
 
-# The world's best pastebin terminal replacement. I'm so in love.
-# You can call this from *within* vi!
+# The world's best pastebin terminal replacement. I'm so in love.  You
+# can call this from *within* vi!
 
 if [ -n "$1" ]; then
   exec curl -s "ix.io/$1"

@@ -186,11 +186,15 @@ autocmd vimleavepre *.md !perl -p -i -e 's,\[([^\]]+)\]\(\),[\1](https://duck.co
 " fill in anything beginning with @ with a link to twitch to it
 autocmd vimleavepre *.md !perl -p -i -e 's, @(\w+), [\\@\1](https://twitch.tv/\1),g' %
 
+" if you are gonna visual, might as well...
+vmap < <gv
+vmap > >gv
+
 " enable omni-completion
 set omnifunc=syntaxcomplete#Complete
 
 " force some file names to be specific file type
-"au bufnewfile,bufRead *.bash* set ft=sh
+au bufnewfile,bufRead *.bash* set ft=sh
 au bufnewfile,bufRead *.profile set filetype=sh
 au bufnewfile,bufRead *.crontab set filetype=crontab
 au bufnewfile,bufRead *ssh/config set filetype=sshconfig
