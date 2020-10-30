@@ -141,6 +141,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   Plug 'vim-pandoc/vim-pandoc'
   Plug 'https://gitlab.com/rwxrob/vim-pandoc-syntax-simple'
   Plug 'https://gitlab.com/rwx.gg/abnf'
+  "Plug 'WolfgangMehner/bash-support' " borkish
   Plug 'cespare/vim-toml'
   Plug 'pangloss/vim-javascript'
   Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
@@ -223,7 +224,6 @@ map <F7> :set spell!<CR>
 map <F12> :set fdm=indent<CR>
 
 nmap <leader>2 :set paste<CR>i
-
 " disable arrow keys (vi muscle memory)
 noremap <up> :echoerr "Umm, use k instead"<CR>
 noremap <down> :echoerr "Umm, use j instead"<CR>
@@ -233,6 +233,14 @@ inoremap <up> <NOP>
 inoremap <down> <NOP>
 inoremap <left> <NOP>
 inoremap <right> <NOP>
+
+" Map alternatives to the <ESC> key (<C-[> already is) 
+inoremap jj <Esc>
+cnoremap jj <Esc>
+inoremap kk <Esc>
+cnoremap kk <Esc>
+inoremap kj <Esc>
+cnoremap kj <Esc>
 
 " read personal/private vim configuration (keep last to override)
 set rtp^=~/.vimpersonal

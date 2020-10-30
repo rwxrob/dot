@@ -1,0 +1,6 @@
+#!/usr/bin/bash
+
+# Calculates the time you should go to bed based on when you got up if
+# you want a minimum number of hours of sleep. Obviously disregards
+# circadian rhythm.
+
