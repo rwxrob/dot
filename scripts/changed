@@ -9,9 +9,9 @@ changed () {
   local tmpname="onchange${dir//\//-}"
   local tmp="/tmp/${tmpname}"
   if [[ ! -e "${tmp}" ]]; then
-    find "${dir}" -type f
+    find "${dir}" -type f -not -path '*testdata*'
   else
-    find "${dir}" -newer "${tmp}" -type f
+    find "${dir}" -newer "${tmp}" -type f -not -path '*testdata*'
   fi
   touch "${tmp}"
 }
