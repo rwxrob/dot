@@ -142,6 +142,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   Plug 'https://gitlab.com/rwxrob/vim-pandoc-syntax-simple'
   Plug 'https://gitlab.com/rwx.gg/abnf'
   "Plug 'WolfgangMehner/bash-support' " borkish
+  Plug 'vim-airline/vim-airline'
   Plug 'cespare/vim-toml'
   Plug 'pangloss/vim-javascript'
   Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
@@ -156,6 +157,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   "hi Normal ctermbg=NONE " for transparent background
   "colorscheme elflord
   set cursorline
+  set noshowmode
 
   " pandoc
   let g:pandoc#formatting#mode = 'h' " A'
@@ -234,7 +236,7 @@ inoremap <down> <NOP>
 inoremap <left> <NOP>
 inoremap <right> <NOP>
 
-" Map alternatives to the <ESC> key (<C-[> already is) 
+" Map alternatives the <ESC> key (<C-[> already is) 
 inoremap jj <Esc>
 cnoremap jj <Esc>
 inoremap kk <Esc>

@@ -1,0 +1,42 @@
+#!/bin/bash
+
+
+if [ "$1" == "cli" -o "$1" == "" ]; then 
+echo -e "
+  [0;33mclear[0m - clear the screen                [0;33mpwd[0m - print working (current) dir
+  [0;33mls[0m - list stuff here                    [0;33mls -l[0m - list stuff with permissions
+  [0;33mls -l hi[0m - list hi's permissions        [0;33mls -a[0m - list all, even hidden
+  [0;33mmkdir bin[0m - make a bin dir              [0;33mmkdir -p go/src/robmuh[0m - create many dirs
+  [0;33mtouch hello[0m - create empty hello file   [0;33mw[0m - show what users are on and doing
+  [0;33mcd bin[0m - change to bin dir              [0;33mcd ..[0m - change dir to parent
+  [0;33mcd[0m - change current dir to home         [0;33mcd ~bob[0m - change dir to bob's home
+  [0;33mcd - [0m - change most recent dir          [0;33mpasswd[0m - change your password 
+  [0;33mmv hello bin[0m - move into bin/           [0;33mcp hi bin[0m - copy hi to bin/hi 
+  [0;33mrm hello[0m - remove file hello            [0;33mrm -r foo[0m - remove foo and all in
+  [0;33mmv hello hello1[0m - rename to hello1      [0;33mchmod +x hello[0m - make executable 
+  [0;33mhistory[0m - show your command history     [0;33mhistory | more[0m - page history (q=quit)
+  [0;33mfind . | more[0m - show dirs and subdirs   [0;33mtree[0m - show dirs and subdirs (pretty)
+  [0;33mwhich ls[0m - see which ls is run          [0;33mtype path[0m - see what path command is
+  [0;33mecho \$PATH[0m - print PATH env var         [0;33mpath[0m - show prettier path 
+  [0;33m<ctrl>-[[0m - same as <esc>                [0;33m<ctrl>-c[0m - cancel something running
+  [0;33mtmux a[0m - begin using tmux               [0;33mvi hello[0m - edit the hello file 
+  [0;33m./hello[0m - run hello (outside bin)       [0;33mhello[0m - run hello (if hello in bin)
+  [0;33msk ls[0m - show all challenges             [0;33msk doc pyhi[0m - read pyhi help doc 
+  [0;33mcolors[0m - show solarized colors table    [0;33mexit[0m - exit tmux or ssh or terminal 
+"
+fi
+
+if [ "$1" == "vi" -o "$1" == "" ]; then
+echo -e "
+   (vi) [0;33mhjkl[0m - move around, [0;33m}[0m - next paragraph, [0;33m:5[0m - line 5, [0;33mG[0m - end of file
+   (vi) [0;33mtp[0m - to p, [0;33mctp[0m - change to p, [0;33mcw[0m - change word, [0;33mea[0m - ins after word  
+   (vi) [0;33m<ctrl>-[[0m - COMMAND mode, [0;33mu[0m - undo, [0;33m.[0m - repeat, [0;33m5.[0m - repeat 5 times,
+   (vi) [0;33mi[0m - insert here, [0;33mI[0m - insert start of line, [0;33mA[0m - add to line, [0;33mx[0m - delete
+   (vi) [0;33mo[0m - add line, [0;33myy[0m/[0;33mdd[0m - yank (copy)/delete line, [0;33mp[0m - paste, [0;33mc[0m - change
+   (vi) [0;33m:w[0m - write, [0;33m:r[0m - read, [0;33m:wq[0m|[0;33mZZ[0m|[0;33m:x[0m- write and quit, [0;33m:q![0m - force quit
+   (vi) [0;33m>>[0m/[0;33m<<[0m - indent/outdent, [0;33m/word[0m - find, [0;33mn[0m - find next, [0;33mN[0m - find previous 
+"
+fi
+
+
+
