@@ -3,7 +3,7 @@
 sudo apt install vim tmux lynx
 
 # But can also build tmux without borders:
-#   git clone git@gitlab.com:tmux/tmux
+#   git clone git@github.com:tmux/tmux
 #   (then apply the following patch)
 # 
 #diff --git a/screen-redraw.c b/screen-redraw.c

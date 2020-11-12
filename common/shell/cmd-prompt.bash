@@ -22,6 +22,8 @@ export PS1p=$'\033[38;2;218;165;32m'
 export PS1P=$'\033[38;2;255;0;0m'
 export PS1U=$PS1P
 
+export gruv_orange=$'\033[38;2;214;93;13m'
+
 if [[ $EUID == 0 ]]; then
   export PS1='\[$PS1U\]\u\[$PS1a\]@\[$PS1h\]\h\[$PS1c\]:\[$PS1w\]\w\[$PS1P\]#\[\033[00m\] '
 else
@@ -29,6 +31,6 @@ else
 fi
 
 ps1min () {
-  export PS1='\[$PS1p\]$\[\033[00m\] '
+  export PS1='\[$gruv_orange\]$\[\033[00m\] '
 }
 
