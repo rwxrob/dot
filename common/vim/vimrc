@@ -43,6 +43,7 @@ set norelativenumber
 
 " easier to see characters when `set paste` is on
 set listchars=tab:→\ ,eol:↲,nbsp:␣,space:·,trail:·,extends:⟩,precedes:⟨
+highlight NonText guifg=bg
 
 " turn on default spell checking
 "set spell
