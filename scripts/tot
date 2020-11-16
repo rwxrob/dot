@@ -2,6 +2,7 @@
 declare -i n total
 while read line; do 
   n=${line%%|*}
+  [[ ${line##*|} == TOTAL ]] && continue
   total+=n
   echo $line
 done
