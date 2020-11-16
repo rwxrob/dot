@@ -1,0 +1,8 @@
+#!/bin/bash
+declare -i n total
+while read line; do 
+  n=${line%%|*}
+  total+=n
+  echo $line
+done
+echo $total\|TOTAL
