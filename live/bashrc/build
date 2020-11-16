@@ -13,7 +13,8 @@ cat \
   ../../common/shell/dircolors.sh    \
   ../../common/shell/trap.sh    \
   ../../common/shell/completion.bash    \
-  ../../common/shell/colors.bash    \
+  ../../common/shell/gruvbox-colors.bash    \
+  ../../common/shell/termcap-colors.bash    \
   ./golang.bash    \
   ../../common/shell/source-local.sh    \
   ../../common/shell/alias-func.bash    \

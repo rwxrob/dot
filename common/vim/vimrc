@@ -164,8 +164,8 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
 	"let g:airline_right_sep = "\uE0C5" 
 	"let g:airline_left_sep = "\uE0C6"
 	"let g:airline_right_sep = "\uE0C7" 
-	let g:airline_left_sep = "\uE0C4"
-	let g:airline_right_sep = "\uE0C5" 
+	"let g:airline_left_sep = "\uE0C4"
+	"let g:airline_right_sep = "\uE0C5" 
 
   colorscheme gruvbox
   "hi Normal ctermbg=NONE " for transparent background

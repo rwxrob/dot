@@ -9,6 +9,7 @@ $REPOS/github.com/$GITUSER/dotfiles/scripts
 export PATH=\
 $SCRIPTS:\
 $SCRIPTS_PRIV:\
+/usr/lib/go-1.15/bin:\
 $HOME/.local/bin:\
 $HOME/.local/go/bin:\
 $HOME/.cargo/bin:\
