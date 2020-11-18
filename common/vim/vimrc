@@ -168,6 +168,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
 	"let g:airline_right_sep = "\uE0C5" 
 
   colorscheme gruvbox
+  let g:gruvbox_termcolors=16 " force match terminal colors
   "hi Normal ctermbg=NONE " for transparent background
   "colorscheme elflord
   set cursorline
@@ -192,8 +193,6 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
 else
   autocmd vimleavepre *.go !gofmt -w % " backup if fatih fails
 endif
-
-autocmd vimleavepre *.rs !rustfmt %
 
 " fill in empty markdown links with duck.com search
 " [some thing]() -> [some thing](https://duck.com/lite?kae=t&q=some thing)
