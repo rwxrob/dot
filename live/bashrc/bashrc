@@ -505,9 +505,7 @@ alias cmatrix="cmatrix -b -C red -u 6"
 
 alias vimpluginstall="vim +':PlugInstall' +':q!' +':q!'"
 
-#alias rustdocs="lynx $(rustup doc --path)"
 
-alias open='xdg-open'
 alias kali='ssh kali'
 alias pico='ssh pico'
 
@@ -529,4 +527,3 @@ alias sl="sl -e"
 
 [ -r ~/.bash_personal   ] && source ~/.bash_personal
 [ -r ~/.bash_private   ] && source ~/.bash_private
-

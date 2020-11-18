@@ -64,4 +64,3 @@ alias cmatrix="cmatrix -b -C red -u 6"
 
 alias vimpluginstall="vim +':PlugInstall' +':q!' +':q!'"
 
-#alias rustdocs="lynx $(rustup doc --path)"

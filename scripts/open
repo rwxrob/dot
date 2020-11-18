@@ -1,0 +1,18 @@
+#!/bin/bash
+
+declare suf=""
+declare what=$1
+
+if [[ -z "$what" ]]; then
+  usageln 'open <what>'
+  exit 1
+fi
+
+if [[ ! -r "$what" ]]; then
+  what=https://$what
+fi
+
+exec xdg-open "$what"
+
+
+

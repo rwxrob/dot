@@ -168,8 +168,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
 	"let g:airline_right_sep = "\uE0C5" 
 
   colorscheme gruvbox
-  let g:gruvbox_termcolors=16 " force match terminal colors
-  "hi Normal ctermbg=NONE " for transparent background
+  hi Normal ctermbg=NONE " for transparent background
   "colorscheme elflord
   set cursorline
   set noshowmode

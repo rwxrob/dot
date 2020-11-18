@@ -1,5 +1,4 @@
 
-alias open='xdg-open'
 alias kali='ssh kali'
 alias pico='ssh pico'
 
