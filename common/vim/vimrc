@@ -170,8 +170,9 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   colorscheme gruvbox
   hi Normal ctermbg=NONE " for transparent background
   "colorscheme elflord
-  set cursorline
-  set noshowmode
+  "set cursorline
+  "set noshowmode
+  set rulerformat=%55(%f\ %y%r\ %l:%c\ %p%%%) "20 effective max
 
   " pandoc
   let g:pandoc#formatting#mode = 'h' " A'
@@ -219,9 +220,9 @@ au bufnewfile,bufRead /tmp/psql.edit.* set syntax=sql
 " displays all the syntax rules for current position, useful
 " when writing vimscript syntax plugins
 function! <SID>SynStack()
-	if !exists("*synstack")
-		return
-	endif
+  if !exists("*synstack")
+    return
+  endif
     echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 endfunc  
 

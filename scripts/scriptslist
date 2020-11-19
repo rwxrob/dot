@@ -1,0 +1,4 @@
+#!/bin/bash
+while read line; do 
+  echo "* [$line](https://gitlab.com/rwxrob/dotfiles/-/blob/master/scripts/$line)"
+done
