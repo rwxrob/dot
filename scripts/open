@@ -9,7 +9,9 @@ if [[ -z "$what" ]]; then
 fi
 
 if [[ ! -r "$what" ]]; then
-  what=https://$what
+  if [[ ! "$what" =~ ^http ]]; then
+    what=https://$what
+  fi
 fi
 
 exec xdg-open "$what"
