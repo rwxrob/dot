@@ -14,6 +14,7 @@ cat \
   ../../common/shell/trap.sh    \
   ../../common/shell/completion.bash    \
   ../../common/shell/gruvbox-colors.bash    \
+  ../../common/shell/colors-basic.bash    \
   ../../common/shell/termcap-colors.bash    \
   ./golang.bash    \
   ../../common/shell/source-local.sh    \

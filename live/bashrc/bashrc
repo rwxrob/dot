@@ -398,6 +398,18 @@ gruv () {
 
 
 
+# foregrounds
+
+export black=$'\033[30m'
+export red=$'\033[31m'
+export green=$'\033[32m'
+export yellow=$'\033[33m'
+export blue=$'\033[34m'
+export magenta=$'\033[35m'
+export cyan=$'\033[36m'
+export white=$'\033[37m'
+
+
 # Here's your colored man pages right here.
 
 export LESS_TERMCAP_mb=$magen
@@ -527,3 +539,5 @@ alias sl="sl -e"
 
 [ -r ~/.bash_personal   ] && source ~/.bash_personal
 [ -r ~/.bash_private   ] && source ~/.bash_private
+export AUTHCONF=/home/rwxrob/repos/gitlab.com/rwxrob/auth/testdata/auth.json
+

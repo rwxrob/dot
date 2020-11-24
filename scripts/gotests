@@ -1,0 +1,12 @@
+#!/bin/bash
+
+
+while read line; do
+  cat <<EOM
+func Test${line}(t *testing.T) {
+  t.Error("unimplemented")
+}
+
+EOM
+done
+
