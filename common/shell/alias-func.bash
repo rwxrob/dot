@@ -59,7 +59,7 @@ cheat() {
 which vim &>/dev/null && alias vi=vim
 
 
-alias tmatrix="tmatrix -s 15 --fade -c default"
+alias tmatrix="tmatrix -s 15 --fade -c default -C red"
 alias cmatrix="cmatrix -b -C red -u 6"
 
 alias vimpluginstall="vim +':PlugInstall' +':q!' +':q!'"

@@ -418,7 +418,7 @@ export LESS_TERMCAP_me=$reset
 export LESS_TERMCAP_se=$reset
 export LESS_TERMCAP_so=$blue
 export LESS_TERMCAP_ue=$reset
-export LESS_TERMCAP_us=$violet
+export LESS_TERMCAP_us=$'\033[4m'
 
 ############################# Go Development #############################
 
@@ -512,7 +512,7 @@ cheat() {
 which vim &>/dev/null && alias vi=vim
 
 
-alias tmatrix="tmatrix -s 15 --fade -c default"
+alias tmatrix="tmatrix -s 15 --fade -c default -C red"
 alias cmatrix="cmatrix -b -C red -u 6"
 
 alias vimpluginstall="vim +':PlugInstall' +':q!' +':q!'"
@@ -539,5 +539,3 @@ alias sl="sl -e"
 
 [ -r ~/.bash_personal   ] && source ~/.bash_personal
 [ -r ~/.bash_private   ] && source ~/.bash_private
-export AUTHCONF=/home/rwxrob/repos/gitlab.com/rwxrob/auth/testdata/auth.json
-
