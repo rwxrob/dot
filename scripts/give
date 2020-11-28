@@ -2,6 +2,7 @@
 
 if [ -z "$1" ]; then
   echo "usage: give <exefrompath>"
+  exit
 fi
 
 ix < $(which "$1")

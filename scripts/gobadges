@@ -1,6 +1,12 @@
-#!/bin/sh
+#!/bin/bash
 
 url="$1"
+
+if [[ -e go.mod ]];then
+  url=$(head -1 go.mod)
+  url=${url#* }
+fi
+
 echo "![WIP](https://img.shields.io/badge/status-wip-red.svg)"
 echo "[![GoDoc](https://godoc.org/$url?status.svg)](https://godoc.org/$url)"
 echo "[![License](https://img.shields.io/badge/license-Apache-brightgreen.svg)](LICENSE)"
