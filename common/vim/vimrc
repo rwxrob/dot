@@ -149,6 +149,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   Plug 'pangloss/vim-javascript'
   Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
   Plug 'PProvost/vim-ps1'
+  Plug 'tpope/vim-fugitive'
   "Plug 'airblade/vim-gitgutter'
   Plug 'morhetz/gruvbox'
   "Plug 'nielsmadan/harlequin'
@@ -169,6 +170,9 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
 
   colorscheme gruvbox
   hi Normal ctermbg=NONE " for transparent background
+  hi SpellBad ctermbg=red " for transparent background
+  hi SpellRare ctermbg=red
+  hi Special ctermfg=cyan 
   "colorscheme elflord
   "set cursorline
   "set noshowmode
@@ -190,9 +194,16 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   let g:go_highlight_function_calls = 1
   let g:go_highlight_operators = 1
   let g:go_highlight_extra_types = 1
+  let g:go_highlight_variable_declarations = 1
+  let g:go_highlight_variable_assignments = 1
   let g:go_highlight_build_constraints = 1
+  let g:go_highlight_diagnostic_errors = 1
+  let g:go_highlight_diagnostic_warnings = 1
   let g:go_auto_type_info = 1
   let g:go_auto_sameids = 0
+  "let g:go_metalinter_command='golangci-lint'
+  "let g:go_metalinter_autosave=1
+  "let g:go_metalinter_autosave_enabled=['golint', 'govet', 'typecheck']
   set updatetime=100
 
   "let g:go_gopls_analyses = { 'composites' : v:false }
