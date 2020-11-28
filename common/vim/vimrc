@@ -172,22 +172,35 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   "colorscheme elflord
   "set cursorline
   "set noshowmode
-  set rulerformat=%55(%f\ %y%r\ %l:%c\ %p%%%) "20 effective max
+  set rulerformat=%55(%f\ %y%r\ %l:%c\ %p%%%) "55 effective max
+  set cmdheight=2
 
   " pandoc
   let g:pandoc#formatting#mode = 'h' " A'
   let g:pandoc#formatting#textwidth = 72
 
   " golang
-  let g:go_fmt_fail_silently = 0 " let me out even with errors
+  let g:go_fmt_fail_silently = 0
   let g:go_fmt_command = 'goimports' " autoupdate import
   let g:go_fmt_autosave = 1
   let g:go_gopls_enabled = 1
+  let g:go_highlight_types = 1
+  let g:go_highlight_fields = 1
+  let g:go_highlight_functions = 1
+  let g:go_highlight_function_calls = 1
+  let g:go_highlight_operators = 1
+  let g:go_highlight_extra_types = 1
+  let g:go_highlight_build_constraints = 1
+  let g:go_auto_type_info = 1
+  let g:go_auto_sameids = 0
+  set updatetime=100
+
   "let g:go_gopls_analyses = { 'composites' : v:false }
   au FileType go nmap <leader>t :GoTest!<CR>
   au FileType go nmap <leader>v :GoVet!<CR>
   au FileType go nmap <leader>b :GoBuild!<CR>
-  au FileType go nmap <leader>i :GoInstall!<CR>
+  au FileType go nmap <leader>c :GoCoverageToggle<CR>
+  au FileType go nmap <leader>i :GoInfo<CR>
   au FileType go nmap <leader>l :GoMetaLinter!<CR>
 
 else
