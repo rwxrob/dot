@@ -2,8 +2,7 @@
 
 set -o errexit
 
-# Make sure you get a "User Access Token" (and not an *App* token)
-# because user access is required for channel and user updates.
+# Make sure you have installed gitlab.com/rwxrob/auth
 #
 # Make sure to set the following environment variables:
 #
@@ -11,18 +10,18 @@ set -o errexit
 #  TWITCH_ID     (from `twitch userid`)
 #  TWITCH_CHID   (from `twitch channel`)
 
-CLIENTID=$(auth client id twitch.tv)
-TOKEN=$(auth token twitch.tv)
-CLIENTSEC=$(auth client secret twitch.tv)
-GAMEID=509670
-GAME='Science%20%26%20Technology'
-
 ####################### Validate base dependencies. ######################
 
 if [ -z "$TWITCH_LOGIN" ]; then
     echo '$TWITCH_LOGIN environment variable not set.'
     exit 1
 fi
+
+CLIENTID=$(auth get id twitch)
+TOKEN=$(auth token twitch)
+CLIENTSEC=$(auth get secret twitch)
+GAMEID=509670
+GAME='Science%20%26%20Technology'
 
 ################################ Helpers ###############################
 
@@ -254,7 +253,7 @@ flowstate () {
     wee /set weechat.bar.input.hidden on
     wee /set weechat.bar.status.hidden on
     wee /set weechat.bar.nicklist.hidden on
-    wee /set weechat.look.buffer_time_format \"\"
+    wee /set weechat.look.buffer_time_format \" \"
     clear
     exec tmux -L twitch resize-pane -y 40
 }
@@ -264,7 +263,7 @@ focus () {
     wee /set weechat.bar.input.hidden on
     wee /set weechat.bar.status.hidden on
     wee /set weechat.bar.nicklist.hidden on
-    wee /set weechat.look.buffer_time_format \"\"
+    wee /set weechat.look.buffer_time_format \" \"
     clear
     exec tmux -L twitch resize-pane -y 32
 }
@@ -274,7 +273,7 @@ casual () {
     wee /set weechat.bar.input.hidden on
     wee /set weechat.bar.status.hidden on
     wee /set weechat.bar.nicklist.hidden on
-    wee /set weechat.look.buffer_time_format \"\"
+    wee /set weechat.look.buffer_time_format \" \"
     clear
     exec tmux -L twitch resize-pane -y 20
 }
@@ -312,12 +311,6 @@ ats () {
 }
 
 top () {
-<<off
-      curl -s \
-           -H "Client-ID: $CLIENTID" \
-           -H "Authorization: Bearer $TOKEN" \
-           -X GET "https://api.twitch.tv/helix/streams?game_id=$GAMEID" 
-off
     while read -r line; do
       if [[ $line =~ Ducks|Dutch|Chicken|eagle ]]; then
           continue
@@ -340,8 +333,7 @@ channel () {
         -H "Client-ID: $CLIENTID" \
         -H "Authorization: OAuth $TOKEN" \
         -H 'Accept: application/vnd.twitchtv.v5+json' \
-        -X GET "https://api.twitch.tv/kraken/channel" |\
-    jq .
+        -X GET "https://api.twitch.tv/kraken/channel" | jq .
 }
 
 status () {
@@ -374,44 +366,6 @@ restart () {
 
 statusdefault () {
     status "$TWITCH_STATUS_DEFAULT"
-}
-
-renewtoken () {
-    if [ ! -d "$AUTHDIR/token" ]; then
-        telln "`$AUTHDIR/token` not found."
-        return 1
-    fi
-    declare grant='
-        analytics:read:extensions
-        analytics:read:games
-        bits:read
-        channel_read
-        channel_editor
-        channel:read:subscriptions
-        clips:edit
-        user:edit
-        user:edit:broadcast
-        user:read:broadcast
-        user:read:email
-        moderation:read
-    '
-    grant=${grant// /}
-    grant=${grant//$'\n'/+}
-    grant=${grant#+}
-    grant=${grant%+}
-    declare local=$(mktemp)
-    curl -s \
-        -H "Accept: application/json" \
-        -X GET "https://id.twitch.tv/oauth2/authorize?client_id=$CLIENTID&response_type=token&redirect_uri=https://twitch.rwx.gg&force_verify=false&scope=$grant" > $local.html
-    xdg-open $local.html
-    # FIXME needs to read the html and put into a localhost web page to
-    # click on for authentication
-    # 1. Do the above to create the link to open
-    # 2. Wrap the link in some html and put into file in /tmp
-    # 3. Open the file with a graphic web browser
-    # 4. <wait for the user to click and complete authentication>
-    # 5. Mine the access token from the response and display
-    # 6. Instruct to add to $AUTHDIR/token/twitch.tv
 }
 
 checktoken () {
@@ -545,7 +499,7 @@ commands () {
 declare -a commands=(
 ban chat chatnicks chatoff commands chaton flowstate focus casual
 casualstat vip raid mod slow slash slowoff tmux host unban unhost
-unmod unraid unvip urls usage status top renewtoken subs delete
+unmod unraid unvip urls usage status top subs delete
 userid mods banned description checktoken channel streaming
 stop latest timeout untimeout afk mark log ats vips mark
 )

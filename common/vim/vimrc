@@ -171,7 +171,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   hi Normal ctermbg=NONE " for transparent background
   "colorscheme elflord
   "set cursorline
-  set noshowmode
+  "set noshowmode
   set rulerformat=%55(%f\ %y%r\ %l:%c\ %p%%%) "20 effective max
 
   " pandoc

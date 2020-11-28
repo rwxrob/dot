@@ -40,11 +40,6 @@ alias discord="$(which discord) &> $(mktemp /tmp/discord.XXX.$(date +%s)) &"
 alias obs="$(which obs) &> $(mktemp /tmp/obs.XXX.$(date +%s)) &"
 alias chmox="chmod u+x"
 
-complete -C pdf pdf
-complete -C twitch twitch
-complete -C md md
-complete -C gh gh
-complete -C kn kn
 
 # Igor Chubin is a god.
 

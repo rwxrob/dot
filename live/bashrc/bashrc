@@ -376,6 +376,13 @@ if [ -r /usr/share/bash-completion/bash_completion ]; then
   source /usr/share/bash-completion/bash_completion
 fi
 
+complete -C pdf pdf
+complete -C md md
+complete -C gh gh
+complete -C kn kn
+complete -C auth auth
+complete -C live live
+
 
 gruv () {
   printf "     "
@@ -493,11 +500,6 @@ alias discord="$(which discord) &> $(mktemp /tmp/discord.XXX.$(date +%s)) &"
 alias obs="$(which obs) &> $(mktemp /tmp/obs.XXX.$(date +%s)) &"
 alias chmox="chmod u+x"
 
-complete -C pdf pdf
-complete -C twitch twitch
-complete -C md md
-complete -C gh gh
-complete -C kn kn
 
 # Igor Chubin is a god.
 
