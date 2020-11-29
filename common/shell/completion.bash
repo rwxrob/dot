@@ -12,3 +12,4 @@ complete -C gh gh
 complete -C kn kn
 complete -C auth auth
 complete -C live live
+complete -C wsutil wsutil
