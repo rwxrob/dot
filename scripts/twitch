@@ -18,10 +18,12 @@ if [ -z "$TWITCH_LOGIN" ]; then
 fi
 
 CLIENTID=$(auth get id twitch)
-TOKEN=$(auth token twitch)
+TOKEN=$(auth get access twitch)
 CLIENTSEC=$(auth get secret twitch)
 GAMEID=509670
 GAME='Science%20%26%20Technology'
+
+#echo perl -p -i -e 's/oauth:[^"]+/oauth:'$TOKEN'/' "$WEECHAT_HOME/irc.conf"
 
 ################################ Helpers ###############################
 
@@ -208,6 +210,7 @@ tmux () {
              "s /buffer clear" Enter \
              "focus" Enter \;\
         send "unset TMUX; clear; tmux" Enter
+
 }
 
 chat () {
