@@ -201,7 +201,7 @@ _render () {
   [[ -e "${node}/styles.css" ]] && style="--metadata=xstyles:styles.css"
   [[ -e "${node}/template.html" ]] && template="--template=${node}/template.html"
   error=$(pandoc -s -M title=_ ${nosyn} --data-dir=${ddir} ${hi} ${out} \
-      ${template} ${style} ${gdata} ${in} 2>&1)
+    ${template} ${style} ${gdata} ${in} 2>&1)
   [[ -n "${error}" ]] && echo ${CYAN}${node}:${RED} ${error}${RESET} >&2
 }
 

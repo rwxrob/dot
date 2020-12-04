@@ -222,8 +222,7 @@ else
   autocmd vimleavepre *.go !gofmt -w % " backup if fatih fails
 endif
 
-" fill in reference to something on my gitlab
-autocmd vimleavepre *.md !perl -p -i -e 's,my `(\w+)` (package|module|repo|command|utility),[my `\1` \2](https://gitlab.com/rwxrob/\1),g' %
+"autocmd vimleavepre *.md !perl -p -i -e 's,(?<!\[)my `(\w+)` (package|module|repo|command|utility),[my `\1` \2](https://gitlab.com/rwxrob/\1),g' %
 
 " fill in empty markdown links with duck.com search
 " [some thing]() -> [some thing](https://duck.com/lite?kae=t&q=some thing)
@@ -232,7 +231,6 @@ autocmd vimleavepre *.md !perl -p -i -e 's,\[([^\]]+)\]\(\),[\1](https://duck.co
 
 " fill in anything beginning with @ with a link to twitch to it
 autocmd vimleavepre *.md !perl -p -i -e 's, @(\w+), [\\@\1](https://twitch.tv/\1),g' %
-
 
 " if you are gonna visual, might as well...
 vmap < <gv

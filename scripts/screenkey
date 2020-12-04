@@ -4,7 +4,7 @@
   --persist \
   -t 5 \
   -p fixed \
-  -g "878x50+1020+1038" \
+  -g "634x40+670+0" \
   -s large \
   -f "UbuntuMono Nerd Font" \
   --font-color "#aaaaaa" \

@@ -18,12 +18,12 @@ if [ -z "$TWITCH_LOGIN" ]; then
 fi
 
 CLIENTID=$(auth get id twitch)
-TOKEN=$(auth get access twitch)
+TOKEN=$(auth token twitch)
 CLIENTSEC=$(auth get secret twitch)
 GAMEID=509670
 GAME='Science%20%26%20Technology'
 
-#echo perl -p -i -e 's/oauth:[^"]+/oauth:'$TOKEN'/' "$WEECHAT_HOME/irc.conf"
+perl -p -i -e 's/oauth:[^"]+/oauth:'$TOKEN'/' "$WEECHAT_HOME/irc.conf"
 
 ################################ Helpers ###############################
 
@@ -303,6 +303,14 @@ urls () {
     done <<< $(grep "https://" "$WEECHAT_HOME/logs/irc.twitch.#$TWITCH_LOGIN.weechatlog" | tail -10)
 }
 
+lasturl () {
+    line=$(grep "https://" "$WEECHAT_HOME/logs/irc.twitch.#$TWITCH_LOGIN.weechatlog" | tail -1)
+    line=${line:20}
+        url=${line##*http}
+    url=${url%% *}
+    echo "http${url}"
+}
+
 ats () {
     echo ${CLEAR}
     while read line; do
@@ -504,7 +512,7 @@ ban chat chatnicks chatoff commands chaton flowstate focus casual
 casualstat vip raid mod slow slash slowoff tmux host unban unhost
 unmod unraid unvip urls usage status top subs delete
 userid mods banned description checktoken channel streaming
-stop latest timeout untimeout afk mark log ats vips mark
+stop latest timeout untimeout afk mark log ats vips mark lasturl
 )
 
 for i in ${commands[@]}; do

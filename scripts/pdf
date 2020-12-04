@@ -30,5 +30,6 @@ pdfpath="$PDFDIR/$1"
 
 # always open using GL in dark (inverted) mode
 if [ -r "$pdfpath" ];then
-  mupdf-gl -I "$pdfpath"  &>/dev/null &
+  #mupdf-gl -I "$pdfpath"  &>/dev/null &
+  open "$pdfpath"
 fi
