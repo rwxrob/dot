@@ -404,7 +404,10 @@ gruv () {
   printf "\n[reset clear]\n"
 }
 
+
+
 # foregrounds
+
 export black=$'\033[30m'
 export red=$'\033[31m'
 export green=$'\033[32m'
@@ -416,6 +419,7 @@ export white=$'\033[37m'
 
 
 # Here's your colored man pages right here.
+
 export LESS_TERMCAP_mb=$magen
 export LESS_TERMCAP_md=$yellow
 export LESS_TERMCAP_me=$reset
@@ -530,6 +534,7 @@ alias chatnicks="twitch chatnicks"
 alias status="twitch status"
 alias nosoup4u="twitch ban"
 alias raid="twitch raid"
+alias lasturl="twitch lasturl"
 
 alias c="clear"
 alias cl="s /buffer clear"

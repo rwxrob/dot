@@ -12,6 +12,7 @@ alias chatnicks="twitch chatnicks"
 alias status="twitch status"
 alias nosoup4u="twitch ban"
 alias raid="twitch raid"
+alias lasturl="twitch lasturl"
 
 alias c="clear"
 alias cl="s /buffer clear"

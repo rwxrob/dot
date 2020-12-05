@@ -1,0 +1,30 @@
+#!/bin/bash
+
+plugins="${HOME}/.local/share/flatpak/app/com.obsproject.Studio/current/active/files/lib/obs-plugins"
+
+sudo apt build-dep obs-studio
+sudo apt install libobs-dev
+sudo apt install v4l2loopback-dkms
+
+if [[ ! -d "${REPOS}" ]]; then
+  echo "No REPOS env variable found."
+  exit 1
+fi
+
+if [[ ! -d "${REPOS}/github.com/CatxFish/obs-v4l2sink" ]]; then
+  mkdir -p "${REPOS}/github.com/CatxFish" 2>/dev/null
+  cd "${REPOS}/github.com/CatxFish"
+  git clone --recursive https://github.com/CatxFish/obs-v4l2sink.git
+  cd obs-v4l2sink 
+else
+  cd "${REPOS}/github.com/CatxFish/obs-v4l2sink"
+fi
+
+export LIBOBS_INCLUDE_DIR=/usr/include/obs
+
+mkdir /tmp/blah
+cmake -DLIBOBS_INCLUDE_DIR="../../obs-studio/libobs" -DCMAKE_INSTALL_PREFIX=/usr ..
+make -j4
+sudo make install
+cp /usr/lib/x86_64-linux-gnu/obs-plugins/v4l2sink.so "${plugins}"
+
