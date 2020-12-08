@@ -1,0 +1,7 @@
+#!/bin/sh
+
+hidecursor
+while true; do
+  clear
+  sleep 10
+done
