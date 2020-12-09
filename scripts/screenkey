@@ -4,10 +4,11 @@
   --persist \
   -t 7 \
   -p fixed \
-  -g "561x153+1339+61" \
-  -s small \
+  -g "520x72+912+1012" \
+  --compr-cnt 1 \
+  -s large \
   -f "UbuntuMono Nerd Font" \
-  --font-color "#ff7d20" \
+  --font-color "#d65d0e" \
   --opacity 0  &
 
 

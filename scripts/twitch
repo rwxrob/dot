@@ -206,29 +206,27 @@ tmux () {
         weechat             \;\
         split-window        \;\
         split-window    -h  \;\
-        resize-pane -y 3 -x 15\;\
+        resize-pane -y 1 -x 15\;\
         swap-pane -s 1 -t 2 \;\
         send "s /connect twitch" Enter \
-             "s /buffer clear" Enter \
-             "focus" Enter \;\
-        send "unset TMUX; clear; tmux" Enter
-
+             "s /buffer clear" Enter \;\
+        send -t 3 "blankpane" Enter
 }
 
 chat () {
-    twitch chaton
-    wee /set weechat.bar.input.hidden on
-    wee /set weechat.bar.status.hidden off
-    wee /set weechat.bar.nicklist.hidden on
-    wee /set weechat.look.buffer_time_format \"%H:%M:%S\"
+    #twitch chaton
+    #wee /set weechat.bar.input.hidden on
+    #wee /set weechat.bar.status.hidden off
+    #wee /set weechat.bar.nicklist.hidden on
+    #wee /set weechat.look.buffer_time_format \"%H:%M:%S\"
     clear
-    exec tmux -L twitch resize-pane -y 0
+    exec tmux -L twitch resize-pane -t 1 -y 1
 }
 
 chatoff () {
     clear
     touch /tmp/twitch-chat-off
-    exec tmux -L twitch set -g status-left "" \;\
+    exec tmux -L twitch set -g status-right "" \;\
         break-pane -d -n hidden -s {bottom}
 }
 
@@ -268,9 +266,9 @@ focus () {
     wee /set weechat.bar.input.hidden on
     wee /set weechat.bar.status.hidden on
     wee /set weechat.bar.nicklist.hidden on
-    wee /set weechat.look.buffer_time_format \" \"
+    wee '/set weechat.look.buffer_time_format ""'
     clear
-    exec tmux -L twitch resize-pane -y 23
+    exec tmux -L twitch resize-pane -t 2 -y 2
 }
 
 casual () {
@@ -278,9 +276,9 @@ casual () {
     wee /set weechat.bar.input.hidden on
     wee /set weechat.bar.status.hidden on
     wee /set weechat.bar.nicklist.hidden on
-    wee /set weechat.look.buffer_time_format \" \"
+    wee '/set weechat.look.buffer_time_format ""'
     clear
-    exec tmux -L twitch resize-pane -y 20
+    exec tmux -L twitch resize-pane -t 2 -y 12
 }
 
 casualstat () {
