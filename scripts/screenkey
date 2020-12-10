@@ -2,16 +2,17 @@
 
 /usr/bin/screenkey \
   --persist \
-  -t 7 \
+  -t 4 \
   -p fixed \
-  -g "520x72+912+1012" \
+  -g "520x76+912+1008" \
   --compr-cnt 1 \
   -s large \
   -f "UbuntuMono Nerd Font" \
-  --font-color "#d65d0e" \
+  --font-color "#fe8019" \
   --opacity 0  &
 
 
+  #--font-color "#d65d0e" \
 #  -g "634x40+670+0" \
 
 
