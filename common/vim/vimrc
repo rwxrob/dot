@@ -12,7 +12,7 @@ set autoindent
 set autowrite
 
 " activate line numbers
-set number
+set nonumber
 
 " turn col and row position on in bottom right
 set ruler
@@ -53,8 +53,6 @@ set nobackup
 set noswapfile
 set nowritebackup
 
-" keep the terminal title updated
-set laststatus=0
 set icon
 
 " center the cursor always on the screen
@@ -156,6 +154,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   "Plug 'tomasr/molokai'
   call plug#end()
 
+
   "let g:airline_powerline_fonts = 1
   "if !exists('g:airline_symbols')
     "let g:airline_symbols = {}
@@ -168,7 +167,10 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
 	"let g:airline_left_sep = "\uE0C4"
 	"let g:airline_right_sep = "\uE0C5" 
 
-  colorscheme gruvbox
+  "autocmd!
+
+  "colorscheme gruvbox
+  "let g:gruvbox_transparent_bg=1
   hi Normal ctermbg=NONE " for transparent background
   hi SpellBad ctermbg=red " for transparent background
   hi SpellRare ctermbg=red
@@ -180,8 +182,20 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   "colorscheme elflord
   "set cursorline
   "set noshowmode
-  set rulerformat=%55(%f\ %y%r\ %l:%c\ %p%%%) "55 effective max
-  set cmdheight=2
+  "set rulerformat=%55(%f\ %y%r\ %l:%c\ %p%%%) "55 effective max
+
+  set noruler
+  "set rulerformat=%55(%f\ %y%r\ %l:%c\ %p%%%) "55 effective max
+  
+  set laststatus=2
+  set statusline=
+  set statusline+=%*\ %<%.60F%*                      " path, trunc to 80 length
+  set statusline+=\ [%{strlen(&ft)?&ft:'none'}]     " filetype
+  set statusline+=%*\ %l:%c%*                        " current line and column
+  set statusline+=%*\ %p%%%*                         " percentage
+
+  "set statusline+=%m\ %F\ %y\ %{&fileencoding?&fileencoding:&encoding}\ %=%(C:%c\ L:%l\ %P%) 
+  set cmdheight=1
 
   " pandoc
   let g:pandoc#formatting#mode = 'h' " A'
@@ -209,7 +223,6 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   "let g:go_metalinter_command='golint'
   "let g:go_metalinter_autosave=1
   set updatetime=100
-
   "let g:go_gopls_analyses = { 'composites' : v:false }
   au FileType go nmap <leader>t :GoTest!<CR>
   au FileType go nmap <leader>v :GoVet!<CR>
@@ -267,6 +280,7 @@ endfunc
 
 " start at last place you were editing
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+"au BufWritePost ~/.vimrc so ~/.vimrc
 
 " functions keys
 map <F1> :set number!<CR> :set relativenumber!<CR>
@@ -296,8 +310,10 @@ cnoremap kk <Esc>
 inoremap kj <Esc>
 cnoremap kj <Esc>
 
-
 " read personal/private vim configuration (keep last to override)
 set rtp^=~/.vimpersonal
 set rtp^=~/.vimprivate
 
+hi StatusLineNC term=none cterm=none gui=none
+hi StatusLine term=reverse ctermfg=LightGray cterm=nocombine 
+set shortmess=F

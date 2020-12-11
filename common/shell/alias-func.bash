@@ -11,6 +11,7 @@
 
 unalias -a
 alias more='less -R'
+alias ducks='du -sh * | sort -hr | head -11' # 🦆
 
 # dropped ls aliases because need to memorize switches
 alias ls='ls -h --color=auto'

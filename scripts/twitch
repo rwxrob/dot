@@ -268,7 +268,7 @@ focus () {
     wee /set weechat.bar.nicklist.hidden on
     wee '/set weechat.look.buffer_time_format ""'
     clear
-    exec tmux -L twitch resize-pane -t 2 -y 2
+    exec tmux -L twitch resize-pane -t 2 -y 4
 }
 
 casual () {
