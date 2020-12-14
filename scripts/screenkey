@@ -4,7 +4,7 @@
   --persist \
   -t 4 \
   -p fixed \
-  -g "420x94+990+990" \
+  -g "420x94+990+988" \
   --compr-cnt 1 \
   -s large \
   -f "UbuntuMono Nerd Font" \
