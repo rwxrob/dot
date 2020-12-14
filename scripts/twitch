@@ -268,7 +268,7 @@ focus () {
     wee /set weechat.bar.nicklist.hidden on
     wee '/set weechat.look.buffer_time_format ""'
     clear
-    exec tmux -L twitch resize-pane -t 2 -y 4
+    exec tmux -L twitch resize-pane -t 1 -y 20
 }
 
 casual () {
@@ -278,7 +278,7 @@ casual () {
     wee /set weechat.bar.nicklist.hidden on
     wee '/set weechat.look.buffer_time_format ""'
     clear
-    exec tmux -L twitch resize-pane -t 2 -y 12
+    exec tmux -L twitch resize-pane -t 2 -y 6
 }
 
 casualstat () {

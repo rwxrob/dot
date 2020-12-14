@@ -65,7 +65,7 @@ set linebreak
 map <silent> <leader><cr> :noh<cr>:redraw!<cr>
 
 " avoid most of the 'Hit Enter ...' messages
-set shortmess=aoOtI
+set shortmess=aoOtIF
 
 " prevents truncated yanks, deletes, etc.
 set viminfo='20,<1000,s1000
@@ -308,7 +308,7 @@ cnoremap jj <Esc>
 inoremap kk <Esc>
 cnoremap kk <Esc>
 inoremap kj <Esc>
-cnoremap kj <Esc>
+cnoremap kj <Esc> 
 
 " read personal/private vim configuration (keep last to override)
 set rtp^=~/.vimpersonal
@@ -316,4 +316,3 @@ set rtp^=~/.vimprivate
 
 hi StatusLineNC term=none cterm=none gui=none
 hi StatusLine term=reverse ctermfg=LightGray cterm=nocombine 
-set shortmess=F
