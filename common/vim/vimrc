@@ -312,8 +312,8 @@ inoremap kj <Esc>
 cnoremap kj <Esc> 
 
 " Better page down and page up
-noremap <C-j> <C-d>
-noremap <C-k> <C-b>
+noremap <C-n> <C-d>
+noremap <C-p> <C-b>
 
 " read personal/private vim configuration (keep last to override)
 set rtp^=~/.vimpersonal
