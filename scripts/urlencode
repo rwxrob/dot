@@ -1,17 +1,23 @@
 #!/bin/bash
 
-declare str="$*"
-declare encoded=""
-for ((i=0; i<${#str}; i++ )); do
-  c=${str:$i:1}
-  case "$c" in
-    [-_.~a-zA-Z0-9]) x="$c" ;;
-    # If the leading character is a single-quote or double-quote, the
-    # value shall be the numeric value in the underlying codeset of the
-    # character following the single-quote or double-quote.
-    # <https://pubs.opengroup.org/onlinepubs/009695399/utilities/printf.html>
-    *) printf -v x '%%%02x' "'$c" ;;
-  esac
-  encoded+="$x"
-done
-echo "$encoded"
+# yeah, i totally stole this from stack exchange, no shame
+
+rawurlencode () {
+  local string="${1}"
+  local strlen=${#string}
+  local encoded=""
+  local pos c o
+
+  for (( pos=0 ; pos<strlen ; pos++ )); do
+     c=${string:$pos:1}
+     case "$c" in
+        [-_.~a-zA-Z0-9] ) o="${c}" ;;
+        * )               printf -v o '%%%02x' "'$c"
+     esac
+     encoded+="${o}"
+  done
+  echo "${encoded}"    # You can either set a return variable (FASTER)
+  REPLY="${encoded}"   #+or echo the result (EASIER)... or both... :p
+}
+
+rawurlencode "$*"
