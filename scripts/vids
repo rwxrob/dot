@@ -2,9 +2,8 @@
 
 url="https://www.youtube.com/c/rwxrob/search?query=$(urlencode $*)"
 
-if [[ $- == *i* ]]; then
+if [[ -n $MYVIMRC ]]; then
   echo "$url"
 else
-  wee "$url"
+   wee "$url"
 fi
-
