@@ -1,5 +1,10 @@
-#!/bin/sh
-url= "https://www.youtube.com/c/rwxrob/search?query=$(urlencode $*)"
-echo $url
-wee $url
+#!/bin/bash
+
+url="https://www.youtube.com/c/rwxrob/search?query=$(urlencode $*)"
+
+if [[ $- == *i* ]]; then
+  echo "$url"
+else
+  wee "$url"
+fi
 
