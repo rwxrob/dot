@@ -1,3 +1,5 @@
 #!/bin/sh
-wee "https://www.youtube.com/c/rwxrob/search?query=$(urlencode $*)"
+url= "https://www.youtube.com/c/rwxrob/search?query=$(urlencode $*)"
+echo $url
+wee $url
 
