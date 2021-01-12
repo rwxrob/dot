@@ -13,6 +13,7 @@ alias status="twitch status"
 alias nosoup4u="twitch ban"
 alias raid="twitch raid"
 alias lasturl="twitch lasturl"
+alias nicks="s /names"
 
 alias c="clear"
 alias cl="s /buffer clear"

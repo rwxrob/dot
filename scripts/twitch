@@ -203,14 +203,13 @@ usage () {
 
 tmux () {
     exec tmux -L twitch -f ~/.tmux-twitch.conf new -s twitch -n parent \
-        weechat             \;\
+        ssh skilstak.sh \;\
+        send -t 1 "weechat" Enter \;\
         split-window        \;\
         resize-pane -t 1 -y 19  \;\
         split-window    -h  \;\
         resize-pane -x 18 \;\
         swap-pane -s 1 -t 2 \;\
-        send "s /connect twitch" Enter \
-             "s /buffer clear" Enter \;\
         send -t 3 "blankpane" Enter
 }
 
@@ -350,6 +349,7 @@ channel () {
 
 status () {
     declare new="$*"
+    <<EOM
     if [[ "$new" == default ]]; then
         new=$TWITCH_STATUS_DEFAULT
     fi
@@ -358,15 +358,16 @@ status () {
         echo $old
         return 0
     fi
+EOM
     declare json='{"channel":{"status":"'"$new"'"}}'
-## curl -s \
-## -H "Client-ID: $CLIENTID" \
-## -H "Authorization: OAuth $TOKEN" \
-## -H 'Accept: application/vnd.twitchtv.v5+json' \
-## -H 'Content-Type: application/json' \
-## -d "$json" \
-## -X PUT "https://api.twitch.tv/kraken/channels/$TWITCH_ID" > /dev/null
- echo "$new" >| $TWITCH_STATUS_FILE
+ curl -s \
+ -H "Client-ID: $CLIENTID" \
+ -H "Authorization: OAuth $TOKEN" \
+ -H 'Accept: application/vnd.twitchtv.v5+json' \
+ -H 'Content-Type: application/json' \
+ -d "$json" \
+ -X PUT "https://api.twitch.tv/kraken/channels/$TWITCH_ID"  > /dev/null
+## echo "$new" >| $TWITCH_STATUS_FILE
 ##    mark "$new"
 }
 
@@ -459,9 +460,10 @@ latest () {
     curl -s \
       -H "Client-ID: $CLIENTID" \
       -H "Authorization: Bearer $TOKEN" \
-      -X GET  "https://api.twitch.tv/helix/videos?period=day&user_id=$TWITCH_ID&first=10" |\
-    jq -a -r '.data[] | [.created_at,.duration,.id,.title[0:20]]|@tsv '
+      -X GET  "https://api.twitch.tv/helix/videos?user_id=$TWITCH_ID" |\
+    jq -r '.data[] | [.created_at,.duration,.id,.title[0:20]]|@tsv '
 }
+      #-X GET  "https://api.twitch.tv/helix/videos?period=day&user_id=$TWITCH_ID&first=10" |\
 
 delete () {
     for i in "$@"; do
