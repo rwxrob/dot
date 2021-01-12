@@ -1,0 +1,8 @@
+#!/bin/bash
+
+all=$(sudo docker ps -aq)
+if [[ -z $all ]];then
+  echo "No containers found."
+  exit
+fi
+sudo docker rm $all
