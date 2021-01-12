@@ -9,7 +9,7 @@ startd () {
   local twitch="rtmp://live-jfk.twitch.tv/app/$(auth token twitchstream)"
   local youtube="rtmp://a.rtmp.youtube.com/live2/$(auth token youtubestream)"
   local secret="$(auth token rtmpsecret)"
-  sudo docker run -t -p 1935:1935 -p 443:443 --name gstreamd\
+  sudo docker run -t -p 1935:1935 -p 443:443 --name gstreamd \
     -e STREAMS="$youtube;$twitch"\
     -e PASSWORD="$secret" \
     -e RTMPSECRET="$secret" \
