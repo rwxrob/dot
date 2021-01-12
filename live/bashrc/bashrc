@@ -477,8 +477,6 @@ alias ducks='du -sh * | sort -hr | head -11' # 🦆
 
 alias coc="egrep '^\\* ' '$REPOS/gitlab.com/rwxrob/robs.io/coc/README.md'"
 
-alias dockerclean="sudo docker rm $(docker ps -aq)"
-
 # dropped ls aliases because need to memorize switches
 alias ls='ls -h --color=auto'
 
