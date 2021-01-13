@@ -311,11 +311,6 @@ cnoremap kk <Esc>
 inoremap kj <Esc>
 cnoremap kj <Esc> 
 
-" Safer caps lock for when accidentally pressed
-" (no esc mapping so doesn't build bad habit)
-inoremap kj <Esc>
-cnoremap kj <Esc> 
-
 " Better page down and page up
 noremap <C-n> <C-d>
 noremap <C-p> <C-b>
