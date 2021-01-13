@@ -1,2 +1,2 @@
 #!/bin/sh
-echo $(date "+%A, %B %e, %Y, %l:%M:%S%p [%s]")
+echo $(date "+%A, %B %e, %Y, %l:%M:%S%p %Z [%s]")
