@@ -146,6 +146,8 @@ HISTCONTROL=ignoreboth
 HISTSIZE=5000
 HISTFILESIZE=10000
 
+setxkbmap -option ctrl:ctrl_modifier # map capslock to control
+
 export HRULEWIDTH=73
 
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"

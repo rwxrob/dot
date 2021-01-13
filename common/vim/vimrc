@@ -138,7 +138,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   call plug#begin('~/.vimplugins')
   Plug 'sheerun/vim-polyglot'
   Plug 'vim-pandoc/vim-pandoc'
-  Plug 'https://gitlab.com/rwxrob/vim-pandoc-syntax-simple'
+  Plug 'rwxrob/vim-pandoc-syntax-simple'
   Plug 'https://gitlab.com/rwx.gg/abnf'
   "Plug 'WolfgangMehner/bash-support' " borkish
   "Plug 'vim-airline/vim-airline'
@@ -306,8 +306,13 @@ inoremap <right> <NOP>
 " Map alternatives the <ESC> key (<C-[> already is) 
 inoremap jj <Esc>
 cnoremap jj <Esc>
-inoremap kk <Esc>
+inoremap kk <Esc> 
 cnoremap kk <Esc>
+inoremap kj <Esc>
+cnoremap kj <Esc> 
+
+" Safer caps lock for when accidentally pressed
+" (no esc mapping so doesn't build bad habit)
 inoremap kj <Esc>
 cnoremap kj <Esc> 
 
