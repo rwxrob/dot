@@ -204,7 +204,7 @@ usage () {
 tmux () {
     exec tmux -L twitch -f ~/.tmux-twitch.conf new -s twitch -n parent \
         ssh skilstak.sh \;\
-        send -t 1 "screen -r" Enter \;\
+        send -t 1 "screen -Dr" Enter \;\
         split-window        \;\
         resize-pane -t 1 -y 19  \;\
         split-window    -h  \;\
