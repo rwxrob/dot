@@ -13,3 +13,5 @@ complete -C auth auth
 complete -C live live
 complete -C wsutil wsutil
 
+eval "$(gh completion -s bash)"
+eval "$(pandoc --bash-completion)"
