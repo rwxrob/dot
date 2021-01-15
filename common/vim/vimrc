@@ -270,6 +270,7 @@ au bufnewfile,bufRead *ssh/config set filetype=sshconfig
 au bufnewfile,bufRead *gitconfig set filetype=gitconfig
 au bufnewfile,bufRead /tmp/psql.edit.* set syntax=sql
 
+
 " displays all the syntax rules for current position, useful
 " when writing vimscript syntax plugins
 function! <SID>SynStack()

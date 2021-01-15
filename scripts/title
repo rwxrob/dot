@@ -1,0 +1,27 @@
+#!/bin/bash
+
+YOUTUBE_VIDEO=2l914H6N7_k
+YOUTUBE_TOKEN=$(auth token youtube)
+YOUTUBE_CLIENTID=$(auth get id youtube)
+TWITCH_TOKEN=$(auth token twitch)
+TWITCH_CLIENTID=$(auth get id twitch)
+TWITCH_CHANID=447179030
+
+TITLE="$* [Goto rwxrob.live to chat.]"
+
+curl -s \
+  -X PUT "https://www.googleapis.com/youtube/v3/videos?part=snippet" \
+  -H "Client-ID: $YOUTUBE_CLIENTID" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $YOUTUBE_TOKEN" \
+  -d '{"id":"'$YOUTUBE_VIDEO'","snippet":{"title":"'"$TITLE"'","categoryId":"22"}}' \
+  > /dev/null
+
+curl -s  \
+  -X PUT "https://api.twitch.tv/kraken/channels/$TWITCH_CHANID" \
+  -H "Client-ID: $TWITCH_CLIENTID" \
+  -H "Authorization: OAuth $TWITCH_TOKEN" \
+  -H 'Accept: application/vnd.twitchtv.v5+json' \
+  -H 'Content-Type: application/json' \
+  -d '{"channel":{"status":"'"$TITLE"'"}}' \
+  > /dev/null
