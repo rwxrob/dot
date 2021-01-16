@@ -13,7 +13,7 @@ pager:
 # Aliases allow you to create nicknames for gh commands.
 aliases:
     co: pr checkout
-    rm: api -X DELETE "repos/$1"
+    delete: api -X DELETE "repos/$1"
     live: |
         api graphql -f query='
           mutation {
