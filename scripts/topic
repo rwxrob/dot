@@ -7,7 +7,7 @@ TWITCH_TOKEN=$(auth token twitch)
 TWITCH_CLIENTID=$(auth get id twitch)
 TWITCH_CHANID=447179030
 
-TOPIC="$* [Goto rwxrob.live to chat.]"
+TOPIC="$*"
 
 curl -s \
   -X PUT "https://www.googleapis.com/youtube/v3/videos?part=snippet" \
