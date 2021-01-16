@@ -27,3 +27,5 @@ curl -s  \
   > /dev/null &
 
 ssh skilstak.sh 'echo "*/topic '$TOPIC'" >> .weechat/weechat_fifo' &
+
+gh live "$TOPIC" > /dev/null &

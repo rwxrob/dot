@@ -1,0 +1,63 @@
+#!/usr/bin/bash
+
+NAME='Rob Muhlestein'
+USER=rwxrob
+EMAIL='rwx@robs.io'
+TOKEN=$(auth token gitlab)
+
+rm () {
+  local repo=$1
+  echo "Would remote ${repo}."
+}
+
+send () {
+    local data=$1
+    local path=$2
+    local url="https://gitlab.com/${path}"
+    curl -s \
+      -X POST "${url}" \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer ${TOKEN}" \
+      -d "${data}" > /dev/null
+}
+
+graphql () {
+  local query='{"query":"'"$1"'"}'
+  send "${query}"
+}
+
+ping () {
+}
+
+############################## Main Command  #############################
+
+subcommand="${1-usage}"
+shift 2>/dev/null
+
+if [ -z "$subcommand" ]; then
+    usage
+    exit 1
+fi
+
+commands () {
+    echo ${commands[@]}
+}
+
+declare -a commands=(rm commands send graphql ping)
+
+for i in ${commands[@]}; do
+    if [[ "$i" == "$subcommand" ]]; then
+        "$subcommand" "$@"
+        exit 0
+    fi
+done
+
+######################### Tab Completion Context ########################
+
+# remember COMP_LINE is changed by shift
+if [ -n "$COMP_LINE" ]; then
+    for cmd in ${commands[@]}; do 
+        [[ "${cmd:0:${#1}}" == "$1" ]] && echo $cmd
+    done
+    exit 0
+fi

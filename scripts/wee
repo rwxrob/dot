@@ -1,22 +1,19 @@
 #!/bin/sh
 
-<<EON
-if [ ! -p "$WEECHAT_FIFO" ]; then
-  echo "WeeChat not running?" >&2
-  exit 1
-fi
-EON
+SERVER=skilstak.sh
 
 buf="$*"
 
 if [ -n "$buf" ]; then
   #echo "*$buf"  > $WEECHAT_FIFO
   tmux -L twitch send -t 2 "$buf" Enter
+  #ssh "$SERVER" 'echo "*'$buf'" >> .weechat/weechat_fifo' &
   exit 0
 fi
 
 while IFS= read -r line; do
   #echo "*$line" > $WEECHAT_FIFO
   tmux -L twitch send -t 2 "$line" Enter
+  #ssh "$SERVER" 'echo "*'$buf'" >> .weechat/weechat_fifo' &
 done
 
