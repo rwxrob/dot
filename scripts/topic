@@ -1,6 +1,11 @@
 #!/bin/bash
 
-YOUTUBE_VIDEO=2l914H6N7_k
+# Updates YouTube and Twitch Titles, sets the GitHub profile status, and
+# sends a tweet pointing to the YouTube video.
+
+# FIXME derive the live youtube video
+YOUTUBE_VIDEO=NKfTsd2l7Nc
+
 YOUTUBE_TOKEN=$(auth token youtube)
 YOUTUBE_CLIENTID=$(auth get id youtube)
 TWITCH_TOKEN=$(auth token twitch)
@@ -27,5 +32,5 @@ curl -s  \
   > /dev/null &
 
 ssh skilstak.sh 'echo "*/topic '$TOPIC'" >> .weechat/weechat_fifo' &
-
 gh live "$TOPIC" > /dev/null &
+tweet "📺 ${TOPIC} https://youtube.com/${YOUTUBE_VIDEO}"

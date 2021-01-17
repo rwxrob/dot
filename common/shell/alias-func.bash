@@ -12,6 +12,7 @@
 unalias -a
 alias more='less -R'
 alias ducks='du -sh * | sort -hr | head -11' # 🦆
+alias tweet='twitter update'
 
 alias coc="egrep '^\\* ' '$REPOS/gitlab.com/rwxrob/robs.io/coc/README.md'"
 

@@ -1,0 +1,50 @@
+#!/usr/bin/bash
+
+USER=rwxrob
+EMAIL='rwx@robs.io'
+TOKEN=$(auth token twitter)
+CLIENTID=$(auth get id twitter)
+
+update () {
+    twurl -d "status=$*" /1.1/statuses/update.json | jq .created_at
+}
+
+tweets () {
+    curl -s \
+      -X GET "https://api.twitter.com/2/tweets?ids=$1" \
+      -H "Authorization: Bearer ${TOKEN}" |\
+    jq 
+}
+
+############################## Main Command  #############################
+
+subcommand="${1-usage}"
+shift 2>/dev/null
+
+if [ -z "$subcommand" ]; then
+    usage
+    exit 1
+fi
+
+commands () {
+    echo ${commands[@]}
+}
+
+declare -a commands=(commands update tweets)
+
+for i in ${commands[@]}; do
+    if [[ "$i" == "$subcommand" ]]; then
+        "$subcommand" "$@"
+        exit 0
+    fi
+done
+
+######################### Tab Completion Context ########################
+
+# remember COMP_LINE is changed by shift
+if [ -n "$COMP_LINE" ]; then
+    for cmd in ${commands[@]}; do 
+        [[ "${cmd:0:${#1}}" == "$1" ]] && echo $cmd
+    done
+    exit 0
+fi
