@@ -14,6 +14,7 @@ TWITCH_CHANID=447179030
 
 TOPIC="$*"
 
+set_youtube_title () {
 curl -s \
   -X PUT "https://www.googleapis.com/youtube/v3/videos?part=snippet" \
   -H "Client-ID: $YOUTUBE_CLIENTID" \
@@ -21,7 +22,9 @@ curl -s \
   -H "Authorization: Bearer $YOUTUBE_TOKEN" \
   -d '{"id":"'$YOUTUBE_VIDEO'","snippet":{"title":"'"$TOPIC"'","categoryId":"28"}}' \
   > /dev/null &
+}
 
+twitch () {
 curl -s  \
   -X PUT "https://api.twitch.tv/kraken/channels/$TWITCH_CHANID" \
   -H "Client-ID: $TWITCH_CLIENTID" \
@@ -30,7 +33,22 @@ curl -s  \
   -H 'Content-Type: application/json' \
   -d '{"channel":{"status":"'"$TOPIC"'"}}' \
   > /dev/null &
+}
 
-ssh skilstak.sh 'echo "*/topic '$TOPIC'" >> .weechat/weechat_fifo' &
-gh live "$TOPIC" > /dev/null &
-tweet "📺 ${TOPIC} https://youtube.com/${YOUTUBE_VIDEO}"
+set_irc_topic () {
+  ssh skilstak.sh 'echo "*/topic '$TOPIC'" >> .weechat/weechat_fifo' &
+}
+
+set_github_status () {
+  gh live "$TOPIC" > /dev/null &
+}
+
+set_twitter_status () {
+  tweet "📺 ${TOPIC} https://youtube.com/${YOUTUBE_VIDEO}"
+}
+
+#set_youtube_title
+#set_twitch_title
+#set_irc_topic
+#set_github_status
+set_twitter_status
