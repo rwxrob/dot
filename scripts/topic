@@ -23,12 +23,15 @@ if [[ ${#topic} > 80 ]]; then
   fatal 'Topic must be under 80 characters'
 fi
 
-YOUTUBE_VIDEO=$(yt liveid)
 YOUTUBE_TOKEN=$(auth token youtube)
 YOUTUBE_CLIENTID=$(auth get id youtube)
 TWITCH_TOKEN=$(auth token twitch)
 TWITCH_CLIENTID=$(auth get id twitch)
-TWITCH_CHANID=447179030
+
+YOUTUBE_VIDEO=$(yt liveid)
+if [[ $YOUTUBE_VIDEO == null ]];then
+  YOUTUBE_VIDEO=$(yt lastid)
+fi
 
 DESC_FILE="/tmp/vid${YOUTUBE_VIDEO}"
 
@@ -41,8 +44,7 @@ curl -s \
   -H "Client-ID: $YOUTUBE_CLIENTID" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $YOUTUBE_TOKEN" \
-  -d "${data}" | \
-  > /dev/null &
+  -d "${data}" > /dev/null &
 }
 
 set_twitch_title () {
@@ -72,11 +74,11 @@ set_twitter_status () {
   if [[ $topic =~ ^\( ]]; then
     return
   fi 
-  twitter update "📺 ${topic} https://youtu.be/${YOUTUBE_VIDEO}?t=$(vidoffsetsec)"
+  twitter update "📺 ${topic} https://youtu.be/${YOUTUBE_VIDEO}?t=$(vidoffsetsec)" &
 }
 
 edit_description () {
-  echo -e "$(vidoffset)\n${topic}" >> "${DESC_FILE}"
+  echo -e "$(vidoffset)  \n${topic}" >> "${DESC_FILE}"
   ${EDITOR} "${DESC_FILE}"
 }
 

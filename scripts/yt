@@ -1,12 +1,19 @@
 #!/usr/bin/bash
 
-USER=rwxrob
-KEY=$(auth get id youtubeapikey)
-ID=UCs2Kaw3Soa63cJq3H0VA7og
+YOUTUBE_APIKEY=$(auth get id youtubeapikey)
+
+lastid () {
+  curl -s "https://www.googleapis.com/youtube/v3/search?part=snippet&key=${YOUTUBE_APIKEY}&channelId=${YOUTUBE_CHANID}&type=video&order=date" | \
+  jq -r '.items[0].id.videoId'
+}
 
 liveid () {
-  curl -s "https://www.googleapis.com/youtube/v3/search?part=snippet&key=$KEY&channelId=$ID&eventType=live&type=video" | \
+  curl -s "https://www.googleapis.com/youtube/v3/search?part=snippet&key=${YOUTUBE_APIKEY}&channelId=${YOUTUBE_CHANID}&type=video&eventType=live" | \
   jq -r '.items[0].id.videoId'
+}
+
+openlast () {
+    open "https://youtu.be/$(lastid)"
 }
 
 ############################## Main Command  #############################
@@ -23,7 +30,18 @@ commands () {
     echo ${commands[@]}
 }
 
-declare -a commands=(commands liveid)
+archive () {
+  echo would archive description file
+  # TODO open the $(yt lastid) file for editing
+  # TODO check file for a good # heading on first line and empty line
+  # TODO create a slug out of title for filename
+  # TODO create a <rwxrob>/videos/<year>/<month>/<day> directory if needed
+  # TODO mv /tmp/vid* file into directory
+  # TODO set final title and description of last video
+  # TODO commit changes to <rwxrob> repo
+}
+
+declare -a commands=(commands liveid lastid openlast)
 
 for i in ${commands[@]}; do
     if [[ "$i" == "$subcommand" ]]; then

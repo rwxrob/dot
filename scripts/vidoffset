@@ -1,13 +1,57 @@
 #!/bin/bash
 
-VIDEO=$(yt liveid)
-vids="$HOME/Videos/Recordings"
-epoch=$(date +%s)
-offset=$(( $epoch - $(stat --printf '%W' $(newest "${vids}"))))
-hours=$(( $offset / 3600 ))
-remainder=$(( $offset % 3600))
-minutes=$(( $remainder / 60 ))
-seconds=$(( $offset % 60))
-printf "%02d:%02d:%02d https://youtu.be/%s?t=%d %s\n" \
-  $hours $minutes $seconds $VIDEO $offset $(date -d @$epoch -Iseconds)
+stamp () {
+  local video=$(yt liveid)
+  local vids="$HOME/Videos/Recordings"
+  local epoch=$(date +%s)
+  local offset=$(( $epoch - $(stat --printf '%W' $(newest "${vids}"))))
+  local hours=$(( $offset / 3600 ))
+  local remainder=$(( $offset % 3600))
+  local minutes=$(( $remainder / 60 ))
+  local seconds=$(( $offset % 60))
+  printf "%02d:%02d:%02d https://youtu.be/%s?t=%d %s\n" \
+    $hours $minutes $seconds $video $offset $(date -d @$epoch -Iseconds)
+}
 
+parse_secs () {
+  local x="$*"
+  x=${x#*t=}
+  x=${x% *}
+  echo "$x"
+}
+
+parse_time () {
+  local x="$*"
+  x=${x##* }
+  echo "$x"
+}
+
+usage () {
+  echo 'usage:
+  vidoffset          (print offset stamp)
+  vidoffset ±<adj>   (print adjusted offset)
+  vidoffset ±<adj> - (read stamp from stdin)'  
+}
+
+if [[ -z $1 ]]; then
+  stamp
+  exit
+fi
+
+if [[ -z $2 ]]; then
+  val=$(stamp)
+  echo $val
+  echo "would adjust prev stamp by $1"
+  exit
+fi
+
+if [[ $2 == - ]]; then
+  read val
+  parse_secs $val
+  parse_time $val
+  echo $val
+  echo "would adjust prev stamp by $1"
+  exit
+fi
+
+usage
