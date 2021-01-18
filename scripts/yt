@@ -1,0 +1,85 @@
+#!/usr/bin/bash
+
+NAME='Rob Muhlestein'
+USER=rwxrob
+EMAIL='rwx@robs.io'
+TOKEN=$(auth token gitlab)
+
+delete () {
+    local project=$1
+    local url="https://gitlab.com/api/v4/projects/$(urlencode $project)"
+    curl -s \
+      -X DELETE "${url}" \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer ${TOKEN}" | \
+    jq .message
+}
+
+list () {
+    local url="https://gitlab.com/api/v4/projects"
+    curl -s \
+      -X GET "${url}?membership=true" \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer ${TOKEN}" | \
+    jq -r '.[].path_with_namespace'
+}
+
+create () {
+  local data='{"name":"'$1'"}'
+  local res=$(post /api/v4/projects "${data}")
+  jq -r '.path_with_namespace' <<<"$res"
+}
+
+post () {
+    local path=$1
+    local data=$2
+    local url="https://gitlab.com${path}"
+    curl -s \
+      -X POST "${url}" \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer ${TOKEN}" \
+      -d "${data}"
+}
+
+graphql () {
+  local query='{"query":"'"$1"'"}'
+  post "/api/graphql" "${query}"
+}
+
+ping () {
+  local res=$(graphql 'query {currentUser {name}}')
+  echo $res
+}
+
+############################## Main Command  #############################
+
+subcommand="${1-usage}"
+shift 2>/dev/null
+
+if [ -z "$subcommand" ]; then
+    usage
+    exit 1
+fi
+
+commands () {
+    echo ${commands[@]}
+}
+
+declare -a commands=(delete commands post graphql ping create list)
+
+for i in ${commands[@]}; do
+    if [[ "$i" == "$subcommand" ]]; then
+        "$subcommand" "$@"
+        exit 0
+    fi
+done
+
+######################### Tab Completion Context ########################
+
+# remember COMP_LINE is changed by shift
+if [ -n "$COMP_LINE" ]; then
+    for cmd in ${commands[@]}; do 
+        [[ "${cmd:0:${#1}}" == "$1" ]] && echo $cmd
+    done
+    exit 0
+fi

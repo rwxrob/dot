@@ -24,6 +24,16 @@ aliases:
               status { message, emoji }
             }
           }'
+    offline: |
+        api graphql -f query='
+          mutation {
+            changeUserStatus(input:{
+              message: "$1",
+              emoji: "🔇"
+            }) {
+              status { message, emoji }
+            }
+          }'
     repos: |
         !gh api --paginate graphql -f owner="$1" -f query='
           query($owner: String!, $per_page: Int = 100, $endCursor: String) {

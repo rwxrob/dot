@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# note, unicode is passed as is (as it should be, imho)
+# and forward slashes are not unnecessarily escaped
+jsonesc () {
+  local q="$1"
+  q=${q//$'\\'/\\\\}    # back slash (must be first)
+  q=${q//$'\"'/'\"'}    # double quote
+  #q=${q//$'/'/'//'}    # forward slash (but just no)
+  q=${q/$'\b'/'\b'}     # backspace
+  q=${q//$'\f'/'\f'}    # form feed
+  q=${q//$'\n'/'\n'}    # line feed
+  q=${q//$'\r'/'\r'}    # carriage return
+  q=${q/$'\t'/'\t'}     # tab
+  printf '%s' $q
+}
+
+IFS=
+read line
+buf=$line
+while IFS= read  line; do
+  buf="${buf}"$'\n'"${line}"
+done
+
+jsonesc "${buf}"

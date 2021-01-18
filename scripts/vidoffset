@@ -1,0 +1,13 @@
+#!/bin/bash
+
+VIDEO=X90l3OW5Ns4
+vids="$HOME/Videos/Recordings"
+epoch=$(date +%s)
+offset=$(( $epoch - $(stat --printf '%W' $(newest "${vids}"))))
+hours=$(( $offset / 3600 ))
+remainder=$(( $offset % 3600))
+minutes=$(( $remainder / 60 ))
+seconds=$(( $offset % 60))
+printf "%02d:%02d:%02d https://youtu.be/%s?t=%d %s\n" \
+  $hours $minutes $seconds $VIDEO $offset $(date -d @$epoch -Iseconds)
+

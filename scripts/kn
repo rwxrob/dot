@@ -24,7 +24,6 @@
 
 declare NOCOLOR=
 [[ -t 1 ]] || NOCOLOR=y
-
 declare GOLD=$'\033[38;2;184;138;0m'
 declare RED=$'\033[38;2;255;0;0m'
 declare GREY=$'\033[38;2;100;100;100m'
