@@ -23,9 +23,7 @@ if [[ ${#topic} > 80 ]]; then
   fatal 'Topic must be under 80 characters'
 fi
 
-# FIXME derive the live youtube video
-YOUTUBE_VIDEO=X90l3OW5Ns4
-
+YOUTUBE_VIDEO=$(yt liveid)
 YOUTUBE_TOKEN=$(auth token youtube)
 YOUTUBE_CLIENTID=$(auth get id youtube)
 TWITCH_TOKEN=$(auth token twitch)
@@ -37,14 +35,13 @@ DESC_FILE="/tmp/vid${YOUTUBE_VIDEO}"
 set_youtube_title () {
   local tpl='{"id":"%s","snippet":{"title":"%s","categoryId":"28","description":"%s"}}'
   local desc="$(jsonesc < "$DESC_FILE")"
-  echo "$desc"
   local data=$(printf "${tpl}" "${YOUTUBE_VIDEO}" "${topic}" "${desc}")
 curl -s \
   -X PUT "https://www.googleapis.com/youtube/v3/videos?part=snippet" \
   -H "Client-ID: $YOUTUBE_CLIENTID" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $YOUTUBE_TOKEN" \
-  -d "${data}" \
+  -d "${data}" | \
   > /dev/null &
 }
 

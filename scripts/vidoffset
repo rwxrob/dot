@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VIDEO=X90l3OW5Ns4
+VIDEO=$(yt liveid)
 vids="$HOME/Videos/Recordings"
 epoch=$(date +%s)
 offset=$(( $epoch - $(stat --printf '%W' $(newest "${vids}"))))

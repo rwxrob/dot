@@ -1,54 +1,12 @@
 #!/usr/bin/bash
 
-NAME='Rob Muhlestein'
 USER=rwxrob
-EMAIL='rwx@robs.io'
-TOKEN=$(auth token gitlab)
+KEY=$(auth get id youtubeapikey)
+ID=UCs2Kaw3Soa63cJq3H0VA7og
 
-delete () {
-    local project=$1
-    local url="https://gitlab.com/api/v4/projects/$(urlencode $project)"
-    curl -s \
-      -X DELETE "${url}" \
-      -H "Content-Type: application/json" \
-      -H "Authorization: Bearer ${TOKEN}" | \
-    jq .message
-}
-
-list () {
-    local url="https://gitlab.com/api/v4/projects"
-    curl -s \
-      -X GET "${url}?membership=true" \
-      -H "Content-Type: application/json" \
-      -H "Authorization: Bearer ${TOKEN}" | \
-    jq -r '.[].path_with_namespace'
-}
-
-create () {
-  local data='{"name":"'$1'"}'
-  local res=$(post /api/v4/projects "${data}")
-  jq -r '.path_with_namespace' <<<"$res"
-}
-
-post () {
-    local path=$1
-    local data=$2
-    local url="https://gitlab.com${path}"
-    curl -s \
-      -X POST "${url}" \
-      -H "Content-Type: application/json" \
-      -H "Authorization: Bearer ${TOKEN}" \
-      -d "${data}"
-}
-
-graphql () {
-  local query='{"query":"'"$1"'"}'
-  post "/api/graphql" "${query}"
-}
-
-ping () {
-  local res=$(graphql 'query {currentUser {name}}')
-  echo $res
+liveid () {
+  curl -s "https://www.googleapis.com/youtube/v3/search?part=snippet&key=$KEY&channelId=$ID&eventType=live&type=video" | \
+  jq -r '.items[0].id.videoId'
 }
 
 ############################## Main Command  #############################
@@ -65,7 +23,7 @@ commands () {
     echo ${commands[@]}
 }
 
-declare -a commands=(delete commands post graphql ping create list)
+declare -a commands=(commands liveid)
 
 for i in ${commands[@]}; do
     if [[ "$i" == "$subcommand" ]]; then
