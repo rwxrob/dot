@@ -7,6 +7,8 @@
 # you don't know how to integrate the shell, you don't know Vi. Learn it
 # *before* you "extend" it.
 
+# assumes there is alway a space after comment charaters
+
 while IFS= read -r line; do 
-  echo "${1-#} $line"
+  echo "${line#* }"
 done
