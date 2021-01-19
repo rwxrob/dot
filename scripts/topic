@@ -58,8 +58,7 @@ curl -s  \
   -H "Authorization: OAuth $TWITCH_TOKEN" \
   -H 'Accept: application/vnd.twitchtv.v5+json' \
   -H 'Content-Type: application/json' \
-  -d '{"channel":{"status":"'"$topic"'"}}' \
-  > /dev/null &
+  -d '{"channel":{"status":"'"$topic"'"}}' > /dev/null &
 }
 
 set_irc_topic () {
@@ -75,10 +74,10 @@ set_github_status () {
 }
 
 set_twitter_status () {
-  if [[ $topic =~ ^\( ]]; then
-    return
-  fi 
-  twitter update "📺 ${topic} https://youtu.be/${YOUTUBE_VIDEO}?t=$(vidoffsetsec)" &
+   if [[ $topic =~ ^\( ]]; then
+     return
+   fi 
+   twitter update "📺 ${topic} https://youtu.be/${YOUTUBE_VIDEO}?t=$(vidoffsetsec)" 
 }
 
 edit_description () {
