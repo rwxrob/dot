@@ -28,6 +28,7 @@ YOUTUBE_CLIENTID=$(auth get id youtube)
 TWITCH_TOKEN=$(auth token twitch)
 TWITCH_CLIENTID=$(auth get id twitch)
 
+# FIXME
 YOUTUBE_VIDEO=$(yt liveid)
 if [[ $YOUTUBE_VIDEO == null ]];then
   YOUTUBE_VIDEO=$(yt lastid)
@@ -36,6 +37,9 @@ fi
 DESC_FILE="/tmp/vid${YOUTUBE_VIDEO}"
 
 set_youtube_title () {
+  if [[ -z "${YOUTUBE_VIDEO}" ]];then
+    return
+  fi
   local tpl='{"id":"%s","snippet":{"title":"%s","categoryId":"28","description":"%s"}}'
   local desc="$(jsonesc < "$DESC_FILE")"
   local data=$(printf "${tpl}" "${YOUTUBE_VIDEO}" "${topic}" "${desc}")
