@@ -81,7 +81,7 @@ set_twitter_status () {
 }
 
 edit_description () {
-  echo -e "$(vidoffset)  \n${topic}" >> "${DESC_FILE}"
+  echo -e "\n$(vidoffset)  \n${topic}" >> "${DESC_FILE}"
   ${EDITOR} "${DESC_FILE}"
 }
 

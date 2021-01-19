@@ -3,7 +3,9 @@
 stamp () {
   local video=$(yt liveid)
 
-  local vids="$HOME/Videos/Recordings"
+  #local vids="$HOME/Videos/Recordings"
+  local vids="${YOUTUBE_RECORDINGS}"
+
   local epoch=$(date +%s)
   local offset=$(( $epoch - $(stat --printf '%W' $(newest "${vids}"))))
 

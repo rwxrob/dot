@@ -30,7 +30,7 @@ openlast () {
 subcommand="${1-usage}"
 shift 2>/dev/null
 
-if [ -z "$subcommand" ]; then
+if [ -z "${subcommand}" ]; then
     usage
     exit 1
 fi
@@ -52,22 +52,61 @@ archive () {
 
 elapsed () {
   local video=$(liveid)
+  local recordings="${YOUTUBE_RECORDINGS}"
   if [[ -z "${video}" ]]; then
     return
   fi
-  local epoch=$(date +%s)
-  local offset=$(( "${epoch}" - $(stat --printf '%W' $(newest "${vids}"))))
-  echo $offset
+  local adjust="$@"
+  local epoch
+  if [[ -n "${adjust}" ]];then
+    epoch=$(date +%s -d "${adjust}")
+  else
+    epoch=$(date +%s)
+  fi
+  local secs=$(( "${epoch}" - \
+    $(stat --printf '%W' $(newest "${recordings}"))))
+  echo "${secs} @${epoch}"
 }
 
-# elapsedsec () {
-# }
+elapsedhr () {
+  local elapsed=$(elapsed "$@")
+  sec2hr "${elapsed%% *}"
+}
 
-declare -a commands=(commands liveid lastid openlast elapsed elapsedsec)
+sec2hr () {
+  local sec="$1"
+  local hours=$(( "${sec}" / 3600 ))
+  local remainder=$(( "${sec}" % 3600))
+  local minutes=$(( "${remainder}" / 60 ))
+  local seconds=$(( "${sec}" % 60))
+  printf "%02d:%02d:%02d\n" "${hours}" "${minutes}" "${seconds}"
+}
+
+elapsedline () {
+  local args=($(elapsed "$@"))
+  local secs="${args[0]}"
+  local epoch="${args[1]}"
+  local hr=$(sec2hr "${secs}")
+  local iso=$(date -d "${epoch}" -Iseconds)
+  echo "${hr} https://youtu.be/%s?t=${secs} ${iso}  " 
+}
+
+adjustline () {
+  IFS= read -r line
+  local secs=${line#*t=}
+  secs=${secs% *}
+  local time=${line##* }
+  echo "$secs $time"
+}
+
+declare -a commands=(
+  commands liveid lastid openlast elapsed
+  elapsedhr elapsedline sec2hr adjustline
+)
 
 for i in ${commands[@]}; do
-    if [[ "$i" == "$subcommand" ]]; then
-        "$subcommand" "$@"
+    if [[ "${i}" == "${subcommand}" ]]; then
+        "${subcommand}" "$@"
         exit 0
     fi
 done
@@ -75,9 +114,9 @@ done
 ######################### Tab Completion Context ########################
 
 # remember COMP_LINE is changed by shift
-if [ -n "$COMP_LINE" ]; then
+if [ -n "${COMP_LINE}" ]; then
     for cmd in ${commands[@]}; do 
-        [[ "${cmd:0:${#1}}" == "$1" ]] && echo $cmd
+        [[ "${cmd:0:${#1}}" == "$1" ]] && echo "${cmd}"
     done
     exit 0
 fi
