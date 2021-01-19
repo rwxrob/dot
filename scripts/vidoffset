@@ -2,9 +2,11 @@
 
 stamp () {
   local video=$(yt liveid)
+
   local vids="$HOME/Videos/Recordings"
   local epoch=$(date +%s)
   local offset=$(( $epoch - $(stat --printf '%W' $(newest "${vids}"))))
+
   local hours=$(( $offset / 3600 ))
   local remainder=$(( $offset % 3600))
   local minutes=$(( $remainder / 60 ))
@@ -29,8 +31,7 @@ parse_time () {
 usage () {
   echo 'usage:
   vidoffset          (print offset stamp)
-  vidoffset ±<adj>   (print adjusted offset)
-  vidoffset ±<adj> - (read stamp from stdin)'  
+  vidoffset ±<adj>   (print adjusted offset)'
 }
 
 if [[ -z $1 ]]; then
@@ -40,15 +41,6 @@ fi
 
 if [[ -z $2 ]]; then
   val=$(stamp)
-  echo $val
-  echo "would adjust prev stamp by $1"
-  exit
-fi
-
-if [[ $2 == - ]]; then
-  read val
-  parse_secs $val
-  parse_time $val
   echo $val
   echo "would adjust prev stamp by $1"
   exit

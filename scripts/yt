@@ -1,5 +1,14 @@
 #!/usr/bin/bash
 
+## Environment Dependencies:
+##   YOUTUBE_RECORDINGS
+##   YOUTUBE_CHANID
+##   COMP_LINE
+## 
+## Script Dependencies
+##   auth
+##   newest
+
 YOUTUBE_APIKEY=$(auth get id youtubeapikey)
 
 lastid () {
@@ -41,7 +50,20 @@ archive () {
   # TODO commit changes to <rwxrob> repo
 }
 
-declare -a commands=(commands liveid lastid openlast)
+elapsed () {
+  local video=$(liveid)
+  if [[ -z "${video}" ]]; then
+    return
+  fi
+  local epoch=$(date +%s)
+  local offset=$(( "${epoch}" - $(stat --printf '%W' $(newest "${vids}"))))
+  echo $offset
+}
+
+# elapsedsec () {
+# }
+
+declare -a commands=(commands liveid lastid openlast elapsed elapsedsec)
 
 for i in ${commands[@]}; do
     if [[ "$i" == "$subcommand" ]]; then

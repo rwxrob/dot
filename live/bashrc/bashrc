@@ -380,6 +380,8 @@ fi
 
 complete -C pdf pdf
 complete -C md md
+complete -C yt yt
+complete -C gl gl
 complete -C kn kn
 complete -C auth auth
 complete -C live live
