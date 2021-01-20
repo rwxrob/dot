@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# Opens the default log file with the default EDITOR. Accepts the
+# standard `date` offset
+
+relpath=$(datepath "$*")
+dir="${KNPATH}/$relpath"
+file="$dir/README.md"
+mkdir -p "${dir}"
+
+# prepend a timestamped heading
+
+tmpfile=$(mktemp)
+hnow "$*" > "${tmpfile}" 
+echo >> "${tmpfile}"
+if [ -e "${file}" ];then
+  cat "${file}" >> "${tmpfile}"
+fi
+mv "${tmpfile}" "${file}"
+
+echo "${file}"
+"${EDITOR}" "${file}"
+

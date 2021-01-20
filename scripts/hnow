@@ -1,10 +1,2 @@
 #!/bin/sh
-
-case "${1:-2}" in 
-  1) exec echo '# '$(now) ;;
-  2) exec echo '## '$(now) ;;
-  3) exec echo '### '$(now) ;;
-  4) exec echo '#### '$(now) ;;
-  5) exec echo '##### '$(now) ;;
-  6) exec echo '###### '$(now) ;;
-esac
+echo '## '$(now "$*")
