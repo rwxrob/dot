@@ -14,8 +14,6 @@ alias more='less -R'
 alias ducks='du -sh * | sort -hr | head -11' # 🦆
 alias tweet='twitter update'
 
-alias coc="egrep '^\\* ' '$REPOS/gitlab.com/rwxrob/robs.io/coc/README.md'"
-
 # dropped ls aliases because need to memorize switches
 alias ls='ls -h --color=auto'
 
@@ -40,10 +38,7 @@ alias syserrors="sudo journalctl -p 3 -xb"
 alias sysderrors="sudo systemctl --failed"
 alias top="htop"
 alias s="wee"
-alias discord="$(which discord) &> $(mktemp /tmp/discord.XXX.$(date +%s)) &"
-alias obs="$(which obs) &> $(mktemp /tmp/obs.XXX.$(date +%s)) &"
 alias chmox="chmod u+x"
-
 
 # Igor Chubin is a god.
 
@@ -56,7 +51,6 @@ cheat () {
 } && export -f cheat
 
 which vim &>/dev/null && alias vi=vim
-
 
 alias tmatrix="tmatrix -s 15 --fade -c default -C red"
 alias cmatrix="cmatrix -b -C red -u 6"

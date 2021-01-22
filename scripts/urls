@@ -1,2 +1,4 @@
 #!/bin/bash
-curl -s 'https://chat.rwx.gg/logs/%23%23rwx.gg/urls'
+curl -s 'https://chat.rwx.gg/urls'
+
+

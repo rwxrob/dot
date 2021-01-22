@@ -1,2 +1,2 @@
 #!/bin/bash
-tail -1 <<< $(urls)
+curl 'https://chat.rwx.gg/lasturl'

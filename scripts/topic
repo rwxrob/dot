@@ -3,6 +3,11 @@
 # Updates YouTube and Twitch Titles, sets the GitHub profile status, and
 # sends a tweet pointing to the YouTube video.
 
+if [[ -z "$1" ]]; then
+  wee /topic
+  exit
+fi
+
 # change these do solarized/gruvbox variations (not millions)
 if [[ -t 1 ]]; then
   GOLD=$'\033[38;2;184;138;0m'
@@ -28,16 +33,17 @@ YOUTUBE_CLIENTID=$(auth get id youtube)
 TWITCH_TOKEN=$(auth token twitch)
 TWITCH_CLIENTID=$(auth get id twitch)
 
-# FIXME
 YOUTUBE_VIDEO=$(yt liveid)
-if [[ $YOUTUBE_VIDEO == null ]];then
-  YOUTUBE_VIDEO=$(yt lastid)
+if [[ ! $topic =~ ^\( ]]; then
+  if [[ $YOUTUBE_VIDEO == null ]];then
+    read -p "YouTube Video ID: " YOUTUBE_VIDEO
+  fi
 fi
 
 DESC_FILE="/tmp/vid${YOUTUBE_VIDEO}"
 
 set_youtube_title () {
-  if [[ -z "${YOUTUBE_VIDEO}" ]];then
+  if [[ "${YOUTUBE_VIDEO}" == null ]];then
     return
   fi
   local tpl='{"id":"%s","snippet":{"title":"%s","categoryId":"28","description":"%s"}}'
@@ -74,6 +80,9 @@ set_github_status () {
 }
 
 set_twitter_status () {
+  if [[ "${YOUTUBE_VIDEO}" == null ]];then
+    return
+  fi
    if [[ $topic =~ ^\( ]]; then
      return
    fi 
@@ -81,6 +90,9 @@ set_twitter_status () {
 }
 
 edit_description () {
+  if [[ $YOUTUBE_VIDEO == null ]];then
+    return
+  fi
   echo -e "\n$(vidoffset)  \n${topic}" >> "${DESC_FILE}"
   ${EDITOR} "${DESC_FILE}"
 }

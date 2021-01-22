@@ -14,26 +14,8 @@ pager:
 aliases:
     co: pr checkout
     delete: api -X DELETE "repos/$1"
-    live: |
-        api graphql -f query='
-          mutation {
-            changeUserStatus(input:{
-              message: "$1",
-              emoji: "📺"
-            }) {
-              status { message, emoji }
-            }
-          }'
-    offline: |
-        api graphql -f query='
-          mutation {
-            changeUserStatus(input:{
-              message: "$1",
-              emoji: "🔇"
-            }) {
-              status { message, emoji }
-            }
-          }'
+    live: "api graphql -f query='\n  mutation {\n    changeUserStatus(input:{\n      message: \"$1\",\n      emoji: \"\U0001F4FA\"\n    }) {\n      status { message, emoji }\n    }\n  }'\n"
+    offline: "api graphql -f query='\n  mutation {\n    changeUserStatus(input:{\n      message: \"$1\",\n      emoji: \"\U0001F507\"\n    }) {\n      status { message, emoji }\n    }\n  }'\n"
     repos: |
         !gh api --paginate graphql -f owner="$1" -f query='
           query($owner: String!, $per_page: Int = 100, $endCursor: String) {

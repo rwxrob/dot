@@ -1,0 +1,3 @@
+#!/bin/sh
+
+"${EDITOR}" "${KNPATH}/todo/README.md"
