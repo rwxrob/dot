@@ -16,10 +16,11 @@ startd () {
 }
 
 stopd () {
+  echo 'please wait while docker container is stopped'
   sudo docker stop gstreamd
 }
 
-sudo echo 'Echo sudo access granted.'
+sudo echo 'sudo access granted'
 
 case $1 in
   start)  startd ;;
