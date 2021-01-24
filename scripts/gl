@@ -17,11 +17,19 @@ delete () {
 
 list () {
     local url="https://gitlab.com/api/v4/projects"
-    curl -s \
-      -X GET "${url}?membership=true" \
+    local -i page
+    while true; do 
+      local -a repos=$(curl -s \
+      -X GET "${url}?membership=true&per_page=100&page=$page" \
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer ${TOKEN}" | \
-    jq -r '.[].path_with_namespace'
+      jq -r '.[].path_with_namespace')
+      if [[ ${#repos} == 0 ]]; then
+        break
+      fi
+      echo "$repos"
+      ((page++))
+    done
 }
 
 create () {
