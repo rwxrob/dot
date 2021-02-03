@@ -14,8 +14,6 @@ alias more='less -R'
 alias ducks='du -sh * | sort -hr | head -11' # 🦆
 alias tweet='twitter update'
 
-# dropped ls aliases because need to memorize switches
-alias ls='ls -h --color=auto'
 
 alias pie='perl -p -i -e '
 alias grep='grep -i --colour=auto'
@@ -23,11 +21,19 @@ alias egrep='egrep -i --colour=auto'
 alias fgrep='fgrep -i --colour=auto'
 alias curl='curl -L'
 
+if [[ -n $(which exa) ]];then
+  # dropped ls aliases because need to memorize switches
+  alias ls='exa -h '
+else
+  alias ls='ls -h --color=auto'
+fi
+
 alias ssh-keygen="ssh-keygen -t ed25519"
 
 alias '?'=duck
 alias '??'=google
 alias '???'=bing
+alias d=sduck
 
 alias bat='\
   upower -i /org/freedesktop/UPower/devices/battery_BAT0 | \
@@ -79,3 +85,15 @@ envx () {
 if [[ -e "$HOME/.env" ]]; then
   envx $HOME/.env
 fi
+
+# Change into the default log directory for given date. Accepts the
+# standard `date` offset. Creates the directory if it does not exist.
+
+cdlog () {
+  local relpath=$(datepath "$*")
+  dir="${KNPATH}/log/$relpath"
+  file="$dir/README.md"
+  mkdir -p "${dir}"
+  cd "${dir}"
+  pwd
+} && export -f cdlog
