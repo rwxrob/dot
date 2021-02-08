@@ -1,12 +1,23 @@
 #!/usr/bin/bash
 
 USER=rwxrob
-EMAIL='rwx@robs.io'
+EMAIL=rwx@robs.io
+ID=1210114652
 TOKEN=$(auth token twitter)
 CLIENTID=$(auth get id twitter)
 
 update () {
-    twurl -d "status=$*" /1.1/statuses/update.json | jq .created_at
+    local status="$1" image="$2" data media_id
+    if [[ -n "${image}" ]]; then
+        media_id=$(twurl -X POST -H upload.twitter.com \
+            '/1.1/media/upload.json?media_category=TWEET_IMAGE&additional_owners='${ID} \
+            -f "${image}" -F media | jq .media_id )
+        data="media_ids=${media_id}&status=${status}"
+        echo "$data"
+    else
+        data="status=${status}"
+    fi
+    twurl '/1.1/statuses/update.json' -d "${data}" | jq .created_at
 }
 
 tweets () {

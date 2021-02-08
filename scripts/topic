@@ -34,27 +34,29 @@ TWITCH_TOKEN=$(auth token twitch)
 TWITCH_CLIENTID=$(auth get id twitch)
 
 YOUTUBE_VIDEO=$(yt liveid)
-if [[ ! $topic =~ ^\( ]]; then
+if [[ ! $topic =~ ^\[ ]]; then
   if [[ $YOUTUBE_VIDEO == null ]];then
     read -p "YouTube Video ID: " YOUTUBE_VIDEO
   fi
 fi
 
-DESC_FILE="/tmp/vid${YOUTUBE_VIDEO}"
+# FIXME change to file in current days log
+LOGDIR=$(kn logpath)
+DATA_FILE="/tmp/vid${YOUTUBE_VIDEO}"
 
 set_youtube_title () {
   if [[ "${YOUTUBE_VIDEO}" == null ]];then
     return
   fi
   local tpl='{"id":"%s","snippet":{"title":"%s","categoryId":"28","description":"%s"}}'
-  local desc="$(jsonesc < "$DESC_FILE")"
+  local desc="$(jsonesc < "$DATA_FILE")"
   local data=$(printf "${tpl}" "${YOUTUBE_VIDEO}" "${topic}" "${desc}")
 curl -s \
   -X PUT "https://www.googleapis.com/youtube/v3/videos?part=snippet" \
   -H "Client-ID: $YOUTUBE_CLIENTID" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $YOUTUBE_TOKEN" \
-  -d "${data}" > /dev/null &
+  -d "${data}" > /dev/null
 }
 
 set_twitch_title () {
@@ -64,26 +66,26 @@ curl -s  \
   -H "Authorization: OAuth $TWITCH_TOKEN" \
   -H 'Accept: application/vnd.twitchtv.v5+json' \
   -H 'Content-Type: application/json' \
-  -d '{"channel":{"status":"'"$topic"'"}}' > /dev/null &
+  -d '{"channel":{"status":"'"$topic"'"}}' > /dev/null
 }
 
 set_irc_topic () {
-  ssh skilstak.sh 'echo "*/topic '$topic'" >> .weechat/weechat_fifo' &
+  ssh skilstak.sh 'echo "*/topic '$topic'" >> .weechat/weechat_fifo'
 }
 
 set_github_status () {
-  if [[ $topic =~ ^\( ]]; then
-    gh offline "$topic" > /dev/null &
+  if [[ $topic =~ ^\[ ]]; then
+    gh offline "$topic" > /dev/null
     return
   fi
-  gh live "$topic" > /dev/null &
+  gh live "$topic" > /dev/null
 }
 
 set_twitter_status () {
   if [[ "${YOUTUBE_VIDEO}" == null ]];then
     return
   fi
-   if [[ $topic =~ ^\( ]]; then
+   if [[ $topic =~ ^\[ ]]; then
      return
    fi 
    twitter update "📺 ${topic} https://youtu.be/${YOUTUBE_VIDEO}?t=$(vidoffsetsec)" 
@@ -93,8 +95,8 @@ edit_description () {
   if [[ $YOUTUBE_VIDEO == null ]];then
     return
   fi
-  echo -e "\n$(vidoffset)  \n${topic}" >> "${DESC_FILE}"
-  ${EDITOR} "${DESC_FILE}"
+  echo -e "\n$(vidoffset)  \n${topic}" >> "${DATA_FILE}"
+  ${EDITOR} "${DATA_FILE}"
 }
 
 edit_description

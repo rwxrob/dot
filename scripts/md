@@ -1,8 +1,9 @@
 #!/bin/bash
 
-## See, not *this* is why using only hashtag headers in Markdown is so
+## See, now *this* is why using only hashtag headers in Markdown are so
 ## essential. Imagine doing this if level one and two headers could
 ## also be the stupid underline style.
+
 toc () {
   declare file=$(mktemp)
   #TODO make it smarter, just need something quick for now

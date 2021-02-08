@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Produces a centered title in the middle of a horizontal rule of text.
+
 str=$(argsorin $*)
 len=${#str}
 side=$(( ((HRULEWIDTH/2)-len/2)-3 ))

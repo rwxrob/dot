@@ -1,25 +1,21 @@
-#!/bin/sh
+#!/bin/bash
 
+#######################################
 # Allows the reading of all combined arguments into a string buffer that
 # is then echoed, or if no arguments are detected reads fully from
-# standard input until there is none left and echoes that. This is notable
-# because it allows the usage of heredoc input instead of arguments making
-# for much cleaner blocks of text See htitle, tell (which is used in the
-# and the setup script including in this repo) for how to use it.
+# standard input until there is none left and echoes that. This is
+# notable because it allows the usage of heredoc input instead of
+# arguments making for much cleaner blocks of text See htitle, tell
+# (which is used in the and the setup script including in this repo) for
+# how to use it.
 
 argsorin () { 
-    buf="$*"
-    if [ -n "$buf" ]; then
+    local buf="$*"
+    if [[ -n "$buf" ]]; then
       echo "$buf"
       return
     fi
-    IFS=
-    read line
-    buf=$line
-    while IFS= read  line; do
-        buf="$buf\n$line"
-    done
-    echo "$buf"
+    echo "$(</dev/stdin)"
 }
 
 argsorin "$@"

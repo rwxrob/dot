@@ -1,11 +1,12 @@
 #!/bin/bash
 
-# Opens the default todo file with vim. Prompts to commit.
+# Opens the default quotes file with vim. Prompts to commit.
 
-dir="${KN}/todo"
+rel="$1"
+dir="${KN}/notes/${rel}"
 file="${dir}/README.md"
 mkdir -p "${dir}"
-vim +3 "${file}"
+vim "${file}"
 
 read -p 'Do you want to commit? ' commit
 
@@ -15,5 +16,5 @@ fi
 
 cd "${dir}"
 git add "${file}" 
-git commit -m 'TODOs updated.'
+git commit
 git push

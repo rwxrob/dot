@@ -1,7 +1,5 @@
 #!/bin/bash
-
 mkdir -p ~/.config/gh 2>/dev/null
-ln -s "$PWD/config.yml" "$HOME/.config/gh/config.yml"
+ln -fs "$PWD/config.yml" "$HOME/.config/gh/config.yml"
 ls -l ~/.config/gh
-
-echo 'Now you still need to `gh auth --scopes delete_repo`.'
+echo 'You might need to do gh auth --with-token $(auth token github)'

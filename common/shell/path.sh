@@ -8,7 +8,6 @@ $REPOS/github.com/$GITUSER/dotfiles/scripts
 # be sure NOT to add ./ cuz it's unsafe
 export PATH=\
 $SCRIPTS:\
-$SCRIPTS_PRIV:\
 /usr/lib/go-1.15/bin:\
 $HOME/.local/bin:\
 $HOME/.local/go/bin:\
@@ -30,12 +29,12 @@ $HOME/.deno/bin:\
 # be sure not to remove ./ or stuff gets weird
 export CDPATH=\
 ./:\
-$REPOS/gitlab.com/$GITUSER:\
 $REPOS/github.com/$GITUSER:\
-$REPOS/gitlab.com/*:\
+$REPOS/gitlab.com/$GITUSER:\
 $REPOS/github.com/*:\
-$REPOS/gitlab.com:\
+$REPOS/gitlab.com/*:\
 $REPOS/github.com:\
+$REPOS/gitlab.com:\
 $REPOS:\
 /media/$USER:\
 $HOME

@@ -1,10 +1,15 @@
 #!/bin/bash
-ageof () {
-  declare path="$1"
+
+# Outputs the seconds since the thing identified by the first argument
+# was last modified (not created).
+
+ageof() {
+  local path="$1"
   if [[ -z "$path" ]]; then
-    usageln 'ageof <path>'
+    echo 'usage: ageof <path>'
     return 1
   fi
   echo $(( $(date +%s) - $(date -r "$path" +%s) ))
 }
-ageof $*
+
+ageof "$@"

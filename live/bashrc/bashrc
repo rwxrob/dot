@@ -425,12 +425,12 @@ export white=$'\033[37m'
 
 # Here's your colored man pages right here.
 
-export LESS_TERMCAP_mb=$magen
-export LESS_TERMCAP_md=$yellow
-export LESS_TERMCAP_me=$reset
-export LESS_TERMCAP_se=$reset
-export LESS_TERMCAP_so=$blue
-export LESS_TERMCAP_ue=$reset
+export LESS_TERMCAP_mb=$'\033[35m'
+export LESS_TERMCAP_md=$'\033[33m'
+export LESS_TERMCAP_me=$'\033[0m'
+export LESS_TERMCAP_se=$'\033[0m'
+export LESS_TERMCAP_so=$'\033[34m'
+export LESS_TERMCAP_ue=$'\033[0m'
 export LESS_TERMCAP_us=$'\033[4m'
 
 ############################# Go Development #############################
@@ -480,8 +480,6 @@ alias more='less -R'
 alias ducks='du -sh * | sort -hr | head -11' # 🦆
 alias tweet='twitter update'
 
-# dropped ls aliases because need to memorize switches
-alias ls='ls -h --color=auto'
 
 alias pie='perl -p -i -e '
 alias grep='grep -i --colour=auto'
@@ -489,11 +487,19 @@ alias egrep='egrep -i --colour=auto'
 alias fgrep='fgrep -i --colour=auto'
 alias curl='curl -L'
 
+if [[ -n $(which exa) ]];then
+  # dropped ls aliases because need to memorize switches
+  alias ls='exa -h '
+else
+  alias ls='ls -h --color=auto'
+fi
+
 alias ssh-keygen="ssh-keygen -t ed25519"
 
 alias '?'=duck
 alias '??'=google
 alias '???'=bing
+alias d=sduck
 
 alias bat='\
   upower -i /org/freedesktop/UPower/devices/battery_BAT0 | \

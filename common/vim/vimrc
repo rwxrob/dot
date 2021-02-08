@@ -148,6 +148,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
   Plug 'PProvost/vim-ps1'
   Plug 'tpope/vim-fugitive'
+  Plug 'tpope/unimpaired'
   "Plug 'airblade/vim-gitgutter'
   Plug 'morhetz/gruvbox'
   "Plug 'nielsmadan/harlequin'
@@ -243,7 +244,7 @@ endif
 autocmd vimleavepre *.md !perl -p -i -e 's,\[([^\]]+)\]\(\),[\1](https://duck.com/lite?kd=-1&kp=-1&q=\1),g' %
 
 " fill in anything beginning with @ with a link to twitch to it
-autocmd vimleavepre *.md !perl -p -i -e 's, @(\w+), [\\@\1](https://twitch.tv/\1),g' %
+"autocmd vimleavepre *.md !perl -p -i -e 's, @(\w+), [\\@\1](https://twitch.tv/\1),g' %
 
 " if you are gonna visual, might as well...
 vmap < <gv
@@ -270,6 +271,12 @@ au bufnewfile,bufRead *ssh/config set filetype=sshconfig
 au bufnewfile,bufRead *gitconfig set filetype=gitconfig
 au bufnewfile,bufRead /tmp/psql.edit.* set syntax=sql
 
+" fun! s:DetectGo()
+"     if getline(1) == 'package main'
+"         set ft=go
+"     endif
+" endfun
+" autocmd BufNewFile,BufRead * call s:DetectGo()
 
 " displays all the syntax rules for current position, useful
 " when writing vimscript syntax plugins

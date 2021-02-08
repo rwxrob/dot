@@ -27,3 +27,17 @@ aliases:
               }
             }
           ' | jq -r '.data.repositoryOwner.repositories.nodes[].nameWithOwner' | sort
+    orgs: |
+        !gh api --paginate graphql  -f query='
+        query {
+          viewer {
+            id
+            name
+            organizations(first: 100) {
+              nodes {
+                id
+                name
+              }
+            }
+          }
+        } ' | jq -r '.data.viewer.organizations[][] | .id + " " + .name'

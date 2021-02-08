@@ -1,0 +1,134 @@
+#!/usr/bin/bash
+
+## Environment Dependencies:
+##   YOUTUBE_RECORDINGS
+##   YOUTUBE_CHANID
+##   COMP_LINE
+## 
+## Script Dependencies
+##   auth
+##   newest
+
+YOUTUBE_APIKEY=$(auth get id youtubeapikey)
+
+lastid () {
+  curl -s "https://www.googleapis.com/youtube/v3/search?part=snippet&key=${YOUTUBE_APIKEY}&channelId=${YOUTUBE_CHANID}&type=video&order=date" | \
+  jq -r '.items[0].id.videoId'
+}
+
+liveid () {
+  curl -s "https://www.googleapis.com/youtube/v3/search?part=snippet&key=${YOUTUBE_APIKEY}&channelId=${YOUTUBE_CHANID}&type=video&eventType=live" | \
+  jq -r '.items[0].id.videoId'
+}
+
+openlast () {
+    open "https://youtu.be/$(lastid)"
+}
+
+# Convert the YAML file at path into text suitable for a YouTube
+# description with Bookmarks/Chapters. If 'live' argument is passed will
+# use elapsedline format since the offsets will not yet be calculated by
+# YouTube. Otherwise, only the offset and the title of the Mark will be
+# written one to a line (with the initial 00:00 to trigger YouTube
+# chapters).
+
+rec2desc () {
+  local recd=${1:-$(kn recdir)}
+  local live=$2
+  # TODO write the descript to stdout
+  # TODO loop through all the Marks writing one line each
+}
+
+subcommand="${1-usage}"
+shift 2>/dev/null
+
+if [ -z "${subcommand}" ]; then
+    usage
+    exit 1
+fi
+
+commands () {
+    echo ${commands[@]}
+}
+
+archive () {
+  echo would archive description file
+  # TODO open the $(yt lastid) file for editing
+  # TODO check file for a good # heading on first line and empty line
+  # TODO create a slug out of title for filename
+  # TODO create a <rwxrob>/videos/<year>/<month>/<day> directory if needed
+  # TODO mv /tmp/vid* file into directory
+  # TODO set final title and description of last video
+  # TODO commit changes to <rwxrob> repo
+}
+
+elapsed () {
+  local video=$(liveid)
+  local recordings="${YOUTUBE_RECORDINGS}"
+  if [[ -z "${video}" ]]; then
+    return
+  fi
+  local adjust="$@"
+  local epoch
+  if [[ -n "${adjust}" ]];then
+    epoch=$(date +%s -d "${adjust}")
+  else
+    epoch=$(date +%s)
+  fi
+  local secs=$(( "${epoch}" - \
+    $(stat --printf '%W' $(newest "${recordings}"))))
+  echo "${secs} @${epoch}"
+}
+
+elapsedhr () {
+  local elapsed=$(elapsed "$@")
+  sec2hr "${elapsed%% *}"
+}
+
+sec2hr () {
+  local sec="$1"
+  local hours=$(( "${sec}" / 3600 ))
+  local remainder=$(( "${sec}" % 3600))
+  local minutes=$(( "${remainder}" / 60 ))
+  local seconds=$(( "${sec}" % 60))
+  printf "%02d:%02d:%02d\n" "${hours}" "${minutes}" "${seconds}"
+}
+
+elapsedline () {
+  local args=($(elapsed "$@"))
+  local secs="${args[0]}"
+  local epoch="${args[1]}"
+  local hr=$(sec2hr "${secs}")
+  local iso=$(date -d "${epoch}" -Iseconds)
+  echo "${hr} https://youtu.be/%s?t=${secs} ${iso}  " 
+}
+
+adjustline () {
+  IFS= read -r line
+  local secs=${line#*t=}
+  secs=${secs% *}
+  local time=${line##* }
+  echo "$secs $time"
+}
+
+######################### Tab Completion Context ########################
+
+declare -a commands=(
+  commands liveid lastid openlast elapsed elapsedhr elapsedline sec2hr
+  adjustline rec2desc
+)
+
+for i in ${commands[@]}; do
+    if [[ "${i}" == "${subcommand}" ]]; then
+        "${subcommand}" "$@"
+        exit 0
+    fi
+done
+
+# remember COMP_LINE is changed by shift
+if [ -n "${COMP_LINE}" ]; then
+    for cmd in ${commands[@]}; do 
+        [[ "${cmd:0:${#1}}" == "$1" ]] && echo "${cmd}"
+    done
+    exit 0
+fi

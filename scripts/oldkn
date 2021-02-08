@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+
 #######################################
 # Assumes modern terminal with RGB.
 
@@ -41,12 +42,21 @@ if [[ -n "$NOCOLOR" ]] ; then
 fi
 
 #######################################
+# Validate that a current knowledge node has been declared as KN
+# environment variable.
+
+if [[ -z "${KN}" ]]; then
+  echo "${RED}Please set \$KN to current knowledge node path."
+  exit 1
+fi
+
+#######################################
 # Each command must have an accompanying function that begins with an
 # underscore to which the main command will delgate.
 
 readonly -a COMMANDS=(
-  usage render build preview previewstop 
-  mkmanifest checkone audit find title rss
+  usage render build preview previewstop mkmanifest checkone audit find
+  title rss logdir logpath datepath logroot recdir
 )
 
 #######################################
@@ -167,6 +177,56 @@ _mkmanifest () {
              -name 'README.md' \
              -printf "%T@ %h\n" \
     | sort -d) > "${file}"
+}
+
+#######################################
+# Output the full path to the current log file for the current day (by
+# default). Normal `date` command adjustments can be added as extra
+# arguments as they are passed directly to `date -d`.
+
+_logpath () {
+  local dir=$(_logdir "$*")
+  echo "${dir}/README.md"
+}
+
+#######################################
+# Output the full path to the current log dir for the current day (by
+# default). Normal `date` command adjustments can be added as extra
+# arguments as they are passed directly to `date -d`.
+
+_logdir () {
+  local relpath=$(_datepath "$*")
+  echo "${KN}/log/${relpath}"
+}
+
+#######################################
+# Output the full path to the current log rec dir for the current day
+# (by default). This is where video and audio recordings YAML documents
+# should normally be kept (but not where the actual audio and
+# video files should be saved due to size). Normal `date` command
+# adjustments can be added as extra arguments as they are passed
+# directly to `date -d`.
+
+_recdir () {
+  local dir=$(_logdir "$*")
+  echo "${dir}/rec"
+}
+
+#######################################
+# Outputs the full path to the root log directory for the current
+# knowledge node.
+
+_logroot () {
+  echo "${KN}/log"
+}
+
+#######################################
+# Output the current date as a path for use when creating content within
+# a directory file structure that models chronological data. Accepts
+# anything that can be passed to `date -d`.
+
+_datepath () {
+  date +%4Y/%m/%d "-d $@"
 }
 
 #######################################

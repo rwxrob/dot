@@ -23,7 +23,7 @@ CLIENTSEC=$(auth get secret twitch)
 GAMEID=509670
 GAME='Science%20%26%20Technology'
 
-perl -p -i -e 's/oauth:[^"]+/oauth:'$TOKEN'/' "$WEECHAT_HOME/irc.conf"
+#perl -p -i -e 's/oauth:[^"]+/oauth:'$TOKEN'/' "$WEECHAT_HOME/irc.conf"
 
 ################################ Helpers ###############################
 
@@ -202,6 +202,7 @@ usage () {
 ############################# Other Commands ############################
 
 tmux () {
+
     exec tmux -L twitch -f ~/.tmux-twitch.conf new -s twitch -n parent \
         ssh skilstak.sh \;\
         send -t 1 "screen -Dr" Enter \;\
@@ -211,6 +212,7 @@ tmux () {
         resize-pane -x 18 \;\
         swap-pane -s 1 -t 2 \;\
         send -t 3 "blankpane" Enter
+
 }
 
 chat () {

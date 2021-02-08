@@ -1,6 +1,0 @@
-#!/bin/sh
-tmux \
-  split-pane -h \;\
-  swap-pane -s 1 -t 2 \;\
-  resizep -x 80 \;\
-  send -t 2 "clear" Enter

@@ -1,2 +1,2 @@
 #!/bin/bash
-curl 'https://chat.rwx.gg/lasturl'
+curl -s 'https://chat.rwx.gg/lasturl'
