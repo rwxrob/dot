@@ -1,2 +1,5 @@
 #!/bin/sh
+if [ -e "main.go" ]; then
+  exec go run main.go "$@"
+fi
 exec go run "$@"
