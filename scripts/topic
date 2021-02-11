@@ -105,3 +105,6 @@ set_twitch_title
 set_irc_topic
 set_github_status
 set_twitter_status
+if [[ $topic =~ ^\[ ]];then 
+  figl <<<"${topic//[\[\]]/}"
+fi

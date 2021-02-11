@@ -270,6 +270,7 @@ au bufnewfile,bufRead *.crontab set filetype=crontab
 au bufnewfile,bufRead *ssh/config set filetype=sshconfig
 au bufnewfile,bufRead *gitconfig set filetype=gitconfig
 au bufnewfile,bufRead /tmp/psql.edit.* set syntax=sql
+au bufnewfile,bufRead doc.go set spell
 
 " fun! s:DetectGo()
 "     if getline(1) == 'package main'

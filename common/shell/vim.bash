@@ -1,4 +1,7 @@
 
+# remap capslock for whole system to ESC (X only)
+setxkbmap -option caps:escape
+
 export EDITOR=vi
 export VISUAL=vi
 export EDITOR_PREFIX=vi

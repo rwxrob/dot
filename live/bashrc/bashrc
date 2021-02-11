@@ -187,6 +187,9 @@ ps1min () {
 }
 
 
+# remap capslock for whole system to ESC (X only)
+setxkbmap -option caps:escape
+
 export EDITOR=vi
 export VISUAL=vi
 export EDITOR_PREFIX=vi
@@ -425,12 +428,12 @@ export white=$'\033[37m'
 
 # Here's your colored man pages right here.
 
-export LESS_TERMCAP_mb=$'\033[35m'
-export LESS_TERMCAP_md=$'\033[33m'
-export LESS_TERMCAP_me=$'\033[0m'
-export LESS_TERMCAP_se=$'\033[0m'
-export LESS_TERMCAP_so=$'\033[34m'
-export LESS_TERMCAP_ue=$'\033[0m'
+export LESS_TERMCAP_mb=$magen
+export LESS_TERMCAP_md=$yellow
+export LESS_TERMCAP_me=$reset
+export LESS_TERMCAP_se=$reset
+export LESS_TERMCAP_so=$blue
+export LESS_TERMCAP_ue=$reset
 export LESS_TERMCAP_us=$'\033[4m'
 
 ############################# Go Development #############################
