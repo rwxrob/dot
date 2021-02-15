@@ -1,0 +1,2 @@
+#!/bin/sh
+exec perl -nae "$@" # so fucking better than sed and/or awk
