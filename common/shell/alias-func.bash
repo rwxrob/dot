@@ -16,6 +16,7 @@ alias tweet='twitter update'
 
 
 alias pie='perl -p -i -e '
+alias pne='perl -pne '
 alias grep='grep -i --colour=auto'
 alias egrep='egrep -i --colour=auto'
 alias fgrep='fgrep -i --colour=auto'
