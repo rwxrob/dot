@@ -1,1 +1,4 @@
-sduck
+#!/bin/sh
+url="https://duckduckgo.com/?kd=-1&kp=-1&q=$(urlencode "$*")"
+wee "$url"
+echo "$url"

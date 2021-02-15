@@ -5,10 +5,9 @@ cheat() {
   if [ $# -ge 1 ]; then
     shift
   fi
-  IFS=+ curl "http://cht.sh/$where/ $*"
+  IFS=+ curl -sS "http://cht.sh/$where/ $*"
 }
 
-cheat $*
-
+cheat "$@"
 
 
