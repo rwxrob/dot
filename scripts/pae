@@ -1,4 +1,0 @@
-#!/bin/sh
-cmd=$1
-shift
-perl -ae 'local $\="\n"; '"$cmd" $*

@@ -1,20 +1,15 @@
-#!/bin/bash
+#!/usr/bin/perl
 
-declare suf=""
-declare what=$1
+# Opens what you would expect. If there is no argument passed to it
+# checks if this is a GitHub repo and if so opens it with the gh tool in
+# your browser. Otherwise, it checks if the argument is a file in the
+# current directory, if not it assumes you are passing a URL and makes
+# sure to add https:// to the beginning. Then it just opens the argument
+# with the default application (xdg-open).
 
-if [[ -z "$what" ]]; then
-  usageln 'open <what>'
-  exit 1
-fi
-
-if [[ ! -r "$what" ]]; then
-  if [[ ! "$what" =~ ^http ]]; then
-    what=https://$what
-  fi
-fi
-
-exec xdg-open "$what"
-
-
-
+use v5.14;
+$_ = shift;
+not $_ and (grep {/github/} qx{git remote get-url --all origin})
+       and exec 'gh repo view -w';
+-r $_ or (m,^http, or  s,^,https://,);
+exec 'xdg-open', $_;
