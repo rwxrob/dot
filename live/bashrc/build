@@ -19,7 +19,6 @@ cat \
   ./golang.bash    \
   ../../common/shell/source-local.sh    \
   ../../common/shell/alias-func.bash    \
-  alias-func.bash    \
   ../../common/shell/source-local.sh    \
 >| bashrc  
 
