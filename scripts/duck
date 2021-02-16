@@ -1,5 +1,5 @@
 #!/bin/sh
-#w3m "duckduckgo.com/lite?kd=-1&kp=-1&q=$*"
-lynx "duckduckgo.com/lite?kd=-1&kp=-1&q=$*" # 🦆
-#lynx "duckduckgo.com/lite?q=$*"
+#exec w3m "duckduckgo.com/lite?kd=-1&kp=-1&q=$*"
+exec lynx "duckduckgo.com/lite?kd=-1&kp=-1&q=$*" # 🦆
+#exec lynx "duckduckgo.com/lite?q=$*"
 
