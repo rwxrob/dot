@@ -1,2 +1,2 @@
 #!/bin/sh
-exec perl -ae "$@" # so fucking better than sed and/or awk
+exec perl -aE "$@" # so fucking better than sed and/or awk
