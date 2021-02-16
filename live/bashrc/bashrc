@@ -181,8 +181,8 @@ else
 fi
 
 ps1min () {
-  export PS1='\[$gruv_orange\]$\[\033[00m\] '
-  #export PS1='$ '
+  export PS1='\[\033[0;34m\]\W\[\033[0;33m\]$\[\033[00m\] '
+  #export PS1='$ '\033[0;35m
 }
 
 
