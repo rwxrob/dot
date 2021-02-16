@@ -9,8 +9,11 @@
 
 use v5.14;
 $_ = shift;
-!$_ && (grep {/github/} qx{git remote get-url --all origin})
-    && exec 'gh repo view -w';
+if (not $_) {
+    my $gh = (grep {/github/ && s,git@,, && s,:,/, && s/\.git$//}
+             qx{git remote get-url --all origin})[0];
+    $gh and exec 'firefox', '-new-window', "https://$gh";
+}
 -r $_ && exec 'xdg-open', $_;
 m,^http, or  s,^,https://,;
 exec 'firefox', '-new-window', $_;
