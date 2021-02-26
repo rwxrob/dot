@@ -50,7 +50,7 @@ set_youtube_title () {
   fi
   local tpl='{"id":"%s","snippet":{"title":"%s","categoryId":"28","description":"%s"}}'
   local desc="$(jsonesc < "$DATA_FILE")"
-  local data=$(printf "${tpl}" "${YOUTUBE_VIDEO}" "${topic}" "${desc}")
+  local data=$(printf "${tpl}" "${YOUTUBE_VIDEO}" "${topic} [chat.rwx.gg]" "${desc}")
 curl -s \
   -X PUT "https://www.googleapis.com/youtube/v3/videos?part=snippet" \
   -H "Client-ID: $YOUTUBE_CLIENTID" \
@@ -66,7 +66,7 @@ curl -s  \
   -H "Authorization: OAuth $TWITCH_TOKEN" \
   -H 'Accept: application/vnd.twitchtv.v5+json' \
   -H 'Content-Type: application/json' \
-  -d '{"channel":{"status":"'"$topic"'"}}' > /dev/null
+  -d '{"channel":{"status":"'"$topic [chat.rwx.gg]"'"}}' > /dev/null
 }
 
 set_irc_topic () {
@@ -88,7 +88,7 @@ set_twitter_status () {
    if [[ $topic =~ ^\[ ]]; then
      return
    fi 
-   twitter update "📺 ${topic} https://youtu.be/${YOUTUBE_VIDEO}?t=$(vidoffsetsec)" 
+   twitter update "📺 ${topic} [chat.rwx.gg] #livestream https://youtu.be/${YOUTUBE_VIDEO}?t=$(vidoffsetsec)" 
 }
 
 edit_description () {
@@ -108,3 +108,4 @@ set_twitter_status
 if [[ $topic =~ ^\[ ]];then 
   figl <<<"${topic//[\[\]]/}"
 fi
+kn pomo start
