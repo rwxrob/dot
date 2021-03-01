@@ -1,2 +1,2 @@
 #!/bin/sh
-wee https://rwxrob.live
+exec wee 'https://github.com/rwxrob/rwxrob/tree/master/faq'
