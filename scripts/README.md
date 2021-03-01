@@ -7,6 +7,25 @@ Pilfer as you will, at your own peril.
 [Licensed under Mozilla Public License Version
 2](https://duck.com/lite?kd=-1&kp=-1&q=Licensed+under+Mozilla+Public+License+Version+2).
 
+## Live-Related Scripts
+
+Script|Purpose
+|:-:|-
+`t`|Change topic on all services, start pomo
+`f`|Clears and prints to screen in large text looping
+`off`|Prints 'off screen" (calls `f`)
+`back`|Prints 'back' with args (calls `f`)
+`muted`|Prints 'no sound, off screen, mentoring' (calls `f`)
+`figl`|Just print stdin to screen (called by `f`)
+
+## Perl Power Scripts
+
+Script|Full|Purpose
+|:-:|:-:|-
+`pie`|`perl -p -i -e`|Inplace edit
+`pae`|`perl -paE`|Replace `sed` and `awk` (prints line)
+`map`|`perl -aE`|Replace `sed` and `awk` (no printing)
+
 ## Why no `sed`, `awk`, `tr`, `cut`?
 
 Cuz they are deprecated, slow, old, busted boomer tech. (I don't fucking

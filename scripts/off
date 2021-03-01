@@ -1,2 +1,2 @@
 #!/bin/sh
-echo 'Off Screen' |figl
+f off screen

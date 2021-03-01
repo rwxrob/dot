@@ -6,12 +6,12 @@
 figl () {
   #font=${FIGL_FONT:-ansi-shadow}
   font=${FIGL_FONT:-future}
-  clear
+  #clear
   declare -a buf
   while IFS= read -r line; do 
     buf+=("$line")
   done
-  clear
+  #clear
   for line in "${buf[@]}"; do
     figlet -d "$HOME/.fonts/figlet" -f "$font" -c -t "${line}" | head -6 | lolcat
   done
