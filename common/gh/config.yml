@@ -41,3 +41,5 @@ aliases:
             }
           }
         } ' | jq -r '.data.viewer.organizations[][] | .id + " " + .name'
+    defmain: |
+      api -X PATCH "repos/$1" -f default_branch="main"
