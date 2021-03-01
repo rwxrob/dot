@@ -6,6 +6,7 @@ export SCRIPTS=$REPOS/github.com/$GITUSER/dotfiles/scripts
 # be sure NOT to add ./ cuz it's unsafe
 export PATH=\
 $SCRIPTS:\
+/home/rwxrob/sdk/go1.16/bin:\
 /usr/lib/go-1.15/bin:\
 $HOME/.local/bin:\
 $HOME/.local/go/bin:\
