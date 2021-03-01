@@ -34,7 +34,7 @@ else
 fi
 
 ps1min () {
-  export PS1='\[\033[0;34m\]\W$(__git_ps1 "${PS1c}:${gruv_purple}%s")\[\033[0;33m\]\$\[\033[00m\] '
+  export PS1='\[\033[0;34m\]\W$(__git_ps1 "\[${PS1c}\]:\[${gruv_purple}\]%s")\[\033[0;33m\]\$\[\033[00m\] '
   #export PS1='$ '\033[0;35m
 }
 
