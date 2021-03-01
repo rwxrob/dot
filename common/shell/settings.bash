@@ -10,6 +10,7 @@ shopt -s histappend
 HISTCONTROL=ignoreboth
 HISTSIZE=5000
 HISTFILESIZE=10000
+export PROMPT_COMMAND="history -a; history -c; history -r;"
 
 setxkbmap -option ctrl:ctrl_modifier # map capslock to control
 
