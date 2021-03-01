@@ -12,7 +12,7 @@ if [ "${confirm}" != yes ]; then
   exit
 fi
 
-url=$(git config remote.origin.url)
+url=$(git config remote.origin.url | head -1)
 repo=${url%.git}
 repo=${repo##*github.com/}
 
