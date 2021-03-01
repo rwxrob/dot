@@ -16,6 +16,11 @@ url=$(git config remote.origin.url | head -1)
 repo=${url%.git}
 repo=${repo##*github.com/}
 
+# WARNING: The following code only works if you have added alias
+# immediately below:
+#   defmain: |
+#     api -X PATCH "repos/$1" -f default_branch="main" 2>/dev/null
+
 git branch -m master main && \
   git push -u origin main && \
   gh defmain "${repo}" && \
