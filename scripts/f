@@ -8,7 +8,7 @@ trap "setterm --cursor on; echo ${clear}; exit; trap -- - SIGINT SIGTERM" SIGTER
 echo "${clear}"
 while true; do
   echo "${top}"
-  figl <<<"$@"
+  echo -e "$@" | figl
   setterm --cursor off
   sleep 2
 done
