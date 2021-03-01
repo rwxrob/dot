@@ -2,12 +2,13 @@
 
   #-g "420x90+1040+1010" \
   #-g "420x90+3120+1010" \
+  #-g "420x90+2920+1010" \
 
 /usr/bin/screenkey \
   --persist \
   -t 4 \
   -p fixed \
-  -g "420x90+1040+1010" \
+  -g "300x90+3080+1010" \
   --compr-cnt 1 \
   -s large \
   -f "UbuntuMono Nerd Font" \
