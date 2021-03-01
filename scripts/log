@@ -30,4 +30,4 @@ fi
 cd "${dir}"
 git add "${file}" 
 git commit
-git push
+#git push
