@@ -22,6 +22,6 @@ repo=${repo##*github.com/}
 #     api -X PATCH "repos/$1" -f default_branch="main" 2>/dev/null
 
 git branch -m master main && \
-  git push -u origin main && \
-  gh defmain "${repo}" && \
+  git push -u origin main && sleep 4 && \
+  gh defmain "${repo}" && sleep 4 && \
   git push origin --delete master
