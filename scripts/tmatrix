@@ -1,0 +1,2 @@
+#!/bin/sh
+exec /usr/bin/tmatrix -s 15 --fade -c default -C red

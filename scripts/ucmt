@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Seriously, why do people fuck around with other editor-specific ways
+# of commenting things. You don't need no fucking "visual" mode. Vi
+# already *is* visual mode (of ex). So tired of people extending Vim to
+# improve it without even knowing how to use Vi in the first place. If
+# you don't know how to integrate the shell, you don't know Vi. Learn it
+# *before* you "extend" it.
+
+# assumes there is alway a space after comment charaters
+
+while IFS= read -r line; do 
+  echo "${line#* }"
+done

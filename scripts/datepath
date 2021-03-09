@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# Prints the current date as a path for use when creating content within
+# a directory file structure that models chronological data. Accepts
+# anything that can be passed to `date -d`.
+
+date +%4Y/%m/%d "-d $@"
+

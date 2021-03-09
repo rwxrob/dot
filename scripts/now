@@ -1,0 +1,6 @@
+#!/bin/sh
+if [ -z "$1" ]; then
+  echo $(date "+%A, %B %e, %Y, %l:%M:%S%p %Z <%s>")
+else
+  echo $(date "+%A, %B %e, %Y, %l:%M:%S%p %Z <%s>" -d "$*")
+fi

@@ -1,0 +1,6 @@
+#!/bin/sh
+yellow="[38;2;255;255;0m"
+reset="\033[0m"
+buf=$(argsorin "$*")
+echo -n "${yellow}WARNING:${reset} "
+telln "$buf"

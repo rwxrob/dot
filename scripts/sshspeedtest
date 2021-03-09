@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if ! havecmd pv; then
+  telln 'Missing `pv` command.'
+  exit 1
+fi
+
+yes | pv |ssh "$1" "cat >/dev/null"

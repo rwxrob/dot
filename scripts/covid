@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# Reports the corona virus stats in a terminal friendly format taking an
+# optional argument that is the region.
+
+curl https://corona-stats.online/$1

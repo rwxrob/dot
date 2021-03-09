@@ -1,0 +1,7 @@
+#!/bin/sh
+branch="$(git branch --show-current)"
+if [ "${branch}" = "master" -o "${branch}" = "main" ]; then
+  echo "Get the fuck out with that. You are on ${branch}."
+  exit 1
+fi
+

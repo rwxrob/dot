@@ -1,0 +1,4 @@
+#!/bin/sh
+# Display fattest files in current directory.
+du -sh * | sort -hr | head -11
+

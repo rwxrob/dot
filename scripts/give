@@ -1,0 +1,62 @@
+#!/bin/bash
+
+# Locates the executable passed as the first argument and detects if it
+# is a text file and in a git repository and if so passes the URL to the
+# raw file to the GIVECMD replacing URL2REPLACE.
+
+if [ -z "$1" ]; then
+  echo "usage: give <exefrompath>"
+  exit
+fi
+
+# Executes the GIVECMD for the given cmd URL. Does not return.
+
+give () {
+  local cmd="$1"
+  local givecmd="${2:-$GIVECMD}"
+  local url path
+
+  if [[ -z "${givecmd}" ]]; then
+	  givecmd="wee URL2REPLACE"
+  fi
+
+  if [[ -z "${cmd}" ]]; then
+    echo "Sorry, didn't catch that. Which command?"
+    return -1
+  fi
+
+  path=$(which "${cmd}")
+  if [[ -z "${path}" ]];then
+    echo "Sorry, no $cmd in $path."
+    return -1
+  fi
+
+  typ=$(file --mime-type "$path")
+  typ=${typ#* }
+
+  if [[ ! $typ =~ ^text ]];then
+    echo "Doesn't appear to be a text file."
+    return -1
+  fi
+
+  if [[ -n $(repos has "$cmd") ]];then
+    cd ${path%/*}
+    local branch=$(git branch --show-current)
+    if [[ $path =~ github.com/([^/]+)/([^/]+)/(.+) ]]; then
+      local entity=${BASH_REMATCH[1]}
+      local repo=${BASH_REMATCH[2]}
+      local therest=${BASH_REMATCH[3]}
+      url="https://raw.githubusercontent.com/$entity/$repo/$branch/$therest"
+      givecmd=${givecmd//URL2REPLACE/$url}
+      echo "${url}"
+      $givecmd
+    fi
+    # TODO if host is gitlab then do something else
+    # TODO support for gitlab and other repo hosting services
+    # TODO full in the URL with the path
+  fi
+}
+
+for i in "$@";do
+  give "${i}" 
+done

@@ -1,0 +1,111 @@
+#!/bin/bash
+
+# Updates YouTube and Twitch Titles, sets the GitHub profile status, and
+# sends a tweet pointing to the YouTube video.
+
+if [[ -z "$1" ]]; then
+  wee /topic
+  exit
+fi
+
+# change these do solarized/gruvbox variations (not millions)
+if [[ -t 1 ]]; then
+  GOLD=$'\033[38;2;184;138;0m'
+  RED=$'\033[38;2;255;0;0m'
+  GREY=$'\033[38;2;100;100;100m'
+  CYAN=$'\033[38;2;0;255;255m'
+  GREEN=$'\033[38;2;0;255;0m'
+  X=$'\033[0m'
+fi
+
+fatal () {
+  echo "${RED}$*${X}"
+  exit 1
+}
+
+topic="$*"
+if [[ ${#topic} > 80 ]]; then
+  fatal 'Topic must be under 80 characters'
+fi
+
+#YOUTUBE_TOKEN=$(auth token youtube)
+#YOUTUBE_CLIENTID=$(auth get id youtube)
+TWITCH_TOKEN=$(auth token twitch)
+TWITCH_CLIENTID=$(auth get id twitch)
+
+# YOUTUBE_VIDEO=$(yt liveid)
+# if [[ ! $topic =~ ^\[ ]]; then
+#   if [[ $YOUTUBE_VIDEO == null ]];then
+#     read -p "YouTube Video ID: " YOUTUBE_VIDEO
+#   fi
+# fi
+
+# FIXME change to file in current days log
+LOGDIR=$(kn logpath)
+DATA_FILE="/tmp/vid${YOUTUBE_VIDEO}"
+
+set_youtube_title () {
+  if [[ "${YOUTUBE_VIDEO}" == null ]];then
+    return
+  fi
+  local tpl='{"id":"%s","snippet":{"title":"%s","categoryId":"28","description":"%s"}}'
+  local desc="$(jsonesc < "$DATA_FILE")"
+  local data=$(printf "${tpl}" "${YOUTUBE_VIDEO}" "${topic} [rwxrob.live]" "${desc}")
+curl -s \
+  -X PUT "https://www.googleapis.com/youtube/v3/videos?part=snippet" \
+  -H "Client-ID: $YOUTUBE_CLIENTID" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $YOUTUBE_TOKEN" \
+  -d "${data}" > /dev/null
+}
+
+set_twitch_title () {
+curl -s  \
+  -X PUT "https://api.twitch.tv/kraken/channels/$TWITCH_CHANID" \
+  -H "Client-ID: $TWITCH_CLIENTID" \
+  -H "Authorization: OAuth $TWITCH_TOKEN" \
+  -H 'Accept: application/vnd.twitchtv.v5+json' \
+  -H 'Content-Type: application/json' \
+  -d '{"channel":{"status":"'"$topic [rwxrob.live]"'"}}' > /dev/null
+}
+
+set_irc_topic () {
+  ssh skilstak.sh 'echo "*/topic '$topic'" >> .weechat/weechat_fifo'
+}
+
+set_github_status () {
+  if [[ $topic =~ ^\[ ]]; then
+    gh offline "$topic" > /dev/null
+    return
+  fi
+  gh live "$topic" > /dev/null
+}
+
+set_twitter_status () {
+  if [[ "${YOUTUBE_VIDEO}" == null ]];then
+    return
+  fi
+   if [[ $topic =~ ^\[ ]]; then
+     return
+   fi 
+   twitter update "📺 ${topic} [rwxrob.live] #livestream https://youtu.be/${YOUTUBE_VIDEO}?t=$(vidoffsetsec)" 
+}
+
+edit_description () {
+  if [[ $YOUTUBE_VIDEO == null ]];then
+    return
+  fi
+  echo -e "\n$(vidoffset)  \n${topic}" >> "${DATA_FILE}"
+  ${EDITOR} "${DATA_FILE}"
+}
+
+edit_description
+#set_youtube_title
+set_twitch_title
+set_irc_topic
+set_github_status
+#set_twitter_status
+if [[ $topic =~ ^\[ ]];then 
+  figl <<<"${topic//[\[\]]/}"
+fi
+kn pomo start

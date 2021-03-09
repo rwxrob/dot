@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Starts up an nginx server in a docker container on localhost enabling
+# dual-streaming to YouTube and Twitch at the same time. Requires the
+# following be set in $PRIVATE/auth/env:
+# 
+#   STREAMS - semicolon-delimited rtmp URL with stream keys
+#   RTMPSECRET - stream key for use with local OBS
+#   PASSWORD - password for the local admin web server
+# 
+# Requires running as root.
+
+startd () {
+  sudo docker run --rm -t -p 1935:1935 -p 443:443 --name gstreamd \
+    --env-file "$PRIVATE/auth/env"  blaize/nginx-rtmp &
+}
+
+stopd () {
+  echo 'please wait while docker container is stopped'
+  sudo docker stop gstreamd
+}
+
+sudo echo 'sudo access granted'
+
+case $1 in
+  start)  startd ;;
+  stop)  stopd ;;
+  *) echo "usage: gstreamd (start|stop)"; exit 1 ;;
+esac

@@ -1,0 +1,9 @@
+#!/bin/sh
+if [ ! -e "$1" ]; then
+  exit 0
+fi
+out=$(file --mime-type "$1")
+out=${out#* }
+typ=${out%%/*}
+echo $typ
+

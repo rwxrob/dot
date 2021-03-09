@@ -1,0 +1,29 @@
+#!/bin/bash
+
+readonly CHA=$'\033[38;2;128;255;0m'
+readonly RED=$'\033[38;2;255;0;0m'
+readonly RESET=$'\033[0m'
+
+newest () {
+  local IFS=$'\n'
+  local -a f=($(ls -1 --color=never -trd ${1:-.}/*))
+  echo "${f[-1]}"
+}
+
+lastdown () {
+  if [[ -z "$DOWNLOADS" ]];then
+    echo "DOWNLOADS env variable not set"
+    exit 1
+  fi
+  echo "$(newest $DOWNLOADS)"
+}
+
+main () {
+  local from=$(lastdown)
+  local to="$PWD/$1"
+  mv "${from}" "${to}"
+  echo "${RED}From: ${from}"
+  echo "${CHA}To:   ${to}${RESET}"
+}
+
+main "$@"

@@ -1,0 +1,4 @@
+#!/bin/sh
+out=$(file --mime-type "$1")
+echo ${out#* }
+

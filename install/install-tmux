@@ -1,0 +1,25 @@
+#!/bin/sh
+
+sudo apt install vim tmux lynx
+
+# But can also build tmux without borders:
+#   git clone git@github.com:tmux/tmux
+#   (then apply the following patch)
+# 
+#diff --git a/screen-redraw.c b/screen-redraw.c
+#index 211f7f79..f2a490f3 100644
+#--- a/screen-redraw.c
+#+++ b/screen-redraw.c
+#@@ -43,7 +43,7 @@ static void	screen_redraw_draw_pane(struct screen_redraw_ctx *,
+# #define CELL_JOIN 11
+# #define CELL_OUTSIDE 12
+# 
+
+# In screen-redraw.c change this:
+#define CELL_BORDERS " xqlkmjwvtun~"
+# To this:
+#define CELL_BORDERS "             "
+
+# 
+# /* Check if cell is on the border of a particular pane. */
+# static int

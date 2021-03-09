@@ -1,0 +1,12 @@
+#!/bin/bash
+
+tell () {
+  if [[ -z "$1" ]]; then
+    echo "usage: tell <something> ..."
+    return 1
+  fi
+  declare buf=$(argsorin "$*")
+  mark $md_plain "$buf"
+}
+
+tell "$@"

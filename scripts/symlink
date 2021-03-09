@@ -1,0 +1,14 @@
+#!/bin/sh
+
+symlink () {
+  from="$1"
+  to="$2"
+  if [ -z "$from" -o -z "$to" ]; then
+    echo 'symlink <from> <to>'
+    return 1
+  fi
+  echo Linking $from'` -> `'$to 
+  ln -fs $to $from
+}
+
+symlink $*

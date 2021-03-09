@@ -1,0 +1,6 @@
+#!/bin/sh
+
+sudo apt-get install libncurses5
+wget https://github.com/M4444/TMatrix/releases/download/v1.3/installation.tar.gz
+tar -zxvf installation.tar.gz
+echo 'Go fix the ./install.sh script and run it'

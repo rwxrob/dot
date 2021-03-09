@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if type tmux; then
+  ln -sf "$PWD/tmux.conf" "$HOME/.tmux.conf"
+  ln -sf "$PWD/twitch.conf" "$HOME/.tmux-twitch.conf"
+else
+  echo  "TMUX isn't installed. Skipping."
+fi

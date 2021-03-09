@@ -1,0 +1,35 @@
+#!/bin/sh
+
+if [ -z "$PDFDIR" ];then
+  warn 'The `PDFDIR` env var not set.'
+  exit 0
+fi
+
+list () {
+  find "$PDFDIR" -name "*.pdf" -exec basename {} \;
+}
+
+usage () {
+  usageln 'list|usage|<pdf>'
+}
+
+if [ -n "$COMP_LINE" ]; then
+  prefix=$(echo "$COMP_LINE" | cut -d " " -f 2)
+  list | grep ^$prefix
+  exit 0
+fi
+
+case "$1" in
+  list) list; exit ;;
+  usage) usage; exit ;;
+esac
+
+# actually we have a pdf name, not a command
+# if gotten this far
+pdfpath="$PDFDIR/$1"
+
+# always open using GL in dark (inverted) mode
+if [ -r "$pdfpath" ];then
+  #mupdf-gl -I "$pdfpath"  &>/dev/null &
+  open "$pdfpath"
+fi

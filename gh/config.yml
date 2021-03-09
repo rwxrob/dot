@@ -1,0 +1,45 @@
+# The protocol to use when performing git operations.
+# Supported values: ssh, https
+git_protocol: https
+# The editor gh should run when creating issues, pull requests, etc. If
+# blank, will refer to environment.
+editor:
+# When to interactively prompt. This is a global config that cannot be
+# overridden by hostname. Supported values: enabled, disabled
+prompt: enabled
+# A pager program to send command output to (e.g. "less") Set the value
+# to "cat" to disable the pager.
+pager:
+# Aliases allow you to create nicknames for gh commands.
+aliases:
+    co: pr checkout
+    delete: api -X DELETE "repos/$1"
+    live: "api graphql -f query='\n  mutation {\n    changeUserStatus(input:{\n      message: \"$1\",\n      emoji: \"\U0001F4FA\"\n    }) {\n      status { message, emoji }\n    }\n  }'\n"
+    offline: "api graphql -f query='\n  mutation {\n    changeUserStatus(input:{\n      message: \"$1\",\n      emoji: \"\U0001F507\"\n    }) {\n      status { message, emoji }\n    }\n  }'\n"
+    repos: |
+        !gh api --paginate graphql -f owner="$1" -f query='
+          query($owner: String!, $per_page: Int = 100, $endCursor: String) {
+            repositoryOwner(login: $owner) {
+              repositories(first: $per_page, after: $endCursor, ownerAffiliations: OWNER) {
+                  nodes { nameWithOwner }
+                  pageInfo { hasNextPage endCursor }
+                }
+              }
+            }
+          ' | jq -r '.data.repositoryOwner.repositories.nodes[].nameWithOwner' | sort
+    orgs: |
+        !gh api --paginate graphql  -f query='
+        query {
+          viewer {
+            id
+            name
+            organizations(first: 100) {
+              nodes {
+                id
+                name
+              }
+            }
+          }
+        } ' | jq -r '.data.viewer.organizations[][] | .id + " " + .name'
+    defmain: |
+      !gh api -X PATCH "repos/$1" -f default_branch="main" | jq .default_branch

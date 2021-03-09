@@ -1,0 +1,4 @@
+#!/bin/sh
+
+handler="$1"
+trap "$handler; echo $'\b\b'; trap -- - SIGINT SIGTERM" SIGTERM SIGINT

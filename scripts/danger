@@ -1,0 +1,5 @@
+#!/bin/sh
+blinkon="\033[5m"
+blinkoff="\033[25m"
+buf=$(argsorin "$*")
+tell "${blinkon}***DANGER:***${blinkoff} $buf"

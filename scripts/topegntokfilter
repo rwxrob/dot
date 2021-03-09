@@ -1,0 +1,5 @@
+#!/bin/bash
+
+while read tok; do
+  echo "func ${tok}(r rune) bool {return r==tk.${tok}}"
+done

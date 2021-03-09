@@ -1,0 +1,6 @@
+#!/bin/sh
+
+if havecmd setterm; then
+  setterm --cursor off
+  trapterm 'setterm --cursor on; clear'
+fi
