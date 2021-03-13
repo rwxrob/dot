@@ -1,0 +1,3 @@
+#!/bin/sh
+#exec w3m https://overthewire.org/wargames/bandit/bandit$1.html
+exec lynx https://overthewire.org/wargames/bandit/bandit$1.html
