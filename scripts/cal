@@ -12,6 +12,5 @@
 # Sa  2  9 16 23 30   
 #     1  2  3  4  5  6
 
-#ncal -M -w $*
-ncal -w $*
+exec ncal -M -w "$@"
 
