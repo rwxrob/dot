@@ -13,7 +13,11 @@ pager:
 # Aliases allow you to create nicknames for gh commands.
 aliases:
     co: pr checkout
-    delete: api -X DELETE "repos/$1"
+    del: api -X DELETE "repos/$1"
+    priv: |
+      !gh api -X PATCH "repos/$1" -f private="true" | jq .private
+    pub: |
+      !gh api -X PATCH "repos/$1" -f private="false" | jq .private
     live: "api graphql -f query='\n  mutation {\n    changeUserStatus(input:{\n      message: \"$1\",\n      emoji: \"\U0001F4FA\"\n    }) {\n      status { message, emoji }\n    }\n  }'\n"
     offline: "api graphql -f query='\n  mutation {\n    changeUserStatus(input:{\n      message: \"$1\",\n      emoji: \"\U0001F507\"\n    }) {\n      status { message, emoji }\n    }\n  }'\n"
     repos: |
