@@ -27,6 +27,7 @@ topic="$*"
 if [[ ${#topic} > 80 ]]; then
   fatal 'Topic must be under 80 characters'
 fi
+zetid="[$(isosec)]"
 
 #YOUTUBE_TOKEN=$(auth token youtube)
 #YOUTUBE_CLIENTID=$(auth get id youtube)
@@ -50,7 +51,7 @@ set_youtube_title () {
   fi
   local tpl='{"id":"%s","snippet":{"title":"%s","categoryId":"28","description":"%s"}}'
   local desc="$(jsonesc < "$DATA_FILE")"
-  local data=$(printf "${tpl}" "${YOUTUBE_VIDEO}" "${topic} [rwxrob.live]" "${desc}")
+  local data=$(printf "${tpl}" "${YOUTUBE_VIDEO}" "${topic}" "${desc}")
 curl -s \
   -X PUT "https://www.googleapis.com/youtube/v3/videos?part=snippet" \
   -H "Client-ID: $YOUTUBE_CLIENTID" \
@@ -66,7 +67,7 @@ curl -s  \
   -H "Authorization: OAuth $TWITCH_TOKEN" \
   -H 'Accept: application/vnd.twitchtv.v5+json' \
   -H 'Content-Type: application/json' \
-  -d '{"channel":{"status":"'"$topic [rwxrob.live]"'"}}' > /dev/null
+  -d '{"channel":{"status":"'"$topic $zetid"'"}}' > /dev/null
 }
 
 set_irc_topic () {
@@ -88,7 +89,7 @@ set_twitter_status () {
    if [[ $topic =~ ^\[ ]]; then
      return
    fi 
-   twitter update "📺 ${topic} [rwxrob.live] #livestream https://youtu.be/${YOUTUBE_VIDEO}?t=$(vidoffsetsec)" 
+   twitter update "📺 ${topic} ${zetid} #livestream https://youtu.be/${YOUTUBE_VIDEO}?t=$(vidoffsetsec)" 
 }
 
 edit_description () {
@@ -99,13 +100,14 @@ edit_description () {
   ${EDITOR} "${DATA_FILE}"
 }
 
-edit_description
+#edit_description
 #set_youtube_title
 set_twitch_title
-set_irc_topic
+#set_irc_topic
 set_github_status
 #set_twitter_status
 if [[ $topic =~ ^\[ ]];then 
   figl <<<"${topic//[\[\]]/}"
 fi
-kn pomo start
+pomo start
+w
