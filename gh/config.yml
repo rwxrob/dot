@@ -13,7 +13,8 @@ pager:
 # Aliases allow you to create nicknames for gh commands.
 aliases:
     co: pr checkout
-    del: api -X DELETE "repos/$GITUSER/$1"
+    del: |
+      !gh api -X DELETE "repos/$GITUSER/$1"
     priv: |
       !gh api -X PATCH "repos/$GITUSER/$1" -f private="true" | jq .private
     pub: |
