@@ -1,2 +1,7 @@
 #!/bin/sh
-exec go install "$@"
+file="$1"
+shift
+if [ -n "${file}" ]; then
+    file="./${file}"
+fi
+exec go install "${file}" "$@"
