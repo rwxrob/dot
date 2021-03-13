@@ -1,0 +1,10 @@
+#!/usr/bin/perl
+use v5.14;
+
+my $def = `config def.github`;
+$_ = shift;
+
+if    (not m,/,)    { $_ = "$def/$_" }
+elsif (not m,/.+/,) { $_ = "github.com/$_" }
+
+exec "gh repo clone '$_'";
