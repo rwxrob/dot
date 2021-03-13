@@ -12,6 +12,8 @@ complete -C yt yt
 complete -C gl gl
 complete -C kn kn
 complete -C auth auth
+complete -C pomo pomo
+complete -C config config
 
 eval "$(gh completion -s bash)"
 eval "$(pandoc --bash-completion)"
