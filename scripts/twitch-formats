@@ -1,0 +1,11 @@
+#!/bin/sh
+name="$1"
+if [ -z "$1" ]; then
+    name=$TWITCH_LOGIN
+fi
+if [ -z "${name}" ]; then
+    echo "\$TWITCH_LOGIN not set"
+    exit 1
+fi
+youtube-dl -F "https://twitch.tv/$name" \
+    | map 'm,^\d+p, && say $&'
