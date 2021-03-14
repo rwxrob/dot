@@ -18,6 +18,13 @@ Script|Purpose
 `muted`|Prints 'no sound, off screen, mentoring' (calls `f`)
 `figl`|Just print stdin to screen (called by `f`)
 
+## What's a "shortcut command"?
+
+A *shortcut command* is my alternative to aliases (which do not work with
+subprocesses such as when using [Vim magic](https://rwx.gg/vimagic). You
+will see this term a lot in the commit messages. Usually such a command
+will only be two lines long.
+
 ## Perl Power Scripts
 
 Script|Full|Purpose
