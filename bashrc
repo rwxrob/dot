@@ -17,3 +17,4 @@ source "$HOME/.shell.d/golang.sh"
 source "$HOME/.shell.d/aliases.sh"
 source "$HOME/.shell.d/envx.bash"
 [ -r ~/.bash_private   ] && source ~/.bash_private
+ps1min
