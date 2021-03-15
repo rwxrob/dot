@@ -68,6 +68,7 @@ curl -s  \
   -H 'Accept: application/vnd.twitchtv.v5+json' \
   -H 'Content-Type: application/json' \
   -d '{"channel":{"status":"'"$topic $zetid"'"}}' > /dev/null
+echo "$topic $zetid">> "$HOME/.topics"
 }
 
 set_irc_topic () {
