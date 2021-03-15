@@ -3,4 +3,5 @@ export GOBIN="$HOME/.local/go/bin"
 mkdir -p $GOBIN
 export GOPATH="$HOME/.local/go"
 export GOPROXY="direct"
+export CGO_ENABLED=0
 
