@@ -17,4 +17,9 @@ source "$HOME/.shell.d/golang.sh"
 source "$HOME/.shell.d/aliases.sh"
 source "$HOME/.shell.d/envx.bash"
 [ -r ~/.bash_private   ] && source ~/.bash_private
+
+# set the default prompt
 ps1min
+
+# hack for wsl2/alacritty to change into home directory
+cd
