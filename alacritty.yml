@@ -29,7 +29,7 @@ font:
 #family: "Ubuntu Mono Nerd Font"
 #  size: 70.0
 
-  size: 22
+  size: 24 # 80 width on Dell Latitude 5411
   offset:
     x: 0
     y: 0 
