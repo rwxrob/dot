@@ -1,0 +1,119 @@
+# I only use Alacritty on Windows. That might explain a lot.
+#
+# ~/.config/alacritty/alacritty.yml
+# /mnt/c/Users/<me>/Application Data/alacritty/alacritty.yml
+# mkdir -p ~/.config/alacritty && \
+#   ln -sf "/mnt/..." /home/<me>/.config/alacritty/alacritty.yml
+
+env:
+  TERM: xterm-256color
+
+shell:
+  program: bash
+  # you'll need to add `cd` to your .bashrc on windows
+
+window:
+  dynamic_padding: false
+  decorations: none
+  startup_mode: Fullscreen
+
+tabspaces: 2
+
+font:
+
+#normal:
+#family: "UbuntuMono Nerd Font Mono"
+#bold:
+#family: "UbuntuMono Nerd Font Mono"
+#italic:
+#family: "Ubuntu Mono Nerd Font"
+#  size: 70.0
+
+  size: 22
+  offset:
+    x: 0
+    y: 0 
+  glyph_offset:
+    x: 0 
+    y: 0 
+
+draw_bold_text_with_bright_colors: false
+
+schemes:
+  gruvbox: &gruvbox
+    primary:
+      background: '0x212121'
+    normal:
+      black:   '0x282828'
+      red:     '0xcc241d'
+      green:   '0x98971a'
+      yellow:  '0xd79921'
+      blue:    '0x458588'
+      magenta: '0xb16286'
+      cyan:    '0x689d6a'
+      white:   '0xa89984'
+    bright:
+      black:   '0x928374'
+      red:     '0xfb4934'
+      green:   '0xb8bb26'
+      yellow:  '0xfabd2f'
+      blue:    '0x83a598'
+      magenta: '0xd3869b'
+      cyan:    '0x8ec07c'
+      white:   '0xebdbb2'
+  xterm: &xterm
+    normal:
+      black:   '#000000'
+      red:     '#cd0000'
+      green:   '#00cd00'
+      yellow:  '#cdcd00'
+      blue:    '#0000ee'
+      magenta: '#cd00cd'
+      cyan:    '#00cdcd'
+      white:   '#e5e5e5'
+    bright:
+      black:   '#7f7f7f'
+      red:     '#ff0000'
+      green:   '#00ff00'
+      yellow:  '#ffff00'
+      blue:    '#5c5cff'
+      magenta: '#ff00ff'
+      cyan:    '#00ffff'
+      white:   '#ffffff'
+
+colors: *gruvbox
+#colors: *xterm
+
+indexed_colors: []
+
+bell:
+  animation: EaseOutExpo
+  color: '0xffffff'
+  duration: 0
+
+background_opacity: 1 
+
+mouse:
+  double_click: { threshold: 300 }
+  triple_click: { threshold: 300 }
+  hide_when_typing: true
+
+selection:
+  semantic_escape_chars: ",│`|:\"' ()[]{}<>"
+  save_to_clipboard: true
+
+mouse_bindings:
+  - { mouse: Middle, action: PasteSelection }
+
+cursor:
+  style: Block
+  unfocused_hollow: true
+
+live_config_reload: true
+
+debug:
+  render_timer: false
+  persistent_logging: false
+  log_level: off
+  print_events: false
+  ref_test: false
