@@ -3,7 +3,9 @@
 #setxkbmap -option ctrl:ctrl_modifier
 
 # remap capslock for whole system to ESC (X only)
-setxkbmap -option caps:escape
+if [ -n "${DISPLAY}" ];then
+  setxkbmap -option caps:escape
+fi
 
 export HRULEWIDTH=73
 export EDITOR=vi
