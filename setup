@@ -10,7 +10,7 @@ ln -sf "$PWD/profile" "$HOME/.profile"
 ln -sf "$PWD/scripts" "$HOME/.local/bin/scripts"
 ln -sf "$PWD/bin/linux/x86_64/tmux" "$HOME/.local/bin/tmux"
 
-for i in vim lynx gh git; do 
+for i in vim lynx gh git tmux; do 
   cd $i && ./setup; cd -
 done
 
