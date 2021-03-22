@@ -3,7 +3,7 @@
 while read line; do 
   n=${line%%|*}
   [[ ${line##*|} == TOTAL ]] && continue
-  total+=n
+  ((total+=n))
   echo $line
 done
 echo $total\|TOTAL
