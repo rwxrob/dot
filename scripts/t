@@ -69,6 +69,7 @@ curl -s  \
   -H 'Content-Type: application/json' \
   -d '{"channel":{"status":"'"$topic $zetid"'"}}' > /dev/null
 echo "$topic $zetid">> "$HOME/.topics"
+twitch mark "$zsetid"
 }
 
 set_irc_topic () {
