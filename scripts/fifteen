@@ -1,0 +1,4 @@
+#!/bin/sh
+pomo stop
+back at $(date -d '15 minutes' +%-I:%M)
+
