@@ -1,0 +1,2 @@
+#!/bin/sh
+echo "$(tail -1 $HOME/.topics)" | xclip
