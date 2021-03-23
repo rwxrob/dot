@@ -20,6 +20,3 @@ source "$HOME/.shell.d/envx.bash"
 
 # set the default prompt
 ps1min
-
-# hack for wsl2/alacritty to change into home directory
-cd
