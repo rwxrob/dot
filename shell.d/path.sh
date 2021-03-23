@@ -1,6 +1,4 @@
 
-export DENO_INSTALL="$HOME/.deno"
-
 export SCRIPTS=$REPOS/github.com/$GITUSER/dotfiles/scripts
 
 export PATH=\
