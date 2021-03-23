@@ -8,10 +8,10 @@
 #
 #   sudo vi /etc/wsl.conf
 #
-# Then change:
+# Should have:
 #
 #   [network]
-#   generateResolveConf = false
+#   generateResolveConf = true
 #
 # Then edit:
 #
