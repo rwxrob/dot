@@ -8,4 +8,4 @@ havecmd () {
   return $?
 }
 
-havecmd $*
+havecmd "$@"

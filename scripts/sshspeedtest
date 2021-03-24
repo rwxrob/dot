@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if ! havecmd pv; then
+if ! type pv >/dev/null 2>&1; then
   telln 'Missing `pv` command.'
   exit 1
 fi

@@ -37,8 +37,3 @@ onunknown () {
   return 1
 }
 
-havecmd () { 
-  type "$1" &> /dev/null
-  return $?
-}
-

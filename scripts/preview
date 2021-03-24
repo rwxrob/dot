@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if ! havecmd browser-sync ; then
+if ! type browser-sync >/dev/null 2>&1; then
   echo 'Need to install browser-sync.'
   exit 1
 fi

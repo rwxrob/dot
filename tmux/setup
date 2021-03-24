@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if type tmux; then
+if type tmux >/dev/null 2>&1; then
   ln -sf "$PWD/tmux.conf" "$HOME/.tmux.conf"
   ln -sf "$PWD/twitch.conf" "$HOME/.tmux-twitch.conf"
 else
