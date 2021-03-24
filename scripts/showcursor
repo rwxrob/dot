@@ -1,5 +1,5 @@
 #!/bin/sh
 
 if type setterm >/dev/null 2>&1; then
-  exec setterm --cursor off
+  exec setterm --cursor on
 fi
