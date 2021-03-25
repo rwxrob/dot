@@ -79,7 +79,10 @@ set viminfo='20,<1000,s1000
 " not a fan of bracket matching or folding
 let g:loaded_matchparen=1
 set noshowmatch
-set foldmethod=manual
+
+if v:version >= 800
+  set foldmethod=manual
+endif
 
 " Just the defaults, these are changed per filetype by plugins.
 " Most of the utility of all of this has been superceded by the use of
