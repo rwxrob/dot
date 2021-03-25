@@ -9,6 +9,7 @@ ln -sf "$PWD/profile" "$HOME/.profile"
 [ -d "$HOME/.local/bin" ] || mkdir -p "$HOME/.local/bin"
 ln -sf "$PWD/scripts" "$HOME/.local/bin/scripts"
 ln -sf "$PWD/bin/linux/x86_64/tmux" "$HOME/.local/bin/tmux"
+ln -sf "$PWD/bin/linux/x86_64/gh" "$HOME/.local/bin/gh"
 
 for i in vim lynx gh git tmux; do 
   cd $i && ./setup; cd -
