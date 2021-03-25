@@ -16,8 +16,14 @@ source "$HOME/.shell.d/termcap-colors.sh"
 source "$HOME/.shell.d/golang.sh"
 source "$HOME/.shell.d/aliases.sh"
 source "$HOME/.shell.d/envx.bash"
+
+# not worried about sharing publicly
 test -r ~/.bash_personal && source ~/.bash_personal
+
+# sensitive configurations
 test -r ~/.bash_private && source ~/.bash_private
+
+# primarily added for HTTP_PROXY and such
 test -r ~/.bash_work && source ~/.bash_work
 
 # set the default prompt
