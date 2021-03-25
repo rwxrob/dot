@@ -30,7 +30,9 @@ set smartindent
 set smarttab
 
 " stop vim from silently fucking with files that it shouldn't 
-set nofixendofline
+if v:version >= 800 
+  set nofixendofline
+endif
 
 " replace tabs with spaces automatically
 set expandtab
@@ -41,8 +43,10 @@ set textwidth=72
 " disable relative line numbers, remove no to sample it
 set norelativenumber
 
-" easier to see characters when `set paste` is on
-set listchars=tab:→\ ,eol:↲,nbsp:␣,space:·,trail:·,extends:⟩,precedes:⟨
+" easier to see characters when `set paste` is on (not 7.4)
+if v:version >= 800
+  set listchars=tab:→\ ,eol:↲,nbsp:␣,space:·,trail:·,extends:⟩,precedes:⟨
+endif
 highlight NonText guifg=bg
 
 " turn on default spell checking
@@ -65,7 +69,9 @@ set linebreak
 map <silent> <leader><cr> :noh<cr>:redraw!<cr>
 
 " avoid most of the 'Hit Enter ...' messages
-set shortmess=aoOtIF
+"set shortmess=aoOtIF 
+set shortmess=aoOtI
+
 
 " prevents truncated yanks, deletes, etc.
 set viminfo='20,<1000,s1000
@@ -121,7 +127,7 @@ filetype plugin on
 
 " Install vim-plug if not already installed
 " (Yes I know about Vim 8 Plugins. They suck.)
-if empty(glob('~/.vim/autoload/plug.vim'))
+if v:version >= 800 && empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
       \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   autocmd VimEnter * PlugInstall
@@ -328,6 +334,9 @@ noremap <C-p> <C-b>
 " read personal/private vim configuration (keep last to override)
 set rtp^=~/.vimpersonal
 set rtp^=~/.vimprivate
+set rtp^=~/.vimwork
 
 hi StatusLineNC term=none cterm=none gui=none
-hi StatusLine term=reverse ctermfg=LightGray cterm=nocombine 
+if v:version >= 800
+  hi StatusLine term=reverse ctermfg=LightGray cterm=nocombine 
+endif
