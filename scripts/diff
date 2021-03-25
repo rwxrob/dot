@@ -1,5 +1,0 @@
-#!/bin/sh
-if [ -n "$1" ]; then
-    exec diff "$@"
-fi
-exec git diff "$@"
