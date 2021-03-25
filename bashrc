@@ -16,7 +16,9 @@ source "$HOME/.shell.d/termcap-colors.sh"
 source "$HOME/.shell.d/golang.sh"
 source "$HOME/.shell.d/aliases.sh"
 source "$HOME/.shell.d/envx.bash"
-[ -r ~/.bash_private   ] && source ~/.bash_private
+test -r ~/.bash_personal && source ~/.bash_personal
+test -r ~/.bash_private && source ~/.bash_private
+test -r ~/.bash_work && source ~/.bash_work
 
 # set the default prompt
 ps1min
