@@ -14,6 +14,7 @@ complete -C kn kn
 complete -C auth auth
 complete -C pomo pomo
 complete -C config config
+complete -F _docker d
 
 if type gh >/dev/null 2>&1; then
   eval "$(gh completion -s bash)"

@@ -1,0 +1,5 @@
+#!/bin/sh
+if [ -n "${COMP_LINE}" ]; then
+    exec
+fi
+exec docker "$@"
