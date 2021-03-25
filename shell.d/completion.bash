@@ -15,5 +15,10 @@ complete -C auth auth
 complete -C pomo pomo
 complete -C config config
 
-eval "$(gh completion -s bash)"
-eval "$(pandoc --bash-completion)"
+if type gh >/dev/null 2>&1; then
+  eval "$(gh completion -s bash)"
+fi
+
+if type pandoc >/dev/null 2>&1; then
+  eval "$(pandoc --bash-completion)"
+fi
