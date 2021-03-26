@@ -2,4 +2,6 @@
 # personal, private, or work imported rc modules later.
 
 export REPOS="$HOME/repos"
-type git >/dev/null 2>&1 && export GITUSER="$(git config --global user.name)"
+if [ git >/dev/null 2>&1 ]; then
+  test -z "${GITUSER}" && export GITUSER="$(git config --global user.name)"
+fi
