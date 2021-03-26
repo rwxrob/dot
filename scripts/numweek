@@ -4,15 +4,9 @@ day="$1"
 format="$2"
 num="$3"
 
-[ -z "${num}" ] && num=1
-
-if [ -z "${day}" ]; then
-    day=$(date)
-fi
-
-if [ -z "${format}" ]; then
-    format="%a, %b %-d"
-fi
+test -z "${num}" && num=1
+test -z "${day}" && day=$(date)
+test -z "${format}" && format="%a, %b %-d"
 
 IFS=
 while read line; do
