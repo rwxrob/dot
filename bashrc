@@ -1,4 +1,10 @@
 #!/usr/bin/bash
+
+# first whatever the system has (required for completion, etc.)
+if [ -e /etc/bashrc ]; then
+    source /etc/bashrc
+fi
+
 source "$HOME/.shell.d/detection.sh"
 source "$HOME/.shell.d/git.sh"
 source "$HOME/.shell.d/git-prompt.sh"
