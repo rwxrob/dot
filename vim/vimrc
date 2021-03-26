@@ -148,7 +148,6 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   Plug 'sheerun/vim-polyglot'
   Plug 'vim-pandoc/vim-pandoc'
   Plug 'rwxrob/vim-pandoc-syntax-simple'
-  Plug 'https://gitlab.com/rwx.gg/abnf'
   "Plug 'WolfgangMehner/bash-support' " borkish
   "Plug 'vim-airline/vim-airline'
   "Plug 'vim-airline/vim-airline-themes'
@@ -157,7 +156,6 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
   Plug 'PProvost/vim-ps1'
   Plug 'tpope/vim-fugitive'
-  Plug 'tpope/unimpaired'
   "Plug 'airblade/vim-gitgutter'
   Plug 'morhetz/gruvbox'
   "Plug 'nielsmadan/harlequin'
