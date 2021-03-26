@@ -1,0 +1,12 @@
+#!/bin/sh
+
+curl -L https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb \
+    -o /tmp/minikube_latest_amd64.deb
+
+if [ ! -e "/tmp/minikube_latest_amd64.deb" ];then
+    echo Could not curl down the release deb file
+    exit 1
+fi
+
+sudo dpkg -i /tmp/minikube_latest_amd64.deb
+rm /tmp/minikube_latest_amd64.deb
