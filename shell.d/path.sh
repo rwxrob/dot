@@ -3,14 +3,16 @@ export SCRIPTS=$REPOS/github.com/$GITUSER/dotfiles/scripts
 
 export PATH=\
 $SCRIPTS:\
-/home/rwxrob/sdk/go1.16/bin:\
+$HOME/sdk/go1.16/bin:\
 /usr/lib/go-1.15/bin:\
 $HOME/.local/bin:\
 $HOME/.local/go/bin:\
 $HOME/.cargo/bin:\
 $HOME/.node/bin:\
 $HOME/.deno/bin:\
+$HOME/bin:\
 /usr/local/opt/coreutils/libexec/gnubin:\
+/mingw64/bin:\
 /usr/local/go/bin:\
 /usr/local/tinygo/bin:\
 /usr/local/bin:\

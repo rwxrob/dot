@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# Git-Bash (on Windows) does not have symbolic links (that are worth
+# using) so we have to make fresh copies of everything. 
+#
+# Keep in mind that the bashrc PATH from this dotfiles will not include
+# many of the things the Windows might have. In fact, only /mingw64/bin
+# is included. This is because I'm not using git-bash for anything
+# substantial other than connecting to other systems and the occasional
+# Windows git pull.
+#
+# WARNING: running this script will delete and replace the following:
+# 
+#   ~/.vimrc
+#   ~/.bashrc
+#   ~/.shell.d
+#   ~/.tmux.conf
+
+cp vim/vimrc ~/.vimrc
+cp bashrc ~/.bashrc
+cp -r shell.d ~/.shell.d
+cp tmux/tmux.conf ~/.tmux.conf
+
