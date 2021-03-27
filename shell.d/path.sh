@@ -21,16 +21,17 @@ pathprepend() {
   done
 }
 
-pathappend \
+pathprepend \
   "${SCRIPTS}" \
   "${HOME}/sdk/go1.16/bin" \
-  "/usr/lib/go-1.15/bin" \
   "${HOME}/.local/bin" \
   "${HOME}/.local/go/bin" \
   "${HOME}/.cargo/bin" \
   "${HOME}/.node/bin" \
   "${HOME}/.deno/bin" \
   "${HOME}/bin" \
+
+pathappend \
   "/usr/local/opt/coreutils/libexec/gnubin" \
   "/mingw64/bin" \
   "/usr/local/go/bin" \
