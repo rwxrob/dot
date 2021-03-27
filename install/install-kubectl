@@ -1,0 +1,8 @@
+#!/bin/sh
+cd $(mktemp -d)
+V=$(curl -L -s https://dl.k8s.io/release/stable.txt)
+curl -LO "https://dl.k8s.io/release/${V}/bin/linux/amd64/kubectl"
+curl -LO "https://dl.k8s.io/${V}/bin/linux/amd64/kubectl.sha256"
+echo "$(head -1 kubectl.sha256) kubectl" | sha256sum --check
+cp kubectl "$HOME/.local/bin"
+chmod +x "$HOME/.local/bin/kubectl"
