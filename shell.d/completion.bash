@@ -10,12 +10,25 @@ complete -C kn kn
 complete -C auth auth
 complete -C pomo pomo
 complete -C config config
-complete -F _docker d
 
-if type gh >/dev/null 2>&1; then
+if type gh &>/dev/null; then
   eval "$(gh completion -s bash)"
 fi
 
-if type pandoc >/dev/null 2>&1; then
+if type pandoc &>/dev/null; then
   eval "$(pandoc --bash-completion)"
+fi
+
+if type kubectl &>/dev/null; then
+  source <(kubectl completion bash)
+  complete -o default -F __start_kubectl k
+fi
+
+if type minikube &>/dev/null; then
+  source <(minikube completion bash)
+  complete -o default -F __start_minikube mk
+fi
+
+if type docker &>/dev/null; then
+  complete -F _docker d
 fi
