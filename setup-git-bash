@@ -3,21 +3,14 @@
 # Git-Bash (on Windows) does not have symbolic links (that are worth
 # using) so we have to make fresh copies of everything. 
 #
-# Keep in mind that the bashrc PATH from this dotfiles will not include
-# many of the things the Windows might have. In fact, only /mingw64/bin
-# is included. This is because I'm not using git-bash for anything
-# substantial other than connecting to other systems and the occasional
-# Windows git pull.
-#
 # WARNING: running this script will delete and replace the following:
-# 
-#   ~/.vimrc
-#   ~/.bashrc
-#   ~/.shell.d
-#   ~/.tmux.conf
 
+rm "$HOME/.vimrc" 
 cp vim/vimrc ~/.vimrc
+rm "$HOME/.bashrc" 
 cp bashrc ~/.bashrc
+rm -r "$HOME/.shell.d" 
 cp -r shell.d ~/.shell.d
+rm "$HOME/.tmux.conf" 
 cp tmux/tmux.conf ~/.tmux.conf
 
