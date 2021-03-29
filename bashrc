@@ -35,6 +35,3 @@ test -r ~/.bash_private && source ~/.bash_private
 
 # primarily added for HTTP_PROXY and such
 test -r ~/.bash_work && source ~/.bash_work
-
-# set the default prompt
-ps1min
