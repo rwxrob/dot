@@ -1,0 +1,14 @@
+#!/usr/bin/perl
+
+# Sorts simple semantic versions.
+
+use v5.18;
+my @versions = <STDIN>;
+
+sub num {
+    $_ = shift;
+    s/^v//;
+    sprintf "%09i%09i%09i", split /\./;
+}
+
+print(grep {s,^,v,} sort {num($a) <=> num($b)} grep {s,^v,,} @versions)
