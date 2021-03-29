@@ -43,10 +43,6 @@ set textwidth=72
 " disable relative line numbers, remove no to sample it
 set norelativenumber
 
-" easier to see characters when `set paste` is on (not 7.4)
-if v:version >= 800
-  set listchars=tab:→\ ,eol:↲,nbsp:␣,space:·,trail:·,extends:⟩,precedes:⟨
-endif
 highlight NonText guifg=bg
 
 " turn on default spell checking
