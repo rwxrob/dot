@@ -1,0 +1,3 @@
+#!/bin/sh
+# No need to get GO111MODULE to on anymore (1.17+)
+exec go get sigs.k8s.io/kind
