@@ -1,6 +1,15 @@
 #!/bin/sh
 
-sudo apt install vim tmux lynx
+# The tmux binary in the bin of this dotfiles repo will work in most
+# cases (all linux/amd64).
+
+# However ...
+
+# You can just install like this:
+# sudo apt install tmux
+
+# Or, you can built your own without borders:
+# 1. docker pull 
 
 # But can also build tmux without borders:
 #   git clone git@github.com:tmux/tmux

@@ -24,7 +24,8 @@ fatal () {
 }
 
 topic="$*"
-if [[ ${#topic} > 80 ]]; then
+short="${topic%%#*}"
+if [[ ${#short} > 80 ]]; then
   fatal 'Topic must be under 80 characters'
 fi
 zetid="[$(isosec)]"

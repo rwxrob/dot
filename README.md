@@ -2,6 +2,8 @@
 
 ![WIP](https://img.shields.io/badge/status-wip-red)
 
+Testing linked project.
+
 WARNING: This thing is *never* complete, full of bugs, and always
 changing. [Pilfer](https://duck.com/lite?q=Pilfer) at your own fucking
 risk. (But *do* pilfer. I don't mind.)
