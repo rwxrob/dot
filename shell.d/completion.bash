@@ -29,6 +29,10 @@ if type minikube &>/dev/null; then
   complete -o default -F __start_minikube mk
 fi
 
+if type kind  &>/dev/null; then
+  source <(kind completion bash)
+fi
+
 if type docker &>/dev/null; then
   complete -F _docker d
 fi
