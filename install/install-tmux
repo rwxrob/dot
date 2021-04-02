@@ -1,34 +1,42 @@
 #!/bin/sh
 
+# Borderless TMUX
+
 # The tmux binary in the bin of this dotfiles repo will work in most
-# cases (all linux/amd64).
-
-# However ...
-
-# You can just install like this:
-# sudo apt install tmux
-
-# Or, you can built your own without borders:
-# 1. docker pull 
-
-# But can also build tmux without borders:
-#   git clone git@github.com:tmux/tmux
-#   (then apply the following patch)
-# 
-#diff --git a/screen-redraw.c b/screen-redraw.c
-#index 211f7f79..f2a490f3 100644
-#--- a/screen-redraw.c
-#+++ b/screen-redraw.c
-#@@ -43,7 +43,7 @@ static void	screen_redraw_draw_pane(struct screen_redraw_ctx *,
-# #define CELL_JOIN 11
-# #define CELL_OUTSIDE 12
-# 
+# cases (all linux/amd64). However, ...
 
 # In screen-redraw.c change this:
 #define CELL_BORDERS " xqlkmjwvtun~"
 # To this:
 #define CELL_BORDERS "             "
 
-# 
-# /* Check if cell is on the border of a particular pane. */
-# static int
+# Which the following code will do for you if you have docker installed:
+
+if ! type docker >/dev/null 2>&1; then
+  echo "Install requires Docker to build"
+  exit 1
+fi
+
+cd $(mktemp -d)
+git clone git@github.com:tmux/tmux
+cd tmux
+docker run -u root -v "$PWD:/tmux:Z" conanio/gcc9 bash -l -c "
+  env;
+  apt update;
+  apt install -y libevent-dev build-essential bison;
+  cd /tmux;
+  perl -p -i -e 's, xqlkmjwvtun~,             ,' screen-redraw.c;
+  sh autogen.sh;
+  ./configure --enable-static --disable-shared;
+  make; 
+"
+echo
+echo "Build complete."
+echo
+echo Your stuff is in $(pwd)
+echo
+mkdir -p "$HOME/.local/bin"
+install ./tmux "$HOME/.local/bin"
+ls -lh "$HOME/.local/bin/tmux"
+file "$HOME/.local/bin/tmux"
+
