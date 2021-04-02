@@ -3,10 +3,11 @@
 # Updates YouTube and Twitch Titles, sets the GitHub profile status, and
 # sends a tweet pointing to the YouTube video.
 
-if [[ -z "$1" ]]; then
-  wee /topic
-  exit
-fi
+topic="$*"
+
+while test -z "${topic}"; do
+  read -p "Topic: " topic
+done
 
 # change these do solarized/gruvbox variations (not millions)
 if [[ -t 1 ]]; then
@@ -23,7 +24,6 @@ fatal () {
   exit 1
 }
 
-topic="$*"
 short="${topic%%#*}"
 if [[ ${#short} > 80 ]]; then
   fatal 'Topic must be under 80 characters'
