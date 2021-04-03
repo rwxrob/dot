@@ -1,6 +1,8 @@
 #!/bin/sh
 
-# Borderless TMUX
+# Borderless TMUX 
+
+# (watch the video about: )
 
 # The tmux binary in the bin of this dotfiles repo will work in most
 # cases (all linux/amd64). However, ...
@@ -22,7 +24,7 @@ fi
 cd $(mktemp -d)
 git clone git@github.com:tmux/tmux
 cd tmux
-docker run -u root -v "$PWD:/tmux:Z" conanio/gcc10 bash -c "
+docker run --rm -u root -v "$PWD:/tmux:Z" conanio/gcc10 bash -c "
   apt update;
   apt install -y libevent-dev build-essential bison;
   cd /tmux;
@@ -40,4 +42,5 @@ mkdir -p "$HOME/.local/bin"
 install ./tmux "$HOME/.local/bin"
 ls -lh "$HOME/.local/bin/tmux"
 file "$HOME/.local/bin/tmux"
+ldd "$HOME/.local/bin/tmux"
 
