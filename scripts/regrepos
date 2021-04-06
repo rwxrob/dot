@@ -1,0 +1,2 @@
+#!/bin/sh
+exec curl localhost:5000/v2/_catalog
