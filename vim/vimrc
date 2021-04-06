@@ -335,5 +335,5 @@ set rtp^=~/.vimwork
 
 hi StatusLineNC term=none cterm=none gui=none
 if v:version >= 800
-  hi StatusLine term=reverse ctermfg=LightGray cterm=nocombine 
+  hi StatusLine term=bold cterm=bold gui=bold
 endif
