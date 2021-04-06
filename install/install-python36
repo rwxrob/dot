@@ -1,0 +1,25 @@
+#!/bin/sh
+
+if ! type docker >/dev/null 2>&1; then
+  echo "Install requires Docker to build"
+  exit 1
+fi
+
+cd $(mktemp -d)
+curl -LO https://www.python.org/ftp/python/3.6.9/Python-3.6.9.tar.xz
+tar xvf Python-3.6.9.tar.xz
+docker run --rm -u root -v "$PWD:/mymnt:Z" conanio/gcc10 bash -c "
+  apt update;
+  cd /mymnt/Python-3.6.9;
+  ./configure;
+  make -j16; 
+"
+echo
+echo "Build complete."
+echo
+echo Your stuff is in $(pwd)
+echo
+mkdir -p "$HOME/.local/bin"
+install ./Python-3.6.9/python "$HOME/.local/bin"
+ls -lh "$HOME/.local/bin/python3.6"
+
