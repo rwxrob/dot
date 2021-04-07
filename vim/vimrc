@@ -333,7 +333,5 @@ set rtp^=~/.vimpersonal
 set rtp^=~/.vimprivate
 set rtp^=~/.vimwork
 
-hi StatusLineNC term=none cterm=none gui=none
-if v:version >= 800
-  hi StatusLine term=bold cterm=bold gui=bold
-endif
+hi StatusLineNC term=bold cterm=bold gui=bold
+hi StatusLine term=bold cterm=bold gui=bold
