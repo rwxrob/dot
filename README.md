@@ -6,6 +6,9 @@ WARNING: This thing is *never* complete, full of bugs, and always
 changing. [Pilfer](https://duck.com/lite?q=Pilfer) at your own risk.
 (But *do* pilfer. I don't mind.)
 
+And yes, for my own dotfiles I feel no shame committing to main. Thank
+for you (not) asking.
+
 I'm a fan of keeping things as portable and testable, as possible
 (without sacrificing ultimate power and time when on workstation).
 Therefore, I use a `bashrc.d` approach (my own thing, not something done
