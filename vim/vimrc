@@ -29,9 +29,15 @@ set shiftwidth=2
 set smartindent
 set smarttab
 
-" stop vim from silently fucking with files that it shouldn't 
 if v:version >= 800 
+  " stop vim from silently fucking with files that it shouldn't 
   set nofixendofline
+
+  " better list chars
+  set listchars=tab:→\ ,eol:↲,nbsp:␣,space:·,trail:·,extends:⟩,precedes:⟨
+
+  " i fucking hate automatic folding
+  set foldmethod=manual
 endif
 
 " replace tabs with spaces automatically
@@ -76,9 +82,6 @@ set viminfo='20,<1000,s1000
 let g:loaded_matchparen=1
 set noshowmatch
 
-if v:version >= 800
-  set foldmethod=manual
-endif
 
 " Just the defaults, these are changed per filetype by plugins.
 " Most of the utility of all of this has been superceded by the use of
@@ -108,6 +111,7 @@ if $PLATFORM == 'mac'
   " required for mac delete to work
   set backspace=indent,eol,start
 endif
+
 
 " stop complaints about switching buffer with changes
 set hidden
