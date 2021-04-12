@@ -41,7 +41,9 @@ give () {
 
   if [[ -n $(repos has "$cmd") ]];then
     cd ${path%/*}
-    local branch=$(git branch --show-current)
+    #local branch=$(git branch --show-current)
+    # TODO detect main or master
+    local branch=main
     if [[ $path =~ github.com/([^/]+)/([^/]+)/(.+) ]]; then
       local entity=${BASH_REMATCH[1]}
       local repo=${BASH_REMATCH[2]}
