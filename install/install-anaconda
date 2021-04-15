@@ -1,0 +1,55 @@
+#!/bin/bash
+
+# WARNING: THIS WILL FUCK WITH YOUR BASHRC AND YOUR PROMPT and who knows
+# what else. The Anaconda developers are fucking idiots. I fucking HATE
+# Anaconda and the idiots who decided this. I only kept this installer
+# script that I wrote because I had to write it and after running it
+# realized what a piece of steaming SHIT Anaconda is. I'll never use it
+# unless forced and neither should you. 
+
+ver="Anaconda3-2020.11-Linux-x86_64"
+sha="cf2ff493f11eaad5d09ce2b4feaa5ea90db5174303d5b3fe030e16d29aeef7de"
+
+create_tmp_dir () {
+    cd $(mktemp -d)
+    pwd
+}
+
+install_deps () {
+    sudo apt update >/dev/null 2>&1
+    sudo apt install -y \
+        libgl1-mesa-glx \
+        libegl1-mesa \
+        libxrandr2 \
+        libxrandr2 \
+        libxss1 \
+        libxcursor1 \
+        libxcomposite1 \
+        libasound2 \
+        libxi6 \
+        libxtst6 \
+        >/dev/null 2>&1
+}
+
+download () {
+    curl -sSLO "https://repo.anaconda.com/archive/${ver}.sh"
+}
+
+check_sum () {
+    sum=$(sha256sum "${ver}.sh")
+    sum=${sum%%\ *}
+    if [ ! $sum = $sha ]; then
+        echo sha256sum check failed
+        return 1
+    fi
+}
+
+run_installer () {
+    bash "./${ver}.sh"
+}
+
+create_tmp_dir && \
+install_deps   && \
+download       && \
+check_sum      && \
+run_installer
