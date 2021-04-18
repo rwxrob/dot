@@ -1,7 +1,0 @@
-#!/bin/sh
-
-egrep '^func [_[:alpha:]]+?\(' $1 | while read line; do
-  line=${line%%[(]*}
-  line=${line#func }
-  echo $line
-done
