@@ -8,7 +8,7 @@
   --persist \
   -t 4 \
   -p fixed \
-  -g "300x90+3077+1010" \
+  -g "300x90+3120+1010" \
   --compr-cnt 1 \
   -s large \
   -f "UbuntuMono Nerd Font" \
