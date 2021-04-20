@@ -10,11 +10,11 @@ fi
 
 source "$HOME/.shell.d/detection.sh"
 source "$HOME/.shell.d/git.sh"
-source "$HOME/.shell.d/git-prompt.sh"
 source "$HOME/.shell.d/path.sh"
 source "$HOME/.shell.d/history.bash"
 source "$HOME/.shell.d/pager.sh"
 source "$HOME/.shell.d/settings.bash"
+source "$HOME/.shell.d/prompt-git.sh"
 source "$HOME/.shell.d/prompt.bash"
 source "$HOME/.shell.d/editor.sh"
 source "$HOME/.shell.d/python.sh"
