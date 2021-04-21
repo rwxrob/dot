@@ -6,27 +6,56 @@ LONG_PROMPT=30
 
 __ps1 () {
 
-  # set shortcuts for all the colors
-  local g='\[\e[38;2;110;110;110m\]'
-  local h='\[\e[34m\]'
-  local u='\[\e[33m\]'
-  local P='$'
-  local p='\[\e[33m'
-  local w='\[\e[35m\]'
-  local x='\[\e[0m\]'
+  local P='$' # changes to hashtag when root
+
+	# set shortcuts for all the colors
+  if test -n "${ZSH_VERSION}"; then
+    local r='%F{red}'
+    local g='%F{black}'
+    local h='%F{blue}'
+    local u='%F{yellow}'
+    local p='%F{yellow}'
+    local w='%F{magenta}'
+    local b='%F{cyan}'
+    local x='%f'
+  else
+		local r='\[\e[31m\]'
+		local g='\[\e[30m\]'
+		local h='\[\e[34m\]'
+		local u='\[\e[33m\]'
+		local p='\[\e[33m\]'
+		local w='\[\e[35m\]'
+		local b='\[\e[36m\]'
+		local x='\[\e[0m\]'
+  fi
 
   # watch out, you're root
   if test "${EUID}" == 0; then
     P='#'
-    u='\[\e[38;2;255;0;0m\]'
+    if test -n "${ZSH_VERSION}"; then
+      u='$F{red}'
+    else
+      u=$r
+    fi
     p=$u
   fi
 
-  # let's see how long this thing really is
-  local countme="$USER@$(hostname):$(basename $PWD)$(__git_ps1 '(%s)')$ "
+  # git branch with warning about main or master
+  local B=$(git branch --show-current 2>/dev/null)
+  local _B="${B}"
+  test "${B}" = master -o "${B}" = main && b=$r
+  test -n "${B}" && B="$g($b$B$g)"
 
-  local short="$u\u$g@$h\h$g:$w\W$g\$(__git_ps1 '(%s)')$p$P$x "
-  local long="$g╔═$u\u$g@$h\h$g:$w\W$g\$(__git_ps1 '(%s)')\n$g╚═$p$P$x "
+  # let's see how long this thing really is
+  local countme="$USER@$(hostname):$(basename $PWD)($_B)\$ "
+
+  if test -n "${ZSH_VERSION}"; then
+    local short="$u%n$g@$h%m$g:$w%1~$B$p$P$x "
+    local long="$g╔═$u%n$g@%m\h$g:$w%1~$B\n$g╚═$p$P$x "
+  else
+    local short="$u\u$g@$h\h$g:$w\W$B$p$P$x "
+    local long="$g╔═$u\u$g@$h\h$g:$w\W$B\n$g╚═$p$P$x "
+  fi
 
   if test ${#countme} -gt "${LONG_PROMPT}"  ;  then
     PS1="${long}"
