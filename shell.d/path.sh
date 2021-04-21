@@ -51,12 +51,11 @@ export PATH
 export CDPATH=\
 ./:\
 $REPOS/github.com/$GITUSER:\
-$REPOS/gitlab.com/$GITUSER:\
+$REPOS/github.com/$GITUSER/$GITUSER:\
 $REPOS/github.com/*:\
-$REPOS/gitlab.com/*:\
 $REPOS/github.com:\
-$REPOS/gitlab.com:\
 $REPOS:\
+$KEGPATH:\
 /media/$USER:\
 $HOME
 
