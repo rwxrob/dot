@@ -12,6 +12,7 @@ alias '??'=google
 alias '???'=bing
 alias x="exit"
 alias sl="sl -e"
+alias tmpd="cd $(mktemp -d)"
 
 alias free='free -h'
 alias df='df -h'
