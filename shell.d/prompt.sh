@@ -2,7 +2,9 @@
 # Adaptive prompt that will be shortened if there is room. Set the
 # following to your preferred threshold.
 
-LONG_PROMPT=30
+PROMPT_LONG=30
+PROMPT_MAX=72
+
 
 __ps1 () {
 
@@ -51,13 +53,17 @@ __ps1 () {
 
   if test -n "${ZSH_VERSION}"; then
     local short="$u%n$g@$h%m$g:$w%1~$B$p$P$x "
-    local long="$g╔$u%n$g@%m\h$g:$w%1~$B\n$g╚$p$P$x "
+    local long="$g╔ $u%n$g@%m\h$g:$w%1~$B\n$g╚ $p$P$x "
+    local double="$g╔ $u%n$g@%m\h$g:$w%1~\n$g║ $B\n$g╚ $p$P$x "
   else
     local short="$u\u$g@$h\h$g:$w\W$B$p$P$x "
     local long="$g╔ $u\u$g@$h\h$g:$w\W$B\n$g╚ $p$P$x "
+    local double="$g╔ $u\u$g@$h\h$g:$w\W\n$g║ $B\n$g╚ $p$P$x "
   fi
 
-  if test ${#countme} -gt "${LONG_PROMPT}"  ;  then
+  if test ${#countme} -gt "${PROMPT_MAX}"  ;  then
+    PS1="${double}"
+  elif test ${#countme} -gt "${PROMPT_LONG}"  ;  then
     PS1="${long}"
   else
     PS1="${short}"
