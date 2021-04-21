@@ -3,7 +3,7 @@
 # following to your preferred threshold.
 
 PROMPT_LONG=30
-PROMPT_MAX=72
+PROMPT_MAX=79
 
 
 __ps1 () {
