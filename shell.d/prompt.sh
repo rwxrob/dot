@@ -51,10 +51,10 @@ __ps1 () {
 
   if test -n "${ZSH_VERSION}"; then
     local short="$u%n$g@$h%m$g:$w%1~$B$p$P$x "
-    local long="$g╔═$u%n$g@%m\h$g:$w%1~$B\n$g╚═$p$P$x "
+    local long="$g╔$u%n$g@%m\h$g:$w%1~$B\n$g╚$p$P$x "
   else
     local short="$u\u$g@$h\h$g:$w\W$B$p$P$x "
-    local long="$g╔═$u\u$g@$h\h$g:$w\W$B\n$g╚═$p$P$x "
+    local long="$g╔ $u\u$g@$h\h$g:$w\W$B\n$g╚ $p$P$x "
   fi
 
   if test ${#countme} -gt "${LONG_PROMPT}"  ;  then
