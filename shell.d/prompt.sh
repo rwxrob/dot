@@ -2,7 +2,7 @@
 # Adaptive prompt that will be shortened if there is room. Set the
 # following to your preferred threshold.
 
-PROMPT_LONG=30
+PROMPT_LONG=50
 PROMPT_MAX=95
 
 __ps1 () {
