@@ -41,23 +41,29 @@ __ps1 () {
     p=$u
   fi
 
-  # git branch with warning about main or master
+  local dir="$(basename $PWD)"
+  if test "${dir}" = _ ;then
+    dir=${PWD#*${PWD%/*/_}}
+    dir=${dir#/}
+  fi
+
   local B=$(git branch --show-current 2>/dev/null)
-  local _B="${B}"
+  test "${dir}" = "${B}" && B='.'
+  local countme="$USER@$(hostname):$dir($B)\$ "
+
   test "${B}" = master -o "${B}" = main && b=$r
   test -n "${B}" && B="$g($b$B$g)"
 
   # let's see how long this thing really is
-  local countme="$USER@$(hostname):$(basename $PWD)($_B)\$ "
 
   if test -n "${ZSH_VERSION}"; then
-    local short="$u%n$g@$h%m$g:$w%1~$B$p$P$x "
-    local long="$g╔ $u%n$g@%m\h$g:$w%1~$B\n$g╚ $p$P$x "
-    local double="$g╔ $u%n$g@%m\h$g:$w%1~\n$g║ $B\n$g╚ $p$P$x "
+    local short="$u%n$g@$h%m$g:$w$dir$B$p$P$x "
+    local long="$g╔ $u%n$g@%m\h$g:$w$dir$B\n$g╚ $p$P$x "
+    local double="$g╔ $u%n$g@%m\h$g:$w$dir\n$g║ $B\n$g╚ $p$P$x "
   else
-    local short="$u\u$g@$h\h$g:$w\W$B$p$P$x "
-    local long="$g╔ $u\u$g@$h\h$g:$w\W$B\n$g╚ $p$P$x "
-    local double="$g╔ $u\u$g@$h\h$g:$w\W\n$g║ $B\n$g╚ $p$P$x "
+    local short="$u\u$g@$h\h$g:$w$dir$B$p$P$x "
+    local long="$g╔ $u\u$g@$h\h$g:$w$dir$B\n$g╚ $p$P$x "
+    local double="$g╔ $u\u$g@$h\h$g:$w$dir\n$g║ $B\n$g╚ $p$P$x "
   fi
 
   if test ${#countme} -gt "${PROMPT_MAX}"  ;  then
