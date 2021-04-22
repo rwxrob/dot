@@ -45,6 +45,9 @@ __ps1 () {
   if test "${dir}" = _ ;then
     dir=${PWD#*${PWD%/*/_}}
     dir=${dir#/}
+  elif test "${dir}" = work ;then
+    dir=${PWD#*${PWD%/*/work}}
+    dir=${dir#/}
   fi
 
   local B=$(git branch --show-current 2>/dev/null)
