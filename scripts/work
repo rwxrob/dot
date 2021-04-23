@@ -1,0 +1,65 @@
+#!/bin/sh
+
+## Manage Git repos as worktrees that are contained in peer directories
+## with branch names that begin with the same prefix as the name of the
+## main repo in order for CDPATH and other cd completion to work properly
+## and to ensure absolute file separation from other branches (which is
+## more difficult to maintain using just switch/co Git approaches.
+##
+## * If no arguments prints the last worktree worked on (so that
+##   it can be combined with a cd
+##
+## * If first arg is `create` then create second or prompt ensuring that
+##   an issue has been created that matches the number after the final dash
+##   in the second argument and if so create a worktree that, if within a
+##   repo currently, is within the parent of the same repo and has the same
+##   prefix as the current repo, if outside of a repo, checks all repos for
+##   one with the same prefix and, if found, cd into that and create a
+##   worktree from it, otherwise, if there is a / in the second argument,
+##   clone the repo from GitHub at the proper location, cd into, and create
+##   a worktree from it.
+##
+## * If one arg and it's `ls` or `list` list all current worktrees
+##
+## * If two args and first is `rm` or `remove` prompt remove worktree
+##   and branch
+##
+## * If the first arg is `merge` then if second arg is a worktree then merge
+##   that one into main, otherwise, if there is no second argument assume
+##   the current worktree should be merged, otherwise, assume the last
+##   worktree should be merged
+##
+## * Is one arg, assume it's a tag, and create issue using gh
+##
+## * If two args, assume first is tag and second is existing issue
+##
+
+CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/work"
+
+in_tree() {
+	pdhas -f .git
+}
+
+case "$1" in
+
+create) echo would create worktree $1 ;;
+
+list | ls) echo would list all worktrees in $REPOS ;;
+
+rm | remove) echo would remove $1 worktree ;;
+
+push) echo would push $1 worktree into up ;;
+
+merge) echo would merge $1 worktree into main and clean up ;;
+
+pr) echo would make a pr for $1 worktree or prompt ;;
+
+last) head -1 "$LAST" 2>/dev/null ;;
+
+cd | on) echo would change into that directory $1 ;;
+
+intree) exec pdhas -f .git >/dev/null ;;
+
+*) echo usage error ;;
+
+esac
