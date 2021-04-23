@@ -145,40 +145,18 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
 
   " load all the plugins
   call plug#begin('~/.vimplugins')
+  Plug 'z0mbix/vim-shfmt'
   Plug 'sheerun/vim-polyglot'
   Plug 'vim-pandoc/vim-pandoc'
   Plug 'rwxrob/vim-pandoc-syntax-simple'
-  "Plug 'WolfgangMehner/bash-support' " borkish
-  "Plug 'vim-airline/vim-airline'
-  "Plug 'vim-airline/vim-airline-themes'
   Plug 'cespare/vim-toml'
   Plug 'pangloss/vim-javascript'
   Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
   Plug 'PProvost/vim-ps1'
   Plug 'tpope/vim-fugitive'
-  "Plug 'airblade/vim-gitgutter'
   Plug 'morhetz/gruvbox'
-  "Plug 'nielsmadan/harlequin'
-  "Plug 'tomasr/molokai'
   call plug#end()
 
-
-  "let g:airline_powerline_fonts = 1
-  "if !exists('g:airline_symbols')
-    "let g:airline_symbols = {}
-  "endif
-
-	"let g:airline_left_sep = "\uE0C4"  
-	"let g:airline_right_sep = "\uE0C5" 
-	"let g:airline_left_sep = "\uE0C6"
-	"let g:airline_right_sep = "\uE0C7" 
-	"let g:airline_left_sep = "\uE0C4"
-	"let g:airline_right_sep = "\uE0C5" 
-
-  "autocmd!
-
-  "colorscheme gruvbox
-  "let g:gruvbox_transparent_bg=1
   hi Normal ctermbg=NONE " for transparent background
   hi SpellBad ctermbg=red " for transparent background
   hi SpellRare ctermbg=red
@@ -186,24 +164,18 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   au FileType pandoc hi pandocAtxHeader ctermfg=yellow cterm=bold
   au FileType pandoc hi pandocAtxHeaderMark ctermfg=yellow cterm=bold
   au FileType pandoc hi pandocAtxStart ctermfg=yellow cterm=bold
-  "hi goDeclsFzfFunction ctermfg=cyan
-  "colorscheme elflord
-  "set cursorline
-  "set noshowmode
-  "set rulerformat=%55(%f\ %y%r\ %l:%c\ %p%%%) "55 effective max
 
   set noruler
-  "set rulerformat=%55(%f\ %y%r\ %l:%c\ %p%%%) "55 effective max
-  
   set laststatus=2
   set statusline=
   set statusline+=%*\ %<%.60F%*                      " path, trunc to 80 length
-  set statusline+=\ [%{strlen(&ft)?&ft:'none'}]     " filetype
+  set statusline+=\ [%{strlen(&ft)?&ft:'none'}]      " filetype
   set statusline+=%*\ %l:%c%*                        " current line and column
   set statusline+=%*\ %p%%%*                         " percentage
-
-  "set statusline+=%m\ %F\ %y\ %{&fileencoding?&fileencoding:&encoding}\ %=%(C:%c\ L:%l\ %P%) 
   set cmdheight=1
+
+  " shell
+  let g:shfmt_fmt_on_save = 1
 
   " pandoc
   let g:pandoc#formatting#mode = 'h' " A'
