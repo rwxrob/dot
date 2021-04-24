@@ -1,5 +1,5 @@
 #!/bin/sh
-set -x
+#set -x # for debugging
 set -e
 
 # Manage Git repos as worktrees that are contained in peer directories
@@ -11,9 +11,9 @@ set -e
 # * If no arguments prints the last worktree worked on (so that
 #   it can be combined with a cd, see workl in aliases.sh).
 #
-# * If first arg is `create` then create a new worktree using the second
+# * If first arg is `add` then add a new worktree using the second
 #   argument as the name and the third the number of an issue that should
-#   be created before calling create. Every work tree must have an issue.
+#   be added before calling add. Every work tree must have an issue.
 #   (For something simpler, just branch with no worktree.) The name and
 #   issue will be added to a prefix that matches the name of the repo
 #   directory and passed to the `git worktree add` command.
@@ -21,7 +21,7 @@ set -e
 # * If one arg and it is `ls` or `list` list all current worktrees.
 #
 # * If two args and first is `rm` or `remove` prompt for confirmation
-#   and remove worktree and branch.
+#   and remove worktree *and* branch.
 
 CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/work"
 
@@ -31,14 +31,14 @@ usage() {
 }
 
 case "$1" in
-create)
+add)
 	dir="$(pdgit)"
 	if test -z "$dir"; then
 		echo "Creating outside of a git repo current unsupported." >&2
 		exit 1
 	fi
 	if test -z "$2"; then
-		echo "Missing name for create." >&2
+		echo "Missing name for add." >&2
 		exit 1
 	fi
 	if test -z "$3"; then
@@ -50,15 +50,24 @@ create)
 		exit 1
 	fi
 	cd "$dir"
-	ndir="../$(pwdname)-$2-$3"
+	branch="$(pwdname)-$2-$3"
+	ndir="../$branch"
 	git worktree add "$ndir"
 	cd "$ndir"
+	git push -u origin "$branch"
 	mkdir -p "$CACHE"
 	echo "$PWD" >"$CACHE/last"
 	echo "$PWD"
 	;;
-list | ls) echo would list all worktrees in $REPOS ;;
-rm | remove) echo would remove $1 worktree ;;
+list | ls) git worktree list ;;
+rm | remove)
+	branch="${2:-$(pwdname)}"
+	read -p "Really remove $branch? " answer
+	test "$answer" != y && echo "Okay." && exit 0
+	git push origin --delete "$branch" || true
+	git worktree remove "$branch"
+	git branch -d "$branch"
+	;;
 last | "") head -1 "$CACHE/last" 2>/dev/null ;;
 *) usage ;;
 esac
