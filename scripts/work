@@ -62,7 +62,7 @@ add)
 	echo "$PWD" >"$CACHE/last"
 	echo "$PWD"
 	;;
-list | ls) git worktree list ;;
+list | ls | "") git worktree list ;;
 main)
 	git worktree list >/dev/null 2>&1 # just for the failure check
 	path=$(git worktree list | head -1)
@@ -76,6 +76,6 @@ rm | remove)
 	git worktree remove -f "$branch" || true
 	git branch -d "$branch" -f
 	;;
-last | "") head -1 "$CACHE/last" 2>/dev/null ;;
+last) head -1 "$CACHE/last" 2>/dev/null ;;
 *) usage ;;
 esac
