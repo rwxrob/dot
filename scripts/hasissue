@@ -1,0 +1,2 @@
+#!/bin/sh
+gh issue list | egrep "^$1"
