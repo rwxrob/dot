@@ -1,5 +1,5 @@
 #!/bin/sh
-#set -x # for debugging
+set -x # for debugging
 set -e
 
 # Manage Git repos as worktrees that are contained in peer directories
@@ -66,21 +66,31 @@ add)
 	echo "$PWD"
 	;;
 merge)
-	if ! pdhas -d .git; then
-		echo "Must be in the main worktree." >&2
+	dir=${2:-$(pdhas -f .git)}
+	dir=${dir%.git}
+	cd "$dir"
+	branch="$(pwdname)"
+	if test -z "$branch"; then
+		echo "Could not determine worktree to merge." >&2
 		exit 1
 	fi
-	git merge "$2"
-	work rm "$2"
+	cd "$(/tmp/work main)"
+	git merge "$branch"
+	/tmp/work rm "$branch"
 	;;
 list | ls) git worktree list ;;
+main)
+	git worktree list >/dev/null 2>&1 # just for the failure check
+	path=$(git worktree list | head -1)
+	echo ${path%% *}
+	;;
 rm | remove)
 	branch="${2:-$(pwdname)}"
 	read -p "Really remove $branch? " answer
 	test "$answer" != y && echo "Okay." && exit 0
 	git push origin --delete "$branch" || true
-	git worktree remove "$branch"
-	git branch -d "$branch"
+	git worktree remove -f "$branch"
+	git branch -d "$branch" -f
 	;;
 last | "") head -1 "$CACHE/last" 2>/dev/null ;;
 *) usage ;;
