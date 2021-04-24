@@ -2,39 +2,26 @@
 set -x
 set -e
 
-## Manage Git repos as worktrees that are contained in peer directories
-## with branch names that begin with the same prefix as the name of the
-## main repo in order for CDPATH and other cd completion to work properly
-## and to ensure absolute file separation from other branches (which is
-## more difficult to maintain using just switch/co Git approaches.
-##
-## * If no arguments prints the last worktree worked on (so that
-##   it can be combined with a cd
-##
-## * If first arg is `create` then create second or prompt ensuring that
-##   an issue has been created that matches the number after the final dash
-##   in the second argument and if so create a worktree that, if within a
-##   repo currently, is within the parent of the same repo and has the same
-##   prefix as the current repo, if outside of a repo, checks all repos for
-##   one with the same prefix and, if found, cd into that and create a
-##   worktree from it, otherwise, if there is a / in the second argument,
-##   clone the repo from GitHub at the proper location, cd into, and create
-##   a worktree from it.
-##
-## * If one arg and it's `ls` or `list` list all current worktrees
-##
-## * If two args and first is `rm` or `remove` prompt remove worktree
-##   and branch
-##
-## * If the first arg is `merge` then if second arg is a worktree then merge
-##   that one into main, otherwise, if there is no second argument assume
-##   the current worktree should be merged, otherwise, assume the last
-##   worktree should be merged
-##
-## * Is one arg, assume it's a tag, and create issue using gh
-##
-## * If two args, assume first is tag and second is existing issue
-##
+# Manage Git repos as worktrees that are contained in peer directories
+# with branch names that begin with the same prefix as the name of the
+# main repo in order for CDPATH and other cd completion to work properly
+# and to ensure absolute file separation from other branches (which is
+# more difficult to maintain using just switch/co Git approaches.
+#
+# * If no arguments prints the last worktree worked on (so that
+#   it can be combined with a cd, see workl in aliases.sh).
+#
+# * If first arg is `create` then create a new worktree using the second
+#   argument as the name and the third the number of an issue that should
+#   be created before calling create. Every work tree must have an issue.
+#   (For something simpler, just branch with no worktree.) The name and
+#   issue will be added to a prefix that matches the name of the repo
+#   directory and passed to the `git worktree add` command.
+#
+# * If one arg and it is `ls` or `list` list all current worktrees.
+#
+# * If two args and first is `rm` or `remove` prompt for confirmation
+#   and remove worktree and branch.
 
 CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/work"
 
@@ -58,27 +45,20 @@ create)
 		echo "Missing issue number." >&2
 		exit 1
 	fi
+	if ! hasissue "$3"; then
+		echo "Cannot find issue #$3, not yet created?"
+		exit 1
+	fi
 	cd "$dir"
 	ndir="../$(pwdname)-$2-$3"
 	git worktree add "$ndir"
 	cd "$ndir"
 	mkdir -p "$CACHE"
 	echo "$PWD" >"$CACHE/last"
+	echo "$PWD"
 	;;
-
 list | ls) echo would list all worktrees in $REPOS ;;
-
 rm | remove) echo would remove $1 worktree ;;
-
-push) echo would push $1 worktree into up ;;
-
-merge) echo would merge $1 worktree into main and clean up ;;
-
-pr) echo would make a pr for $1 worktree or prompt ;;
-
-last) head -1 "$CACHE/last" 2>/dev/null ;;
-
-intree) exec pdhas -f .git >/dev/null ;;
-inrepo) exec pdhas -d .git >/dev/null ;;
-*) echo usage error ;;
+last | "") head -1 "$CACHE/last" 2>/dev/null ;;
+*) usage ;;
 esac
