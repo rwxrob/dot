@@ -22,6 +22,12 @@ set -e
 #
 # * If two args and first is `rm` or `remove` prompt for confirmation
 #   and remove worktree *and* branch.
+#
+# * If first arg is `merge` will prompt to merge current worktree into
+#   main and remove itself.
+#
+# Note that there is no need to close tickets because that can simply be
+# done by including references to them in the commit messages.
 
 CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/work"
 
@@ -58,6 +64,14 @@ add)
 	mkdir -p "$CACHE"
 	echo "$PWD" >"$CACHE/last"
 	echo "$PWD"
+	;;
+merge)
+	if ! pdhas -d .git; then
+		echo "Must be in the main worktree." >&2
+		exit 1
+	fi
+	git merge "$2"
+	work rm "$2"
 	;;
 list | ls) git worktree list ;;
 rm | remove)
