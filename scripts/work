@@ -1,4 +1,6 @@
 #!/bin/sh
+set -x
+set -e
 
 ## Manage Git repos as worktrees that are contained in peer directories
 ## with branch names that begin with the same prefix as the name of the
@@ -36,13 +38,30 @@
 
 CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/work"
 
-in_tree() {
-	pdhas -f .git
+usage() {
+	echo "would show usage" >&2
+	exit 1
 }
 
 case "$1" in
-
-create) echo would create worktree $1 ;;
+create)
+	dir="$(pdgit)"
+	if test -z "$dir"; then
+		echo "Creating outside of a git repo current unsupported." >&2
+		exit 1
+	fi
+	if test -z "$2"; then
+		echo "Missing name for create." >&2
+		exit 1
+	fi
+	if test -z "$3"; then
+		echo "Missing issue number." >&2
+		exit 1
+	fi
+	cd "$dir"
+	ndir="../$(pwdname)-$2-$3"
+	git worktree add "$ndir"
+	;;
 
 list | ls) echo would list all worktrees in $REPOS ;;
 
@@ -56,10 +75,7 @@ pr) echo would make a pr for $1 worktree or prompt ;;
 
 last) head -1 "$LAST" 2>/dev/null ;;
 
-cd | on) echo would change into that directory $1 ;;
-
 intree) exec pdhas -f .git >/dev/null ;;
-
+inrepo) exec pdhas -d .git >/dev/null ;;
 *) echo usage error ;;
-
 esac

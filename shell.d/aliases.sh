@@ -1,5 +1,3 @@
-
-
 unalias -a
 
 alias grep='grep -i --colour=auto'
