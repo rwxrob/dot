@@ -73,7 +73,7 @@ rm | remove)
 	read -p "Really remove $branch? " answer
 	test "$answer" != y && echo "Okay." && exit 0
 	git push origin --delete "$branch" || true
-	git worktree remove -f "$branch"
+	git worktree remove -f "$branch" || true
 	git branch -d "$branch" -f
 	;;
 last | "") head -1 "$CACHE/last" 2>/dev/null ;;
