@@ -12,6 +12,7 @@ alias x="exit"
 alias sl="sl -e"
 alias tmpd='cd $(mktemp -d)'
 alias mkdirisosec='d=$(isosec);mkdir $d; cd $d'
+alias workl="cd $(work last)"
 
 alias free='free -h'
 alias df='df -h'

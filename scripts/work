@@ -61,6 +61,9 @@ create)
 	cd "$dir"
 	ndir="../$(pwdname)-$2-$3"
 	git worktree add "$ndir"
+	cd "$ndir"
+	mkdir -p "$CACHE"
+	echo "$PWD" >"$CACHE/last"
 	;;
 
 list | ls) echo would list all worktrees in $REPOS ;;
@@ -73,7 +76,7 @@ merge) echo would merge $1 worktree into main and clean up ;;
 
 pr) echo would make a pr for $1 worktree or prompt ;;
 
-last) head -1 "$LAST" 2>/dev/null ;;
+last) head -1 "$CACHE/last" 2>/dev/null ;;
 
 intree) exec pdhas -f .git >/dev/null ;;
 inrepo) exec pdhas -d .git >/dev/null ;;
