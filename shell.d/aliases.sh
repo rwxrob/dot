@@ -11,6 +11,7 @@ alias '???'=bing
 alias x="exit"
 alias sl="sl -e"
 alias mkdirisosec='d=$(isosec);mkdir $d; cd $d'
+alias main="cd $(work main)"
 
 # remember, instead of alias use cd ``
 # so alias tmpd='cd $(mktemp -d)'

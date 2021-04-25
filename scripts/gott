@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Can be run from TMUX pane to simply watch the tests without having to
 # explicitely run them constantly. When combined with a dump() Go utility
