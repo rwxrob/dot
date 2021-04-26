@@ -77,5 +77,9 @@ rm | remove)
 	git branch -d "$branch" -f
 	;;
 last) head -1 "$CACHE/last" 2>/dev/null ;;
-*) usage ;;
+*)
+	path=$(git worktree list | grep "$1" | head -1)
+	echo ${path%% *}
+	;;
+
 esac
