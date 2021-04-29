@@ -1,0 +1,2 @@
+#!/bin/sh
+tail -1 "$HOME/.lynx_bookmarks.html" | pandoc -f html -t markdown
