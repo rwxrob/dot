@@ -176,6 +176,13 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
 
   " shell
   let g:shfmt_fmt_on_save = 1
+
+  " Even though the POSIX shell standard and clean here-documents
+  " require use of tabs, the amount of YAML (which forbids tabs) and
+  " shell these days really mandates this. Otherwise, people will be
+  " cutting and pasting in their shitty graphic editors and whine about
+  " why they have tabs with their spaces in their YAML files. And most
+  " Vim users don't even know what the fuck `set list` even does.
   let g:shfmt_extra_args = '-i 2'
 
   " pandoc
