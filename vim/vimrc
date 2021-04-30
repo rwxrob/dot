@@ -29,22 +29,26 @@ set shiftwidth=2
 set smartindent
 set smarttab
 
-if v:version >= 800 
-  " stop vim from silently fucking with files that it shouldn't 
+if v:version >= 800
+  " stop vim from silently fucking with files that it shouldn't
   set nofixendofline
 
-  " better list chars
-  set listchars=tab:→\ ,eol:↲,nbsp:␣,space:·,trail:·,extends:⟩,precedes:⟨
+  " better ascii friendly listchars
+  set listchars=tab:\|_,eol:§,nbsp:•,space:·,trail:•,extends:»,precedes:«
 
   " i fucking hate automatic folding
   set foldmethod=manual
 endif
 
+
+" mark trailing spaces as errors
+match ErrorMsg '\s\+$'
+
 " replace tabs with spaces automatically
 set expandtab
 
 " enough for line numbers + gutter within 80 standard
-set textwidth=72 
+set textwidth=72
 
 " disable relative line numbers, remove no to sample it
 set norelativenumber
@@ -64,14 +68,14 @@ set icon
 " center the cursor always on the screen
 "set scrolloff=999
 
-" highlight search hits,  \+<cr> to clear 
+" highlight search hits,  \+<cr> to clear
 set hlsearch
 set incsearch
 set linebreak
 map <silent> <leader><cr> :noh<cr>:redraw!<cr>
 
 " avoid most of the 'Hit Enter ...' messages
-"set shortmess=aoOtIF 
+"set shortmess=aoOtIF
 set shortmess=aoOtI
 
 
