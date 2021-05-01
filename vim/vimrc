@@ -34,7 +34,7 @@ if v:version >= 800
   set nofixendofline
 
   " better ascii friendly listchars
-  set listchars=tab:\|_,eol:§,nbsp:·,space:·,trail:·,extends:»,precedes:«
+  set listchars=tab:\|_,nbsp:·,space:·,trail:·,extends:>,precedes:<
 
   " i fucking hate automatic folding
   set foldmethod=manual
