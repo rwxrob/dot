@@ -1,0 +1,22 @@
+#!/bin/sh
+
+# Creates a Zettelkasten repo entry with an isosec unique directory name
+# within the $KN/$exe parent directory. Whatever the effective name of
+# the executable (multicall, symlink, hardlink, alias, copy) will be
+# used for $exe. Opens editor with $EDITOR or vim.  Then git commits
+# using the first 50 characters of the first line (ignoring heading
+# hashtags if prefixed) and pushes. Designed to be used in situations
+# where commiting and pushing to main/master is allowed.
+
+set -e
+exe=${0##*/}
+test ! -d "$KN/$exe" && echo "Directory not found: $KN/$exe" && exit 1
+dir="$KN/$exe/$(isosec)"
+mkdir -p "$dir"
+${EDITOR:-vim} "$dir/README.md"
+cd "$dir"
+line=$(head -1 "$dir/README.md" | sed 's/#\+ *//')
+echo "Adding: $line"
+git add -A "$dir"
+git commit -m "$line"
+git push
