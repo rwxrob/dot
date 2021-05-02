@@ -1,33 +1,21 @@
-#!/bin/bash
+#!/bin/sh
 
-# Opens the default log file with vim. Accepts the
-# standard `date` offset. Prompts to commit.
+# Creates a log entry with an isosec unique directory name within the
+# $KN/log parent directory. Edits with $EDITOR or vim. Prompts to commit
+# using the first 50 characters of the first line (ignoring heading
+# hashtags if prefixed). Git Pushes. Designed to be used in situations
+# where commiting and pushing to main/master is allowed.
 
-relpath=$(datepath "$*")
-dir="${KN}/log/$relpath"
-file="$dir/README.md"
-mkdir -p "${dir}"
-
-# prepend a timestamped heading
-
-tmpfile=$(mktemp)
-hnow "$*" > "${tmpfile}" 
-echo -e "\n\n">> "${tmpfile}"
-if [ -e "${file}" ];then
-  cat "${file}" >> "${tmpfile}"
-fi
-mv "${tmpfile}" "${file}"
-
-echo "${file}"
-vim +3 "${file}"
-
-read -p 'Do you want to commit? ' commit
-
-if [[ ! $commit =~ ^[Yy] ]]; then
-  exit
-fi
-
-cd "${dir}"
-git add "${file}" 
-git commit
-#git push
+set -e
+dir="$KN/log/$(isosec)"
+mkdir -p "$dir"
+${EDITOR:-vim} "$dir/README.md"
+read -p 'Do you want to commit? ' a
+test "$a" = y -o "$a" = yes
+cd "$dir"
+line=$(head -1 "$dir/README.md")
+line=$(echo "${line#* }" | cut -c1-50)
+echo "Adding: $line"
+git add -A "$dir"
+git commit -m "$line"
+git push
