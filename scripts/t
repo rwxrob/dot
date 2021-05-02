@@ -19,7 +19,7 @@ if [[ -t 1 ]]; then
   X=$'\033[0m'
 fi
 
-fatal () {
+fatal() {
   echo "${RED}$*${X}"
   exit 1
 }
@@ -46,60 +46,60 @@ TWITCH_CLIENTID=$(auth get id twitch)
 LOGDIR=$(kn logpath)
 DATA_FILE="/tmp/vid${YOUTUBE_VIDEO}"
 
-set_youtube_title () {
-  if [[ "${YOUTUBE_VIDEO}" == null ]];then
+set_youtube_title() {
+  if [[ "${YOUTUBE_VIDEO}" == null ]]; then
     return
   fi
   local tpl='{"id":"%s","snippet":{"title":"%s","categoryId":"28","description":"%s"}}'
-  local desc="$(jsonesc < "$DATA_FILE")"
+  local desc="$(jsonesc <"$DATA_FILE")"
   local data=$(printf "${tpl}" "${YOUTUBE_VIDEO}" "${topic}" "${desc}")
-curl -s \
-  -X PUT "https://www.googleapis.com/youtube/v3/videos?part=snippet" \
-  -H "Client-ID: $YOUTUBE_CLIENTID" \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer $YOUTUBE_TOKEN" \
-  -d "${data}" > /dev/null
+  curl -s \
+    -X PUT "https://www.googleapis.com/youtube/v3/videos?part=snippet" \
+    -H "Client-ID: $YOUTUBE_CLIENTID" \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer $YOUTUBE_TOKEN" \
+    -d "${data}" >/dev/null
 }
 
-set_twitch_title () {
-curl -s  \
-  -X PUT "https://api.twitch.tv/kraken/channels/$TWITCH_CHANID" \
-  -H "Client-ID: $TWITCH_CLIENTID" \
-  -H "Authorization: OAuth $TWITCH_TOKEN" \
-  -H 'Accept: application/vnd.twitchtv.v5+json' \
-  -H 'Content-Type: application/json' \
-  -d '{"channel":{"status":"'"$topic $zetid"'"}}' > /dev/null
-echo "$topic $zetid">> "$HOME/.topics"
-twitch mark "$zsetid"
+set_twitch_title() {
+  curl -s \
+    -X PUT "https://api.twitch.tv/kraken/channels/$TWITCH_CHANID" \
+    -H "Client-ID: $TWITCH_CLIENTID" \
+    -H "Authorization: OAuth $TWITCH_TOKEN" \
+    -H 'Accept: application/vnd.twitchtv.v5+json' \
+    -H 'Content-Type: application/json' \
+    -d '{"channel":{"status":"'"$topic $zetid"'"}}' >/dev/null
+  echo "$topic $zetid" >>"$HOME/.topics"
+  twitch mark "$zsetid"
 }
 
-set_irc_topic () {
+set_irc_topic() {
   ssh skilstak.sh 'echo "*/topic '$topic'" >> .weechat/weechat_fifo'
 }
 
-set_github_status () {
+set_github_status() {
   if [[ $topic =~ ^\[ ]]; then
-    gh offline "$topic" > /dev/null
+    gh offline "$topic" >/dev/null
     return
   fi
-  gh live "$topic" > /dev/null
+  gh live "$topic" >/dev/null
 }
 
-set_twitter_status () {
-  if [[ "${YOUTUBE_VIDEO}" == null ]];then
+set_twitter_status() {
+  if [[ "${YOUTUBE_VIDEO}" == null ]]; then
     return
   fi
-   if [[ $topic =~ ^\[ ]]; then
-     return
-   fi 
-   twitter update "📺 ${topic} ${zetid} #livestream https://youtu.be/${YOUTUBE_VIDEO}?t=$(vidoffsetsec)" 
+  if [[ $topic =~ ^\[ ]]; then
+    return
+  fi
+  twitter update "📺 ${topic} ${zetid} #livestream https://youtu.be/${YOUTUBE_VIDEO}?t=$(vidoffsetsec)"
 }
 
-edit_description () {
-  if [[ $YOUTUBE_VIDEO == null ]];then
+edit_description() {
+  if [[ $YOUTUBE_VIDEO == null ]]; then
     return
   fi
-  echo -e "\n$(vidoffset)  \n${topic}" >> "${DATA_FILE}"
+  echo -e "\n$(vidoffset)  \n${topic}" >>"${DATA_FILE}"
   ${EDITOR} "${DATA_FILE}"
 }
 
@@ -109,7 +109,7 @@ set_twitch_title
 #set_irc_topic
 set_github_status
 #set_twitter_status
-if [[ $topic =~ ^\[ ]];then 
+if [[ $topic =~ ^\[ ]]; then
   figl <<<"${topic//[\[\]]/}"
 fi
 pomo start

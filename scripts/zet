@@ -3,10 +3,11 @@
 # Creates a Zettelkasten repo entry with an isosec unique directory name
 # within the $KN/$exe parent directory. Whatever the effective name of
 # the executable (multicall, symlink, hardlink, alias, copy) will be
-# used for $exe. Opens editor with $EDITOR or vim.  Then git commits
+# used for $exe. Opens editor with $EDITOR or vim.  Git commits
 # using the first 50 characters of the first line (ignoring heading
 # hashtags if prefixed) and pushes. Designed to be used in situations
-# where commiting and pushing to main/master is allowed.
+# where commiting and pushing to main/master is allowed (which is
+# usually fine for knowledge repos).
 
 set -e
 exe=${0##*/}

@@ -1,0 +1,5 @@
+#!/bin/sh
+if test -n "$1"; then
+  exec wee "https://github.com/rwxrob/faq/search?q=$@"
+fi
+exec wee 'https://github.com/rwxrob/faq/search'
