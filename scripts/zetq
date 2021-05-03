@@ -1,5 +1,13 @@
 #!/bin/sh
-if test -n "$1"; then
-  exec wee "https://github.com/rwxrob/zet/search?q=$@"
-fi
-exec wee 'https://github.com/rwxrob/zet/search'
+
+# Writes the search query URL for the Zettelkasten knowledge repo that
+# matches the name of the executable (or link) to the chat (see wee
+# command) and prints it as well for inclusion from within Vim sessions.
+
+set -e
+exe=${0##*/}
+exe=${exe%q}
+test -z "$1" && echo "Missing search query." && exit 1
+it="https://github.com/rwxrob/$exe/search?q=$(urlencode $*)"
+echo "$it"
+exec wee "$it"
