@@ -79,13 +79,13 @@ CHR  37;44
 ORPHAN  05;37;41
 MISSING 05;37;41
 
-EXEC 01;31  # Unix
-.cmd 01;31  # Win
-.exe 01;31  # Win
-.com 01;31  # Win
-.bat 01;31  # Win
-.reg 01;31  # Win
-.app 01;31  # OSX
+EXEC 31  # Unix
+.cmd 31  # Win
+.exe 31  # Win
+.com 31  # Win
+.bat 31  # Win
+.reg 31  # Win
+.app 31  # OSX
 .txt 32
 .org 32
 .md 32
