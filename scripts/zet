@@ -1,23 +1,55 @@
 #!/bin/sh
-
-# Creates a Zettelkasten repo entry with an isosec unique directory name
-# within the $KN/$exe parent directory. Whatever the effective name of
-# the executable (multicall, symlink, hardlink, alias, copy) will be
-# used for $exe. Opens editor with $EDITOR or vim.  Git commits
-# using the first 50 characters of the first line (ignoring heading
-# hashtags if prefixed) and pushes. Designed to be used in situations
-# where commiting and pushing to main/master is allowed (which is
-# usually fine for knowledge repos).
-
 set -e
-exe=${0##*/}
-test ! -d "$KN/$exe" && echo "Directory not found: $KN/$exe" && exit 1
-dir="$KN/$exe/$(isosec)"
-mkdir -p "$dir"
-${EDITOR:-vim} "$dir/README.md"
-cd "$dir"
-line=$(head -1 "$dir/README.md" | sed 's/#\+ *//')
-echo "Adding: $line"
-git add -A "$dir"
-git commit -m "$line"
-git push
+
+# Add the following to bashrc to enable completion:
+#
+#   complete -C zet zet
+#
+# Note that you will need one such complete line for every multicall
+# variation of this script (ex: ln -s zet log; complete -C log log)
+
+test -z "$KN" && echo "KN (knowledge directory) not set." && exit 1
+test -z "$GITUSER" && echo "GITUSER not set." && exit 1
+
+EXE=${0##*/}
+test -z "$EXE" && echo "Could not determine name of executable." && exit 1
+
+# Add creates a Zettelkasten repo entry with an isosec unique directory
+# name within the $KN/$EXE parent directory. Whatever the effective name
+# of the executable (multicall, symlink, hardlink, alias, copy) will be
+# used for $EXE. Opens editor with $EDITOR or vim.  Git commits using
+# the first 50 characters of the first line (ignoring heading hashtags
+# if prefixed) and pushes. Designed to be used in situations where
+# commiting and pushing to main/master is allowed (which is usually fine
+# for knowledge repos).
+
+add() {
+  test ! -d "$KN/$EXE" && echo "Directory not found: $KN/$EXE" && exit 1
+  dir="$KN/$EXE/$(isosec)"
+  mkdir -p "$dir"
+  ${EDITOR:-vim} "$dir/README.md"
+  cd "$dir"
+  line=$(head -1 "$dir/README.md" | sed 's/#\+ *//')
+  echo "Adding: $line"
+  git add -A "$dir"
+  git commit -m "$line"
+  git push
+}
+
+query() {
+  test -z "$1" && echo "Missing search query." && exit 1
+  type urlencode >/dev/null 2>&1
+  it="https://github.com/$GITUSER/$EXE/search?q=$(urlencode $*)"
+  echo "$it"
+  type wee >/dev/null 2>&1 || return 0
+  exec wee "$it"
+}
+
+case "$1" in
+add | "") add ;;
+q | query)
+  shift
+  query "$@"
+  ;;
+*) echo Unsupported. ;;
+esac
