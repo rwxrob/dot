@@ -39,8 +39,9 @@ add() {
 query() {
   test -z "$1" && echo "Missing search query." && exit 1
   type urlencode >/dev/null 2>&1
-  it="https://github.com/$GITUSER/$EXE/search?q=$(urlencode $*)"
-  echo "$it"
+  term="$*"
+  it="https://github.com/$GITUSER/$EXE/search?q=$(urlencode $term)"
+  echo "[$term]: <$it>"
   type wee >/dev/null 2>&1 || return 0
   exec wee "$it"
 }
