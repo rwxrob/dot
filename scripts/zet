@@ -29,7 +29,9 @@ add() {
   mkdir -p "$dir"
   ${EDITOR:-vim} "$dir/README.md"
   cd "$dir"
+  test -r "$dir/REAMDME.md" || rmdir "$dir"
   line=$(head -1 "$dir/README.md" | sed 's/#\+ *//')
+  test -n "$line"
   echo "Adding: $line"
   git add -A "$dir"
   git commit -m "$line"
