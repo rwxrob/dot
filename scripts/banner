@@ -1,0 +1,2 @@
+#!/bin/sh
+exec f "$(head -1 ~/.banner)"
