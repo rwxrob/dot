@@ -1,0 +1,3 @@
+#!/bin/sh
+echo 🎶 "$*" 🎵
+wee "/me sings: 🎶 $* 🎵"
