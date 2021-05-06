@@ -159,12 +159,13 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   Plug 'PProvost/vim-ps1'
   Plug 'tpope/vim-fugitive'
   Plug 'morhetz/gruvbox'
+  Plug 'roxma/vim-tmux-clipboard'
   call plug#end()
 
   hi Normal ctermbg=NONE " for transparent background
   hi SpellBad ctermbg=red " for transparent background
   hi SpellRare ctermbg=red
-  hi Special ctermfg=cyan 
+  hi Special ctermfg=cyan
   au FileType pandoc hi pandocAtxHeader ctermfg=yellow cterm=bold
   au FileType pandoc hi pandocAtxHeaderMark ctermfg=yellow cterm=bold
   au FileType pandoc hi pandocAtxStart ctermfg=yellow cterm=bold
