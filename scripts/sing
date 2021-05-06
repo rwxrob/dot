@@ -1,3 +1,24 @@
-#!/bin/sh
-echo 🎶 "$*" 🎵
-wee "/me sings: 🎶 $* 🎵"
+#!/bin/bash
+
+declare notes=(🎶 🎵 🎤)
+
+randnote() {
+  local i=$((RANDOM % ${#notes[@]}))
+  echo ${notes[$i]}
+}
+
+sing() {
+  local what="$(randnote) $* $(randnote)"
+  echo "$what"
+  wee "/me sings: $what"
+}
+
+if test -n "$*"; then
+  sing "$*"
+  exit 0
+fi
+
+IFS=
+while read -r line; do
+  sing "$line"
+done
