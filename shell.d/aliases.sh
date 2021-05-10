@@ -12,7 +12,7 @@ alias x="exit"
 alias sl="sl -e"
 alias mkdirisosec='d=$(isosec);mkdir $d; cd $d'
 alias main="cd $(work main)"
-alias dot="cd dotfiles"
+alias dot="cd dot"
 alias scripts="cd scripts"
 
 # remember, instead of alias use cd ``
