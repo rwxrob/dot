@@ -6,15 +6,9 @@ ln -sf "$PWD/dircolors/dircolors" "$HOME/.dircolors"
 ln -sf "$PWD/inputrc" "$HOME/.inputrc"
 ln -sf "$PWD/profile" "$HOME/.profile"
 
-[ -d "$HOME/.local/bin" ] || mkdir -p "$HOME/.local/bin"
-ln -sf "$PWD/scripts" "$HOME/.local/bin/scripts"
-ln -sf "$PWD/bin/linux/x86_64/tmux" "$HOME/.local/bin/tmux"
-ln -sf "$PWD/bin/linux/x86_64/gh" "$HOME/.local/bin/gh"
+test -d "$HOME/.local/bin" || mkdir -p "$HOME/.local/bin"
 
-for i in vim lynx gh git tmux; do 
-  cd $i && ./setup; cd -
+for i in vim lynx gh git tmux; do
+  cd $i && ./setup
+  cd -
 done
-
-exit
-
-

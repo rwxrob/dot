@@ -1,8 +1,8 @@
 #!/bin/sh
 
 if [ -z "$(which vim)" -o -z "$(which vimtutor)" ]; then
-    echo Need to install full vim.
-    exit 1
+  echo Need to install full vim.
+  exit 1
 fi
 
 ln -sf "$PWD/vimrc" "$HOME/.vimrc"
