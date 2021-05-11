@@ -1,48 +1,4 @@
 #!/bin/sh
 set -e
 test -n "$BASH_DASHX" && set -x
-
-# Borderless TMUX (mostly just for streaming)
-
-# (watch the video about: )
-
-# The tmux binary in the bin of this dotfiles repo will work in most
-# cases (all linux/amd64). However, ...
-
-# In screen-redraw.c change this:
-#define CELL_BORDERS " xqlkmjwvtun~"
-# To this:
-#define CELL_BORDERS "             "
-
-# Which the following code will do for you if you have docker installed:
-
-if ! type docker >/dev/null 2>&1; then
-  echo "Install requires Docker to build"
-  exit 1
-fi
-
-# --enable-static needs more work
-
-cd $(mktemp -d)
-git clone git@github.com:tmux/tmux
-cd tmux
-docker run --rm -u root -v "$PWD:/tmux:Z" conanio/gcc10 bash -c "
-  apt update;
-  apt install -y libevent-dev build-essential bison;
-  cd /tmux;
-  perl -p -i -e 's, xqlkmjwvtun~,             ,' screen-redraw.c;
-  sh autogen.sh;
-  ./configure;
-  make;
-"
-echo
-echo "Build complete."
-echo
-echo Your stuff is in $(pwd)
-echo
-bindir="$HOME/.local/bin"
-mkdir -p "${bindir}"
-install ./tmux "${bindir}"
-ls -lh "${bindir}/tmux"
-file "${bindir}/tmux"
-ldd "${bindir}/tmux"
+sudo apt install -y tmux
