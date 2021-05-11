@@ -6,22 +6,28 @@ WARNING: This thing is *never* complete, full of bugs, and always
 changing. [Pilfer](https://duck.com/lite?q=Pilfer) at your own risk.
 (But *do* pilfer. I don't mind.)
 
-I'm a fan of keeping things as portable and testable, as possible
-(without sacrificing ultimate power and time when on workstation).
+I'm a fan of keeping things as portable and testable, as possible.
 Therefore, I use a `shell.d` approach (my own thing, not something done
-on any distro). I `source` stuff in my [bashrc](bashrc) but 
-[build](build) a full, independent version every time I push any changes
-I've accrued over the day or week. That way I can batch all that work
-together rather than having it impact my day with an annoying forced
-build. This also makes every section of my `.bashrc` shareable as is so
-people can just download pieces of it that they might like instead of
-the whole thing (you know, `curl`-able modularity).
+on any distro). I `source` stuff in my [bashrc](bashrc) This makes every
+section of my `.bashrc` shareable so others people can just download
+pieces of it that they might like instead of the whole thing.
+
+## What distro do you use?
+
+I use PopOS! because it is the simplest and most reliable distro I've
+ever used. If I want complexity and stuff like the AUR I can just create
+a container easily with the `run` script.
+
+## Why not include all the scripts in the Dockerfile?
+
+Because having a Git repo allows me to `git pull` the changes as I make
+them without having to recreate an image.
 
 ## Why no `sed`, `awk`, `tr`, `cut`?
 
-Usually people using any of these just don't know how to code shell. If
-they did, they'd use parameter expansion instead of these unnecessary
-and inconsistent sub-shell commands.
+I use as few subshells as possible. Usually people abuse these because
+they just don't know how to code shell properly. If they did, they'd use
+parameter expansion instead.
 
 ## Why `perl`? I thought `perl` was shit?
 
@@ -69,3 +75,17 @@ if the executed command were run instead of the script calling it.
 
 One example of this is anything with `tmux` that needs to be running in
 the current shell, window, and pane.
+
+## What's up with `RVAL`?
+
+Setting the global `$RVAL` variable in a script function has long been a
+convention to get around the fact that strings cannot be returned.
+
+## Why only GitHub?
+
+Because it is the industry/enterprise standard. GitLab lost. The rest weren't
+even in the race. I hate that so much power is consolitdated with GitHub, but
+any pragmatist will likely make the same decision. The `gh` tool and superior
+GitHub API destroys everything else in the field and has a strong group
+sustaining it.
+

@@ -1,15 +1,13 @@
-FROM debian
-LABEL maintainer "Rob Muhlestein <rob@rwx.gg>"
+FROM ubuntu
 
-# I left these one to a line (despite the inefficiencies) so that you
-# can easily comment out the ones you don't want. This just makes image
-# build time slower, not actual runtime or performance.
+LABEL MAINTAINER "Rob Muhlestein <rob@rwx.gg>"
+LABEL SOURCE "https://github.com/rwxrob/dot"
 
-RUN apt update && apt install -y vim tmux lynx git 
+RUN apt update -y && \
+    apt install -y software-properties-common && \
+    add-apt-repository ppa:git-core/ppa && \
+    apt update -y && apt install -y git sudo curl
 
-RUN useradd -ms /bin/bash you
-WORKDIR /home/you
-COPY README.md .
-RUN chown -R you:you . 
-USER you
-CMD ["bash"]
+COPY Dockerfile install/entrypoint /
+
+ENTRYPOINT ["sh","/entrypoint"]

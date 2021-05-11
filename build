@@ -1,3 +1,0 @@
-#!/bin/sh
-docker build --no-cache -t 'base' -t 'rwxrob/base' . \
-    && docker push 'rwxrob/base' 
