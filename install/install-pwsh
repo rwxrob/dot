@@ -1,9 +1,0 @@
-#!/bin/sh
-
-# THIS DEFINITELY *NOT* P0W3RSH3ll! *shhhh*
-
-curl -s https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb \
-     -o /tmp/packages-microsoft-prod.deb
-sudo dpkg -i /tmp/packages-microsoft-prod.deb
-sudo apt update
-sudo apt install -y $(rot13 cbjrefuryy)

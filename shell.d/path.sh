@@ -62,9 +62,8 @@ detect_scripts_repo
 
 pathprepend \
   "${SCRIPTS}" \
-  "${HOME}/sdk/go1.16/bin" \
+  "${HOME}/.go/bin" \
   "${HOME}/.local/bin" \
-  "${HOME}/.local/go/bin" \
   "${HOME}/.cargo/bin" \
   "${HOME}/.node/bin" \
   "${HOME}/.deno/bin" \

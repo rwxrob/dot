@@ -1,5 +1,8 @@
 #!/bin/sh
-
-sudo add-apt-repository ppa:longsleep/golang-backports
-sudo apt update
-sudo apt install golang-go
+set -e
+test -n "$BASH_DASHX" && set -x
+cd $(mktemp -d)
+pwd
+curl -sSLO https://storage.googleapis.com/golang/getgo/installer_linux
+chmod +x installer_linux # it fucking turns my stomach to do this without checksum
+./installer_linux

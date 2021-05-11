@@ -1,7 +1,10 @@
 #!/bin/sh
+set -e
+test -n "$BASH_DASHX" && set -x
+
 # No need to get GO111MODULE to on anymore (1.17+)
 go get sigs.k8s.io/kind
-echo <<<EOM
+echo <<EOM
 Add the following to your .bashrc (or equivalent):
 
   source <(kind completion bash)

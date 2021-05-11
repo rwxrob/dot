@@ -1,4 +1,6 @@
 #!/bin/sh
+set -e
+test -n "$BASH_DASHX" && set -x
 
 # Borderless TMUX (mostly just for streaming)
 
@@ -31,14 +33,14 @@ docker run --rm -u root -v "$PWD:/tmux:Z" conanio/gcc10 bash -c "
   perl -p -i -e 's, xqlkmjwvtun~,             ,' screen-redraw.c;
   sh autogen.sh;
   ./configure;
-  make; 
+  make;
 "
 echo
 echo "Build complete."
 echo
 echo Your stuff is in $(pwd)
 echo
-bindir="$HOME/.local/bin/linux/x86_64"
+bindir="$HOME/.local/bin"
 mkdir -p "${bindir}"
 install ./tmux "${bindir}"
 ls -lh "${bindir}/tmux"

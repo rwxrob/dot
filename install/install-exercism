@@ -1,5 +1,0 @@
-#!/bin/sh
-
-snap install exercism
-sudo apt install bats # bash testing framework
-echo 'Then something like:\n  exercism -w $REPOS/gitlab.com/rwxrob/exercism -t $(token exercism.io)'

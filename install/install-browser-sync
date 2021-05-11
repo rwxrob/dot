@@ -1,8 +1,5 @@
 #!/bin/sh
-
-if ! which npm; then
-  echo "Doesn't look like Node/NPM are installed."
-  echo "Be sure to install them safely with install-node."
-  exit 1
-fi
-npm install -g browser-sync
+set -e
+test -n "$BASH_DASHX" && set -x
+type npm
+sudo npm install -g browser-sync

@@ -1,0 +1,79 @@
+#!/bin/sh
+set -e
+set -x
+
+# This script is called from the Dockerfile ENTRYPOINT and stored in the
+# root of the resulting workspace container for reference.
+
+if test -e /var/run/been_built; then
+  exec sh -c "su - $(head -1 /var/run/defuser)"
+fi
+
+_NAME="you"
+_ID="1000"
+_GID="1000"
+_HOME="/home/you"
+_SHELL="/bin/bash"
+
+get_new_user_info() {
+  local user userid home
+  read -p "User Name ($_NAME): " user
+  test -n "$user" && _NAME="$user"
+  read -p "User ID ($_ID): " userid
+  test -n "$userid" && _ID="$userid"
+  read -p "Group ID ($_GID): " gid
+  test -n "$gid" && _GID="$gid"
+  read -p "User Home Directory ($_HOME): " home
+  test -n "$home" && _HOME="$home"
+  read -p "User Shell ($_SHELL): " shell
+  test -n "$shell" && _SHELL="$shell"
+  return 0
+}
+
+create_new_user() {
+  local shell=${_SHELL##*/}
+  if ! type "$shell"; then
+    echo Attempting to install shell: $shell
+    apt install -y "$shell"
+  fi
+  groupadd -g "$_GID" "$_NAME"
+  useradd -m -s "$_SHELL" -d "$_HOME" -u "$_ID" -g "$_GID" "$_NAME"
+  # TODO add to docker group
+  # TODO give no password sudo access
+}
+
+setup_dotfiles() {
+  mkdir -p "$_HOME/repos/github.com/rwxrob"
+  cd "$_HOME/repos/github.com/rwxrob"
+  git clone "http://github.com/rwxrob/dot"
+  cd dot
+  ./setup
+}
+
+been_built() {
+  touch /var/run/been_built
+  echo "$_NAME" >/var/run/defuser
+}
+
+## ------------------------------- main -------------------------------
+
+git --version
+
+while test ! "$a" = y; do
+  get_new_user_info
+  read -p 'Keep? ' a
+  echo $a
+done
+
+create_new_user
+setup_dotfiles
+
+for i in vim tmux lynx jq yq docker gh golang helm \
+  hyperfine kind kubectl pandoc python36 nodejs browsersync; do
+  "$_HOME/repos/github.com/rwxrob/dot/install/install-$i"
+done
+
+been_built
+
+chown -R "$_NAME:$_GID" $_HOME
+exec /bin/sh -c "su - $_NAME"

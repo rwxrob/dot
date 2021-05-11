@@ -1,7 +1,7 @@
 # Installers
 
 These scripts install the different things I generally need on a system.
-Some of the installers are just reminders, others do the full
-installation, and others install as much as they can and remind me about
-other stuff that is needed.
-
+Some are just reminders of what to install (and don't actually install
+anything, for now). You might find them useful, but it is probably
+easier to just `docker run -it rwxrob/dot` if you just want to try stuff
+out.

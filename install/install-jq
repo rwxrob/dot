@@ -1,3 +1,4 @@
 #!/bin/sh
-
-sudo apt install jq
+set -e
+test -n "$BASH_DASHX" && set -x
+sudo apt install -y jq

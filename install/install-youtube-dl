@@ -1,4 +1,6 @@
 #!/bin/sh
-dest=$HOME/.local/bin/youtube-dl
+set -e
+test -n "$BASH_DASHX" && set -x
+dest="$HOME/.local/bin/youtube-dl"
 curl -L https://yt-dl.org/downloads/latest/youtube-dl -o "$dest"
 chmod +rx $dest

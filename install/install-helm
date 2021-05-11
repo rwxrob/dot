@@ -1,4 +1,6 @@
 #!/bin/sh
+set -e
+test -n "$BASH_DASHX" && set -x
 
 # If you like packages ...
 # curl https://baltocdn.com/helm/signing.asc | sudo apt-key add -

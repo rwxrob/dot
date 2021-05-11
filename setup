@@ -1,4 +1,6 @@
 #!/bin/sh
+set -e
+test -n "$BASH_DASHX" && set -x
 
 ln -sf "$PWD/bashrc" "$HOME/.bashrc"
 ln -sf "$PWD/shell.d" "$HOME/.shell.d"
@@ -6,7 +8,7 @@ ln -sf "$PWD/dircolors/dircolors" "$HOME/.dircolors"
 ln -sf "$PWD/inputrc" "$HOME/.inputrc"
 ln -sf "$PWD/profile" "$HOME/.profile"
 
-test -d "$HOME/.local/bin" || mkdir -p "$HOME/.local/bin"
+mkdir -p "$HOME/.local/bin" || true
 
 for i in vim lynx gh git tmux; do
   cd $i && ./setup

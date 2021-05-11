@@ -25,4 +25,3 @@ mkdir -p "${bindir}"
 mv python python3.6
 install ./python3.6 "${bindir}"
 ls -lh "${bindir}/python3.6"
-
