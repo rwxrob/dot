@@ -5,15 +5,16 @@ is_dir() {
 }
 
 scripts_repo() {
-  is_dir /var/repos/github.com/rwxrob/dot/scripts && return 0
   is_dir "$REPOS/github.com/$GITUSER/scripts" && return 0
   is_dir "$REPOS/github.com/$GITUSER/dotfiles/scripts" && return 0
   is_dir "$REPOS/github.com/$GITUSER/dot/scripts" && return 0
+  is_dir "$HOME/.local/bin/scripts" && return 0
   return 1
 }
 
 detect_scripts_repo() {
-  test -z "$GITUSER" -o -z "$REPOS" -o ! scripts_repo && return 1
+  test -z "$GITUSER" -o -z "$REPOS" -o && return 1
+  scripts_repo || return 1
   export SCRIPTS="$RVAL"
   return 0
 }
