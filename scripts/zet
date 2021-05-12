@@ -1,7 +1,11 @@
 #!/bin/sh
 set -e
 
-# Add the following to bashrc to enable completion:
+# This zet script is a multicall executable, which means you may have
+# opened another file or link which opened this.
+#
+# Add the following to bashrc to enable completion (replace zet with
+# your multicall executable name):
 #
 #   complete -C zet zet
 #
