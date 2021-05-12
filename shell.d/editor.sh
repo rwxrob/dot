@@ -1,9 +1,10 @@
+#!/bin/sh
 
 # map capslock to control (X only)
 #setxkbmap -option ctrl:ctrl_modifier
 
 # remap capslock for whole system to ESC (X only)
-if [ -n "${DISPLAY}" ];then
+if [ -n "${DISPLAY}" ]; then
   setxkbmap -option caps:escape
 fi
 
@@ -25,4 +26,3 @@ if [ -d ~/.vimprivate ]; then
   privatespell=(~/.vimprivate/spell/*.add)
   [ -n $privatespell ] && VIMSPELL=$privatespell
 fi
-

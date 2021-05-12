@@ -1,3 +1,5 @@
+#!/bin/sh
+
 is_dir() {
   RVAL=""
   test -d "$1" && RVAL="$1" && return 0
@@ -13,7 +15,7 @@ scripts_repo() {
 }
 
 detect_scripts_repo() {
-  test -z "$GITUSER" -o -z "$REPOS" -o && return 1
+  test -z "$GITUSER" -o -z "$REPOS" && return 1
   scripts_repo || return 1
   export SCRIPTS="$RVAL"
   return 0

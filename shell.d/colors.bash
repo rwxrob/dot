@@ -1,3 +1,4 @@
+#!/bin/bash
 
 escape=$'\033'
 reset=$'\033[0m'
@@ -11,7 +12,7 @@ normal=$'\033[39m'
 normalbg=$'\033[49m'
 
 clear=$'\033[H\033[2J'
-clear () { echo -n $clear; }
+clear() { echo -n $clear; }
 
 black=$'\033[30m'
 red=$'\033[31m'

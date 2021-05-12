@@ -1,3 +1,4 @@
+#!/bin/sh
 
 # Here's your colored man pages right here.
 

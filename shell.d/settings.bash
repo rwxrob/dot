@@ -1,3 +1,5 @@
+#!/bin/sh
+
 shopt -s checkwinsize
 shopt -s expand_aliases
 shopt -s globstar

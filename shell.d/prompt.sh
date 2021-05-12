@@ -1,3 +1,4 @@
+#!/bin/sh
 
 # Adaptive prompt that will be shortened if there is room. Set the
 # following to your preferred threshold.
@@ -5,11 +6,11 @@
 PROMPT_LONG=50
 PROMPT_MAX=95
 
-__ps1 () {
+__ps1() {
 
   local P='$' # changes to hashtag when root
 
-	# set shortcuts for all the colors
+  # set shortcuts for all the colors
   if test -n "${ZSH_VERSION}"; then
     local r='%F{red}'
     local g='%F{black}'
@@ -20,14 +21,14 @@ __ps1 () {
     local b='%F{cyan}'
     local x='%f'
   else
-		local r='\[\e[31m\]'
-		local g='\[\e[30m\]'
-		local h='\[\e[34m\]'
-		local u='\[\e[33m\]'
-		local p='\[\e[33m\]'
-		local w='\[\e[35m\]'
-		local b='\[\e[36m\]'
-		local x='\[\e[0m\]'
+    local r='\[\e[31m\]'
+    local g='\[\e[30m\]'
+    local h='\[\e[34m\]'
+    local u='\[\e[33m\]'
+    local p='\[\e[33m\]'
+    local w='\[\e[35m\]'
+    local b='\[\e[36m\]'
+    local x='\[\e[0m\]'
   fi
 
   # watch out, you're root
@@ -42,10 +43,10 @@ __ps1 () {
   fi
 
   local dir="$(basename $PWD)"
-  if test "${dir}" = _ ;then
+  if test "${dir}" = _; then
     dir=${PWD#*${PWD%/*/_}}
     dir=${dir#/}
-  elif test "${dir}" = work ;then
+  elif test "${dir}" = work; then
     dir=${PWD#*${PWD%/*/work}}
     dir=${dir#/}
   fi
@@ -69,9 +70,9 @@ __ps1 () {
     local double="$g╔ $u\u$g@$h\h$g:$w$dir\n$g║ $B\n$g╚ $p$P$x "
   fi
 
-  if test ${#countme} -gt "${PROMPT_MAX}"  ;  then
+  if test ${#countme} -gt "${PROMPT_MAX}"; then
     PS1="${double}"
-  elif test ${#countme} -gt "${PROMPT_LONG}"  ;  then
+  elif test ${#countme} -gt "${PROMPT_LONG}"; then
     PS1="${long}"
   else
     PS1="${short}"
@@ -79,4 +80,3 @@ __ps1 () {
 }
 
 PROMPT_COMMAND="${PROMPT_COMMAND:+PROMPT_COMMAND;}__ps1;"
-

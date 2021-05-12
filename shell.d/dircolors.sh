@@ -1,3 +1,4 @@
+#!/bin/sh
 
 if which dircolors &>/dev/null; then
   if [ -r ~/.dircolors ]; then

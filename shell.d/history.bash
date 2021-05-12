@@ -1,3 +1,4 @@
+#!/bin/sh
 
 # vi or die
 set -o vi

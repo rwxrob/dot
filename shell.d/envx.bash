@@ -1,5 +1,6 @@
+#!/bin/sh
 
-envx () {
+envx() {
   local envfile="$1"
   if [[ ! -e "${envfile}" ]]; then
     if [[ ! -e "$HOME/.env" ]]; then
@@ -15,7 +16,7 @@ envx () {
       continue
     fi
     export "$name"="$value"
-  done < "${envfile}"
+  done <"${envfile}"
 } && export -f envx
 
 if [[ -e "$HOME/.env" ]]; then
