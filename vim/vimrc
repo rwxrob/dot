@@ -138,7 +138,6 @@ if v:version >= 800 && executable('curl') && empty(glob('~/.vim/autoload/plug.vi
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
       \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   autocmd VimEnter * PlugInstall
-  echo "Don't forget to GoInstallBinaries if you're doing Go dev."
 endif
 
 " high contrast for streaming, etc.
