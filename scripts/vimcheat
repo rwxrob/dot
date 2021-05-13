@@ -1,0 +1,16 @@
+#!/bin/sh
+
+g="\e[1;30m"
+c="\e[1;34m"
+r="\e[0m"
+
+echo "${c}dap${r} - ${g}delete current paragraph${r}"
+echo "${c}yap${r} - ${g}yank current paragraph${r}"
+echo "${c}ea ${r} - ${g}append to current word${r}"
+echo "${c}cw ${r} - ${g}change to end of current word${r}"
+echo "${c}bcw${r} - ${g}change current word${r}"
+echo "${c}dw ${r} - ${g}delete to beginning of next word${r}"
+echo "${c}daf${r} - ${g}delete current function${r}"
+echo "${c}yaf${r} - ${g}yank current function${r}"
+echo "${c}dif${r} - ${g}delete current inner function${r}"
+echo "${c}yif${r} - ${g}yank current inner function${r}"
