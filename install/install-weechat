@@ -1,4 +1,0 @@
-#!/bin/sh
-
-echo 'Go to https://weechat.org/download/debian/'
-echo 'Make sure to get 2.7.1 or later to avoid vulns'

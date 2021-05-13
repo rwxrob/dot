@@ -1,4 +1,0 @@
-#!/bin/sh
-set -e
-test -n "$BASH_DASHX" && set -x
-sudo apt install -y nodejs npm

@@ -1,6 +1,0 @@
-#!/bin/sh
-set -e
-test -n "$BASH_DASHX" && set -x
-sudo add-apt-repository ppa:git-core/ppa
-sudo apt update
-sudo apt install -y git
