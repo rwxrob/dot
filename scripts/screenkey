@@ -13,7 +13,7 @@
   -t 4 \
   -p fixed \
   --compr-cnt 1 \
-  -g "500x90+2550+1002" \
+  -g "500x90+2560+1002" \
   -s large \
   -f "UbuntuMono Nerd Font" \
   --font-color "#fe8019" \
