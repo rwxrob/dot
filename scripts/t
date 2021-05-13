@@ -112,5 +112,6 @@ set_github_status
 if [[ $topic =~ ^\[ ]]; then
   figl <<<"${topic//[\[\]]/}"
 fi
-pomo start
 w
+pomo start
+f "$topic"
