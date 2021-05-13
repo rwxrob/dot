@@ -1,11 +1,3 @@
 #!/bin/sh
-     tmux -L twitch -f ~/.tmux-twitch.conf new -s twitch -n parent \
-        ssh skilstak.sh \;\
-        send -t 1 "screen -Dr" Enter \;\
-        split-window        \;\
-        resize-pane -t 1 -y 17  \;\
-        split-window    -h  \;\
-        resize-pane -x 16 \;\
-        swap-pane -s 1 -t 2 \;\
-        send -t 3 "blankpane" Enter
-
+exec tmux -L live -f ~/.tmux-live.conf new -s live -n parent \
+  weechat \; split-window \; resize-pane -t 1 -y 17 \; split-window -h \; resize-pane -x 16 \; swap-pane -s 1 -t 2 \; send -t 3 "blankpane" Enter
