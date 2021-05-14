@@ -305,14 +305,6 @@ inoremap <down> <NOP>
 inoremap <left> <NOP>
 inoremap <right> <NOP>
 
-" Map alternatives the <ESC> key (<C-[> already is) 
-inoremap jj <Esc>
-cnoremap jj <Esc>
-inoremap kk <Esc> 
-cnoremap kk <Esc>
-inoremap kj <Esc>
-cnoremap kj <Esc> 
-
 " Better page down and page up
 noremap <C-n> <C-d>
 noremap <C-p> <C-b>
