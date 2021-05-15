@@ -1,19 +1,13 @@
 #!/bin/sh
 
-SERVER=skilstak.sh
-
 buf="$*"
 
-if [ -n "$buf" ]; then
-  #echo "*$buf"  > $WEECHAT_FIFO
-  tmux -L twitch send -t 2 "$buf" Enter
-  #ssh "$SERVER" 'echo "*'$buf'" >> .weechat/weechat_fifo' &
-  exit 0
+if test -n "$buf"; then
+  #echo "*$buf" >$WEECHAT_FIFO
+  tmux -L live send -t 2 "$buf" Enter
 fi
 
 while IFS= read -r line; do
-  #echo "*$line" > $WEECHAT_FIFO
-  tmux -L twitch send -t 2 "$line" Enter
-  #ssh "$SERVER" 'echo "*'$buf'" >> .weechat/weechat_fifo' &
+  #echo "*$line" >$WEECHAT_FIFO
+  tmux -L live send -t 2 "$line" Enter
 done
-
