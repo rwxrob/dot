@@ -20,48 +20,17 @@ a container easily with the `run` script.
 
 ## Why not include all the scripts in the Dockerfile?
 
-Because having a Git repo allows me to `git pull` the changes as I make
-them without having to recreate an image.
-
-## Why no `sed`, `awk`, `tr`, `cut`?
-
-I use as few subshells as possible. Usually people abuse these because
-they just don't know how to code shell properly. If they did, they'd use
-parameter expansion instead.
-
-## Why `perl`? I thought `perl` was shit?
-
-Because `perl` is still the best tool for the job many times (and the
-only language that supports `\p{Ll}` in regular expressions).
-
-I do prefer to redo most of my `perl` as POSIX shell these days so that
-it is the most compatible with everything --- including `busybox`
-containers (which have no `perl` or even `bash`).
-
-### What about Python?
-
-Python is a disastrously bad pick for most simple shell scripts. It's
-way too verbose and bloated and never included by default in any
-consistent way. I despite Python for these reasons for most things.
-
-Python startup execution is so slow it is physically painful to use for
-anything on the shell. Creating a one-liner or short script in Python is
-a ridiculously bad choice given these facts, which is most *real*
-hackers still prefer Perl over Python.
-
-However, if you are doing enterprise deployments and infrastructure
-automation or want to build a big thing that's not Java, and for some
-stupid reason you can't do it in a *real* language like Go, then Python
-is fine.
+I [did](https://github.com/rwxrob/workspace).
 
 ## Why one line scripts and not aliases or exported functions?
 
 At one point many of these scripts were functions and aliases in a
 massive `.bashrc` file. Then I realized aliases cannot be used at all
 from within `vim`. Even exportable Bash functions required that I always
-use Bash (which I still prefer, but Zsh cannot even export functions).
-Scripts are also easier to share as independent POSIX shell or Perl
-(which is also the reason I often repeat code in more than one script.)
+use Bash for my interactive shell. Scripts are also easier to share and
+include into containers as independent POSIX shell. For anything more
+complex I'll compile a [CmdBox](https://github.com/rwxrob/cmdbox) Go
+utility (like [Pomo](https://github.com/rwxrob/cmdbox-pomo).
 
 ## What's up with `exec`?
 
@@ -84,8 +53,10 @@ convention to get around the fact that strings cannot be returned.
 ## Why only GitHub?
 
 Because it is the industry/enterprise standard. GitLab lost. The rest weren't
-even in the race. I hate that so much power is consolitdated with GitHub, but
+even in the race. I hate that so much power is consolidated with GitHub, but
 any pragmatist will likely make the same decision. The `gh` tool and superior
 GitHub API destroys everything else in the field and has a strong group
 sustaining it.
 
+GitHub has also demonstrated far greater support for open source
+developer sponsorships even though they are owned by Microsoft.
