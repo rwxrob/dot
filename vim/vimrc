@@ -260,7 +260,7 @@ fun! s:Perltidy()
   silent execute '%!perltidy -i=2'
   call setpos('.', l:pos)
 endfun
-autocmd FileType perl autocmd BufWritePre <buffer> call s:Perltidy()
+"autocmd FileType perl autocmd BufWritePre <buffer> call s:Perltidy()
 
 " force some file names to be specific file type
 au bufnewfile,bufRead *.bash* set ft=sh

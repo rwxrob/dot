@@ -11,13 +11,14 @@
 /usr/bin/screenkey \
   --persist \
   -t 4 \
-  -p fixed \
   --compr-cnt 1 \
-  -g "500x90+2560+1002" \
-  -s large \
+  -p fixed \
+  -g "500x100+3100+0" \
   -f "UbuntuMono Nerd Font" \
-  --font-color "#fe8019" \
-  --opacity 0 &
+  --font-color "#FABD2F" \
+  --bg-color "#222222" \
+  --bak-mode full \
+  --opacity 1 &
 
 #--font-color "#d65d0e" \
 #  -g "634x40+670+0" \
