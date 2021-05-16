@@ -23,14 +23,11 @@ test -z "$GITUSER" && echo "GITUSER not set." && exit 1
 
 if test -n "$ZETDIR"; then
   pdir="$ZETDIR"
-  echo "$pdir" && exit 1
 elif test -n "$KN"; then
   pdir="$KN"
-  echo "$pdir" && exit 1
 else
   pdir="$HOME/.local/share/zet"
   test ! -d "$pdir" && mkdir -p "$pdir"
-  echo "$pdir" && exit 1
 fi
 
 EXE=${0##*/}
