@@ -1,1 +1,3 @@
-wee
+#!/bin/sh
+pgrep screenkey >/dev/null && exec keyoff
+exec keyon
