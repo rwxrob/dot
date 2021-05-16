@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 # Updates YouTube and Twitch Titles, sets the GitHub profile status, and
 # sends a tweet pointing to the YouTube video.
@@ -65,14 +66,6 @@ set_irc_topic() {
   ssh skilstak.sh 'echo "*/topic '$topic'" >> .weechat/weechat_fifo'
 }
 
-set_github_status() {
-  if [[ $topic =~ ^\[ ]]; then
-    gh offline "$topic" >/dev/null
-    return
-  fi
-  gh live "$topic" >/dev/null
-}
-
 set_twitter_status() {
   if [[ "${YOUTUBE_VIDEO}" == null ]]; then
     return
@@ -94,18 +87,15 @@ edit_description() {
 #edit_description
 #set_youtube_title
 #set_irc_topic
-set_github_status
 #set_twitter_status
-if [[ $topic =~ ^\[ ]]; then
-  figl <<<"${topic//[\[\]]/}"
-fi
 w
 pomo start
-twitch title "$topic"
 if test "$topic" = default; then
   topic=$(head -1 $HOME/.banner)
 else
   echo "$topic" >>"$HOME/.topic"
 fi
 echo "$topic" >"$HOME/.tmux-live-right"
+twitch title "$topic"
+gh live "$topic"
 f "$topic"
