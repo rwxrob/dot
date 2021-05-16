@@ -155,6 +155,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   Plug 'cespare/vim-toml'
   Plug 'pangloss/vim-javascript'
   Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
+  Plug 'vim-go/vim-go'
   Plug 'PProvost/vim-ps1'
   Plug 'tpope/vim-fugitive'
   Plug 'morhetz/gruvbox'
@@ -253,6 +254,14 @@ nnoremap <C-L> :nohl<CR><C-L>
 " enable omni-completion
 set omnifunc=syntaxcomplete#Complete
 
+" format perl on save
+fun! s:Perltidy()
+  let l:pos = getcurpos()
+  silent execute '%!perltidy -i=2'
+  call setpos('.', l:pos)
+endfun
+autocmd FileType perl autocmd BufWritePre <buffer> call s:Perltidy()
+
 " force some file names to be specific file type
 au bufnewfile,bufRead *.bash* set ft=sh
 au bufnewfile,bufRead *.pegn set ft=config
@@ -278,7 +287,7 @@ function! <SID>SynStack()
     return
   endif
     echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-endfunc  
+endfunc
 
 " start at last place you were editing
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
