@@ -57,7 +57,7 @@ if test "$topic" = default; then
   topic="$(head -1 $HOME/.banner)"
   pomo stop
 else
-  echo "$topic" >>"$HOME/.topic"
+  echo "$topic" >>"$HOME/.topics"
   w
   pomo start
 fi
