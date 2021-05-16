@@ -12,8 +12,26 @@ set -e
 # Note that you will need one such complete line for every multicall
 # variation of this script (ex: ln -s zet log; complete -C log log)
 
-test -z "$KN" && echo "KN (knowledge directory) not set." && exit 1
 test -z "$GITUSER" && echo "GITUSER not set." && exit 1
+
+# Check for $ZETDIR or $KN variables (in that order). If found, use
+# those variables for the parent directory. If they do not exist, check
+# for the existance of the default directory and create the folder if
+# necessary. This not only allows for customization of the parent
+# directory via $ZETDIR, but also allows for compatibility with the
+# KEG/KN toolset.
+
+if test -n "$ZETDIR"; then
+  pdir="$ZETDIR"
+  echo "$pdir" && exit 1
+elif test -n "$KN"; then
+  pdir="$KN"
+  echo "$pdir" && exit 1
+else
+  pdir="$HOME/.local/share/zet"
+  test ! -d "$pdir" && mkdir -p "$pdir"
+  echo "$pdir" && exit 1
+fi
 
 EXE=${0##*/}
 test -z "$EXE" && echo "Could not determine name of executable." && exit 1
@@ -28,8 +46,8 @@ test -z "$EXE" && echo "Could not determine name of executable." && exit 1
 # for knowledge repos).
 
 add() {
-  test ! -d "$KN/$EXE" && echo "Directory not found: $KN/$EXE" && exit 1
-  dir="$KN/$EXE/$(isosec)"
+  test ! -d "$pdir/$EXE" && echo "Directory not found: $pdir/$EXE" && exit 1
+  dir="$pdir/$EXE/$(isosec)"
   mkdir -p "$dir"
   ${EDITOR:-vim} "$dir/README.md"
   cd "$dir"
