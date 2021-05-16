@@ -43,29 +43,6 @@ TWITCH_CLIENTID=$(auth get id twitch)
 #   fi
 # fi
 
-# FIXME change to file in current days log
-LOGDIR=$(kn logpath)
-DATA_FILE="/tmp/vid${YOUTUBE_VIDEO}"
-
-set_youtube_title() {
-  if [[ "${YOUTUBE_VIDEO}" == null ]]; then
-    return
-  fi
-  local tpl='{"id":"%s","snippet":{"title":"%s","categoryId":"28","description":"%s"}}'
-  local desc="$(jsonesc <"$DATA_FILE")"
-  local data=$(printf "${tpl}" "${YOUTUBE_VIDEO}" "${topic}" "${desc}")
-  curl -s \
-    -X PUT "https://www.googleapis.com/youtube/v3/videos?part=snippet" \
-    -H "Client-ID: $YOUTUBE_CLIENTID" \
-    -H "Content-Type: application/json" \
-    -H "Authorization: Bearer $YOUTUBE_TOKEN" \
-    -d "${data}" >/dev/null
-}
-
-set_irc_topic() {
-  ssh skilstak.sh 'echo "*/topic '$topic'" >> .weechat/weechat_fifo'
-}
-
 set_twitter_status() {
   if [[ "${YOUTUBE_VIDEO}" == null ]]; then
     return
@@ -75,27 +52,16 @@ set_twitter_status() {
   fi
   twitter update "📺 ${topic} ${zetid} #livestream https://youtu.be/${YOUTUBE_VIDEO}?t=$(vidoffsetsec)"
 }
-
-edit_description() {
-  if [[ $YOUTUBE_VIDEO == null ]]; then
-    return
-  fi
-  echo -e "\n$(vidoffset)  \n${topic}" >>"${DATA_FILE}"
-  ${EDITOR} "${DATA_FILE}"
-}
-
-#edit_description
-#set_youtube_title
-#set_irc_topic
 #set_twitter_status
-w
-pomo start
 if test "$topic" = default; then
-  topic=$(head -1 $HOME/.banner)
+  topic="$(head -1 $HOME/.banner)"
+  pomo stop
 else
   echo "$topic" >>"$HOME/.topic"
+  w
+  pomo start
 fi
 echo "$topic" >"$HOME/.tmux-live-right"
 twitch title "$topic"
 gh live "$topic"
-f "$topic"
+f "${topic}"

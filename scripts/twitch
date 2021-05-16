@@ -25,14 +25,16 @@ GAME=$(config twitch.game)
 
 title() {
   test -z "$1" && echo "$TITLE" && return
-  title="$* [$(isosec)]"
-  test ${title%% *} = default && title="$TITLE"
+  if test "${1%% *}" = default; then
+    title="$TITLE"
+  else
+    title="$* [$(isosec)]"
+  fi
   resp=$(curl -sS -X PATCH "https://api.twitch.tv/helix/channels?broadcaster_id=$USERID" \
     -H "Authorization: Bearer $TOKEN" \
     -H "Client-Id: $CLIENTID" \
     -H 'Content-Type: application/json' \
     --data-raw '{"game_id":"'$GAMEID'", "title":"'"$title"'", "broadcaster_language":"'$LANG'"}' | jq -r '[.status,.message] | @tsv')
-  echo "$resp"
 }
 
 ## ------------------------------- main -------------------------------
