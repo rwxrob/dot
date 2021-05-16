@@ -1,2 +1,2 @@
 #!/bin/sh
-vi "$(which $1)"
+exec vi "$(which $1)"
