@@ -1,0 +1,3 @@
+#!/bin/sh
+topic=$(tail -1 "$HOME/.topics")
+echo "${topic%%[*}"

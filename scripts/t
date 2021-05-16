@@ -61,18 +61,6 @@ set_youtube_title() {
     -d "${data}" >/dev/null
 }
 
-set_twitch_title() {
-  curl -s \
-    -X PUT "https://api.twitch.tv/kraken/channels/$TWITCH_CHANID" \
-    -H "Client-ID: $TWITCH_CLIENTID" \
-    -H "Authorization: OAuth $TWITCH_TOKEN" \
-    -H 'Accept: application/vnd.twitchtv.v5+json' \
-    -H 'Content-Type: application/json' \
-    -d '{"channel":{"status":"'"$topic $zetid"'"}}' >/dev/null
-  echo "$topic $zetid" >>"$HOME/.topics"
-  twitch mark "$zsetid"
-}
-
 set_irc_topic() {
   ssh skilstak.sh 'echo "*/topic '$topic'" >> .weechat/weechat_fifo'
 }
@@ -105,7 +93,6 @@ edit_description() {
 
 #edit_description
 #set_youtube_title
-set_twitch_title
 #set_irc_topic
 set_github_status
 #set_twitter_status
@@ -114,4 +101,11 @@ if [[ $topic =~ ^\[ ]]; then
 fi
 w
 pomo start
+twitch title "$topic"
+if test "$topic" = default; then
+  topic=$(head -1 $HOME/.banner)
+else
+  echo "$topic" >>"$HOME/.topic"
+fi
+echo "$topic" >"$HOME/.tmux-live-right"
 f "$topic"
