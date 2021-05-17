@@ -7,6 +7,7 @@
 # best for 79 cols, and cam
 #-g "420x90+3000+1010" \
 #-g "300x90+3166+1010" \
+#--font-color "#FABD2F"
 
 /usr/bin/screenkey \
   --persist \
@@ -15,7 +16,7 @@
   -p fixed \
   -g "500x100+3100+0" \
   -f "UbuntuMono Nerd Font" \
-  --font-color "#FABD2F" \
+  --font-color "#EBDBB2" \
   --bg-color "#222222" \
   --bak-mode full \
   --opacity 1 &
