@@ -1,4 +1,7 @@
 #!/usr/bin/env perl
+
+`which keyoff` and `keyoff`;
+
 #
 # BUT FIRST:
 # Keep in mind that you probably have to install libcurses-perl
