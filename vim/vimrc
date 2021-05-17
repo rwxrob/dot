@@ -85,6 +85,9 @@ set viminfo='20,<1000,s1000
 let g:loaded_matchparen=1
 set noshowmatch
 
+" wrap around when searching
+set wrapscan
+
 " Just the defaults, these are changed per filetype by plugins.
 " Most of the utility of all of this has been superceded by the use of
 " modern simplified pandoc for capturing knowledge source instead of
