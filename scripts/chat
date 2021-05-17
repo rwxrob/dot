@@ -5,9 +5,11 @@ buf="$*"
 if test -n "$buf"; then
   #echo "*$buf" >$WEECHAT_FIFO
   tmux -L live send -t 2 "$buf" Enter
+  exit
 fi
 
-while IFS= read -r line; do
+IFS=
+while read -r line; do
   #echo "*$line" >$WEECHAT_FIFO
   tmux -L live send -t 2 "$line" Enter
 done
