@@ -15,7 +15,7 @@ set autowrite
 set number
 
 " turn col and row position on in bottom right
-set noruler
+set ruler " see ruf for formatting
 
 " show command and insert mode
 set showmode
@@ -168,15 +168,7 @@ au FileType pandoc hi pandocAtxStart ctermfg=yellow cterm=bold
 nnoremap confe :e $HOME/.vimrc<CR>
 nnoremap confr :source $HOME/.vimrc<CR>
 
-" turn on when streaming to transparent background
-"set noruler
-"set laststatus=2
-"set statusline=
-"set statusline+=%*\ %<%.60F%*                      " path, trunc to 80 length
-"set statusline+=\ [%{strlen(&ft)?&ft:'none'}]      " filetype
-"set statusline+=%*\ %l:%c%*                        " current line and column
-"set statusline+=%*\ %p%%%*                         " percentage
-"set cmdheight=1
+set ruf=%50(%=%#LineNr#%.50F\ [%{strlen(&ft)?&ft:'none'}]\ %l:%c\ %p%%%)
 
 " only load plugins if Plug detected
 if filereadable(expand("~/.vim/autoload/plug.vim"))
