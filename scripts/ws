@@ -1,285 +1,286 @@
 #!/usr/bin/env perl
 #          ^^^ only because this is a rapid prototype
+
+# This is an unoptimized prototype with lots of subshells in preparation
+# for port to Go eventually. In other words, this just works for now.
+
 use v5.14;
+use File::Path qw(make_path);
 no strict;
 
-sub cmd_list {
-  say 'would list';
-}
-*cmd_ls = *cmd_list;
+my $image = $ENV{'WORKSPACE_IMAGE'} || 'docker.io/rwxrob/workspace';
+my $wsdir = $ENV{'WORKSPACES'} || "$ENV{'HOME'}/Workspaces";
+my $editor = $ENV{'EDITOR'} || 'vi';
 
-sub cmd_remove {
-  say 'would remove';
+sub end {
+  say shift;
+  exit;
 }
-*cmd_rm = *cmd_remove;
 
-sub cmd_pick {
-  say 'would pick';
+sub get_ws_list {
+  opendir( my $dh, $wsdir)
+    || end "Failed to open workspace directory: $!";
+  return grep !/^(\.\.?|README)/, readdir($dh);
 }
+
+sub x_config {
+  my $name = shift || x_pick();
+  say "$wsdir/$name/.config/ws/config.yml";
+}
+
+sub x_edit {
+  my $name = shift || x_pick();
+  my $conf = "$wsdir/$name/.config/ws/config.yml";
+  exec $editor, $conf;
+}
+
+sub expand {
+  my $r = shift;
+  return unless @$r;
+  map {!/:/;$_="$_:$_"} @$r;
+}
+
+sub x_open {
+  my $name = shift || x_pick();
+  chdir "$wsdir/$name";
+  @cmd= ('docker','run','-it', '--rm', '--name', $name, '-h', $name);
+  my @ports = `yq e .ports[] \`ws config\``;
+  chomp @ports;
+  expand \@ports;
+  map {@cmd=(@cmd,'-p',$_)} @ports;
+  my @mounts = `yq e .mounts[] \`ws config\``;
+  chomp @mounts;
+  expand \@mounts;
+  map {@cmd=(@cmd,'-v',$_)} @mounts;
+  say "Executing: ".join(" ",(@cmd,$image));
+  sleep 1;
+  exec(@cmd,$image);
+}
+
+sub x_list { map {say $_} get_ws_list}
+*x_ls = *x_list;
+
+sub x_remove {
+  my $name = shift;
+  $name or $name = x_pick();
+  my $path = "$wsdir/$name";
+  -d $path and `rm -rf $path`;
+  say "Removed $wsdir/$name directory.";
+  exec('docker','rm','-f',$name)
+}
+*x_rm = *x_remove;
+
+sub x_pick {
+  my $n=1;
+  my @names = get_ws_list();
+  not @names and end "No workspaces found.";
+  my @list = get_ws_list();
+  scalar(@list) == 1 and return $list[0];
+  map {say "$n. $_"; $n++} @list;
+  my $pick;
+  until (0 < $pick && $pick < $n){
+    print "#? ";
+    $pick = <STDIN>;
+  }
+  my $name = @names[$pick-1];
+  return $name;
+}
+
+sub x_usage {
+  my @path = split( /\//, $0 );
+  my $exe = pop @path;
+  say "usage: $exe [COMMAND]";
+}
+
+sub x_create {
+  my $name, $dir, $username, $userid, $groupname, $groupid,
+    $ports, $mounts, $getlatest, $resp, $confd, $conf;
+
+  until ($name) {
+    print "Workspace Name: ";
+    $name = <STDIN>;
+    chomp $name;
+    not $name and next;
+    $dir = "$wsdir/$name";
+    if (-d $dir) {
+      say "Workspace ($name) already exists.";
+      $name="";
+      next;
+    }
+  }
+
+  $username = `id -un`; chomp $username;
+  print "User Name ($username): ";
+  $username = <STDIN>;
+  $userid = `id -u`; chomp $userid;
+
+  $groupname = `id -gn`; chomp $groupname;
+  print "Group Name ($groupname): ";
+  $groupname = <STDIN>;
+  $groupid = `id -g`; chomp $groupid;
+
+  $ports = "80 8080 8000 3000";
+  printf "Ports ($ports): ";
+  $resp = <STDIN>;
+  chomp $resp;
+  $ports ||= $resp;
+
+  $mounts = '';
+  printf "Extra Mounts ($mounts): ";
+  $resp = <STDIN>;
+  chomp $resp;
+  $mounts ||= $resp;
+
+  $getlatest = 'n';
+  printf "Get Latest Image (n): ";
+  $resp = <STDIN>;
+  chomp $resp;
+  $getlatest ||= $resp;
+
+  $getlatest and `docker pull $image`;
+
+  $confd = "$dir/.config/ws/";
+  $conf = "$confd/config.yml";
+  make_path($dir)
+    || end 'Failed to create workspace directory: ' . $dir;
+  make_path($confd)
+    || end 'Failed to create config directory: ' . $confd;
+  open(my $fh, ">", $conf)
+    || end 'Failed to open config file for writing: ' . $conf;
+
+  say $fh '# This file is used by the ws workspace container manager.';
+  say $fh "# It's fine to make changes directly and is shared by host.";
+  say $fh "\nname: $name";
+
+  if ($ports) {
+    $ports =~ s/ +/,/g;
+    say $fh "ports: [$ports]";
+  }
+  if ($mounts) {
+    $mounts = s/ +/,/g;
+    say $fh "ports: [$ports]";
+  }
+  close $fh;
+
+  x_open($name);
+
+}
+
+sub x_dir {
+  my $name = shift || x_pick();
+  say "$wsdir/$name"
+}
+
+# ------------------------ bash tab completion -----------------------
+#                  `complete -C ws ws` ->  ~/.bashrc
+#                   (any command starting with x_)
 
 if ( $ENV{'COMP_LINE'} ) {
-  @commands = grep s/^cmd_//, keys %{"main::"};
+  @completions = grep s/^x_//, keys %{"main::"};
+  @completions = (@completions,get_ws_list);
   if ( not $ARGV[1] ) {
-    map { say $_} @commands;
+    map { say $_} @completions;
     exit;
   }
-  map { /^$ARGV[1]/ && say $_} @commands;
+  map { /^$ARGV[1]/ && say $_} @completions;
+  exit;
 }
-
-__END__
-
-# See end of script for documentation comments.
-
-CMDS="list ls create rm remove switch pick config"
-WORKSPACES="${WORKSPACES:-$HOME/Workspaces}"
-test -d "${WORKSPACES}" || mkdir "${WORKSPACES}"
-
-create() {
-
-  name=""
-  while true; do
-    printf "Workspace Name: "
-    read -r name
-    test -z "$name" && continue
-    test -d "${WORKSPACES}/${name}" && echo "Exists." && continue
-    break
-  done
-  dir="${WORKSPACES}/${name}"
-
-  username=$(id -nu)
-  printf "User Name (%s): " "${username}"
-  read -r val
-  test -n "${val}" && username="${val}"
-  userid=$(id -u)
-
-  groupname=$(id -ng)
-  printf "Group Name (%s): " "${groupname}"
-  read -r val
-  test -n "${val}" && groupname="${val}"
-  groupid=$(id -g)
-
-  ports="80 8080 8000 3000"
-  printf "Ports (%s): " "${ports}"
-  read -r val
-  test -n "${val}" && ports="${val}"
-
-  mounts=""
-  printf "Extra Mounts (%s): " "${mounts}"
-  read -r val
-  test -n "${val}" && mounts="${val}"
-
-  printf "Check for Latest Image (n): "
-  read -r val
-  test -n "${val}" && getlatest="${val}"
-
-  if test -n "${getlatest}"; then
-    docker pull rwxrob/workspace
-  fi
-
-  test ! -d "${dir}"
-  mkdir "${dir}"
-  mkdir "${dir}/.config"
-  mkdir "${dir}/.config/ws"
-  conf="${dir}/.config/ws/config.yml"
-  >"${conf}"
-
-  echo "# This file is used by the ws workspace container manager." >>"${conf}"
-  echo "# It's fine to make changes directly and is shared by host." >>"${conf}"
-  echo "" >>"${conf}"
-
-  if test -n "$ports"; then
-    echo "ports:" >>"${conf}"
-    echo $conf
-    for port in $ports; do
-      echo "- ${port}" >>"${conf}"
-    done
-    echo "" >>"${conf}"
-  fi
-
-  if test -n "$mounts"; then
-    echo "mounts:" >>"${conf}"
-    for mount in $mounts; do
-      echo "- ${mount}" >>"${conf}"
-    done
-    echo "" >>"${conf}"
-  fi
-
-  switch "${name}"
-}
-
-switch() {
-  echo would switch
-}
-
-config() {
-  echo would open config with editor
-}
-
-get_ws_name() {
-  name="$1"
-  if test -z "$name"; then
-    pick
-    name="$RVAL"
-    test -z "$name" && echo "Workspace not found." && return 1
-  fi
-}
-
-remove() {
-  get_ws_name
-  name="$RVAL"
-  test -d "${WORKSPACES}/${name}" || return 1
-  rm -rf "${WORKSPACES}/${name}"
-  docker rm -f "${name}"
-}
-
-list() {
-  while read -r line; do
-    echo "${line##*/}"
-  done <<EOF
-$(ls -1 "${WORKSPACES}")
-EOF
-}
-
-pick() {
-  vals=$(list)
-  test ${#vals} -eq 0 && echo "No workspaces found." && return 0
-  while true; do
-    n=1
-    for ws in $vals; do
-      echo "$n) ${ws}"
-      n=$((n + 1))
-    done
-    printf "#? "
-    read -r v
-    test -n "$v" && break
-  done
-  n=1
-  for ws in $vals; do
-    expr "$n" = "$v" >/dev/null && RVAL="$ws" && break
-    n=$((n + 1))
-  done
-}
-
-# ---------------------- bash completion context ---------------------
-
-# add `complete -S sshkey sshkey` to bashrc
-
-if test -n "${COMP_LINE}"; then
-  pre="${COMP_LINE##* }"
-  for c in ${CMDS:+${CMDS} $(list)}; do
-    test -z "${pre}" -o "${c}" != "${c#${pre}}" && echo "$c"
-  done
-  exit
-fi
 
 # ------------------------------- main -------------------------------
 
-cmd="$1"
-test $# -gt 0 && shift
+if ( not "$ARGV[0]" ) { x_usage; exit; }
+$cname = "x_$ARGV[0]";
+$func = main->can($cname) and &$func(@ARGV[1..$#ARGV]);
 
-case "$cmd" in
-ls | list) list "$@" ;;
-config) config "$@" ;;
-pick)
-  pick "$@"
-  #echo "$RVAL"
-  ;;
-create) create "$@" ;;
-remove | rm) remove "$@" ;;
-*) pub "$@" ;;
-esac
+__END__
 
-exit
+Workspace Container Management Utility
 
-#######################################################################
-#
-# Workspace Container Management Utility
-#
-# The ws container workspace management utility provides what most
-# engineers, developers, and learners want from a workspace container
-# manager with reasonable defaults: a single consistent bind-mount to
-# home directory, a few configurable volume and port bindings, and ---
-# most importantly --- to be able to *quickly* switch between them and
-# keep them up to date with the latest workspace image as new tools are
-# added and old ones improved.
-#
-# Command: create
-#
-# Creates a directory for each workspace in the parent directory
-# indicated by the WORKSPACES environment variable (default
-# ~/Workspaces) and automatically bind-mounts it as the home directory
-# for the workspace user. The `.config/ws/config.yml` file will be
-# created within it and used by subsequent switch commands (which
-# activate the workspace.
-#
-# During creation the user will be prompted for the following (defaults
-# taken from the current user):
-#
-#   * Workspace Name - name of workspace and directory in $WORKSPACES
-#   * User Name      - user name for workspace container
-#   * Group Name     - user group name for workspace container
-#   * Ports          - ports (ex: 80 -> -p 80:80)
-#   * Extra Mounts   - extra bind-mounts (ex: /tmp -> -v /tmp:/tmp)
-#
-# The directory within $WORKSPACES is always mounted the user home
-# directory. (Hence, "extra mounts")
-#
-# The initial user home directory is taken from the configuration of
-# /etc/skel by the base image. Any changes to home after this initial
-# run will, however, be persistent. For substantial base workspace image
-# changes a new workspace may need to be created.
-#
-# The user and group ID will always match that of the currently running
-# user. This is sufficient for most work situations. When different IDs
-# are required, first create a user on the local host system that has
-# the wanted IDs. Note that this is a constraint of working with
-# containers in docker itself, not the workspace manager.
-#
-# The hostname of the container is automatically set to the name of the
-# workspace.
-#
-# By default the following ports are set (and can be deleted):
-#
-#   80 8080 8000 3000
-#
-# Ports and mounts can be specified in shorthand as single values
-# without the colon (as well as the normal colon syntax). Separate
-# multiple values with spaces. No other validation of port input
-# values is done allowing any syntax that is valid for the docker -v
-# switch to be passed.
-#
-# Note that it is generally best to just use a single home directory and
-# create symbolic and/or hardlinks within the container to stuff within
-# that home directory. This centralizes the workspace directory for
-# convenience and provides a quick visual representation of what is
-# included in the work.
-#
-# The /var/run/docker.sock socket is always mounted. Unfortunately, the
-# owner user id or group id must exactly match that of the workspace.
-# A warning is printed if these do not coincide since usually the host
-# docker instance is wanted and not another contained within the
-# workspace, but not always.
-#
-# Command: switch
-#
-# Switches to the named workspace. This is the default if no known
-# command is passed as the first argument in which case the first
-# argument it assumed to be the name of the workspace to switch to.
-#
-# Command: rm, remove
-#
-# Remove the specified workspace with an interactive confirmation
-# prompt. Will delete the directory and named container.
-#
-# Command: ls, list
-#
-# List all workspaces (lexigraphically from WORKSPACES directory).
-#
-# Bash Tab Completion
-#
-# This script supports its own completion. Simply add the following to
-# your .bashrc (or other) startup configuration file:
-#
-#   complete -C ws ws
-#
-# Note that this assumes the ws command is included in the PATH.
+The ws container workspace management utility provides what most
+engineers, developers, and learners want from a workspace container
+manager with reasonable defaults: a single consistent bind-mount to
+home directory, a few configurable volume and port bindings, and ---
+most importantly --- to be able to *quickly* switch between them and
+keep them up to date with the latest workspace image as new tools are
+added and old ones improved.
+
+Command: create
+
+Creates a directory for each workspace in the parent directory
+indicated by the WORKSPACES environment variable (default
+~/Workspaces) and automatically bind-mounts it as the home directory
+for the workspace user. The `.config/ws/config.yml` file will be
+created within it and used by subsequent switch commands (which
+activate the workspace.
+
+During creation the user will be prompted for the following (defaults
+taken from the current user):
+
+  * Workspace Name - name of workspace and directory in $WORKSPACES
+  * User Name      - user name for workspace container
+  * Group Name     - user group name for workspace container
+  * Ports          - ports (ex: 80 -> -p 80:80)
+  * Extra Mounts   - extra bind-mounts (ex: /tmp -> -v /tmp:/tmp)
+
+The directory within $WORKSPACES is always mounted the user home
+directory. (Hence, "extra mounts")
+
+The initial user home directory is taken from the configuration of
+/etc/skel by the base image. Any changes to home after this initial
+run will, however, be persistent. For substantial base workspace image
+changes a new workspace may need to be created.
+
+The user and group ID will always match that of the currently running
+user. This is sufficient for most work situations. When different IDs
+are required, first create a user on the local host system that has
+the wanted IDs. Note that this is a constraint of working with
+containers in docker itself, not the workspace manager.
+
+The hostname of the container is automatically set to the name of the
+workspace.
+
+By default the following ports are set (and can be deleted):
+
+  80 8080 8000 3000
+
+Ports and mounts can be specified in shorthand as single values
+without the colon (as well as the normal colon syntax). Separate
+multiple values with spaces. No other validation of port input
+values is done allowing any syntax that is valid for the docker -v
+switch to be passed.
+
+Note that it is generally best to just use a single home directory and
+create symbolic and/or hardlinks within the container to stuff within
+that home directory. This centralizes the workspace directory for
+convenience and provides a quick visual representation of what is
+included in the work.
+
+The /var/run/docker.sock socket is always mounted. Unfortunately, the
+owner user id or group id must exactly match that of the workspace.
+A warning is printed if these do not coincide since usually the host
+docker instance is wanted and not another contained within the
+workspace, but not always.
+
+Command: switch
+
+Switches to the named workspace. This is the default if no known
+command is passed as the first argument in which case the first
+argument it assumed to be the name of the workspace to switch to.
+
+Command: rm, remove
+
+Remove the specified workspace with an interactive confirmation
+prompt. Will delete the directory and named container.
+
+Command: ls, list
+
+List all workspaces (lexigraphically from WORKSPACES directory).
+
+Bash Tab Completion
+
+This script supports its own completion. Simply add the following to
+your .bashrc (or other) startup configuration file:
+
+  complete -C ws ws
+
+Note that this assumes the ws command is included in the PATH.
