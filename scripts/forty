@@ -1,4 +1,4 @@
 #!/bin/sh
 pomo stop
+tmux split-window \; resize-pane -y 10 \; send -t 2 "fishies" Enter
 back at $(date -d '40 minutes' +%-I:%M)
-
