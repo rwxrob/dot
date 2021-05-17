@@ -12,10 +12,18 @@ on any distro). I `source` stuff in my [bashrc](bashrc) This makes every
 section of my `.bashrc` shareable so others people can just download
 pieces of it that they might like instead of the whole thing.
 
+## Best Screen Dimensions
+
+While any dimensions should work, this workspace has been optimized for
+(the very unusual) 76 columns and 21 rows optimized for streaming
+(including to mobile devices) and presentations (classrooms, meetups,
+etc.).
+
 ## What distro do you use?
 
 I use PopOS! because it is the simplest and most reliable distro I've
-ever used. If I want complexity and stuff like the AUR I can just create
+ever used. I also regularly use this workspace on Windows with Docker
+installed. If I want complexity and stuff like the AUR I can just create
 a container easily with the `run` script.
 
 ## Why not include all the scripts in the Dockerfile?
