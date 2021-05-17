@@ -12,10 +12,10 @@ set autoindent
 set autowrite
 
 " activate line numbers
-set nonumber
+set number
 
 " turn col and row position on in bottom right
-set ruler
+set noruler
 
 " show command and insert mode
 set showmode
@@ -40,7 +40,6 @@ if v:version >= 800
   set foldmethod=manual
 endif
 
-
 " mark trailing spaces as errors
 match ErrorMsg '\s\+$'
 
@@ -53,7 +52,8 @@ set textwidth=72
 " disable relative line numbers, remove no to sample it
 set norelativenumber
 
-highlight NonText guifg=bg
+" makes ~ effectively invisible
+"highlight NonText guifg=bg
 
 " turn on default spell checking
 "set spell
@@ -68,11 +68,10 @@ set icon
 " center the cursor always on the screen
 "set scrolloff=999
 
-" highlight search hits,  \+<cr> to clear
+" highlight search hits
 set hlsearch
 set incsearch
 set linebreak
-map <silent> <leader><cr> :noh<cr>:redraw!<cr>
 
 " avoid most of the 'Hit Enter ...' messages
 "set shortmess=aoOtIF
@@ -85,7 +84,6 @@ set viminfo='20,<1000,s1000
 " not a fan of bracket matching or folding
 let g:loaded_matchparen=1
 set noshowmatch
-
 
 " Just the defaults, these are changed per filetype by plugins.
 " Most of the utility of all of this has been superceded by the use of
@@ -143,6 +141,43 @@ endif
 " high contrast for streaming, etc.
 set background=dark
 
+hi Normal ctermbg=NONE " for transparent background
+hi Special ctermfg=cyan
+hi LineNr ctermfg=black ctermbg=NONE
+hi SpecialKey ctermfg=black ctermbg=NONE
+hi ModeMsg ctermfg=black cterm=NONE ctermbg=NONE
+hi MoreMsg ctermfg=black ctermbg=NONE
+hi NonText ctermfg=black ctermbg=NONE
+hi vimGlobal ctermfg=black ctermbg=NONE
+hi ErrorMsg ctermbg=234 ctermfg=darkred cterm=NONE
+hi Error ctermbg=234 ctermfg=darkred cterm=NONE
+hi SpellBad ctermbg=234 ctermfg=darkred cterm=NONE
+hi SpellRare ctermbg=234 ctermfg=darkred cterm=NONE
+hi Search ctermbg=236 ctermfg=darkred
+hi vimTodo ctermbg=236 ctermfg=darkred
+hi Todo ctermbg=236 ctermfg=darkred
+hi IncSearch ctermbg=236 cterm=NONE ctermfg=darkred
+hi MatchParen ctermbg=236 ctermfg=darkred
+
+" pandoc color tweaks
+au FileType pandoc hi pandocAtxHeader ctermfg=yellow cterm=bold
+au FileType pandoc hi pandocAtxHeaderMark ctermfg=yellow cterm=bold
+au FileType pandoc hi pandocAtxStart ctermfg=yellow cterm=bold
+
+" Edit/Reload vimr configuration file
+nnoremap confe :e $HOME/.vimrc<CR>
+nnoremap confr :source $HOME/.vimrc<CR>
+
+" turn on when streaming to transparent background
+"set noruler
+"set laststatus=2
+"set statusline=
+"set statusline+=%*\ %<%.60F%*                      " path, trunc to 80 length
+"set statusline+=\ [%{strlen(&ft)?&ft:'none'}]      " filetype
+"set statusline+=%*\ %l:%c%*                        " current line and column
+"set statusline+=%*\ %p%%%*                         " percentage
+"set cmdheight=1
+
 " only load plugins if Plug detected
 if filereadable(expand("~/.vim/autoload/plug.vim"))
 
@@ -161,23 +196,6 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   Plug 'morhetz/gruvbox'
   Plug 'roxma/vim-tmux-clipboard'
   call plug#end()
-
-  hi Normal ctermbg=NONE " for transparent background
-  hi SpellBad ctermbg=red " for transparent background
-  hi SpellRare ctermbg=red
-  hi Special ctermfg=cyan
-  au FileType pandoc hi pandocAtxHeader ctermfg=yellow cterm=bold
-  au FileType pandoc hi pandocAtxHeaderMark ctermfg=yellow cterm=bold
-  au FileType pandoc hi pandocAtxStart ctermfg=yellow cterm=bold
-
-  set noruler
-  set laststatus=2
-  set statusline=
-  set statusline+=%*\ %<%.60F%*                      " path, trunc to 80 length
-  set statusline+=\ [%{strlen(&ft)?&ft:'none'}]      " filetype
-  set statusline+=%*\ %l:%c%*                        " current line and column
-  set statusline+=%*\ %p%%%*                         " percentage
-  set cmdheight=1
 
   " shell
   let g:shfmt_fmt_on_save = 1
@@ -323,5 +341,5 @@ set rtp^=~/.vimpersonal
 set rtp^=~/.vimprivate
 set rtp^=~/.vimwork
 
-hi StatusLineNC term=bold cterm=bold gui=bold
-hi StatusLine term=bold cterm=bold gui=bold
+hi StatusLine ctermfg=black ctermbg=NONE
+hi StatusLineNC ctermfg=black ctermbg=NONE
