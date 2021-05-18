@@ -43,23 +43,25 @@ sub expand {
 }
 
 sub x_open {
+    my @names = get_ws_list();
+    not @names and return x_create(@_);
     my $name = shift || x_pick();
     my $dir  = "$wsdir/$name";
+    not -d $dir and return x_create($name);
     chdir $dir;
-    my $username = qx(yq e .user.name `ws config`);
+    my $username = qx(yq e .user.name `ws config $name`);
     chomp $username;
     my @cmd   = (qw(docker run -it --rm --name), $name, '-h', $name );
-    my @ports = qx(yq e .ports[] `ws config`);
+    my @ports = qx(yq e .ports[] `ws config $name`);
     chomp @ports;
     expand \@ports;
     map { @cmd = ( @cmd, '-p', $_ ) } @ports;
-    my @mounts = qx(yq e .mounts[] `ws config`);
+    my @mounts = qx(yq e .mounts[] `ws config $name`);
     chomp @mounts;
     expand \@mounts;
     unshift @mounts, "$dir:/home/$username";
     map { @cmd = ( @cmd, '-v', $_ ) } @mounts;
     say "Executing: " . join( " ", ( @cmd, $image ) );
-    sleep 1;
     exec( @cmd, $image );
 }
 
@@ -72,9 +74,11 @@ sub x_remove {
     my $name = shift;
     $name or $name = x_pick();
     my $path = "$wsdir/$name";
+    ! -d $path and say "Path not found: $path" and return;
+    print "Sure you want to remove '$path'? (n) ";
+    <STDIN> =~ /^y/i or return;
     -d $path and `rm -rf $path`;
     say "Removed $wsdir/$name directory.";
-    exec( 'docker', 'rm', '-f', $name );
 }
 *x_rm = *x_remove;
 
@@ -128,6 +132,7 @@ sub x_create {
     $resp and $username = $resp;
     $userid = `id -u`;
     chomp $userid;
+    say "User ID will be $userid.";
 
     $shell = $ENV{'SHELL'};
     print "User Shell ($shell): ";
@@ -143,6 +148,7 @@ sub x_create {
     $resp and $groupname = $resp;
     $groupid = `id -g`;
     chomp $groupid;
+    say "Group ID will be $groupid.";
 
     $ports = "80 8080 8000 3000";
     printf "Ports ($ports): ";
@@ -234,7 +240,7 @@ indicated by the WORKSPACES environment variable (default
 ~/Workspaces) and automatically bind-mounts it as the home directory
 for the workspace user. The `.config/ws/config.yml` file will be
 created within it and used by subsequent switch commands (which
-activate the workspace.
+activate the workspace. A `.config/ws/synced` file will also be created after the skeleton directory has first populated the user home directory. Removing it later will cause the ephemeral workspace image entrypoint to do another sync with whatever the current local image is.
 
 During creation the user will be prompted for the following (defaults
 taken from the current user):
@@ -249,16 +255,18 @@ taken from the current user):
 The directory within $WORKSPACES is always mounted the user home
 directory. (Hence, "extra mounts")
 
-The initial user home directory is taken from the configuration of
-/etc/skel by the base image. Any changes to home after this initial
-run will, however, be persistent. For substantial base workspace image
-changes a new workspace may need to be created.
+The initial user home directory is directy mirrored (rsync) from the
+/usr/share/rwxrob/workspace provided by the base image. Any changes to
+home after this initial run will, however, be persistent. For
+substantial base workspace image changes a new workspace may need to be
+created. The ~/.config/ws/synced file is created when the mirror sync completes. Removing it will trigger another sync when the workspace is next opened.
 
-The user and group ID will always match that of the currently running
-user. This is sufficient for most work situations. When different IDs
-are required, first create a user on the local host system that has
-the wanted IDs. Note that this is a constraint of working with
-containers in docker itself, not the workspace manager.
+The user and group ID will always match that of the current user. This
+is sufficient for most work situations. When different IDs are required,
+first create a user on the local host system that has the wanted IDs and
+change to that user before running ws. This prevents file owner and
+group ID problems later. Note that this is a constraint of working with
+containers in docker itself, not this utility.
 
 The hostname of the container is automatically set to the name of the
 workspace.
