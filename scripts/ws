@@ -61,7 +61,7 @@ sub x_open {
     expand \@mounts;
     unshift @mounts, "$dir:/home/$username";
     map { @cmd = ( @cmd, '-v', $_ ) } @mounts;
-    say "Executing: " . join( " ", ( @cmd, $image ) );
+    #say "Executing: " . join( " ", ( @cmd, $image ) );
     exec( @cmd, $image );
 }
 
