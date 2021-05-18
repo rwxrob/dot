@@ -180,7 +180,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
 
   " load all the plugins
   call plug#begin('~/.vimplugins')
-  Plug 'z0mbix/vim-shfmt'
+  "Plug 'z0mbix/vim-shfmt' " fucking hate joining \ lines
   Plug 'sheerun/vim-polyglot'
   Plug 'vim-pandoc/vim-pandoc'
   Plug 'rwxrob/vim-pandoc-syntax-simple'

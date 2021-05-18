@@ -12,6 +12,7 @@ complete -C auth auth
 complete -C pomo pomo
 complete -C config config
 complete -C sshkey sshkey
+complete -C ws ws
 complete -C ./setup ./setup
 
 if type gh &>/dev/null; then

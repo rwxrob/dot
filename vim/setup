@@ -5,4 +5,4 @@ if [ -z "$(which vim)" -o -z "$(which vimtutor)" ]; then
   exit 1
 fi
 
-ln -sf "$PWD/vimrc" "$HOME/.vimrc"
+ln -sf "$PWD/.vimrc" "$HOME/.vimrc"
