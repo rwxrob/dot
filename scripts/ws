@@ -8,167 +8,189 @@ use v5.14;
 use File::Path qw(make_path);
 no strict;
 
-my $image = $ENV{'WORKSPACE_IMAGE'} || 'docker.io/rwxrob/workspace';
-my $wsdir = $ENV{'WORKSPACES'} || "$ENV{'HOME'}/Workspaces";
-my $editor = $ENV{'EDITOR'} || 'vi';
+my $image  = $ENV{'WORKSPACE_IMAGE'} || 'docker.io/rwxrob/workspace';
+my $wsdir  = $ENV{'WORKSPACES'}      || "$ENV{'HOME'}/Workspaces";
+my $editor = $ENV{'EDITOR'}          || 'vi';
 
 sub end {
-  say shift;
-  exit;
+    say shift;
+    exit;
 }
 
 sub get_ws_list {
-  opendir( my $dh, $wsdir)
-    || end "Failed to open workspace directory: $!";
-  return grep !/^(\.\.?|README)/, readdir($dh);
+    opendir( my $dh, $wsdir )
+      || end "Failed to open workspace directory: $!";
+    return grep !/^(\.\.?|README)/, readdir($dh);
 }
 
+sub x_pull { exec qq{docker pull $image} }
+
 sub x_config {
-  my $name = shift || x_pick();
-  say "$wsdir/$name/.config/ws/config.yml";
+    my $name = shift || x_pick();
+    say "$wsdir/$name/.config/ws/config.yml";
 }
 
 sub x_edit {
-  my $name = shift || x_pick();
-  my $conf = "$wsdir/$name/.config/ws/config.yml";
-  exec $editor, $conf;
+    my $name = shift || x_pick();
+    my $conf = "$wsdir/$name/.config/ws/config.yml";
+    exec $editor, $conf;
 }
 
 sub expand {
-  my $r = shift;
-  return unless @$r;
-  map {!/:/;$_="$_:$_"} @$r;
+    my $r = shift;
+    return unless @$r;
+    map { !/:/; $_ = "$_:$_" } @$r;
 }
 
 sub x_open {
-  my $name = shift || x_pick();
-  chdir "$wsdir/$name";
-  @cmd= ('docker','run','-it', '--rm', '--name', $name, '-h', $name);
-  my @ports = `yq e .ports[] \`ws config\``;
-  chomp @ports;
-  expand \@ports;
-  map {@cmd=(@cmd,'-p',$_)} @ports;
-  my @mounts = `yq e .mounts[] \`ws config\``;
-  chomp @mounts;
-  expand \@mounts;
-  map {@cmd=(@cmd,'-v',$_)} @mounts;
-  say "Executing: ".join(" ",(@cmd,$image));
-  sleep 1;
-  exec(@cmd,$image);
+    my $name = shift || x_pick();
+    my $dir  = "$wsdir/$name";
+    chdir $dir;
+    my $username = qx(yq e .user.name `ws config`);
+    chomp $username;
+    my @cmd   = (qw(docker run -it --rm --name), $name, '-h', $name );
+    my @ports = qx(yq e .ports[] `ws config`);
+    chomp @ports;
+    expand \@ports;
+    map { @cmd = ( @cmd, '-p', $_ ) } @ports;
+    my @mounts = qx(yq e .mounts[] `ws config`);
+    chomp @mounts;
+    expand \@mounts;
+    unshift @mounts, "$dir:/home/$username";
+    map { @cmd = ( @cmd, '-v', $_ ) } @mounts;
+    say "Executing: " . join( " ", ( @cmd, $image ) );
+    sleep 1;
+    exec( @cmd, $image );
 }
 
-sub x_list { map {say $_} get_ws_list}
+sub x_list {
+    map { say $_} get_ws_list;
+}
 *x_ls = *x_list;
 
 sub x_remove {
-  my $name = shift;
-  $name or $name = x_pick();
-  my $path = "$wsdir/$name";
-  -d $path and `rm -rf $path`;
-  say "Removed $wsdir/$name directory.";
-  exec('docker','rm','-f',$name)
+    my $name = shift;
+    $name or $name = x_pick();
+    my $path = "$wsdir/$name";
+    -d $path and `rm -rf $path`;
+    say "Removed $wsdir/$name directory.";
+    exec( 'docker', 'rm', '-f', $name );
 }
 *x_rm = *x_remove;
 
 sub x_pick {
-  my $n=1;
-  my @names = get_ws_list();
-  not @names and end "No workspaces found.";
-  my @list = get_ws_list();
-  scalar(@list) == 1 and return $list[0];
-  map {say "$n. $_"; $n++} @list;
-  my $pick;
-  until (0 < $pick && $pick < $n){
-    print "#? ";
-    $pick = <STDIN>;
-  }
-  my $name = @names[$pick-1];
-  return $name;
+    my $n     = 1;
+    my @names = get_ws_list();
+    not @names and end "No workspaces found.";
+    my @list = get_ws_list();
+    scalar(@list) == 1 and return $list[0];
+    map { say "$n. $_"; $n++ } @list;
+    my $pick;
+    until ( 0 < $pick && $pick < $n ) {
+        print "#? ";
+        $pick = <STDIN>;
+    }
+    my $name = @names[ $pick - 1 ];
+    return $name;
 }
 
 sub x_usage {
-  my @path = split( /\//, $0 );
-  my $exe = pop @path;
-  say "usage: $exe [COMMAND]";
+    my @path = split( /\//, $0 );
+    my $exe  = pop @path;
+    say "usage: $exe [COMMAND]";
 }
 
 sub x_create {
-  my $name, $dir, $username, $userid, $groupname, $groupid,
-    $ports, $mounts, $getlatest, $resp, $confd, $conf;
+    my $name, $dir, $username, $userid, $groupname, $groupid,
+      $ports, $mounts, $getlatest, $resp, $confd, $conf;
 
-  until ($name) {
-    print "Workspace Name: ";
-    $name = <STDIN>;
-    chomp $name;
-    not $name and next;
-    $dir = "$wsdir/$name";
-    if (-d $dir) {
-      say "Workspace ($name) already exists.";
-      $name="";
-      next;
+    $name = shift;
+    $dir  = "$wsdir/$name";
+
+    until ($name) {
+        print "Workspace Name: ";
+        $name = <STDIN>;
+        chomp $name;
+        not $name and next;
+        $dir = "$wsdir/$name";
+        if ( -d $dir ) {
+            say "Workspace ($name) already exists.";
+            $name = "";
+            next;
+        }
     }
-  }
 
-  $username = `id -un`; chomp $username;
-  print "User Name ($username): ";
-  $username = <STDIN>;
-  $userid = `id -u`; chomp $userid;
+    $username = `id -un`;
+    chomp $username;
+    print "User Name ($username): ";
+    $resp = <STDIN>;
+    chomp $resp;
+    $resp and $username = $resp;
+    $userid = `id -u`;
+    chomp $userid;
 
-  $groupname = `id -gn`; chomp $groupname;
-  print "Group Name ($groupname): ";
-  $groupname = <STDIN>;
-  $groupid = `id -g`; chomp $groupid;
+    $shell = $ENV{'SHELL'};
+    print "User Shell ($shell): ";
+    $resp = <STDIN>;
+    chomp $resp;
+    $resp and $shell = $resp;
 
-  $ports = "80 8080 8000 3000";
-  printf "Ports ($ports): ";
-  $resp = <STDIN>;
-  chomp $resp;
-  $ports ||= $resp;
+    $groupname = `id -gn`;
+    chomp $groupname;
+    print "Group Name ($groupname): ";
+    $resp = <STDIN>;
+    chomp $resp;
+    $resp and $groupname = $resp;
+    $groupid = `id -g`;
+    chomp $groupid;
 
-  $mounts = '';
-  printf "Extra Mounts ($mounts): ";
-  $resp = <STDIN>;
-  chomp $resp;
-  $mounts ||= $resp;
+    $ports = "80 8080 8000 3000";
+    printf "Ports ($ports): ";
+    $resp = <STDIN>;
+    chomp $resp;
+    $ports ||= $resp;
 
-  $getlatest = 'n';
-  printf "Get Latest Image (n): ";
-  $resp = <STDIN>;
-  chomp $resp;
-  $getlatest ||= $resp;
+    $mounts = '';
+    printf "Extra Mounts ($mounts): ";
+    $resp = <STDIN>;
+    chomp $resp;
+    $mounts ||= $resp;
 
-  $getlatest and `docker pull $image`;
+    $confd = "$dir/.config/ws/";
+    $conf  = "$confd/config.yml";
+    -d $dir and end 'Workspace directory already exists: ' . $dir;
+    make_path($dir)
+      || end 'Failed to create workspace directory: ' . $dir;
+    make_path($confd)
+      || end 'Failed to create config directory: ' . $confd;
+    open( my $fh, ">", $conf )
+      || end 'Failed to open config file for writing: ' . $conf;
 
-  $confd = "$dir/.config/ws/";
-  $conf = "$confd/config.yml";
-  make_path($dir)
-    || end 'Failed to create workspace directory: ' . $dir;
-  make_path($confd)
-    || end 'Failed to create config directory: ' . $confd;
-  open(my $fh, ">", $conf)
-    || end 'Failed to open config file for writing: ' . $conf;
+    say $fh '# This file is used by the ws workspace container manager.';
+    say $fh "# It's fine to make changes directly and is shared by host.";
+    say $fh "\nname: $name\n";
 
-  say $fh '# This file is used by the ws workspace container manager.';
-  say $fh "# It's fine to make changes directly and is shared by host.";
-  say $fh "\nname: $name";
+    say $fh "\nuser:\n  name: $username\n  id: $userid\n  shell:  $shell";
+    say $fh "\ngroup:\n  name: $groupname\n  id: $groupid";
+    say $fh "";
 
-  if ($ports) {
-    $ports =~ s/ +/,/g;
-    say $fh "ports: [$ports]";
-  }
-  if ($mounts) {
-    $mounts = s/ +/,/g;
-    say $fh "ports: [$ports]";
-  }
-  close $fh;
+    if ($ports) {
+        $ports =~ s/ +/,/g;
+        say $fh "ports: [$ports]";
+    }
+    if ($mounts) {
+        $mounts = s/ +/,/g;
+        say $fh "ports: [$ports]";
+    }
+    close $fh;
 
-  x_open($name);
+    x_open($name);
 
 }
 
 sub x_dir {
-  my $name = shift || x_pick();
-  say "$wsdir/$name"
+    my $name = shift || x_pick();
+    say "$wsdir/$name";
 }
 
 # ------------------------ bash tab completion -----------------------
@@ -176,21 +198,22 @@ sub x_dir {
 #                   (any command starting with x_)
 
 if ( $ENV{'COMP_LINE'} ) {
-  @completions = grep s/^x_//, keys %{"main::"};
-  @completions = (@completions,get_ws_list);
-  if ( not $ARGV[1] ) {
-    map { say $_} @completions;
+    @completions = grep s/^x_//, keys %{"main::"};
+    @completions = ( @completions, get_ws_list );
+    if ( not $ARGV[1] ) {
+        map { say $_} @completions;
+        exit;
+    }
+    map { /^$ARGV[1]/ && say $_} @completions;
     exit;
-  }
-  map { /^$ARGV[1]/ && say $_} @completions;
-  exit;
 }
 
 # ------------------------------- main -------------------------------
 
 if ( not "$ARGV[0]" ) { x_usage; exit; }
-$cname = "x_$ARGV[0]";
-$func = main->can($cname) and &$func(@ARGV[1..$#ARGV]);
+my $first = shift @ARGV;
+$cname = "x_$first";
+$func  = main->can($cname) and &$func(@ARGV);
 
 __END__
 
@@ -218,6 +241,7 @@ taken from the current user):
 
   * Workspace Name - name of workspace and directory in $WORKSPACES
   * User Name      - user name for workspace container
+  * User Shell     - user shell for workspace container
   * Group Name     - user group name for workspace container
   * Ports          - ports (ex: 80 -> -p 80:80)
   * Extra Mounts   - extra bind-mounts (ex: /tmp -> -v /tmp:/tmp)
