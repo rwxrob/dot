@@ -93,23 +93,24 @@ set wrapscan
 " modern simplified pandoc for capturing knowledge source instead of
 " arbitrary raw text files.
 
-set formatoptions-=t   " don't auto-wrap text using text width
-set formatoptions+=c   " autowrap comments using textwidth with leader
-set formatoptions-=r   " don't auto-insert comment leader on enter in insert
-set formatoptions-=o   " don't auto-insert comment leader on o/O in normal
-set formatoptions+=q   " allow formatting of comments with gq
-set formatoptions-=w   " don't use trailing whitespace for paragraphs
-set formatoptions-=a   " disable auto-formatting of paragraph changes
-set formatoptions-=n   " don't recognized numbered lists
-set formatoptions+=j   " delete comment prefix when joining
-set formatoptions-=2   " don't use the indent of second paragraph line
-set formatoptions-=v   " don't use broken 'vi-compatible auto-wrapping'
-set formatoptions-=b   " don't use broken 'vi-compatible auto-wrapping'
-set formatoptions+=l   " long lines not broken in insert mode
-set formatoptions+=m   " multi-byte character line break support
-set formatoptions+=M   " don't add space before or after multi-byte char
-set formatoptions-=B   " don't add space between two multi-byte chars in join 
-set formatoptions+=1   " don't break a line after a one-letter word
+set fo-=t   " don't auto-wrap text using text width
+set fo+=c   " autowrap comments using textwidth with leader
+set fo-=r   " don't auto-insert comment leader on enter in insert
+set fo-=o   " don't auto-insert comment leader on o/O in normal
+set fo+=q   " allow formatting of comments with gq
+set fo-=w   " don't use trailing whitespace for paragraphs
+set fo-=a   " disable auto-formatting of paragraph changes
+set fo-=n   " don't recognized numbered lists
+set fo+=j   " delete comment prefix when joining
+set fo-=2   " don't use the indent of second paragraph line
+set fo-=v   " don't use broken 'vi-compatible auto-wrapping'
+set fo-=b   " don't use broken 'vi-compatible auto-wrapping'
+set fo+=l   " long lines not broken in insert mode
+set fo+=m   " multi-byte character line break support
+set fo+=M   " don't add space before or after multi-byte char
+set fo-=B   " don't add space between two multi-byte chars
+set fo+=1   " don't break a line after a one-letter word
+set shm+=T   " truncate all messages instead of 'Press Enter'
 
 " requires PLATFORM env variable set (in ~/.bashrc)
 if $PLATFORM == 'mac'
