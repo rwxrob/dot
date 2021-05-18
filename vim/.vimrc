@@ -146,6 +146,28 @@ endif
 " high contrast for streaming, etc.
 set background=dark
 
+hi StatusLine ctermfg=black ctermbg=NONE
+hi StatusLineNC ctermfg=black ctermbg=NONE
+hi Title ctermfg=yellow ctermbg=NONE
+hi Operator ctermfg=yellow ctermbg=NONE
+hi Normal ctermbg=NONE
+hi Special ctermfg=cyan
+hi LineNr ctermfg=black ctermbg=NONE
+hi SpecialKey ctermfg=black ctermbg=NONE
+hi ModeMsg ctermfg=black cterm=NONE ctermbg=NONE
+hi MoreMsg ctermfg=black ctermbg=NONE
+hi NonText ctermfg=black ctermbg=NONE
+hi vimGlobal ctermfg=black ctermbg=NONE
+hi ErrorMsg ctermbg=234 ctermfg=darkred cterm=NONE
+hi Error ctermbg=234 ctermfg=darkred cterm=NONE
+hi SpellBad ctermbg=234 ctermfg=darkred cterm=NONE
+hi SpellRare ctermbg=234 ctermfg=darkred cterm=NONE
+hi Search ctermbg=236 ctermfg=darkred
+hi vimTodo ctermbg=236 ctermfg=darkred
+hi Todo ctermbg=236 ctermfg=darkred
+hi IncSearch ctermbg=236 cterm=NONE ctermfg=darkred
+hi MatchParen ctermbg=236 ctermfg=darkred
+
 " color overrides
 au FileType * hi StatusLine ctermfg=black ctermbg=NONE
 au FileType * hi StatusLineNC ctermfg=black ctermbg=NONE
