@@ -208,12 +208,13 @@ alias '???'=bing
 alias x="exit"
 alias sl="sl -e"
 alias mkdirisosec='d=$(isosec);mkdir $d; cd $d'
-alias main="cd $(work main)"
-alias dot="cd dot"
-alias scripts="cd scripts"
+alias main='cd $(work main)'
+alias dot='cd ~/repos/github.com/$GITUSER/dot'
+alias scripts='cd $SCRIPTS'
 alias free='free -h'
 alias df='df -h'
-alias top="htop"
+alias top=htop
+alias chmox="chmod +x"
 
 which vim &>/dev/null && alias vi=vim
 
