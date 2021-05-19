@@ -117,7 +117,7 @@ __ps1() {
     fi
   fi
 
-  local B=$(git branch --show-current &>/dev/null)
+  local B=$(git branch --show-current 2>/dev/null)
   test "$dir" = "$B" && B='.'
   local countme="$USER@$(hostname):$dir($B)\$ "
 
