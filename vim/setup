@@ -6,3 +6,6 @@ if [ -z "$(which vim)" -o -z "$(which vimtutor)" ]; then
 fi
 
 ln -sf "$PWD/.vimrc" "$HOME/.vimrc"
+mkdir "$HOME/.vim/" "$HOME/.vim/autoload"
+ln -sf "$PWD/.vim/autoload/plug.vim" "$HOME/.vim/autoload/plug.vim"
+

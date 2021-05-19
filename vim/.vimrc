@@ -75,9 +75,7 @@ set incsearch
 set linebreak
 
 " avoid most of the 'Hit Enter ...' messages
-"set shortmess=aoOtIF
-set shortmess=aoOtI
-
+set shortmess=aoOtTIF
 
 " prevents truncated yanks, deletes, etc.
 set viminfo='20,<1000,s1000
@@ -119,7 +117,6 @@ if $PLATFORM == 'mac'
   set backspace=indent,eol,start
 endif
 
-
 " stop complaints about switching buffer with changes
 set hidden
 
@@ -135,21 +132,12 @@ set ttyfast
 " allow sensing the filetype
 filetype plugin on
 
-" Install vim-plug if not already installed
-" (Yes I know about Vim 8 Plugins. They suck.)
-if v:version >= 800 && executable('curl') && empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-      \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall
-endif
-
 " high contrast for streaming, etc.
 set background=dark
 
+" base default color changes (gruvbox dark friendly)
 hi StatusLine ctermfg=black ctermbg=NONE
 hi StatusLineNC ctermfg=black ctermbg=NONE
-hi Title ctermfg=yellow ctermbg=NONE
-hi Operator ctermfg=yellow ctermbg=NONE
 hi Normal ctermbg=NONE
 hi Special ctermfg=cyan
 hi LineNr ctermfg=black ctermbg=NONE
@@ -171,8 +159,6 @@ hi MatchParen ctermbg=236 ctermfg=darkred
 " color overrides
 au FileType * hi StatusLine ctermfg=black ctermbg=NONE
 au FileType * hi StatusLineNC ctermfg=black ctermbg=NONE
-au FileType * hi Title ctermfg=yellow ctermbg=NONE
-au FileType * hi Operator ctermfg=yellow ctermbg=NONE
 au FileType * hi Normal ctermbg=NONE
 au FileType * hi Special ctermfg=cyan
 au FileType * hi LineNr ctermfg=black ctermbg=NONE
@@ -190,6 +176,8 @@ au FileType * hi vimTodo ctermbg=236 ctermfg=darkred
 au FileType * hi Todo ctermbg=236 ctermfg=darkred
 au FileType * hi IncSearch ctermbg=236 cterm=NONE ctermfg=darkred
 au FileType * hi MatchParen ctermbg=236 ctermfg=darkred
+au FileType markdown,pandoc hi Title ctermfg=yellow ctermbg=NONE
+au FileType markdown,pandoc hi Operator ctermfg=yellow ctermbg=NONE
 
 " Edit/Reload vimr configuration file
 nnoremap confe :e $HOME/.vimrc<CR>
@@ -200,7 +188,6 @@ set ruf=%50(%=%#LineNr#%.50F\ [%{strlen(&ft)?&ft:'none'}]\ %l:%c\ %p%%%)
 " only load plugins if Plug detected
 if filereadable(expand("~/.vim/autoload/plug.vim"))
 
-  " load all the plugins
   call plug#begin('~/.vimplugins')
   "Plug 'z0mbix/vim-shfmt' " fucking hate joining \ lines
   Plug 'sheerun/vim-polyglot'
@@ -216,7 +203,6 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   Plug 'roxma/vim-tmux-clipboard'
   call plug#end()
 
-  " shell
   let g:shfmt_fmt_on_save = 1
 
   " Even though the POSIX shell standard and clean here-documents
