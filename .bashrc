@@ -189,9 +189,9 @@ export LESS_TERMCAP_ue="0m"
 export LESS_TERMCAP_us="[4m"  # underline
 
 export GOPRIVATE="github.com/$GITUSER/*,gitlab.com/$GITUSER/*"
-export GOPATH="$HOME/.go"
-export GOBIN="$HOME/.go/bin"
-export GOPROXY="direct"
+export GOPATH=~/.local/share/go
+export GOBIN=~/.local/bin
+export GOPROXY=direct
 export CGO_ENABLED=0
 
 unalias -a
