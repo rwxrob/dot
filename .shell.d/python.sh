@@ -1,3 +1,0 @@
-#!/bin/sh
-
-export PYTHONDONTWRITEBYTECODE=1

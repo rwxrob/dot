@@ -1,9 +1,7 @@
 #!/bin/sh
 set -e
-test -n "$BASH_DASHX" && set -x
 
 ln -sf "$PWD/.bashrc" "$HOME/.bashrc"
-ln -sf "$PWD/.shell.d" "$HOME/.shell.d"
 ln -sf "$PWD/.dircolors" "$HOME/.dircolors"
 ln -sf "$PWD/.inputrc" "$HOME/.inputrc"
 ln -sf "$PWD/.profile" "$HOME/.profile"
