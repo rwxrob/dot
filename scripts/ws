@@ -220,9 +220,16 @@ if ( not "$ARGV[0]" ) {
     ws_get_list and x_open and exit;
     wx_usage and exit;
 }
+
 my $first = shift @ARGV;
+
 $cname = "x_$first";
-$func  = main->can($cname) and &$func(@ARGV);
+if (my $func = main->can($cname)) {
+    &$func(@ARGV);
+    exit;
+}
+
+x_open($first);
 
 __END__
 
