@@ -30,11 +30,10 @@ pathprepend() {
 
 export SCRIPTS=~/.local/bin/scripts
 
-pathprepend "$SCRIPTS" ~/.local/bin
+pathprepend "$SCRIPTS" ~/.local/bin /usr/local/go/bin 
 pathappend \
   /usr/local/opt/coreutils/libexec/gnubin \
   /mingw64/bin \
-  /usr/local/go/bin \
   /usr/local/tinygo/bin \
   /usr/local/bin \
   /usr/local/sbin \
@@ -143,7 +142,7 @@ __ps1() {
   fi
 }
 
-PROMPT_COMMAND="${PROMPT_COMMAND:+PROMPT_COMMAND;}__ps1;"
+PROMPT_COMMAND="${PROMPT_COMMAND:+"$PROMPT_COMMAND;"}__ps1;"
 
 test -n "$DISPLAY" && setxkbmap -option caps:escape &>/dev/null
 
