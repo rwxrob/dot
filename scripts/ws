@@ -73,6 +73,7 @@ sub x_open {
 
     my @mounts = qx(yq e .mounts[] `ws config $name`);
     chomp @mounts;
+    unshift @mounts, "/var/run/docker.sock";
     expand \@mounts;
     unshift @mounts, "$dir:/home/$username";
     map { @cmd = ( @cmd, '-v', $_ ) } @mounts;
