@@ -1,2 +1,3 @@
 #!/bin/sh
+rm -rf "$HOME/.git-templates"
 ln -sf "$PWD/.git-templates" "$HOME/.git-templates"
