@@ -1,5 +1,6 @@
 
 export GITUSER="$USER"
+export DOTFILES="$HOME/repos/github.com/$GITUSER/dot"
 
 test -e /etc/bashrc && source /etc/bashrc
 
@@ -33,7 +34,7 @@ export SCRIPTS=~/.local/bin/scripts
 pathprepend \
   "$SCRIPTS" \
   ~/.local/bin \
-  ~/repos/github.com/$GITUSER/workspace/goroot/bin \
+  ~/repos/github.com/rwxrob/workspace/goroot/bin \
   /usr/local/go/bin 
 pathappend \
   /usr/local/opt/coreutils/libexec/gnubin \
@@ -51,6 +52,7 @@ pathappend \
 export CDPATH=.:\
 ~/repos/github.com:\
 ~/repos/github.com/$GITUSER:\
+~/repos/github.com/rwxrob:\
 ~/repos:\
 /media/$USER:\
 ~
@@ -212,7 +214,7 @@ alias x="exit"
 alias sl="sl -e"
 alias mkdirisosec='d=$(isosec);mkdir $d; cd $d'
 alias main='cd $(work main)'
-alias dot='cd ~/repos/github.com/$GITUSER/dot'
+alias dot='cd $DOTFILES'
 alias scripts='cd $SCRIPTS'
 alias free='free -h'
 alias df='df -h'
