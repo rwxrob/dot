@@ -3,6 +3,8 @@
 
 # This is an unoptimized prototype with lots of subshells in preparation
 # for port to Go eventually. In other words, this just works for now.
+# See documentation after __END__ at the bottom. (I didn't feel like
+# writing it in Perl POD format, sorry.)
 
 use v5.14;
 use File::Path qw(make_path);
@@ -167,17 +169,17 @@ sub x_create {
     chomp $groupid;
     say "Group ID will be $groupid.";
 
-    $ports = "80 8080 8000 3000";
-    printf "Ports ($ports): ";
+    $ports = "";
+    printf "Ports: ";
     $resp = <STDIN>;
     chomp $resp;
-    $ports ||= $resp;
+    $ports = $resp;
 
     $mounts = '';
-    printf "Extra Mounts ($mounts): ";
+    printf "Extra Mounts: ";
     $resp = <STDIN>;
     chomp $resp;
-    $mounts ||= $resp;
+    $mounts = $resp;
 
     $confd = "$dir/.config/ws/";
     $conf  = "$confd/config.yml";
