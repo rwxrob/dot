@@ -8,6 +8,7 @@ ln -sf "$PWD/.profile" "$HOME/.profile"
 ln -sf "$PWD/.profile" "$HOME/.bash_profile"
 
 mkdir -p "$HOME/.local/bin" || true
+ln -sf "$PWD/scripts" "$HOME/.local/bin/scripts"
 
 for i in vim lynx gh git tmux; do
   cd $i && ./setup
