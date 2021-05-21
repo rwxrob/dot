@@ -170,7 +170,7 @@ if which dircolors &>/dev/null; then
   fi
 fi
 
-owncomp=(pdf md yt gl kn auth pomo config sshkey ws ./setup)
+owncomp=(pdf md yt gl kn auth pomo config sshkey ws ./build build ./setup)
 for i in ${owncomp[@]}; do complete -C $i $i; done
 
 type gh &>/dev/null && . <(gh completion -s bash)
