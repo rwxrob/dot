@@ -142,7 +142,7 @@ __ps1() {
   fi
 }
 
-PROMPT_COMMAND="${PROMPT_COMMAND:+"$PROMPT_COMMAND;"}__ps1;"
+PROMPT_COMMAND="__ps1"
 
 test -n "$DISPLAY" && setxkbmap -option caps:escape &>/dev/null
 
