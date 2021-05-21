@@ -18,6 +18,8 @@ my $image  = $ENV{'WORKSPACE_IMAGE'} || 'docker.io/rwxrob/workspace';
 my $wsdir  = $ENV{'WORKSPACES'}      || "$ENV{'HOME'}/Workspaces";
 my $editor = $ENV{'EDITOR'}          || 'vi';
 
+not -d $wsdir and mkdir($wsdir);
+
 sub end {
     say shift;
     exit;
