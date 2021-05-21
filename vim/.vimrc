@@ -75,7 +75,7 @@ set incsearch
 set linebreak
 
 " avoid most of the 'Hit Enter ...' messages
-set shortmess=aoOtTIF
+set shortmess=aoOtTI
 
 " prevents truncated yanks, deletes, etc.
 set viminfo='20,<1000,s1000
