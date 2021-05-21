@@ -70,8 +70,12 @@ sub x_open {
 
     my @ports = qx(yq e .ports[] `ws config $name`);
     chomp @ports;
-    expand \@ports;
-    map { @cmd = ( @cmd, '-p', $_ ) } @ports;
+    if ($ports[0] eq 'all') {
+        @cmd = ( @cmd, '--network', 'host' );
+    } else {
+        expand \@ports;
+        map { @cmd = ( @cmd, '-p', $_ ) } @ports;
+    }
 
     my @mounts = qx(yq e .mounts[] `ws config $name`);
     chomp @mounts;
