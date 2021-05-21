@@ -30,7 +30,11 @@ pathprepend() {
 
 export SCRIPTS=~/.local/bin/scripts
 
-pathprepend "$SCRIPTS" ~/.local/bin /usr/local/go/bin 
+pathprepend \
+  "$SCRIPTS" \
+  ~/.local/bin \
+  ~/repos/github.com/$GITUSER/workspace/goroot/bin \
+  /usr/local/go/bin 
 pathappend \
   /usr/local/opt/coreutils/libexec/gnubin \
   /mingw64/bin \
