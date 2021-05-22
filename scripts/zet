@@ -21,14 +21,19 @@ test -z "$GITUSER" && echo "GITUSER not set." && exit 1
 # directory via $ZETDIR, but also allows for compatibility with the
 # KEG/KN toolset.
 
-if test -n "$ZETDIR"; then
-  pdir="$ZETDIR"
-elif test -n "$KN"; then
-  pdir="$KN"
-else
-  pdir="$HOME/.local/share/zet"
-  test ! -d "$pdir" && mkdir -p "$pdir"
-fi
+pdir="$ZETDIR"||"$KN"||"$HOME/.local/share/zet"
+echo "$pdir"
+exit
+#test ! -d "$pdir" && mkdir -p "$pdir"
+
+#if test -n "$ZETDIR"; then
+#  pdir="$ZETDIR"
+#elif test -n "$KN"; then
+#  pdir="$KN"
+#else
+#  pdir="$HOME/.local/share/zet"
+#  test ! -d "$pdir" && mkdir -p "$pdir"
+#fi
 
 EXE=${0##*/}
 test -z "$EXE" && echo "Could not determine name of executable." && exit 1
