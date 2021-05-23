@@ -32,6 +32,7 @@ sub get_ws_list {
 }
 
 sub image {
+    not -d "$wsdir/.config.yml" and return "";
     my $image = `yq e '.image' "$wsdir/.config.yml"`;
     chomp $image;
     return $image;
@@ -94,7 +95,7 @@ sub x_open {
     chomp $username;
     not $username and end "No user name found.";
 
-    my @cmd = (qw(docker run -it --rm --name), $name, '-h', $name );
+    my @cmd = (qw(docker run -it --rm --privileged --name), $name, '-h', $name );
 
     my @ports = qx(yq e '.ports[]' `ws config $name`);
     chomp @ports;
