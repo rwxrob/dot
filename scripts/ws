@@ -14,6 +14,9 @@ for (qw( yq docker id )) {
     not `which $_` and say "Missing dependency: $_" and exit 1;
 }
 
+# attemp to filter out that piece of shit Python yq
+`yq --help` =~ /eval-all.*shell-completion/s or say "Missing GOOD yq." and exit 1;
+
 my $wsdir  = $ENV{'WORKSPACES'}      || "$ENV{'HOME'}/Workspaces";
 my $image  = image() || $ENV{'WORKSPACE_IMAGE'} || 'rwxrob/workspace';
 my $editor = $ENV{'EDITOR'}          || 'vi';
@@ -32,7 +35,6 @@ sub get_ws_list {
 }
 
 sub image {
-    not -d "$wsdir/.config.yml" and return "";
     my $image = `yq e '.image' "$wsdir/.config.yml"`;
     chomp $image;
     return $image;
@@ -91,11 +93,11 @@ sub x_open {
     chomp $confpath;
     not $confpath and end "No config file found.";
 
-    my $username = `yq e .user.name $confpath`;
+    my $username = `yq e .user.name "$confpath"`;
     chomp $username;
     not $username and end "No user name found.";
 
-    my @cmd = (qw(docker run -it --rm --privileged --name), $name, '-h', $name );
+    my @cmd = (qw(docker run -it --rm --name), $name, '-h', $name );
 
     my @ports = qx(yq e '.ports[]' `ws config $name`);
     chomp @ports;
@@ -303,12 +305,17 @@ Pulls the latest current image (see image) if set, otherwise pulls the named ima
 
 Command: create
 
-Creates a directory for each workspace in the parent directory
-indicated by the WORKSPACES environment variable (default
-~/Workspaces) and automatically bind-mounts it as the home directory
-for the workspace user. The `.config/ws/config.yml` file will be
-created within it and used by subsequent switch commands (which
-activate the workspace. A `.config/ws/synced` file will also be created after the skeleton directory has first populated the user home directory. Removing it later will cause the ephemeral workspace image entrypoint to do another sync with whatever the current local image is.
+Creates a directory for each workspace in the parent directory indicated
+by the WORKSPACES environment variable (default ~/Workspaces) and
+automatically bind-mounts it as the home directory for the workspace
+user. The `.config/ws/config.yml` file will be created within it and
+used by subsequent open commands (which activate the workspace).
+A `/var/run/synced` file will also be created after the
+/usr/share/workspace directory has first copied for the user home
+directory (much like /etc/skel). Removing it later will cause the
+ephemeral workspace image entrypoint to do another sync with whatever
+the current local image is replacing everything that it contains with
+copies
 
 During creation the user will be prompted for the following (defaults
 taken from the current user):
@@ -322,12 +329,6 @@ taken from the current user):
 
 The directory within $WORKSPACES is always mounted the user home
 directory. (Hence, "extra mounts")
-
-The initial user home directory is directy mirrored (rsync) from the
-/usr/share/rwxrob/workspace provided by the base image. Any changes to
-home after this initial run will, however, be persistent. For
-substantial base workspace image changes a new workspace may need to be
-created. The ~/.config/ws/synced file is created when the mirror sync completes. Removing it will trigger another sync when the workspace is next opened.
 
 The user and group ID will always match that of the current user. This
 is sufficient for most work situations. When different IDs are required,
