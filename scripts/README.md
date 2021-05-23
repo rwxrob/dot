@@ -1,67 +1,37 @@
 # Scripts
 
-Pilfer as you will, at your own peril.
-
-## LICENSE 
-
-[Licensed under Mozilla Public License Version
-2](https://duck.com/lite?kd=-1&kp=-1&q=Licensed+under+Mozilla+Public+License+Version+2).
-
-## Live-Related Scripts
-
-Script|Purpose
-|:-:|-
-`t`|Change topic on all services, start pomo
-`f`|Clears and prints to screen in large text looping
-`off`|Prints 'off screen" (calls `f`)
-`back`|Prints 'back' with args (calls `f`)
-`muted`|Prints 'no sound, off screen, mentoring' (calls `f`)
-`figl`|Just print stdin to screen (called by `f`)
+Pilfer as you will, but use at your own peril.
 
 ## What's a "shortcut command"?
 
-A *shortcut command* is my alternative to aliases (which do not work with
-subprocesses such as when using [Vim magic](https://rwx.gg/vimagic). You
-will see this term a lot in the commit messages. Usually such a command
-will only be two lines long.
+A *shortcut command* is an alternative to aliases (which do not work
+with subprocesses such as from within an editor session. You will see
+this term a lot in the commit messages. Usually such a command will only
+be two lines long.
+
+## POSIX, Perl, or Python
+
+Even though I have some `bash` still in here, my goal these days is to
+use nothing but POSIX shell, `perl`, and `python3` for everything. POSIX
+shell is the most widely supported (for Dockerfile builds and such) and
+`perl` is the fastest prototyping language on the planet (unless you
+*really* need OOP in which case `python` is the best choice for
+*prototyping*. (Surprisingly enough, `python` and `perl` address
+completely different needs and use cases that rarely *actually* overlap,
+but the world is full of morons who try to argue they are the same.)
 
 ## Perl Power Scripts
+
+Perl was primarily created to replace `sed`, `awk`, `tr`, and `cut` and
+did it so well it became the de facto lingua franca of all server-side
+web development for over two decades.
+
+I really hate `sed` for all the reasons Larry Wall did, but mostly its
+absolutely horrible BRE syntax. Using any of the PCRE variations are
+not POSIX, might as well just use `perl` instead in those cases.
 
 Script|Full|Purpose
 |:-:|:-:|-
 `pie`|`perl -p -i -e`|Inplace edit
 `pae`|`perl -paE`|Replace `sed` and `awk` (prints line)
 `map`|`perl -aE`|Replace `sed` and `awk` (no printing)
-
-## Why no `sed`, `awk`, `tr`, `cut`?
-
-Cuz they are deprecated, slow, old, busted boomer tech. (I don't fucking
-care what your Cybersecurity course or boot camp told you. They are and
-I can prove it.)
-
-You really must not understand shell programming if you are asking this
-question in 2021. But that is understandable because the Internet is
-full of absolutely shitty suggestions. 
-
-The only time these make even remote sense is when working with single
-pipelines from a shell. 
-
-*Never* put these in a modern script unless you have been given an
-absolute directive not to use anything but POSIX shell (in which case,
-by all means, its the only thing you have). But anyone holding you to
-that must have a really good reason since Bash is the default Linux
-shell and Perl has been installed on every single UNIX/Linux OS since
-the year 1996. Perl was designed specifically to make up for the flaws ---
-some security related --- within the alternatives and replace them.
-
-And if you find yourself joining the trendy club of modern morons hating
-on Perl instead of first understanding it you might want [to read
-this](https://rwx.gg/advice/dont/perlhate) before you make a fucking
-fool of yourself.
-
-## Why the one line scripts and not an alias or function?
-
-At one point many of these scripts were functions in a massive `.bashrc`
-file. But they I realized it was easier to share them as stand alone
-scripts and that some of them could be done in POSIX shell allow me to
-share them with Zsh users (who can't use exported functions at all).
