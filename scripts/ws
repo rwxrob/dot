@@ -14,8 +14,8 @@ for (qw( yq docker id )) {
     not `which $_` and say "Missing dependency: $_" and exit 1;
 }
 
-my $image  = $ENV{'WORKSPACE_IMAGE'} || 'docker.io/rwxrob/workspace';
 my $wsdir  = $ENV{'WORKSPACES'}      || "$ENV{'HOME'}/Workspaces";
+my $image  = image() || $ENV{'WORKSPACE_IMAGE'} || 'rwxrob/workspace';
 my $editor = $ENV{'EDITOR'}          || 'vi';
 
 not -d $wsdir and mkdir($wsdir);
@@ -31,7 +31,33 @@ sub get_ws_list {
     return grep !/^(\.\.?|README)/, readdir($dh);
 }
 
-sub x_pull { exec qq{docker pull $image} }
+sub image {
+    my $image = `yq e '.image' "$wsdir/.config.yml"`;
+    chomp $image;
+    return $image;
+}
+
+sub image_exists {
+    my $name = shift;
+    `docker image inspect $name >/dev/null 2>&1`;
+    return $? == 0;
+}
+
+sub x_image {
+    my $name = shift;
+    my $conf = "$wsdir/.config.yml";
+    not $name and say "$image" and return;
+    not image_exists($name) and say "Image '$name' not found. Pull." and return;
+    not -e $conf and `yq e -n '.image="$name"' >| "$conf"` and return;
+    `yq e -i '.image="$name"' "$conf"` and return;
+}
+
+sub x_pull {
+    my $arg = shift;
+    $arg and exec qq{docker pull $arg};
+    exec qq{docker pull $image};
+}
+
 
 sub x_config {
     my $name = shift || x_pick();
@@ -70,7 +96,7 @@ sub x_open {
 
     my @cmd = (qw(docker run -it --rm --name), $name, '-h', $name );
 
-    my @ports = qx(yq e .ports[] `ws config $name`);
+    my @ports = qx(yq e '.ports[]' `ws config $name`);
     chomp @ports;
     if ($ports[0] eq 'all') {
         @cmd = ( @cmd, '--network', 'host' );
@@ -79,7 +105,7 @@ sub x_open {
         map { @cmd = ( @cmd, '-p', $_ ) } @ports;
     }
 
-    my @mounts = qx(yq e .mounts[] `ws config $name`);
+    my @mounts = qx(yq e '.mounts[]' `ws config $name`);
     chomp @mounts;
     unshift @mounts, "/var/run/docker.sock";
     expand \@mounts;
@@ -263,11 +289,16 @@ Workspace Container Management Utility
 
 The ws container workspace management utility provides what most
 engineers, developers, and learners want from a workspace container
-manager with reasonable defaults: a single consistent bind-mount to
-home directory, a few configurable volume and port bindings, and ---
-most importantly --- to be able to *quickly* switch between them and
-keep them up to date with the latest workspace image as new tools are
-added and old ones improved.
+manager with reasonable defaults: a single consistent bind-mount to home
+directory, a few configurable volume and port bindings, and --- most
+importantly --- to be able to *quickly* switch between them and keep
+them up to date with the latest workspace image as new tools are added
+and old ones improved, even use the same workspace with different
+images.
+
+Command: pull
+
+Pulls the latest current image (see image) if set, otherwise pulls the named image from registry.
 
 Command: create
 
@@ -307,10 +338,6 @@ containers in docker itself, not this utility.
 The hostname of the container is automatically set to the name of the
 workspace.
 
-By default the following ports are set (and can be deleted):
-
-  80 8080 8000 3000
-
 Ports and mounts can be specified in shorthand as single values
 without the colon (as well as the normal colon syntax). Separate
 multiple values with spaces. No other validation of port input
@@ -329,11 +356,19 @@ A warning is printed if these do not coincide since usually the host
 docker instance is wanted and not another contained within the
 workspace, but not always.
 
-Command: switch
+Command: config
 
-Switches to the named workspace. This is the default if no known
-command is passed as the first argument in which case the first
-argument it assumed to be the name of the workspace to switch to.
+Prints the path to the configuration file for the given workspace.
+
+Command: edit
+
+Opens the configuration file (see config) for editing.
+
+Command: open
+
+Opens the named workspace (or creates if not found). This is the default
+if no known command is passed as the first argument in which case the
+first argument it assumed to be the name of the workspace to switch to.
 
 Command: rm, remove
 
@@ -343,6 +378,12 @@ prompt. Will delete the directory and named container.
 Command: ls, list
 
 List all workspaces (lexigraphically from WORKSPACES directory).
+
+Command: image
+
+Sets the default image to be used. By default it is rwxrob/workspace but
+it can be set to any image name that has been pulled into the current
+Docker installation.
 
 Bash Tab Completion
 
