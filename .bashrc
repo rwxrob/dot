@@ -180,6 +180,7 @@ type gh &>/dev/null && . <(gh completion -s bash)
 type pandoc &>/dev/null && . <(pandoc --bash-completion)
 type kubectl &>/dev/null && . <(kubectl completion bash)
 type kind &>/dev/null && . <(kind completion bash)
+type yq &>/dev/null && . <(yq shell-completion bash)
 
 if test -x /usr/bin/lesspipe; then
   export LESSOPEN="| /usr/bin/lesspipe %s";
