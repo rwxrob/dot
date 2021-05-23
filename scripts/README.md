@@ -2,6 +2,19 @@
 
 Pilfer as you will, but use at your own peril.
 
+## Installation
+
+Best way to use these is grab them and put them into your own stuff.
+Technically, you are supposed to mention me if you do that (per Apache
+license), but whatever.
+
+The `.bashrc` in this `dot` repo is set to look in
+`~/.local/bin/scripts` for stuff (and sets `$SCRIPTS` to that location)
+but many of these scripts only work if `$SCRIPTS` is pointing to
+something within a GitHub repo. So you might want to override that in
+your `.bash_{personal,private,work}` file (from another repo,
+presumably).
+
 ## What's a "shortcut command"?
 
 A *shortcut command* is an alternative to aliases (which do not work
