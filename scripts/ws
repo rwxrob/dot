@@ -97,7 +97,7 @@ sub x_open {
     chomp $username;
     not $username and end "No user name found.";
 
-    my @cmd = (qw(docker run -it --rm --name), $name, '-h', $name );
+    my @cmd = (qw(docker run -it --rm --privileged --name), $name, '-h', $name );
 
     my @ports = qx(yq e '.ports[]' `ws config $name`);
     chomp @ports;
