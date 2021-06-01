@@ -1,0 +1,4 @@
+#!/bin/sh
+node="$1"
+shift
+exec kubectl exec --stdin --tty "$node" -- "$@"
