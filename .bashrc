@@ -224,7 +224,8 @@ alias scripts='cd $SCRIPTS'
 alias free='free -h'
 alias df='df -h'
 alias top=htop
-alias chmox="chmod +x"
+alias chmox='chmod +x'
+alias sshh='sshpass -f $HOME/.sshpass ssh '
 
 which vim &>/dev/null && alias vi=vim
 
