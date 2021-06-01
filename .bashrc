@@ -182,6 +182,7 @@ for i in ${owncomp[@]}; do complete -C $i $i; done
 type gh &>/dev/null && . <(gh completion -s bash)
 type pandoc &>/dev/null && . <(pandoc --bash-completion)
 type kubectl &>/dev/null && . <(kubectl completion bash)
+type k &>/dev/null && complete -o default -F __start_kubectl k
 type kind &>/dev/null && . <(kind completion bash)
 type yq &>/dev/null && . <(yq shell-completion bash)
 
@@ -205,8 +206,6 @@ export GOPROXY=direct
 export CGO_ENABLED=0
 
 unalias -a
-alias d=docker
-alias k=kubectl
 alias grep='grep -i --colour=auto'
 alias egrep='egrep -i --colour=auto'
 alias fgrep='fgrep -i --colour=auto'
