@@ -14,9 +14,9 @@ esac
 pathappend() {
   for ARG in "$@"; do
     test -d "${ARG}" || continue
-    case ":${PATH}:" in
-    *:${ARG}:*) continue ;;
-    esac
+    PATH=${PATH//:${ARG}:/:}
+    PATH=${PATH/#${ARG}:/}
+    PATH=${PATH/%:${ARG}/}
     export PATH="${PATH:+"${PATH}:"}${ARG}"
   done
 }
@@ -24,9 +24,9 @@ pathappend() {
 pathprepend() {
   for ARG in "$@"; do
     test -d "${ARG}" || continue
-    case ":${PATH}:" in
-    *:${ARG}:*) continue ;;
-    esac
+    PATH=${PATH//:${ARG}:/:}
+    PATH=${PATH/#${ARG}:/}
+    PATH=${PATH/%:${ARG}/}
     export PATH="${ARG}${PATH:+":${PATH}"}"
   done
 }
@@ -34,17 +34,17 @@ pathprepend() {
 # override as needed in .bashrc_{personal,private,work}
 # several utilities depend on SCRIPTS being in a github repo
 export SCRIPTS=~/.local/bin/scripts
-test ! -d "$SCRIPTS" && mkdir -p "$SCRIPTS"
+mkdir -p "$SCRIPTS" &>/dev/null
 
+# remember last arg will be first in path
 pathprepend \
-  "$SCRIPTS" \
+  /usr/local/go/bin \
   ~/.local/bin \
-  /usr/local/go/bin
+  "$SCRIPTS" 
 
 pathappend \
   /usr/local/opt/coreutils/libexec/gnubin \
   /mingw64/bin \
-  /usr/local/tinygo/bin \
   /usr/local/bin \
   /usr/local/sbin \
   /usr/games \
