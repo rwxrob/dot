@@ -225,6 +225,7 @@ alias df='df -h'
 alias top=htop
 alias chmox='chmod +x'
 alias sshh='sshpass -f $HOME/.sshpass ssh '
+alias temp='cd $(mktemp -d)'
 
 which vim &>/dev/null && alias vi=vim
 
