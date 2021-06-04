@@ -226,6 +226,7 @@ alias top=htop
 alias chmox='chmod +x'
 alias sshh='sshpass -f $HOME/.sshpass ssh '
 alias temp='cd $(mktemp -d)'
+alias view='vi -R' # which is usually linked to vim
 
 which vim &>/dev/null && alias vi=vim
 
