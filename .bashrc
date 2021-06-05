@@ -7,9 +7,11 @@ case $- in
 esac
 
 # ----------------------- environment variables ----------------------
+#                           (also see envx)
 
 export GITUSER="$USER"
 export DOTFILES="$HOME/repos/github.com/$GITUSER/dot"
+export GHREPOS="$HOME/repos/github.com/$GITUSER/"
 
 export TERM=xterm-256color
 export HRULEWIDTH=73
@@ -271,6 +273,17 @@ envx() {
 } && export -f envx
 
 test -e ~/.env && envx ~/.env 
+
+newcmd() { 
+  name="$1"
+  test -z "$name" && echo "usage: newcmd <name>" && return 1
+  test -z "$GHREPOS" && echo "GHREPOS not set" && return 1
+  test ! -d "$GHREPOS" && echo "Not found: $GHREPOS" && return 1
+  test -e "cmdbox-$name" && echo "exists: cmdbox-$name" && return 1
+  cd "$GHREPOS"
+  gh repo create -p rwxrob/cmdbox-_foo "cmdbox-$name"
+  cd "cmdbox-$name"
+} && export -f newcmd
 
 # -------------------- personalized configuration --------------------
 
