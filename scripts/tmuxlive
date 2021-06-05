@@ -1,3 +1,3 @@
 #!/bin/sh
 #exec /usr/bin/tmux -L live -f ~/.tmux-live.conf new -s live -n parent \ weechat \; split-window \; resize-pane -t 1 -y 17 \; split-window -h \; resize-pane -x 16 \; swap-pane -s 1 -t 2 \; send -t 3 "blankpane" Enter
-exec /usr/bin/tmux -L live -f ~/.tmux-live.conf new -s live -n parent \ weechat \; split-window \; resize-pane -t 1 -y 17 \; swap-pane -s 1 -t 2
+exec /usr/bin/tmux -L live -u -f ~/.tmux-live.conf new -s live -n parent \ weechat \; split-window \; resize-pane -t 1 -y 17 \; swap-pane -s 1 -t 2
