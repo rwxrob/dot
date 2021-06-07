@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
 # If you prefer to not have dependencies on the helper commands for the
@@ -28,7 +28,11 @@ title() {
   if test "${1%% *}" = default; then
     title="$TITLE"
   else
-    title="$* [$(isosec)]"
+    if test ${1:0:1} = '['; then
+      title="$*"
+    else
+      title="$* [$(isosec)]"
+    fi
   fi
   resp=$(curl -sS -X PATCH "https://api.twitch.tv/helix/channels?broadcaster_id=$USERID" \
     -H "Authorization: Bearer $TOKEN" \

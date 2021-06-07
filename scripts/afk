@@ -1,2 +1,13 @@
-#!/bin/sh
-exec f away for a while
+#!/bin/bash
+
+trap "setterm --cursor on; stty echo; trap -- - SIGINT SIGTERM" SIGTERM SIGINT
+
+away="[Away Since $(now)]"
+chat "$away"
+twitch title "$away"
+pomo stop
+fishies
+topics
+topic="$(tail -1 ~/.topics)"
+chat "[Back to '$topic']"
+twitch title "$topic"

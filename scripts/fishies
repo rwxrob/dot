@@ -2,6 +2,13 @@
 
 `which keyoff` and `keyoff`;
 
+sub handle {
+	exit(0);
+}
+
+$SIG{"TERM"} = \&handle;
+$SIG{"INT"} = \&handle;
+
 #
 # BUT FIRST:
 # Keep in mind that you probably have to install libcurses-perl
