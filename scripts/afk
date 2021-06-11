@@ -5,6 +5,7 @@ trap "setterm --cursor on; stty echo; trap -- - SIGINT SIGTERM" SIGTERM SIGINT
 away="[Away Since $(now)]"
 chat "$away"
 twitch title "$away"
+echo "$away" > ~/.tmux-live-right
 pomo stop
 fishies
 topics
