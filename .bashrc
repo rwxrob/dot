@@ -23,6 +23,14 @@ export PYTHONDONTWRITEBYTECODE=1
 
 test -d ~/.vim/spell && export VIMSPELL=(~/.vim/spell/*.add)
 
+export GOPRIVATE="github.com/$GITUSER/*,gitlab.com/$GITUSER/*"
+export GOPATH=~/.local/share/go
+export GOBIN=~/.local/bin
+export GOPROXY=direct
+export CGO_ENABLED=0
+
+# ------------------------------- pager ------------------------------
+
 if test -x /usr/bin/lesspipe; then
   export LESSOPEN="| /usr/bin/lesspipe %s";
   export LESSCLOSE="/usr/bin/lesspipe %s %s";
@@ -36,11 +44,15 @@ export LESS_TERMCAP_so="[34m" # blue
 export LESS_TERMCAP_ue="" # "0m"
 export LESS_TERMCAP_us="[4m"  # underline
 
-export GOPRIVATE="github.com/$GITUSER/*,gitlab.com/$GITUSER/*"
-export GOPATH=~/.local/share/go
-export GOBIN=~/.local/bin
-export GOPROXY=direct
-export CGO_ENABLED=0
+# ----------------------------- dircolors ----------------------------
+
+if which dircolors &>/dev/null; then
+  if test -r ~/.dircolors; then
+    eval "$(dircolors -b ~/.dircolors)"
+  else
+    eval "$(dircolors -b)"
+  fi
+fi
 
 # ------------------------------- path -------------------------------
 
@@ -198,16 +210,6 @@ PROMPT_COMMAND="__ps1"
 # ----------------------------- keyboard -----------------------------
 
 test -n "$DISPLAY" && setxkbmap -option caps:escape &>/dev/null
-
-# ----------------------------- dircolors ----------------------------
-
-if which dircolors &>/dev/null; then
-  if test -r ~/.dircolors; then
-    eval "$(dircolors -b ~/.dircolors)"
-  else
-    eval "$(dircolors -b)"
-  fi
-fi
 
 # ------------- source external dependencies / completion ------------
 
