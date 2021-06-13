@@ -1,6 +1,4 @@
 
-test -e /etc/bashrc && source /etc/bashrc
-
 case $- in
 *i*) ;; # interactive
 *) return ;; 
@@ -111,7 +109,7 @@ export CDPATH=.:\
 # ------------------------ bash shell options ------------------------
 
 shopt -s checkwinsize
-shopt -s expand_aliases
+#shopt -s expand_aliases
 shopt -s globstar
 shopt -s dotglob
 shopt -s extglob
