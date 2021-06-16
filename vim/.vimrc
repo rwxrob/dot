@@ -109,7 +109,6 @@ set fo+=m   " multi-byte character line break support
 set fo+=M   " don't add space before or after multi-byte char
 set fo-=B   " don't add space between two multi-byte chars
 set fo+=1   " don't break a line after a one-letter word
-set shm+=T   " truncate all messages instead of 'Press Enter'
 
 " requires PLATFORM env variable set (in ~/.bashrc)
 if $PLATFORM == 'mac'
@@ -183,13 +182,12 @@ au FileType markdown,pandoc hi Operator ctermfg=yellow ctermbg=NONE
 nnoremap confe :e $HOME/.vimrc<CR>
 nnoremap confr :source $HOME/.vimrc<CR>
 
-set ruf=%50(%=%#LineNr#%.50F\ [%{strlen(&ft)?&ft:'none'}]\ %l:%c\ %p%%%)
+set ruf=%30(%=%#LineNr#%.50F\ [%{strlen(&ft)?&ft:'none'}]\ %l:%c\ %p%%%)
 
 " only load plugins if Plug detected
 if filereadable(expand("~/.vim/autoload/plug.vim"))
 
   call plug#begin('~/.vimplugins')
-  "Plug 'z0mbix/vim-shfmt' " fucking hate joining \ lines
   Plug 'sheerun/vim-polyglot'
   Plug 'vim-pandoc/vim-pandoc'
   Plug 'rwxrob/vim-pandoc-syntax-simple'
@@ -202,16 +200,6 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   Plug 'morhetz/gruvbox'
   Plug 'roxma/vim-tmux-clipboard'
   call plug#end()
-
-  let g:shfmt_fmt_on_save = 1
-
-  " Even though the POSIX shell standard and clean here-documents
-  " require use of tabs, the amount of YAML (which forbids tabs) and
-  " shell these days really mandates this. Otherwise, people will be
-  " cutting and pasting in their shitty graphic editors and whine about
-  " why they have tabs with their spaces in their YAML files. And most
-  " Vim users don't even know what the fuck `set list` even does.
-  let g:shfmt_extra_args = '-i 2'
 
   " pandoc
   let g:pandoc#formatting#mode = 'h' " A'
@@ -246,7 +234,6 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   au FileType go nmap <leader>c :GoCoverageToggle<CR>
   au FileType go nmap <leader>i :GoInfo<CR>
   au FileType go nmap <leader>l :GoMetaLinter!<CR>
-
 else
   autocmd vimleavepre *.go !gofmt -w % " backup if fatih fails
 endif
