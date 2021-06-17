@@ -18,11 +18,11 @@ availk=$((availb / 1024))
 availm=$((availk / 1024))
 availg=$(echo "scale=1; $availm / 1024" | bc)
 
-echo "memory.capacity_in_bytes:    $memb"
-echo "memory.usage_in_bytes:       $used"
-echo "memory.total_inactive_file:  $inactive"
-echo "memory.working_set:          $working"
-echo "memory.available_in_bytes:   $availb"
-echo "memory.available_in_kb:      $availk"
-echo "memory.available_in_mb:      $availm"
-echo "memory.available_in_gb:      $availg"
+echo "capacity:   $memb"
+echo "usage:      $used"
+echo "inactive:   $inactive"
+echo "working:    $working"
+echo "available:  $availb"
+echo "availableK: $availk"
+echo "availableM: $availm"
+echo "availableG: $availg"
