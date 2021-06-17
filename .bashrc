@@ -109,7 +109,7 @@ export CDPATH=.:\
 # ------------------------ bash shell options ------------------------
 
 shopt -s checkwinsize
-#shopt -s expand_aliases
+shopt -s expand_aliases
 shopt -s globstar
 shopt -s dotglob
 shopt -s extglob
@@ -211,7 +211,7 @@ test -n "$DISPLAY" && setxkbmap -option caps:escape &>/dev/null
 
 # ------------- source external dependencies / completion ------------
 
-owncomp=(pdf md yt gl kn auth pomo config sshkey ws ./build build ./setup)
+owncomp=(pdf md yt gl kn auth pomo config sshkey ws ./build build b ./setup)
 for i in ${owncomp[@]}; do complete -C $i $i; done
 
 type gh &>/dev/null && . <(gh completion -s bash)
@@ -245,13 +245,17 @@ alias chmox='chmod +x'
 alias sshh='sshpass -f $HOME/.sshpass ssh '
 alias temp='cd $(mktemp -d)'
 alias view='vi -R' # which is usually linked to vim
+alias c='printf "\e[H\e[2J"'
+alias clear='printf "\e[H\e[2J"'
 
 which vim &>/dev/null && alias vi=vim
 
 # ----------------------------- functions ----------------------------
 
-clear() { printf "\e[H\e[2J"; } && export -f clear
-c() { printf "\e[H\e[2J"; } && export -f c
+build() { ./build "$@"; } && export -f build
+b() { build "$@"; } && export -f b
+d() { docker "$@"; } && export -f d
+k() { kubectl "$@"; } && export -f k
 
 envx() {
   local envfile="$1"
