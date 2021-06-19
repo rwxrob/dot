@@ -1,19 +1,19 @@
 #!/bin/sh
 
-if [ -z "$PDFDIR" ];then
+if test -z "$PDFDIR";then
   warn 'The `PDFDIR` env var not set.'
   exit 0
 fi
 
-list () {
+list() {
   find "$PDFDIR" -name "*.pdf" -exec basename {} \;
 }
 
-usage () {
+usage() {
   usageln 'list|usage|<pdf>'
 }
 
-if [ -n "$COMP_LINE" ]; then
+if test -n "$COMP_LINE"; then
   prefix=$(echo "$COMP_LINE" | cut -d " " -f 2)
   list | grep ^$prefix
   exit 0
