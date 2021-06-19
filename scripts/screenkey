@@ -14,7 +14,7 @@
   -t 4 \
   --compr-cnt 1 \
   -p fixed \
-  -g "500x100+3100+0" \
+  -g "600x100+3000+0" \
   -f "UbuntuMono Nerd Font" \
   --font-color "#EBDBB2" \
   --bg-color "#222222" \
