@@ -1,0 +1,4 @@
+#!/bin/sh
+# TODO build this into a utility that can grep the bookmarks and print
+# as Markdown Links by default.
+exec tail -1 ~/.lynx_bookmarks.html | pandoc -f html -t markdown

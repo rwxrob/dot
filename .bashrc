@@ -55,12 +55,13 @@ fi
 # ------------------------------- path -------------------------------
 
 pathappend() {
-  for ARG in "$@"; do
-    test -d "${ARG}" || continue
-    PATH=${PATH//:${ARG}:/:}
-    PATH=${PATH/#${ARG}:/}
-    PATH=${PATH/%:${ARG}/}
-    export PATH="${PATH:+"${PATH}:"}${ARG}"
+  declare arg
+  for arg in "$@"; do
+    test -d "${arg}" || continue
+    PATH=${PATH//:${arg}:/:}
+    PATH=${PATH/#${arg}:/}
+    PATH=${PATH/%:${arg}/}
+    export PATH="${PATH:+"${PATH}:"}${arg}"
   done
 }
 
