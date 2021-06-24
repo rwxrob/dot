@@ -1,4 +1,13 @@
-#!/bin/sh
-# TODO build this into a utility that can grep the bookmarks and print
-# as Markdown Links by default.
-exec tail -1 ~/.lynx_bookmarks.html | pandoc -f html -t markdown
+#!/usr/bin/bash
+
+count=1
+if test -n "$1"; then
+    count="$1"
+fi
+
+IFS=$'\n'
+html=(`tail -"${count}" ~/.lynx_bookmarks.html | pandoc -f html -t markdown --wrap=none`)
+
+for line in ${html[@]}; do
+    printf "* $line\n"
+done
