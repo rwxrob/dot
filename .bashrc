@@ -9,6 +9,7 @@ esac
 
 export GITUSER="$USER"
 export DOTFILES="$HOME/repos/github.com/$GITUSER/dot"
+export SNIPPETS="$HOME/repos/github.com/$GITUSER/dot/snippets"
 export GHREPOS="$HOME/repos/github.com/$GITUSER/"
 
 export TERM=xterm-256color
@@ -103,6 +104,7 @@ pathappend \
 export CDPATH=.:\
 ~/repos/github.com:\
 ~/repos/github.com/$GITUSER:\
+~/repos/github.com/$GITUSER/dot:\
 ~/repos:\
 /media/$USER:\
 ~
@@ -239,6 +241,7 @@ alias mkdirisosec='d=$(isosec);mkdir $d; cd $d'
 alias main='cd $(work main)'
 alias dot='cd $DOTFILES'
 alias scripts='cd $SCRIPTS'
+alias snippets='cd $SNIPPETS'
 alias free='free -h'
 alias df='df -h'
 alias top=htop
