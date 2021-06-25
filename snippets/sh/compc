@@ -7,27 +7,31 @@
 # name of it to the commands array declaration at the top of the script.
 # Then add complete -C foo foo (or something like it) to your bashrc.
 
-declare -a commands=(usage)
-subcmd="${1:-usage}"; shift 2>/dev/null
+declare -a COMMANDS=(foo usage)
+CMD="${1:-usage}"; shift 2>/dev/null
 
-# ----------------------------- commands -----------------------------
+# ----------------------------- COMMANDS -----------------------------
+
+foo() {
+    echo "would foo"
+}
 
 usage() {
-    printf "would print usage for: ${0##*/}\n"
+    local cmds="${COMMANDS[@]}"
+    printf "usage: ${0##*/} (${cmds// /|})\n"
 }
 
 # ------------------------ complete -C foo foo -----------------------
 
-for i in ${commands[@]}; do
-    if [[ "${i}" == "${subcmd}" ]]; then
-        "${subcmd}" "$@"
-        exit 0
+for c in ${COMMANDS[@]}; do
+    if [[ $c == $CMD ]]; then
+        "$CMD" "$@"
+        exit $?
     fi
 done
 
-if [ -n "${COMP_LINE}" ]; then
-    for cmd in ${commands[@]}; do 
-        [[ "${cmd:0:${#1}}" == "$1" ]] && echo "${cmd}"
+if [[ -n $COMP_LINE ]]; then
+    for c in ${COMMANDS[@]}; do 
+        [[ ${c:0:${#1}} == $1 ]] && echo "$c"
     done
-    exit 0
 fi
