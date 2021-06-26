@@ -9,5 +9,7 @@ IFS=$'\n'
 html=($(tail -"${count}" ~/.lynx_bookmarks.html | pandoc -f html -t markdown --wrap=none))
 
 for line in ${html[@]}; do
-   echo "* $line"
+   line=${line/](/] <}
+   line=${line/%)/>}
+   echo "$line"
 done
