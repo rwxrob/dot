@@ -1,4 +1,4 @@
 #!/bin/sh
-echo Local: $(git tag)
-echo Remote: $(git ls-remote --tags | pae 's,.*/,,')
+echo Local: $(git tag | semver-sort)
+echo Remote: $(git ls-remote --tags | pae 's,.*/,,' | semver-sort)
 
