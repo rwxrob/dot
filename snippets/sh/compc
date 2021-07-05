@@ -23,15 +23,17 @@ usage() {
 
 # ------------------------ complete -C foo foo -----------------------
 
+
+if [[ -n $COMP_LINE ]]; then
+    for c in ${COMMANDS[@]}; do 
+        [[ ${c:0:${#1}} == $1 ]] && echo "$c"
+    done
+    exit 0
+fi
+
 for c in ${COMMANDS[@]}; do
     if [[ $c == $CMD ]]; then
         "$CMD" "$@"
         exit $?
     fi
 done
-
-if [[ -n $COMP_LINE ]]; then
-    for c in ${COMMANDS[@]}; do 
-        [[ ${c:0:${#1}} == $1 ]] && echo "$c"
-    done
-fi
