@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+exec go install sigs.k8s.io/kind@latest
+
+
