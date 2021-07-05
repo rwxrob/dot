@@ -221,8 +221,10 @@ type gh &>/dev/null && . <(gh completion -s bash)
 type pandoc &>/dev/null && . <(pandoc --bash-completion)
 type kubectl &>/dev/null && . <(kubectl completion bash)
 type k &>/dev/null && complete -o default -F __start_kubectl k
+type d &>/dev/null && complete -o default -F _docker d
 type kind &>/dev/null && . <(kind completion bash)
 type yq &>/dev/null && . <(yq shell-completion bash)
+type helm &>/dev/null && . <(helm completion bash)
 
 # ------------------------------ aliases -----------------------------
 
@@ -256,10 +258,9 @@ which vim &>/dev/null && alias vi=vim
 
 # ----------------------------- functions ----------------------------
 
-build() { ./build "$@"; } && export -f build
-b() { build "$@"; } && export -f b
-d() { docker "$@"; } && export -f d
-k() { kubectl "$@"; } && export -f k
+alias b=./build
+alias d=docker
+alias k=kubectl
 
 envx() {
   local envfile="$1"
