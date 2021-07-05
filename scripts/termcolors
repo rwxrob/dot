@@ -32,7 +32,7 @@ if test -t 1; then
   blink="\e[5m"
   reset="\e[0m"
 fi
-
+echo POSIX
 printf "${black}black=\"\\\e[30m\"
 ${red}red=\"\\\e[31m\"
 ${green}green=\"\\\e[32m\"
@@ -42,4 +42,16 @@ ${magenta}magenta=\"\\\e[35m\"
 ${cyan}cyan=\"\\\e[36m\"
 ${white}white=\"\\\e[37m\"
 reset=\"\\\e[0m\"
+"
+echo
+echo BASH:
+printf "${black}black=$'\\\e[30m'
+${red}red=$'\\\e[31m'
+${green}green=$'\\\e[32m'
+${yellow}yellow=$'\\\e[33m'
+${blue}blue=$'\\\e[34m'
+${magenta}magenta=$'\\\e[35m'
+${cyan}cyan=$'\\\e[36m'
+${white}white=$'\\\e[37m'
+reset=$'\\\e[0m'
 "
