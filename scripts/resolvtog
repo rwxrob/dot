@@ -1,0 +1,47 @@
+#!/usr/bin/bash
+
+# assumes only two NET: entries and toggles with comments
+
+toggle() {
+  in_net=""
+  current_net=""
+
+  while read -r line; do
+
+    # net
+    if [[ $line =~ ^#\ *NET: ]];then
+      current_net=${line#*:}
+      in_net=y
+      echo "$line"
+      continue
+    fi
+
+    # end net
+    if [[ -n $in_net && $line =~ ^\ *$ ]]; then
+      in_net=""
+      current_net=""
+      echo "$line"
+      continue
+    fi
+
+    # if in net and disabled, enable
+    if [[ -n $in_net && $line =~ ^# ]]; then
+      echo "${line##\#}"
+      continue
+    fi
+
+    # if in net and enabled, disable
+    if [[ -n $in_net && ! $line =~ ^# ]]; then
+      echo "#${line}"
+      continue
+    fi
+
+    echo "$line"
+
+  done < /etc/resolv.conf
+}
+
+tmpfile=$(mktemp)
+toggle >| "$tmpfile"
+sudo cp "$tmpfile" /etc/resolv.conf
+
