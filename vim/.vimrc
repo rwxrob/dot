@@ -25,18 +25,22 @@ set tabstop=2
 "#######################################################################
 
 set softtabstop=2
+
+" mostly used with >> and <<
 set shiftwidth=2
+
 set smartindent
+
 set smarttab
 
 if v:version >= 800
-  " stop vim from silently fucking with files that it shouldn't
+  " stop vim from silently messing with files that it shouldn't
   set nofixendofline
 
   " better ascii friendly listchars
   set listchars=space:*,trail:*,nbsp:*,extends:>,precedes:<,tab:\|>
 
-  " i fucking hate automatic folding
+  " i hate automatic folding
   set foldmethod=manual
   set nofoldenable
 endif
@@ -44,11 +48,11 @@ endif
 " mark trailing spaces as errors
 match ErrorMsg '\s\+$'
 
-" replace tabs with spaces automatically
-set expandtab
-
 " enough for line numbers + gutter within 80 standard
 set textwidth=72
+
+" replace tabs with spaces automatically
+set expandtab
 
 " disable relative line numbers, remove no to sample it
 set norelativenumber
@@ -198,7 +202,12 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   Plug 'PProvost/vim-ps1'
   Plug 'tpope/vim-fugitive'
   Plug 'morhetz/gruvbox'
+  "Plug 'frazrepo/vim-rainbow'
   call plug#end()
+
+  " rainbox
+  " au FileType c,cpp,objc,objcpp call rainbow#load() " by type or ...
+  let g:rainbow_active = 1                            " globally
 
   " pandoc
   let g:pandoc#formatting#mode = 'h' " A'
@@ -237,19 +246,18 @@ else
   autocmd vimleavepre *.go !gofmt -w % " backup if fatih fails
 endif
 
+
 "autocmd vimleavepre *.md !perl -p -i -e 's,(?<!\[)my `(\w+)` (package|module|repo|command|utility),[my `\1` \2](https://gitlab.com/rwxrob/\1),g' %
 
 " fill in empty markdown links with duck.com search
 " [some thing]() -> [some thing](https://duck.com/lite?kae=t&q=some thing)
 " s,/foo,/bar,g
-autocmd vimleavepre *.md !perl -p -i -e 's,\[([^\]]+)\]\(\),[\1](https://duck.com/lite?kd=-1&kp=-1&q=\1),g' %
+"autocmd vimleavepre *.md !perl -p -i -e 's,\[([^\]]+)\]\(\),[\1](https://duck.com/lite?kd=-1&kp=-1&q=\1),g' %
+
+autocmd BufWritePost *.md silent !toemoji %
 
 " fill in anything beginning with @ with a link to twitch to it
-"autocmd vimleavepre *.md !perl -p -i -e 's, @(\w+), [\\@\1](https://twitch.tv/\1),g' %
-
-" if you are gonna visual, might as well...
-vmap < <gv
-vmap > >gv
+autocmd vimleavepre *.md !perl -p -i -e 's, @(\w+), [\\@\1](https://twitch.tv/\1),g' %
 
 " make Y consitent with D and C (yank til end)
 map Y y$
@@ -272,8 +280,8 @@ endfun
 "autocmd FileType perl autocmd BufWritePre <buffer> call s:Perltidy()
 
 " force some file names to be specific file type
-au bufnewfile,bufRead *.bash* set ft=sh
-au bufnewfile,bufRead *.pegn set ft=config
+au bufnewfile,bufRead *.bash* set ft=bash
+au bufnewfile,bufRead *.{peg,pegn} set ft=config
 au bufnewfile,bufRead *.profile set filetype=sh
 au bufnewfile,bufRead *.crontab set filetype=crontab
 au bufnewfile,bufRead *ssh/config set filetype=sshconfig
@@ -314,18 +322,25 @@ map <F12> :set fdm=indent<CR>
 nmap <leader>2 :set paste<CR>i
 
 " disable arrow keys (vi muscle memory)
-noremap <up> :echoerr "Umm, use k instead"<CR>
-noremap <down> :echoerr "Umm, use j instead"<CR>
-noremap <left> :echoerr "Umm, use h instead"<CR>
-noremap <right> :echoerr "Umm, use l instead"<CR>
-inoremap <up> <NOP>
-inoremap <down> <NOP>
-inoremap <left> <NOP>
-inoremap <right> <NOP>
+"noremap <up> :echoerr "Umm, use k instead"<CR>
+"noremap <down> :echoerr "Umm, use j instead"<CR>
+"noremap <left> :echoerr "Umm, use h instead"<CR>
+" noremap <right> :echoerr "Umm, use l instead"<CR>
+" inoremap <up> <NOP>
+" inoremap <down> <NOP>
+" inoremap <left> <NOP>
+" inoremap <right> <NOP>
+"
+" better use of arrow keys, number increment/decrement
+nnoremap <up> <C-a>
+nnoremap <down> <C-x>
 
 " Better page down and page up
 noremap <C-n> <C-d>
 noremap <C-p> <C-b>
+
+" Set TMUX window name to name of file
+"au fileopened * !tmux rename-window TESTING
 
 " read personal/private vim configuration (keep last to override)
 set rtp^=~/.vimpersonal

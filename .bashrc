@@ -212,20 +212,6 @@ PROMPT_COMMAND="__ps1"
 
 test -n "$DISPLAY" && setxkbmap -option caps:escape &>/dev/null
 
-# ------------- source external dependencies / completion ------------
-
-owncomp=(pdf md yt gl kn auth pomo config sshkey ws ./build build b ./setup)
-for i in ${owncomp[@]}; do complete -C $i $i; done
-
-type gh &>/dev/null && . <(gh completion -s bash)
-type pandoc &>/dev/null && . <(pandoc --bash-completion)
-type kubectl &>/dev/null && . <(kubectl completion bash)
-type k &>/dev/null && complete -o default -F __start_kubectl k
-type d &>/dev/null && complete -o default -F _docker d
-type kind &>/dev/null && . <(kind completion bash)
-type yq &>/dev/null && . <(yq shell-completion bash)
-type helm &>/dev/null && . <(helm completion bash)
-
 # ------------------------------ aliases -----------------------------
 
 unalias -a
@@ -258,9 +244,12 @@ which vim &>/dev/null && alias vi=vim
 
 # ----------------------------- functions ----------------------------
 
-alias b=./build
-alias d=docker
-alias k=kubectl
+# these work with subshells, aliases do not (ex: watch k get pods)
+
+build(){ exec ./build "$@"; } && export build
+b(){ exec ./build "$@"; } && export b
+d(){ exec docker "$@"; } && export d
+k(){ exec kubectl "$@"; } && export k
 
 envx() {
   local envfile="$1"
@@ -271,7 +260,7 @@ envx() {
     fi
     envfile=~/.env
   fi
-  while IFS= read -r line; do
+  while IFS=$'\n' read -r line; do
     name=${line%%=*}
     value=${line#*=}
     if [[ -z "${name}" || $name =~ ^# ]]; then
@@ -293,6 +282,23 @@ newcmd() {
   gh repo create -p rwxrob/cmdbox-_foo "cmdbox-$name"
   cd "cmdbox-$name"
 } && export -f newcmd
+
+# ------------- source external dependencies / completion ------------
+
+owncomp=(pdf md yt gl kn auth pomo config sshkey ws ./build build b ./setup)
+for i in ${owncomp[@]}; do complete -C $i $i; done
+
+type gh &>/dev/null && . <(gh completion -s bash)
+type pandoc &>/dev/null && . <(pandoc --bash-completion)
+type kubectl &>/dev/null && . <(kubectl completion bash)
+type kind &>/dev/null && . <(kind completion bash)
+type yq &>/dev/null && . <(yq shell-completion bash)
+type helm &>/dev/null && . <(helm completion bash)
+type docker &>/dev/null && . ~/.local/share/docker/completion
+
+type k &>/dev/null && complete -o default -F __start_kubectl k
+
+
 
 # -------------------- personalized configuration --------------------
 

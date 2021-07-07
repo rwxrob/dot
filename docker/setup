@@ -1,0 +1,3 @@
+#!/usr/bin/bash
+mkdir -p ~/.local/share/docker
+ln -fs "$PWD/completion" ~/.local/share/docker/completion
