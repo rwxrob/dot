@@ -294,7 +294,7 @@ type kubectl &>/dev/null && . <(kubectl completion bash)
 type kind &>/dev/null && . <(kind completion bash)
 type yq &>/dev/null && . <(yq shell-completion bash)
 type helm &>/dev/null && . <(helm completion bash)
-type docker &>/dev/null && . ~/.local/share/docker/completion
+type docker &>/dev/null && . ~/.local/share/docker/completion # with d
 
 type k &>/dev/null && complete -o default -F __start_kubectl k
 
