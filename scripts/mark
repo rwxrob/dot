@@ -1,16 +1,19 @@
 #!/bin/bash
 
-export red=$'\033[38;2;255;0;0m'
-export yellow=$'\033[38;2;255;255;0m'
-export magen=$'\033[38;2;255;0;255m'
-export cyan=$'\033[38;2;0;255;255m'
-export reset=$'\033[0m'
+export black=$'\e[30m'
+export red=$'\e[31m'
+export green=$'\e[32m'
+export yellow=$'\e[33m'
+export blue=$'\e[34m'
+export magenta=$'\e[35m'
+export cyan=$'\e[36m'
+export white=$'\e[37m'
+export reset=$'\e[0m'
 
 # Minimal packrat parsing expression grammar (PEG):
 # 
 #   Mark      <- Span* !.
-#   Span      <- Plain / StrongEm / Strong / Emphasis / Link / Code
-#   StrongEm  <- '***' .* '***'
+#   Span      <- StrongEm / Strong / Emphasis / Link / Code / Plain
 #   StrongEm  <- '***' .* '***'
 #   Strong    <- '**' .* '**'
 #   Emphasis  <- '*' .* '*'
@@ -26,11 +29,11 @@ export reset=$'\033[0m'
 # There's no character escape support because it isn't needed for most
 # all use cases here. 
 
-export md_strongem=$red     #  ***strongem***
-export md_strong=$yellow    #  **strong**
-export md_emphasis=$magen   #  *emphasis*
-export md_code=$cyan        #  `code`
-export md_plain=''          #  plain
+export md_strongem=$red       #  ***strongem***
+export md_strong=$yellow      #  **strong**
+export md_emphasis=$magenta   #  *emphasis*
+export md_code=$cyan          #  `code`
+export md_plain=''            #  plain
 
 mark () {
   declare inemphasis instrong instrongem incode indquote inquote inlink i
