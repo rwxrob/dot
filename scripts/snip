@@ -1,0 +1,27 @@
+#!/usr/bin/bash
+
+[[ -z $SNIPPETS ]] && echo "SNIPPETS directory undefined" && exit 1
+
+snip() {
+    local name="$1"
+    shift
+    local path="$SNIPPETS/$name"
+    if [[ -r $path ]]; then
+        local buf="$(<$path)"
+        local -i n=1
+        if [[ $# > 0 ]]; then
+            for arg in $@;do
+                buf=${buf//\{$n\}/$arg}
+                ((n++))
+            done
+        else
+            while IFS=$'\n' read -r argline; do 
+                IFS=" " snip $name $argline
+            done
+            return
+        fi
+        echo "$buf"
+    fi
+}
+
+snip "$@"

@@ -281,6 +281,7 @@ endfun
 
 " force some file names to be specific file type
 au bufnewfile,bufRead *.bash* set ft=bash
+au bufnewfile,bufRead $SNIPPETS/go/* set ft=go
 au bufnewfile,bufRead *.{peg,pegn} set ft=config
 au bufnewfile,bufRead *.profile set filetype=sh
 au bufnewfile,bufRead *.crontab set filetype=crontab

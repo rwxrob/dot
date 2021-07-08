@@ -298,8 +298,6 @@ type docker &>/dev/null && . ~/.local/share/docker/completion # with d
 
 type k &>/dev/null && complete -o default -F __start_kubectl k
 
-
-
 # -------------------- personalized configuration --------------------
 
 test -r ~/.bash_personal && source ~/.bash_personal
