@@ -244,13 +244,6 @@ which vim &>/dev/null && alias vi=vim
 
 # ----------------------------- functions ----------------------------
 
-# these work with subshells, aliases do not (ex: watch k get pods)
-
-build(){ ./build "$@"; } && export build
-b(){ ./build "$@"; } && export b
-d(){ docker "$@"; } && export d
-k(){ kubectl "$@"; } && export k
-
 envx() {
   local envfile="$1"
   if test ! -e "$envfile" ; then
