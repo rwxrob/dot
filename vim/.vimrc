@@ -279,9 +279,18 @@ fun! s:Perltidy()
 endfun
 "autocmd FileType perl autocmd BufWritePre <buffer> call s:Perltidy()
 
-" force some file names to be specific file type
-au bufnewfile,bufRead *.bash* set ft=bash
+" force some files to be specific file type
+au bufnewfile,bufRead $SNIPPETS/md/* set ft=pandoc
+au bufnewfile,bufRead $SNIPPETS/sh/* set ft=sh
+au bufnewfile,bufRead $SNIPPETS/bash/* set ft=bash
 au bufnewfile,bufRead $SNIPPETS/go/* set ft=go
+au bufnewfile,bufRead $SNIPPETS/c/* set ft=c
+au bufnewfile,bufRead $SNIPPETS/html/* set ft=html
+au bufnewfile,bufRead $SNIPPETS/css/* set ft=css
+au bufnewfile,bufRead $SNIPPETS/js/* set ft=javascript
+au bufnewfile,bufRead $SNIPPETS/python/* set ft=python
+au bufnewfile,bufRead $SNIPPETS/perl/* set ft=perl
+au bufnewfile,bufRead *.bash* set ft=bash
 au bufnewfile,bufRead *.{peg,pegn} set ft=config
 au bufnewfile,bufRead *.profile set filetype=sh
 au bufnewfile,bufRead *.crontab set filetype=crontab
