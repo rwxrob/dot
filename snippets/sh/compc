@@ -6,17 +6,20 @@
 # use it simply add a function with the additional command and add the
 # name of it to the commands array declaration at the top of the script.
 # Then add complete -C foo foo (or something like it) to your bashrc.
+# Begin functions with underscore to allow useful command names to be
+# used that would otherwise conflict with existing systam and bash
+# keywords.
 
 declare -a COMMANDS=(foo usage)
 CMD="${1:-usage}"; shift 2>/dev/null
 
 # ----------------------------- COMMANDS -----------------------------
 
-foo() {
+_foo() {
     echo "would foo"
 }
 
-usage() {
+_usage() {
     local cmds="${COMMANDS[@]}"
     printf "usage: ${0##*/} (${cmds// /|})\n"
 }
@@ -33,7 +36,7 @@ fi
 
 for c in ${COMMANDS[@]}; do
     if [[ $c == $CMD ]]; then
-        "$CMD" "$@"
+        "_$CMD" "$@"
         exit $?
     fi
 done
