@@ -1,0 +1,32 @@
+#!/usr/bin/bash
+
+[[ -z "$PDFS" ]] && echo 'PDFS dir path not set' && exit 1
+
+list() {
+  find "$PDFS" -name "*.pdf" -exec basename {} \;
+}
+
+usage() {
+  echo 'usage: list|usage|<pdf>'
+}
+
+if test -n "$COMP_LINE"; then
+  prefix=$(echo "$COMP_LINE" | cut -d " " -f 2)
+  list | grep ^$prefix
+  exit 0
+fi
+
+case "$1" in
+  list) list; exit ;;
+  usage) usage; exit ;;
+esac
+
+# actually we have a pdf name, not a command
+# if gotten this far
+pdfpath="$PDFS/$1"
+
+# always open using GL in dark (inverted) mode
+if [ -r "$pdfpath" ];then
+  #mupdf-gl -I "$pdfpath"  &>/dev/null &
+  open "$pdfpath"
+fi

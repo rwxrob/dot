@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+IFS=$'\n'
+f=($(ls -1 --color=never -trd ${1:-.}/*))
+echo "${f[-1]}"

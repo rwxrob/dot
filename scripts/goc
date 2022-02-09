@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+go test -coverprofile=/tmp/cover
+go tool cover -html=/tmp/cover -o /tmp/cover.html
+perl -e 'local $/; open $fh,"<", $ARGV[0]; $buf=<$fh>; $buf=~s,<span\s+class="cov0"[^>]+>([^<]+)</span>,<b>\1</b>,gms; print $buf' /tmp/cover.html >/tmp/cover-lynx.html
+lynx /tmp/cover-lynx.html
+rm /tmp/cover*

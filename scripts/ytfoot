@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+zet text footer | tail -n +3 |xclip

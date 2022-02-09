@@ -1,0 +1,27 @@
+#!/usr/bin/bash
+set -e
+
+# Note that the current timezone and daylight savings time are assumed
+# since OBS does not provide that information. This will only be an
+# issue if and when conversion is done way after the time that is was
+# created (because the OBS developers didn't feel the need to included
+# the timezone/offset in the time stamp, maybe I'll add it someday). 
+
+mkv2isosec() {
+    local file="$1"
+    local name=${file##*/}
+    name=${name//[-_]/}
+    local newname="$(date +%Y%m%d%H%M%S -u -d "$(isosec2plain "$name") $(date +%z)").mkv"
+    if [[ $file =~ \/ ]]; then
+        echo "${file%/*}/$newname"
+    else
+        echo "$newname"
+    fi
+}
+
+[[ -n $1 ]] && mkv2isosec "$1" && exit $?
+
+IFS=$'\n'
+while read -r line; do 
+    mkv2isosec "$line"
+done

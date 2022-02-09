@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+year="$1"
+
+firstday=$(date "+%A, %B %e, %Y" -d "May 4 $year")
+firstweekday=$(date "+%u" -d "May 4 $year")
+daystilsat=$((6-firstweekday))
+sat=$(date "+%A, %B %e, %Y" -d "May 4 $year + $daystilsat days")
+
+echo "$firstday"
+for i in {0..16}; do 
+  echo "$sat"
+  sat="$(date "+%A, %B %e, %Y" -d "$sat + 7 days")"
+done

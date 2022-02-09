@@ -1,0 +1,25 @@
+#!/usr/bin/bash
+
+toduck() {
+  local in=/dev/stdin
+  local out=/dev/stdout
+  local file="$1"
+  if [[ -n $file ]];then
+    in="$file"
+    out="$(mktemp)"
+  fi
+  duck="https://lite.duckduckgo.com/lite?kd=-1&kp=-1&q=" # 🦆
+  while IFS= read -r line; do
+    if [[ $line =~ \[([^\]]+)\]\(\) ]]; then
+      text="${BASH_REMATCH[1]}"
+        line=${line/\[*\]\(\)/[$text]($duck$(urlencode "$text"))}
+    fi
+    echo "$line" >> $out
+  done < "$in"
+  if [[ -n $file ]]; then
+    cp "$out" "$file"
+    rm "$out"
+  fi
+}
+
+toduck "$@"

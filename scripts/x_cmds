@@ -1,0 +1,11 @@
+#!/usr/bin/bash
+
+if [[ -z "$1" ]]; then
+  mapfile cmds < /dev/stdin
+else
+  mapfile cmds < "$1"
+fi
+
+for cmd in "${cmds[@]}"; do
+  [[ $cmd =~ ^x_[_a-zA-Z0-9]* ]] && echo "${BASH_REMATCH[0]}"
+done

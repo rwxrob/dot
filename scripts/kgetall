@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+x.getall() {
+  _filter "$@" && return $?
+  for i in "$@"; do
+    k get all -n "$i" > "$i".yaml 2>&1
+  done
+}
+
+_filter(){
+  [[ -n "$1" ]] && return 1
+  while IFS= read -ra args; do
+    "${FUNCNAME[1]}" "${args[@]}"
+  done
+}
+
+x.getall "$@"

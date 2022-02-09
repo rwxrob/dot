@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+function have {
+  which "$1" &>/dev/null
+  return $?
+}
+
+have chat && chat '!song'
+if have spotify; then
+  out=$(spotify status 2>&1)
+  if [[ ! $out =~ Error ]]; then
+    echo "$out"
+  else
+    echo "Nothing playing right now"
+  fi
+fi

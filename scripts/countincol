@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+declare -i total
+while IFS= read -r line; do
+  num=${line#* }
+  num=${num%% *}
+  ((total+=num))
+done
+echo "$total"

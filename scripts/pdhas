@@ -1,0 +1,44 @@
+#!/bin/sh
+
+## Recursively search upward in parent and grandparent directories for
+## existence of the specified inode by any testable type. If two arguments
+## are passed assumes the first is a valid argument to the test command
+## (man test for details). If just one assumes a type of -e if the name
+## matches the base name of the command (default: pdhas). Otherwise, the
+## last character of the file name is assumed to be the type (without the
+## dash) and validated that it is okay.
+
+pdhas() {
+	script=${0##*/}
+	typ=e
+	entry="$1"
+	dir="$PWD"
+
+	if test $# -eq 1; then
+		ntyp=${script#pdhas}
+		test -n "$ntyp" && typ="$ntyp"
+	elif test $# -eq 2; then
+		typ=$(printf "%s" "$1" | tail -c 1)
+		entry="$2"
+	fi
+
+	case "$typ" in
+	b | c | d | e | f | g | G | h | k | L | N | O | P | r | s | S | t | u | w | x) ;;
+	*)
+		printf "Invalid file test type: %s\n" $typ >&2
+		exit 1
+		;;
+	esac
+
+	while true; do
+		path="$dir/$entry"
+		# echo checking $path
+		test -"$typ" "$path" && break
+		test "$dir" = "" && return 1
+		dir=${dir%/*}
+	done
+	echo "$path"
+	return 0
+}
+
+pdhas "$@"

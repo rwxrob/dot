@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+IFS=$'\n'
+select topic in $(tail -n $(($(tput lines)-1)) "$HOME/.topics"); do
+    t "${topic%[*}"
+    exit
+done

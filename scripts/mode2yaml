@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# 💤 **Break** - out < 30 minutes, *no chat*
+while IFS= read -r line; do
+  mode=${line%%-*}
+  status=${line#*-}
+ # echo mode: $mode
+ # echo status: $status
+  emoji=${mode%% *}
+  name=${mode#* }
+  name=${name//\*/}
+  printf "  - emoji: %s\n    name: %s\n    status: %s\n    flags:\n    tags:\n\n" "$emoji" "$name" "$status"
+done

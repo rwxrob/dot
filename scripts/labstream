@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+#ffmpeg -f flv -listen 1 -i rtmp://localhost:8889/live/app -c copy -f flv -listen 1 rtmp://localhost:1935/live/app
+#exec ffmpeg -fflags nobuffer -f flv -i 'rtmp://192.168.1.7:8554' -f flv -vcodec copy "rtmp://localhost:10000"
+# ffmpeg -re -i SampleM.flv -acodec libmp3lame -ar 44100 -b:a 128k \
+#  -pix_fmt yuv420p -profile:v baseline -s 426x240 -bufsize 6000k \
+#  -vb 400k -maxrate 1500k -deinterlace -vcodec libx264           \
+#  -preset veryfast -g 30 -r 30 -f flv                            \
+#  -flvflags no_duration_filesize                                 \
+#  "rtmp://live-api.facebook.com:80/rtmp/my_key"
+# exec ffmpeg -v debug \
+#   -listen 1 -i 'rtmp://192.168.1.7' \
+#   -c copy \
+#   -f flv -flvflags no_duration_filesize -listen 1 'rtmp://localhost'
+
+
+#   STREAMS - semicolon-delimited rtmp URL with stream keys
+#   RTMPSECRET - stream key for use with local OBS
+#   PASSWORD - password for the local admin web server
+# 
+# Requires running as root.
+
+exec docker run --rm -td -p 1935:1935 \
+  --name labstream \
+  -e 'STREAMS=rtmp://localhost' \
+  -e 'RTMPSECRET=blah' \
+  -e 'PASSWORD=blah' \
+  blaize/nginx-rtmp

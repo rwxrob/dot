@@ -1,0 +1,4 @@
+#!/bin/sh
+last=$(tail -1 $HOME/.topics)
+echo "${last}" | xclip
+echo "${last}"

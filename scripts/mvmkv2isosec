@@ -1,0 +1,25 @@
+#!/usr/bin/bash
+set -e
+
+# Note that the current timezone and daylight savings time are assumed
+# since OBS does not provide that information. This will only be an
+# issue if and when conversion is done way after the time that is was
+# created (because the OBS developers didn't feel the need to included
+# the timezone/offset in the time stamp, maybe I'll add it someday). 
+
+convert() {
+    local path=${1%/*}
+    local sec=${1##*/}
+    local sec=${sec//[-_]/}
+    local newname="$(date +%Y%m%d%H%M%S -u -d "$(isosec2plain "$sec") $(date +%z)").mkv"
+    echo  "$1 -> $path/$newname"
+    mv "$1" "$path/$newname" || true
+    return 0
+}
+
+[[ -n $1 ]] && convert "$1" && exit $?
+
+IFS=$'\n'
+while read -r line; do 
+    convert "$line"
+done

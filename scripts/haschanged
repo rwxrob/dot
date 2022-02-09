@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+## Returns the number of changed files in the current directory or any
+## subdirectories recursively. Useful for detecting changes and taking
+## action (see changed).
+
+haschanged () {
+  local -a files
+  files=($(changed))
+  return ${#files[@]}
+}
+
+haschanged "$@"

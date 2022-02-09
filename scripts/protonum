@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+declare -i count=1
+while IFS= read line; do
+  if [[ ! $line =~ = ]];then
+    echo  "$line"
+    continue
+  fi
+  pre=${line%%=*}
+  suf=${line#*;}
+  echo "${pre}= ${count}; ${suf}"
+  count+=1
+done 

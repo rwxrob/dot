@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+_trim() {
+  local it="${1#"${1%%[![:space:]]*}"}"
+  echo -e "${it%"${it##*[![:space:]]}"}"
+}
+
+while IFS= read -r name; do
+  name=$(_trim "$name")
+  [[ -z "$name" ]] && continue
+  name=${name^}
+  printf "\t%s() string\n\tSet%s(v string)\n" "$name" "$name"
+done
+
+

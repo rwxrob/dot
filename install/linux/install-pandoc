@@ -1,0 +1,9 @@
+#!/bin/sh
+set -e
+loc=$(curl -o /dev/null -sIw "%{redirect_url}" \
+      'https://github.com/jgm/pandoc/releases/latest')
+	vers=${loc##*/}
+deb="pandoc-$vers-1-amd64.deb"
+uri=${loc%/tag*}/download/$vers/$deb
+curl -sL "$uri" -o "/tmp/$deb"
+dpkg -i "/tmp/$deb"

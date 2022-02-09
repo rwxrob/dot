@@ -1,0 +1,42 @@
+#!/usr/bin/bash
+
+declare -A emoji
+emoji[smile]=😃
+emoji[bear]=🐻
+emoji[hamburger]=🍔
+emoji[lightbulb]=💡
+emoji[idea]=💡
+emoji[comment]=💬
+emoji[chat]=💬
+emoji[pomo]=🍅
+emoji[stop]=🛑
+emoji[warning]=⚠️
+emoji[rant]=🤬
+emoji[tv]=📺
+emoji[update]=📰
+emoji[tux]=🐧
+emoji[tux]=🐧
+emoji[facepalm]=🤦
+
+toemoji() {
+  local in=/dev/stdin
+  local out=/dev/stdout
+  local file="$1"
+  if [[ -n $file ]];then
+    in="$file"
+    out="$(mktemp)"
+  fi
+  IFS=$'\n'
+  while read -r line; do 
+    for k in ${!emoji[@]}; do 
+      line=${line//:$k:/${emoji[$k]}}
+    done
+    echo "$line" >> $out
+  done < "$in"
+  if [[ -n $file ]]; then
+    cp "$out" "$file"
+    rm "$out"
+  fi
+}
+
+toemoji "$@"

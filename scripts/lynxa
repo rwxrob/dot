@@ -1,0 +1,15 @@
+#!/usr/bin/bash
+
+count=1
+if test -n "$1"; then
+    count="$1"
+fi
+
+IFS=$'\n'
+html=($(tail -"${count}" ~/.lynx_bookmarks.html | pandoc -f html -t markdown --wrap=none))
+
+for line in ${html[@]}; do
+   [[ $line =~ ^\[(.+)\]\((.+)\) ]]
+   echo "* ${BASH_REMATCH[1]}  "
+   echo "  <${BASH_REMATCH[2]}>"
+done

@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+time="$*"
+[[ -z "$time" ]] && echo "usage: $0 TIME (see date -d)" && exit 1
+start=$(date "+%s" -d "$time")
+now=$(date "+%s")
+declare -i secs=$((start-now))
+sec2dur "$secs"

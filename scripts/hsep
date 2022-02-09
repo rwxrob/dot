@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+# Produces a centered title in the middle of a horizontal rule of text.
+
+_filter(){
+  [[ -n "$1" ]] && return 1
+  while IFS= read -ra args; do
+    "${FUNCNAME[1]}" "${args[@]}"
+  done
+}
+
+hsep() {
+  _filter "$@" && return $?
+  local str="$1" char="${2:-#}"
+  local -i len=${#str}
+  local -i side=$((((HRULEWIDTH / 2) - len / 2) - 3))
+  local -i left=$side
+  local -i right=$side
+  (( len % 2 == 1 )) && ((right -= 1))
+  echo "##$(echon "$char" "$left") "$str" $(echon "$char" "$right")"
+}
+
+hsep "$@"

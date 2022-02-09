@@ -1,0 +1,2 @@
+#!/usr/bin/bash
+exec basenc -d -w 0 --base2lsbf < /dev/stdin

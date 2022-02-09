@@ -1,0 +1,28 @@
+#!/bin/sh
+
+# This script reproduces what the kubelet does to calculate
+# memory.available relative to root cgroup. (Adapted from 
+# https://kubernetes.io/examples/admin/resource/memory-available.sh)
+
+memk=$(grep MemTotal /proc/meminfo)
+memk=${memk##MemTotal: }
+memk=${memk%% kB}
+memb=$((memk * 1024))
+used=$(cat /sys/fs/cgroup/memory/memory.usage_in_bytes)
+inactive=$(grep total_inactive_file /sys/fs/cgroup/memory/memory.stat)
+inactive=${inactive##* }
+working=0
+test "$used" -ge "$inactive" && working=$((memb - inactive))
+availb=$((memb - working))
+availk=$((availb / 1024))
+availm=$((availk / 1024))
+availg=$(echo "scale=1; $availm / 1024" | bc)
+
+echo "capacity:   $memb"
+echo "usage:      $used"
+echo "inactive:   $inactive"
+echo "working:    $working"
+echo "available:  $availb"
+echo "availableK: $availk"
+echo "availableM: $availm"
+echo "availableG: $availg"

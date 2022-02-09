@@ -1,0 +1,17 @@
+  - name: rwxrob
+    ssh_authorized_keys:
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIXETTuUIx75wsuPWvMH+mcdPQCXmixYzz6dNxzildM/ rwxrob@tv
+    sudo:
+      - ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    lock_passwd: false
+    #passwd: "{{passwd}}"
+fqdn: dot.local
+hostname: dot
+manage_etc_hosts: true
+runcmd:
+  - mkfs.xfs /dev/nvme0n2
+  - mkdir /s
+  - echo "/dev/nvme0n2 /s xfs defaults 0 0" >>/etc/fstab
+  - mount -a
+'

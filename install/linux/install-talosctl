@@ -1,0 +1,5 @@
+#!/bin/bash
+dir="$HOME/.local/bin"
+mkdir -p "$dir"
+curl -L https://github.com/talos-systems/talos/releases/latest/download/talosctl-linux-amd64 -o "$dir"/talosctl
+chmod +x "$dir/talosctl"

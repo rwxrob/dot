@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if ! type pv >/dev/null 2>&1; then
+  telln 'Missing `pv` command.'
+  exit 1
+fi
+
+yes | pv |ssh "$1" "cat >/dev/null"

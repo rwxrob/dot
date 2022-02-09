@@ -1,0 +1,30 @@
+
+# complete -C foo foo
+
+# add functions beginning with x. to COMMANDS
+while IFS= read -r line; do
+  [[ $line =~ ^declare\ -f\ x\. ]] || continue
+  COMMANDS+=( "${line##declare -f x.}" )
+done < <(declare -F)
+mapfile -t COMMANDS < \
+  <(LC_COLLATE=C sort < <(printf "%s\n" "${COMMANDS[@]}"))
+
+# complete if completion context detect (complete -C kapp kapp)
+if [[ -n $COMP_LINE ]]; then
+  line=${COMP_LINE#* }
+  for c in "${COMMANDS[@]}"; do
+    [[ ${c:0:${#line}} == "${line,,}" ]] && echo "$c"
+  done
+  exit
+fi
+
+# delegate to COMMAND passed as first argument
+if [[ -n "$1" ]]; then
+  declare CMD="$1"; shift
+  for c in "${COMMANDS[@]}"; do
+    if [[ $c == "$CMD" ]]; then
+      "x.$CMD" "$@"
+      exit $?
+    fi
+  done
+fi

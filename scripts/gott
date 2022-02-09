@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# Can be run from TMUX pane to simply watch the tests without having to
+# explicitely run them constantly. When combined with a dump() Go utility
+# function provides immediate, real-time insight without complicating
+# development with a bloated IDE. (Also see Monitoring for other ideas for
+# running real-time evaluations during development)
+
+clear
+got "$@"
+onchange got "$@"

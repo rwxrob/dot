@@ -1,0 +1,8 @@
+
+_filter(){
+  [[ -n "$1" ]] && return 1
+  while IFS= read -ra args; do
+    "${FUNCNAME[1]}" "${args[@]}"
+  done
+}
+

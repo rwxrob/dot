@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+_trim() {
+  local it="${1#"${1%%[![:space:]]*}"}"
+  echo -e "${it%"${it##*[![:space:]]}"}"
+}
+
+receiver="$1"
+
+while IFS= read -r name; do
+  name=$(_trim "$name")
+  [[ -z "$name" ]] && continue
+  printf "func (r *%s) %s() string {return r.%s}\n"  \
+    "$receiver" "${name^}" "${name,}"
+  printf "func (r *%s) Set%s(v string) {r.%s = v}\n"  \
+    "$receiver" "${name^}" "${name,}"
+done
+
+

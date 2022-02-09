@@ -1,0 +1,30 @@
+#!/bin/bash
+set -e
+
+obs=$(command -v obs)
+
+[[ -z "$obs" ]] && echo "OBS not found" && exit 1
+
+ver=$($obs -V)
+[[ $ver =~ ([0-9]+)\.([0-9]+)\.([0-9]+) ]]
+major=${BASH_REMATCH[1]}
+minor=${BASH_REMATCH[2]}
+patch=${BASH_REMATCH[3]}
+
+url="https://api.github.com/repos/ratwithacompiler/OBS-captions-plugin/releases/latest"
+
+if (( major < 27 )); then
+  url="https://api.github.com/repos/ratwithacompiler/OBS-captions-plugin/releases/tags/v0.18b"
+fi
+
+dir=$(mktemp -d)
+cd "$dir"
+echo "Working directory now $dir"
+curl -sSL "$url" -o release.json
+name=$(jq -r .name release.json)
+url=$(jq -r '.assets[].browser_download_url' release.json | grep Linux)
+echo "Attempting to download $name from $url"
+curl -LO "$url"
+unzip *.zip
+mv *Linux/libobs_google_caption_plugin "$HOME/.config/obs-studio/plugins"
+rm -rf "$dir" 

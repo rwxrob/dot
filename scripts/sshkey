@@ -1,0 +1,50 @@
+#!/bin/sh
+set -e
+
+typ=ed25519
+confd="$HOME/.ssh"
+cmds="gen pub list ls"
+
+gen() {
+  name=${1:-$(date -u +%Y%m%d%H%M%S)}
+  ssh-keygen -t "${typ}" -f "${confd}/$name"
+}
+
+pub() {
+  name="${1:-id_ed25519}"
+  test -e "${confd}/${name}.pub" || return 1
+  cat "${confd}/${name}.pub"
+}
+
+list() {
+  while read -r line; do
+    line=${line##*/}
+    echo "${line%.pub}"
+  done <<EOF
+$(ls -1 "${confd}"/*.pub)
+EOF
+}
+
+# ---------------------- bash completion context ---------------------
+
+# add `complete -S sshkey sshkey` to bashrc
+
+if test -n "${COMP_LINE}"; then
+  pre="${COMP_LINE##* }"
+  for c in ${cmds:+${cmds} $(list)}; do
+    test -z "${pre}" -o "${c}" != "${c#${pre}}" && echo "$c"
+  done
+  exit
+fi
+
+# ------------------------------- main -------------------------------
+
+cmd="$1"
+test $# -gt 0 && shift
+
+case "$cmd" in
+pub) pub "$@" ;;
+gen) gen "$@" ;;
+ls | list) list "$@" ;;
+*) pub "$@" ;;
+esac

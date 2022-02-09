@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+vids="$HOME/Videos/Recordings"
+offset=$(( $(date +%s) - $(stat --printf '%W' $(newest "${vids}"))))
+echo $offset
+

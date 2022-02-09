@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+while IFS= read -r line;do
+  line="${line#$'\t'}"
+  line="${line//$'\t'/  }"
+  echo "  // ${line}"
+done
+

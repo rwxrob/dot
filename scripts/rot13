@@ -1,0 +1,13 @@
+#!/usr/bin/env bash  
+
+_buffer() {
+  [[ -n "$1" ]] && return 1
+  "${FUNCNAME[1]}" "$(</dev/stdin)"
+}
+
+rot13(){
+  _buffer "$@" && return $?
+  tr '[A-Za-z]' '[N-ZA-Mn-za-m]' <<< "$*"
+}
+
+rot13 "$*"

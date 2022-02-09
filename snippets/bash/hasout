@@ -1,0 +1,6 @@
+
+if [[ -t 1 ]]; then
+    echo has stdout
+else
+    echo redirected
+fi

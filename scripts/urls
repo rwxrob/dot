@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+tmp=$(mktemp)
+IFS=$'\n'
+while read -r line; do 
+    [[ $line =~ https: ]] || continue
+    line="http${line##*http}"
+    line=${line%% *}
+    echo $line 
+done < "$WEECHAT_LOG" > "$tmp"
+if isterm; then
+    tail -10 "$tmp" |lolcat
+else
+    tail -10 "$tmp"
+fi
+rm "$tmp"
+

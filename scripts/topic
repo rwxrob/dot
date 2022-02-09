@@ -1,0 +1,4 @@
+#!/usr/bin/bash
+touch "$HOME/.topics"
+topic=$(tail -1 "$HOME/.topics")
+echo "${topic%%[*}"

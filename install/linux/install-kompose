@@ -1,0 +1,5 @@
+#!/usr/bin/bash
+target="$GOBIN/kompose"
+#exec go install github.com/kubernetes/kompose@latest
+curl -sSL https://github.com/kubernetes/kompose/releases/download/v1.26.1/kompose-linux-amd64 -o "$target"
+chmod +x "$target"

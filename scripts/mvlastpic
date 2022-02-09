@@ -1,0 +1,5 @@
+#!/bin/sh
+from=$(lastpic)
+to="$PWD/$1"
+mv "$from" "$to"
+printf  "From: $from\nTo:   $to"

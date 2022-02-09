@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+declare -r red=$((RANDOM%256))
+declare -r green=$((RANDOM%256))
+declare -r blue=$((RANDOM%256))
+
+echo -e $"\033[38;2;$red;$green;${blue}m"

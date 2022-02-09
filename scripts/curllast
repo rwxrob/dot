@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+declare path=$(mktemp)
+if [[ $1 != "" ]]; then
+  path="$1"
+fi
+
+curl $(twitch lasturl) -o "${path}" -s
+echo "${path}"

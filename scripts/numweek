@@ -1,0 +1,16 @@
+#!/bin/sh
+
+day="$1"
+format="$2"
+num="$3"
+
+test -z "${num}" && num=1
+test -z "${day}" && day=$(date)
+test -z "${format}" && format="%a, %b %-d"
+
+IFS=
+while read line; do
+    echo "$num|$(date +$format -d $day)|$line"
+    num=$((num+1)) 
+    day="$day +1 week"
+done

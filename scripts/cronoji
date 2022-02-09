@@ -1,0 +1,25 @@
+#!/usr/bin/bash
+
+readonly -a clocks=(
+  🕛 🕐 🕑 🕒 🕓 🕔 🕕 🕖 🕗 🕘 🕙 🕚
+  🕧 🕜 🕝 🕞 🕟 🕠 🕡 🕢 🕣 🕤 🕥 🕦
+)
+
+cronji() {
+  local time hour min dex
+  time=$(date  +%-l\ %-M)
+  hour=${time% *}
+  min=${time#* }
+  (( hour == 12 )) && hour=0
+  if (( min >= 45  )); then
+    ((hour+=1))
+  fi
+  if ((min>=15 && min<45)); then
+    dex=$((hour+12))
+  else
+    dex=$hour
+  fi
+  echo "${clocks[$dex]}"
+}
+
+cronji "$@"

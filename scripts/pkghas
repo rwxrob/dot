@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+dpkg -S "$1" |grep '\b'$1'\b'

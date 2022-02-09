@@ -1,0 +1,2 @@
+#!/usr/bin/bash
+exec mpv --fs --fs-screen=1 "$CUTSCENES/swag.mkv" &>/dev/null

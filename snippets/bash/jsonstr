@@ -1,0 +1,12 @@
+
+
+_buffer() {
+  [[ -n "$1" ]] && return 1
+  "${FUNCNAME[1]}" "$(</dev/stdin)"
+}
+
+_jsonstr() {
+  _buffer "$@" && return $?
+  jq -MRsc <<< "$1"
+}
+

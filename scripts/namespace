@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+k config set-context --current --namespace $1
+k config get-contexts

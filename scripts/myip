@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# Pulls down the external IP address used by this system or local area
+# network in a safe, reliable way. Consider avoiding alternatives using
+# curl that cannot be verified as legitimate organizations.
+#
+# Note this is a script instead of an exported function or alias so that
+# it can be called by any executable in any language using some form of
+# the exec() system call (man exec).
+
+dig +short myip.opendns.com @resolver1.opendns.com

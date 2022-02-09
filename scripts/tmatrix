@@ -1,0 +1,3 @@
+#!/bin/sh
+#exec /usr/local/bin/tmatrix -s 15 --fade -c default -C red
+exec "$HOME/.local/bin/tmatrix" --fade -c default -C magenta

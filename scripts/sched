@@ -1,0 +1,3 @@
+#!/bin/sh
+yq  e '.Schedule[].Activities[] | .[0] +" "+ .[1]' ${KNPATH%%:*}/schedule/data.yml
+

@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+
+while IFS= read -r line; do
+  id=${line%% *}
+  name=${line#* }
+  printf '  %s: "%s"\n' "$id" "$name"
+done

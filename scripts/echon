@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+echon () {
+  declare i
+  for ((i=0; i<${2:-1}; i++)); do echo -n "$1"; done
+}
+
+echon "$@"

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+while IFS= read -r line; do
+  line=${line//\\/\/}
+  drive=${line%%:*}
+  line=${line// /\\ }
+  echo "/mnt/${drive,,}${line#*:}"
+done

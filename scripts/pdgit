@@ -1,0 +1,14 @@
+#!/bin/sh
+
+## Prints the parent (or grandparent) directory that contains the .git
+## directory (or file in the case of worktrees). Assumes $PWD if no
+## argument provided.
+
+pdgit() {
+	dir=${1:-$PWD}
+	pdir=$(pdhas .git)
+	test -z "$pdir" && return 1
+	echo "${pdir%/.git}"
+}
+
+pdgit "$@"

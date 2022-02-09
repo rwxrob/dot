@@ -1,0 +1,2 @@
+#!/bin/sh
+exec docker run -it -d -h "$1" --name "$1" "$1"

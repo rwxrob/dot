@@ -1,0 +1,27 @@
+#!/bin/sh
+
+# Uses a custom gh defmain alias to rename simple repos with no open PRs
+# from master to main. USE AT YOUR OWN GREAT RISK! (Know what the fuck
+# it does before you run it or that shit's on you.)
+
+# WARNING: does not affect any open PRs against the master branch.
+
+read -p 'Have you read every line of this script and understand exactly what it does? ' confirm
+if [ "${confirm}" != yes ]; then
+  echo "exiting."
+  exit
+fi
+
+url=$(git config remote.origin.url | head -1)
+repo=${url%.git}
+repo=${repo##*github.com/}
+
+# WARNING: The following code only works if you have added alias
+# immediately below:
+#   defmain: |
+#     api -X PATCH "repos/$1" -f default_branch="main" 2>/dev/null
+
+git branch -m master main && \
+  git push -u origin main && sleep 4 && \
+  gh defmain "${repo}" && sleep 4 && \
+  git push origin --delete master

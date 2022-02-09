@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# Will detect one of the following OS family and distro combinations:
+#
+# linux
+#   debian
+#   ubuntu
+#   redhat
+# mac
+# windows
+#
+# The following distro types are then added:
+#
+#   debian (just debian)
+#   ubuntu (including mint, popos)
+#   redhat (including rhel, centos, alma, rocky)
+
+
+
+which uname 
+

@@ -1,0 +1,11 @@
+
+# NOTE: following must be found in path
+declare vdiskmanager=vmware-vdiskmanager
+declare vmrun=vmrun
+
+# adapt for WSL2 (Windows) variation
+if [[ $(uname -r) =~ Microsoft ]]; then
+  vdiskmanager=vmware-vdiskmanager.exe
+  vmrun=vmrun.exe
+fi
+

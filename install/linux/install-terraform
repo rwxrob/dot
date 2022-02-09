@@ -1,0 +1,12 @@
+#!/bin/bash
+
+ver=1.1.3
+
+[[ -z "$GOBIN" ]] && echo "GOBIN not set" && exit 1
+
+dir=$(mktemp -d)
+cd "$dir"
+echo "Now working from $dir"
+curl -sSLO "https://releases.hashicorp.com/terraform/$ver/terraform_${ver}_linux_amd64.zip" 
+unzip -q *.zip
+mv terraform "$GOBIN"

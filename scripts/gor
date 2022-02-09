@@ -1,0 +1,8 @@
+#!/bin/sh
+if [ -e "main.go" ]; then
+  exec go run main.go "$@"
+fi
+if [ -e "generate.go" ]; then
+  exec go run generate.go "$@"
+fi
+exec go run "$@"

@@ -1,0 +1,7 @@
+#!/bin/sh
+
+path=/media/$USER
+first=$(ls -1 $path | head -1)
+mpoint=$path/$first
+[ -z "$first" ] && tell 'Nothing to eject.' && exit
+umount $mpoint && tell "$first ejected" || tell 'Could not eject.'

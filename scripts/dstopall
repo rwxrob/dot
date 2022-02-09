@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+exec docker container stop $(docker container list -q)

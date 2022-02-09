@@ -1,0 +1,8 @@
+#!/bin/sh
+from="$1"
+to="$2"
+if [ -z "$1" -o -z "$2" ];then
+  usageln "tohd <fromfile> <tofile>"
+  exit 0
+fi
+ffmpeg -i "$from" -c:a copy -vf scale=1920:1080 "$to"

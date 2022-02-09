@@ -1,0 +1,11 @@
+cloudinit.iso
+dot.vmdk
+dot.vmxf
+dot.vmx
+dot.qcow2
+dot.vmsd 
+dot.nvram
+storage.vmdk
+vmware*.log
+vm*.scoreboard
+mksSandbox*.log 

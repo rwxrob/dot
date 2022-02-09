@@ -1,0 +1,5 @@
+#!/bin/sh
+if [ -z "$1" ]; then
+    exec git branch --show-current
+fi
+exec git checkout -b "$@"

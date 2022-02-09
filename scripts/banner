@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+clear=$'\033[2J'
+top=$'\033[H'
+
+trap "setterm --cursor on; echo ${clear}; exit; trap -- - SIGINT SIGTERM" SIGTERM SIGINT
+
+what="$*"
+if [ -z "${what}" ]; then
+  read -p "Text: " what
+fi
+
+echo "${clear}"
+while true; do
+  echo "${top}"
+  figl <<<"$what" | lolcat
+  setterm --cursor off
+  sleep 2
+done

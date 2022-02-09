@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+ex () {
+  file=$1
+  [ -z "$file" ] && echo 'ex <compressed>' && return 1
+  [ ! -f "$file" ] && echo 'Invalid file: `'$file'`' && return 1
+  case $file in
+    *.tar.bz2)   tar xjf $file;;
+    *.tar.gz)    tar xzf $file;;
+    *.bz2)       bunzip2 $file;;
+    *.rar)       unrar x $file;;
+    *.gz)        gunzip $file;;
+    *.tar)       tar xf $file;;
+    *.tbz2)      tar xjf $file;;
+    *.tgz)       tar xzf $file;;
+    *.zip)       unzip $file;;
+    *.Z)         uncompress $file;;
+    *.7z)        7z x $file;;
+    *.xz)        unxz $file;;
+    *)           echo 'Unknown suffix on file: `'$file'`'; return 1 ;;
+  esac
+}
+
+ex "$@"

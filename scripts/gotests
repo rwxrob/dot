@@ -1,0 +1,26 @@
+#!/usr/bin/perl
+use v5.14;
+
+# Extracts the names of the functions in the target file or from STDIN
+# and prints test stubs for them.
+
+sub print_test {
+  my $name = shift;
+  say <<EOM;
+func Test$name(t *testing.T) {
+  t.Error("unimplemented")
+}
+
+EOM
+}
+
+my $arg = shift;
+$arg=~s/\.go//;
+-f "$arg.go" or die "File not found: $arg.go";
+my $fh = *STDIN;
+-f "$arg.go" and open($fh, '<', "$arg.go");
+while (<$fh>) {
+  next unless /^func +(?:\(\w+ +\*?(\w+)\))? *(\w+)/;
+  print_test $1.ucfirst($2);
+}
+

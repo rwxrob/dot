@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+overrides='
+{
+  "metadata": {
+    "annotations": {
+      "sidecar.istio.io/inject": "false"
+    }
+  }
+}
+'
+
+exec kubectl run netshoot --rm -it \
+  --image nicolaka/netshoot:latest \
+  --namespace "${1:-$(ns)}" \
+  --overrides "$overrides" \
+  -- /bin/bash
+

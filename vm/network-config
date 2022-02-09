@@ -1,0 +1,14 @@
+version: 1
+config:
+  - type: physical
+    name: eth0
+    subnets:
+      - type: static
+        address: 192.168.136.10 
+        netmask: 255.255.255.0
+        gateway: 192.168.136.1
+        dns_nameservers:
+          - 1.1.1.1
+          - 8.8.8.8
+        dns_search:
+          - localdomain

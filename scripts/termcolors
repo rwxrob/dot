@@ -1,0 +1,57 @@
+#!/bin/sh
+
+# Prints the terminal theme regular colors (and some other escapes). For
+# "bright/bold" variation add 1; in front of the number. Useful for
+# sampling and remembering the escapes when hardcoding them into scripts
+# for portability. Keep in mind that the color names are those given for
+# the original color terminal and obviously can vary widely. For color
+# intensive output consider shortening the names to their first letter
+# instead and don't forget to wrap them within ${}. Omits (and overrides
+# any inherited) colors when not interactive/piped.
+
+black=""
+red=""
+green=""
+yellow=""
+blue=""
+magenta=""
+cyan=""
+white=""
+blink=""
+reset=""
+
+if test -t 1; then
+  black="\e[30m"
+  red="\e[31m"
+  green="\e[32m"
+  yellow="\e[33m"
+  blue="\e[34m"
+  magenta="\e[35m"
+  cyan="\e[36m"
+  white="\e[37m"
+  blink="\e[5m"
+  reset="\e[0m"
+fi
+echo POSIX
+printf "${black}black=\"\\\e[30m\"
+${red}red=\"\\\e[31m\"
+${green}green=\"\\\e[32m\"
+${yellow}yellow=\"\\\e[33m\"
+${blue}blue=\"\\\e[34m\"
+${magenta}magenta=\"\\\e[35m\"
+${cyan}cyan=\"\\\e[36m\"
+${white}white=\"\\\e[37m\"
+reset=\"\\\e[0m\"
+"
+echo
+echo BASH:
+printf "${black}black=$'\\\e[30m'
+${red}red=$'\\\e[31m'
+${green}green=$'\\\e[32m'
+${yellow}yellow=$'\\\e[33m'
+${blue}blue=$'\\\e[34m'
+${magenta}magenta=$'\\\e[35m'
+${cyan}cyan=$'\\\e[36m'
+${white}white=$'\\\e[37m'
+reset=$'\\\e[0m'
+"

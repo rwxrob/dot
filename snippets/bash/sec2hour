@@ -1,0 +1,10 @@
+
+sec2hr () {
+  local sec="$1"
+  local hours=$(( "${sec}" / 3600 ))
+  local remainder=$(( "${sec}" % 3600))
+  local minutes=$(( "${remainder}" / 60 ))
+  local seconds=$(( "${sec}" % 60))
+  printf "%02d:%02d:%02d\n" "${hours}" "${minutes}" "${seconds}"
+}
+

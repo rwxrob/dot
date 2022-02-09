@@ -1,0 +1,239 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC2016,SC2119,SC2120,SC2230,SC2034
+shellcheck "$0"
+set -euo pipefail
+
+declare -A D # contains VM configuartion data
+
+# ---------------------- executable dependencies ---------------------
+
+# NOTE: following must be found in path
+declare vdiskmanager=vmware-vdiskmanager
+declare vmrun=vmrun
+
+# adapt for WSL2 (Windows) variation
+if [[ $(uname -r) =~ [Mm]icrosoft ]]; then
+  vdiskmanager=vmware-vdiskmanager.exe
+  vmrun=vmrun.exe
+fi
+
+which "$vmrun" &>/dev/null || (echo "vmrun not found" && exit 1)
+which "$vdiskmanager" &>/dev/null || (echo "vmrun not found" && exit 1)
+which "curl" &>/dev/null || (echo "curl not found" && exit 1)
+which "qemu-img" &>/dev/null || (echo "qemu-img not found" && exit 1)
+which "mkisofs" &>/dev/null || (echo "mkisofs not found" && exit 1)
+
+# --------------------------- vmx template ---------------------------
+
+# This is a copy from a .vmx file originally created from the VMware GUI
+# but with much of the post start extra stuff removed. This includes the
+# expectation of a storage.vmdk extra drive.
+
+declare VMX_TEMPLATE='
+.encoding = "UTF-8"
+config.version = "8"
+virtualHW.version = "18"
+mks.enable3d = "TRUE"
+pciBridge0.present = "TRUE"
+pciBridge4.present = "TRUE"
+pciBridge4.virtualDev = "pcieRootPort"
+pciBridge4.functions = "8"
+pciBridge5.present = "TRUE"
+pciBridge5.virtualDev = "pcieRootPort"
+pciBridge5.functions = "8"
+pciBridge6.present = "TRUE"
+pciBridge6.virtualDev = "pcieRootPort"
+pciBridge6.functions = "8"
+pciBridge7.present = "TRUE"
+pciBridge7.virtualDev = "pcieRootPort"
+pciBridge7.functions = "8"
+vmci0.present = "TRUE"
+hpet0.present = "TRUE"
+nvram = "{{name}}.nvram"
+virtualHW.productCompatibility = "hosted"
+powerType.powerOff = "soft"
+powerType.powerOn = "soft"
+powerType.suspend = "soft"
+powerType.reset = "soft"
+displayName = "{{name}}"
+usb.vbluetooth.startConnected = "TRUE"
+guestOS = "{{guest_os}}"
+tools.syncTime = "TRUE"
+tools.upgrade.policy = "upgradeAtPowerCycle"
+sound.autoDetect = "TRUE"
+sound.fileName = "-1"
+numvcpus = "{{cores}}"
+vcpu.hotadd = "TRUE"
+memsize = "{{memory}}"
+mem.hotadd = "TRUE"
+sata0.present = "TRUE"
+nvme0.present = "TRUE"
+nvme0:0.fileName = "{{vmdk}}"
+nvme0:0.present = "TRUE"
+sata0:1.autodetect = "TRUE"
+sata0:1.deviceType = "cdrom-image"
+sata0:1.fileName = "cloudinit.iso"
+sata0:1.startConnected = "TRUE"
+sata0:1.present = "TRUE"
+svga.graphicsMemoryKB = "8388608"
+ethernet0.connectionType = "nat"
+ethernet0.addressType = "generated"
+ethernet0.virtualDev = "vmxnet3"
+ethernet0.linkStatePropagation.enable = "TRUE"
+serial0.fileType = "thinprint"
+serial0.fileName = "thinprint"
+ethernet0.present = "TRUE"
+extendedConfigFile = "{{name}}.vmxf"
+floppy0.present = "FALSE"
+ehci:0.parent = "-1"
+ehci:0.port = "0"
+ehci:0.deviceType = "video"
+ehci:0.present = "TRUE"
+nvme0:1.fileName="storage.vmdk"
+nvme0:1.present="TRUE"
+'
+
+# ------------------------ user-data template ------------------------
+
+declare USER_DATA_TEMPLATE='
+#cloud-config
+users:
+  - name: {{user}}
+    ssh_authorized_keys:
+      - {{sshkey}}
+    sudo:
+      - ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    lock_passwd: false
+    passwd: "{{passwd}}"
+fqdn: {{name}}.{{domain}}
+hostname: {{name}}
+manage_etc_hosts: true
+runcmd:
+  - mkfs.xfs /dev/nvme0n2
+  - mkdir /s
+  - echo "/dev/nvme0n2 /s xfs defaults 0 0" >>/etc/fstab
+  - mount -a
+'
+
+# ---------------------- network-config template ---------------------
+
+declare NETWORK_CONFIG_TEMPLATE='
+version: 1
+config:
+  - type: physical
+    name: {{interface}}
+    subnets:
+      - type: static
+        address: {{ip}}
+        netmask: 255.255.255.0
+        gateway: {{gateway}}
+        dns_nameservers:
+          - 1.1.1.1
+          - 8.8.8.8
+        dns_search:
+          - {{domain}}
+'
+
+# ------------------------------- fill -------------------------------
+
+# Fills any template using {{foo}} notation with values from passed
+# associative array. Requires that the D associate array be declared and
+# assigned before being called (within local function scope or
+# globally).
+
+function fill {
+  local buf="$1" val
+  for i in "${!D[@]}"; do  # D from caller scope
+    val=${D[$i]}
+    buf=${buf//\{\{$i\}\}/$val}
+  done
+  echo "$buf"
+}
+
+# ------------------------------- fetch ------------------------------
+
+function fetch {
+  local url="$1" out="$2"
+  [[ -e "$out" ]] && return 0
+  curl -L "$url" -o "$out"
+}
+
+# ------------------------ create vm functions -----------------------
+
+# name       # name of the VM to create, also hostname
+# url        # url to the qcow2 image to download
+# qcow2      # name of QEMU image to save to disk
+# vmdk       # name of the vmdk image to create from the qcow2
+# vmdir      # full path to the directory of VMs
+# imgdir     # full path to directory to cache image downloads
+# user       # username for VM
+# passwd     # mkpassd -s --method=SHA-512 encrypted password 
+# sshkey     # ssh pub key for authorized_keys file
+# domain     # usually just localdomain
+# interface  # usually eth0
+# ip         # check vmnetcfg.exe or vmnet-cfgcli for network
+# gateway    # probably best to end in .2
+# cores      # CPU cores
+# memory     # in megabytes
+# guest_os   # the VMware thing for optimizations
+
+# ------------------------------ create ------------------------------
+
+# Expects that a global D associative array has been set to pass the
+# variables.
+
+function create {
+  # create the vmware virtual machine (skip if already exists)
+  local dir="${D[vmdir]}/${D[name]}.vmwarevm"
+  [[ -e "$dir" ]] && echo "Already exists: \"$dir\"" && return 0
+  mkdir -p "$dir"
+  cd "$dir"
+  "$vdiskmanager" -c -s 100MB -a lsilogic -t 0 "storage.vmdk"
+  fill "$VMX_TEMPLATE" > "${D[name]}.vmx"
+
+  # fetch the cloud-init enabled disk image and convert to vmware
+  if [[ ! -d "${D[imgdir]}/${D[qcow2]}" ]]; then
+    fetch "${D[url]}" "${D[imgdir]}/${D[qcow2]}"
+    qemu-img convert -O vmdk \
+      "${D[imgdir]}/${D[qcow2]}" "${D[imgdir]}/${D[vmdk]}"
+    cp "${D[imgdir]}/${D[vmdk]}" "$dir"
+  fi
+
+  # create the cloud-init configuration files
+  touch "meta-data"
+  fill "$USER_DATA_TEMPLATE" > "user-data"
+  fill "$NETWORK_CONFIG_TEMPLATE" > "network-config"
+  mkisofs -output "cloudinit.iso" -volid cidata -joliet \
+    -rock {meta-data,user-data,network-config}
+  cd -
+}
+
+# --------------- configure and create virtual machines --------------
+
+D[name]=control
+D[qcow2]="AlmaLinux-8-GenericCloud-8.5-20211119.x86_64.qcow2" 
+D[vmdk]="${D[qcow2]//qcow2/vmdk}"
+D[url]="https://repo.almalinux.org/almalinux/8/cloud/x86_64/images/${D[qcow2]}"
+D[vmdir]="/mnt/c/Users/rob/Documents/Virtual Machines"
+D[imgdir]="/mnt/c/Users/rob/Documents/DiskImages"
+D[user]=rwxrob
+D[passwd]='$6$rEibXMefJRd9q5L$F2y84STmrOJ30cTcjEEhQZGZ.bQV7VHJQ2Ek5com25Ywl7rgdLoRvT/Uw1z0r8ycYrZ3QoC2qcLQvsJ94ikEP0'
+D[sshkey]='ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIXETTuUIx75wsuPWvMH+mcdPQCXmixYzz6dNxzildM/ rwxrob@tv'
+D[domain]="localdomain"
+D[interface]="eth0"
+D[ip]="192.168.136.10"
+D[gateway]="192.168.136.2"
+D[cores]="2"
+D[memory]="2048"
+D[guest_os]="rhel8-64"
+create
+
+D[cores]="1"
+D[memory]="2048"
+
+for i in {1..6}; do
+  D[name]=node$i
+  D[ip]="192.168.136.1$i"
+  create
+done

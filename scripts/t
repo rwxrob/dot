@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+
+
+# Updates YouTube and Twitch Titles, sets the GitHub profile status, and
+# sends a tweet pointing to the YouTube video.
+
+topic="$*"
+
+while test -z "${topic}"; do
+  read -p "Topic: " topic
+done
+
+# change these do solarized/gruvbox variations (not millions)
+if [[ -t 1 ]]; then
+  GOLD=$'\033[38;2;184;138;0m'
+  RED=$'\033[38;2;255;0;0m'
+  GREY=$'\033[38;2;100;100;100m'
+  CYAN=$'\033[38;2;0;255;255m'
+  GREEN=$'\033[38;2;0;255;0m'
+  X=$'\033[0m'
+fi
+
+fatal() {
+  echo "${RED}$*${X}"
+  exit 1
+}
+
+short="${topic%%#*}"
+if [[ ${#short} > 80 ]]; then
+  fatal 'Topic must be under 80 characters'
+fi
+
+TWITCH_TOKEN=$(auth token twitch)
+TWITCH_CLIENTID=$(auth get id twitch)
+
+set_twitter_status() {
+  if [[ "${YOUTUBE_VIDEO}" == null ]]; then
+    return
+  fi
+  if [[ $topic =~ ^\[ ]]; then
+    return
+  fi
+  twitter update "📺 ${topic} #livestream https://youtu.be/${YOUTUBE_VIDEO}?t=$(vidoffsetsec)"
+}
+#set_twitter_status
+if test "$topic" = default; then
+  topic="$(head -1 $HOME/.banner)"
+else
+  echo "$topic" >>"$HOME/.topics"
+fi
+echo "$topic" >"$HOME/.tmux-live-right"
+if [[ $topic =~ [dD]ota ]]; then
+  export TWITCH_GAMEID=29595
+  export TWITCH_GAME="Dota 2"
+  #export TWITCH_GAMEID=509658
+  #export TWITCH_GAME="Just Chatting"
+elif [[ $topic =~ [Tt][Ff]2 ]]; then
+  #export TWITCH_GAMEID=
+  export TWITCH_GAME="Team Fortress 2"
+elif [[ $topic =~ [wW]itcher ]]; then
+  export TWITCH_GAMEID=115977
+  export TWITCH_GAME="The Witcher 3: Wild Hunt"
+  #export TWITCH_GAMEID=509658
+  #export TWITCH_GAME="Just Chatting"
+elif [[ $topic =~ [pP]rogramming ]]; then
+  export TWITCH_GAMEID=1469308723
+  export TWITCH_GAME="Software and Game Development"
+elif [[ $topic =~ [pP]rogramming ]]; then
+  export TWITCH_GAMEID=1469308723
+  export TWITCH_GAME="Software and Game Development"
+elif [[ $topic =~ ⌨️  ]]; then
+  export TWITCH_GAMEID=1469308723
+  export TWITCH_GAME="Software and Game Development"
+elif [[ $topic =~ 💬 ]]; then
+  :
+  #export TWITCH_GAMEID=417752
+  #export TWITCH_GAME="Talk Shows & Podcasts"
+  #
+  export TWITCH_GAMEID=509658
+  export TWITCH_GAME="Just Chatting"
+fi
+twitch title "$topic" 
+chat "$topic"
+#yt live title "$topic" &>/dev/null
+# TODO add time stamp to yt live and bonk twitter cache
+twitter update "$topic #livestream #status #update rwxrob.tv" &>/dev/null
+gh status "$topic" &>/dev/null

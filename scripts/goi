@@ -1,0 +1,8 @@
+#!/bin/sh
+file="$1"
+if [ -n "${file}" ]; then
+    file="./${file}"
+else
+    file="."
+fi
+exec go install "${file}" "$@"

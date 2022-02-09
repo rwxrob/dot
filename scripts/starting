@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+echo '(starting)' > ~/.break
+exec bannerfish "starting soon"

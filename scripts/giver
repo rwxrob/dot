@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if [ "${string#*/}" != "$string" ]; then
+  url="https://github.com/$1" 
+else
+  url="https://github.com/rwxrob/$1" 
+fi
+wee "${url}"

@@ -1,0 +1,16 @@
+#!/usr/bin/bash
+set -e
+
+declare arg="$1"
+
+[[ -z $arg ]] && read -r arg
+
+year=${arg:0:4}
+month=${arg:4:2}
+day=${arg:6:2}
+hour=${arg:8:2}
+min=${arg:10:2}
+sec=${arg:12:2}
+
+echo "$year/$month/$day $hour:$min:$sec"
+

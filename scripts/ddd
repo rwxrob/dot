@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+> /tmp/buf
+while IFS= read -r line;do
+  echo "$line" >> /tmp/buf
+done

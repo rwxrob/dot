@@ -1,0 +1,3 @@
+#!/usr/bin/bash
+
+zet4mkv "$@"
