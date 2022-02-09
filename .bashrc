@@ -116,7 +116,8 @@ pathprepend() {
 
 # remember last arg will be first in path
 pathprepend \
-  /usr/local/go/bin \
+  /usr/local/bin \
+  /usr/local/*/bin \
   "$HOME/.local/bin" \
   "$GHREPOS/cmd-"* \
   "$SCRIPTS" 

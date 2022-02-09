@@ -1,6 +1,0 @@
-#!/bin/sh
-brew install bash
-echo "Now don't forget:"
-echo "  Add /usr/local/bin/bash to /etc/shells"
-echo "  Run chsh -s /usr/local/bin/bash"
-echo "  Use #!/usr/bin/env bash as shebang line"
