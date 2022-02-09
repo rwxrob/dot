@@ -1,5 +1,0 @@
-#!/bin/sh
-if [ -z "$1" ]; then
-  exec git switch - "$@"
-fi
-exec git switch "$@"
