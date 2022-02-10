@@ -1,3 +1,0 @@
-#!/bin/sh
-# yeah, it really is that current (much more than ubuntu)
-exec brew install golang
