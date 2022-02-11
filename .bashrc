@@ -117,7 +117,6 @@ pathprepend() {
 # remember last arg will be first in path
 pathprepend \
   /usr/local/bin \
-  /usr/local/*/bin \
   "$HOME/.local/bin" \
   "$GHREPOS/cmd-"* \
   "$SCRIPTS" 
@@ -140,7 +139,7 @@ pathappend \
 
 # ------------------------------ cdpath ------------------------------
 
-export CDPATH=".:$GHREPOS:$DOT:$REPOS:/media/$USER:$HOME"
+export CDPATH=".:$GHREPOS:$DOTFILES:$REPOS:/media/$USER:$HOME"
 
 # ------------------------ bash shell options ------------------------
 
@@ -226,7 +225,7 @@ alias view='vi -R' # which is usually linked to vim
 alias c='printf "\e[H\e[2J"'
 alias clear='printf "\e[H\e[2J"'
 alias coin="clip '(yes|no)'"
-alias grep="grep -P"
+alias grep="pcregrep"
 alias minidockenv=". <(minikube docker-env)"
 alias top=bashtop
 alias iam=live

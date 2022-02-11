@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 shopt -s extglob
 chat "${1//+($'\n')/ }"
 twitter update "$@"
