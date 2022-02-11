@@ -9,18 +9,37 @@
 
 use v5.14;
 $_ = shift;
+
+# git repo
 if (not $_) {
     my $gh = (grep {/github/ && s,git@,, && s,:,/, && s/\.git$//}
              qx{git remote get-url --all origin})[0];
          #    $gh and exec 'firefox', '-new-window', "https://$gh";
          $gh and exec 'google-chrome', "https://$gh";
 }
-if (/\.md$/) {
+
+# markdown file
+if (/\.md$/ && `which pandoc` && `which lynx`) {
     `pandoc -s -o /tmp/index.html $_ 2>/dev/null`;
     exec 'lynx', '/tmp/index.html';
 }
--r $_ && exec 'xdg-open', $_;
-m,^http, or  s,^,https://,;
--x '/mnt/c/Windows/explorer.exe' and exec 'explorer.exe', $_;
-exec 'google-chrome', $_;
 
+# file
+if (-r $_) {
+  `which xdg-open` && exec 'xdg-open', $_;
+  `which /usr/bin/open` && exec '/usr/bin/open', $_;
+  `which explorer.exe` && exec 'explorer.exe', $_;
+  print "Unable to open file: $_";
+  exit 1;
+}
+
+# bare url
+m,^http, or  s,^,https://,;
+`which lynx` && exec 'lynx', $_;
+`which /usr/bin/open` && exec '/usr/bin/open', $_;
+`which explorer.exe` && exec 'explorer.exe', $_;
+`which google-chrome` && exec 'google-chrome', $_;
+my $chrome = '/System/Applications/Google\ Chrome.app';
+`which $chrome` && exec "$chrome", "$_";
+
+print "Unable to determine how to open $_\n";
