@@ -7,8 +7,11 @@
 # Finally, it assumes it is a URL, ensures begins with https:// and
 # opens it in a new window with Firefox.
 
+
 use v5.14;
 $_ = shift;
+
+`env > /tmp/env`
 
 # git repo
 if (not $_) {

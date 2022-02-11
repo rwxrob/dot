@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+VBoxHeadless --startvm control &
+VBoxHeadless --startvm node1 &
+VBoxHeadless --startvm node2 &
