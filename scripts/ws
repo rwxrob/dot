@@ -1,5 +1,4 @@
 #!/usr/bin/env perl
-#          ^^^ only because this is a rapid prototype
 
 # This is an unoptimized prototype with lots of subshells in preparation
 # for port to Go eventually. In other words, this just works for now.

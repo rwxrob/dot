@@ -152,6 +152,10 @@ shopt -s extglob
 #shopt -s nullglob # bug kills completion for some
 #set -o noclobber
 
+# -------------------------- stty annoyances -------------------------
+
+stty stop undef # disable control-s accidental terminal stops
+
 # ------------------------------ history -----------------------------
 
 export HISTCONTROL=ignoreboth
@@ -186,7 +190,7 @@ __ps1() {
   [[ -n "$B" ]] && B="$g($b$B$g)"
 
   short="$u\u$g$PROMPT_AT$h\h$g:$w$dir$B$p$P$x "
-  long="${g}╔ $u\u$g$PROMPT_AT$h\h$g:$w$dir$B\n${g}╚ $p$P$x "
+  long="$g╔ $u\u$g$PROMPT_AT$h\h$g:$w$dir$B\n$g╚ $p$P$x "
   double="$g╔ $u\u$g$PROMPT_AT$h\h$g:$w$dir\n$g║ $B\n$g╚ $p$P$x "
 
   if (( ${#countme} > PROMPT_MAX )); then
@@ -222,11 +226,10 @@ alias chmox='chmod +x'
 alias sshh='sshpass -f $HOME/.sshpass ssh '
 alias temp='cd $(mktemp -d)'
 alias view='vi -R' # which is usually linked to vim
-alias c='printf "\e[H\e[2J"'
 alias clear='printf "\e[H\e[2J"'
+alias c='printf "\e[H\e[2J"'
 alias coin="clip '(yes|no)'"
 alias grep="pcregrep"
-alias minidockenv=". <(minikube docker-env)"
 alias top=bashtop
 alias iam=live
 

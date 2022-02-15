@@ -13,14 +13,13 @@ marquee() {
   local -a timebar topicbar
   #topic="$(topic)" topic="${topic#* }"
   topic="$(head -1 ~/.currently)"
-  #pomo="$(pomo)" pomo=${pomo%%m*} pomo=${pomo%%s*} 
+  pomo="$(pomo)"
   #mode="$(iam mode emoji)"
   zet="zet:$(zet current)"
   time="$(date +"%A, %B %-e, %Y, %-H:%M %Z%0z")"
-  replay=$(printf "(%02d)" "$((20-$(date +"%S")%20))")
   tilboost="$(countdown 11:11:11 May 4)"
-  [[ -n "$pomo" ]] && timebar+=("$pomo")
-  [[ -n "$pomo" ]] && topicbar+=("$pomo")
+  #[[ -n "$pomo" ]] && timebar+=("$pomo")
+  #[[ -n "$pomo" ]] && topicbar+=("$pomo")
   [[ -n "$time" ]] && timebar+=("$time")
   [[ -n "$topic" ]] && topicbar+=("$topic")
   timebarb="${timebar[*]}"
@@ -28,12 +27,13 @@ marquee() {
   topicremain=$(( $(tput cols) - ${#topicbarb} ))
   timeremain=$(( $(tput cols) - ${#timebarb} ))
   topicspace=$(( topicremain - ${#mode} - ${#zet}))
-  timespace=$(( timeremain - ${#mode} - ${#zet} - ${#tilboost} - 5))
+  timespace=$(( timeremain - ${#mode} - ${#zet} - ${#tilboost}))
   #if (( $(date +%s)%20 < 10 ));then
     #echo "$topicbarb $(repeat $' ' "$topicspace")              rwxrob.tv"
   #else
     #echo "$mode $timebarb $(repeat $' ' "$timespace") rwxrob.tv $zet"
-    echo "$timebarb $replay [boost in $tilboost] $(repeat $' ' "$timespace") rwxrob.tv"
+    #echo "$timebarb $replay [boost in $tilboost] $(repeat $' ' "$timespace") rwxrob.tv"
+    echo "$timebarb [boost: $tilboost]"
   #fi
 }
 
