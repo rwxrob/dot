@@ -17,8 +17,9 @@ $_ = shift;
 if (not $_) {
     my $gh = (grep {/github/ && s,git@,, && s,:,/, && s/\.git$//}
              qx{git remote get-url --all origin})[0];
-         #    $gh and exec 'firefox', '-new-window', "https://$gh";
-         $gh and exec 'google-chrome', "https://$gh";
+    if ($gh) {
+        exec 'gh', 'repo', 'view','--web'
+    }
 }
 
 # markdown file
