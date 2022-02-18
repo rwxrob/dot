@@ -3,29 +3,18 @@
 # Opens what you would expect. If there is no argument passed to it
 # checks if this is a GitHub repo and if so opens it with the gh tool in
 # your browser. Otherwise, it checks if the argument is a file in the
-# current directory and opens it with the default application (xdg-open).
-# Finally, it assumes it is a URL, ensures begins with https:// and
-# opens it in a new window with Firefox.
-
-
+# current directory and opens it with the default application
+# (xdg-open). Finally, it assumes it is a URL, ensures begins with
+# https:// and opens it in a new window with Firefox.
+#
 use v5.14;
 $_ = shift;
-
-`env > /tmp/env`
-
-# git repo
-if (not $_) {
-    my $gh = (grep {/github/ && s,git@,, && s,:,/, && s/\.git$//}
-             qx{git remote get-url --all origin})[0];
-    if ($gh) {
-        exec 'gh', 'repo', 'view','--web'
-    }
-}
 
 # markdown file
 if (/\.md$/ && `which pandoc` && `which lynx`) {
     `pandoc -s -o /tmp/index.html $_ 2>/dev/null`;
-    exec 'lynx', '/tmp/index.html';
+    system 'lynx', '/tmp/index.html';
+    exit
 }
 
 # file
@@ -35,6 +24,15 @@ if (-r $_) {
   `which explorer.exe` && exec 'explorer.exe', $_;
   print "Unable to open file: $_";
   exit 1;
+}
+
+# git repo
+if ($_) {
+  my $gh = (grep {/github/ && s,git@,, && s,:,/, && s/\.git$//} qx{git remote get-url --all origin})[0];
+  if ($gh) {
+        system 'gh', 'repo', 'view','--web';
+        exit;
+  }
 }
 
 # bare url
