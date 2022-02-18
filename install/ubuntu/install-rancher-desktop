@@ -1,9 +1,0 @@
-#!/bin/bash
-
-# WARNING: this will fuck up your terminal and overwrite stuff, be
-# careful
-
-curl https://download.opensuse.org/repositories/isv:/Rancher:/stable/deb/Release.key | sudo apt-key add -
-sudo add-apt-repository 'deb https://download.opensuse.org/repositories/isv:/Rancher:/stable/deb/ ./'
-sudo apt update
-sudo apt install rancher-desktop
