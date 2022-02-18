@@ -1,0 +1,2 @@
+#!/bin/sh
+exec VBoxManage.exe startvm --type headless anton
