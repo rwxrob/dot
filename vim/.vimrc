@@ -27,6 +27,8 @@ set tabstop=2
 
 "#######################################################################
 
+let mapleader=","
+
 set softtabstop=2
 
 " mostly used with >> and <<
@@ -253,6 +255,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   au FileType go nmap <leader>c :GoCoverageToggle<CR>
   au FileType go nmap <leader>i :GoInfo<CR>
   au FileType go nmap <leader>l :GoMetaLinter!<CR>
+  au FileType go nmap <leader>m ilog.Print("made")<CR><ESC>
 else
   autocmd vimleavepre *.go !gofmt -w % " backup if fatih fails
 endif
