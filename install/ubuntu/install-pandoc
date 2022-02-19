@@ -6,4 +6,4 @@ loc=$(curl -o /dev/null -sIw "%{redirect_url}" \
 deb="pandoc-$vers-1-amd64.deb"
 uri=${loc%/tag*}/download/$vers/$deb
 curl -sL "$uri" -o "/tmp/$deb"
-dpkg -i "/tmp/$deb"
+sudo dpkg -i "/tmp/$deb"
