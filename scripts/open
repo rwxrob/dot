@@ -5,16 +5,26 @@
 # your browser. Otherwise, it checks if the argument is a file in the
 # current directory and opens it with the default application
 # (xdg-open). Finally, it assumes it is a URL, ensures begins with
-# https:// and opens it in a new window with Firefox.
+# https:// and opens it in local web browser.
 #
 use v5.14;
 $_ = shift;
+$| = 1;
 
 # markdown file
-if (/\.md$/ && `which pandoc` && `which lynx`) {
-    `pandoc -s -o /tmp/index.html $_ 2>/dev/null`;
-    system 'lynx', '/tmp/index.html';
-    exit
+if (/\.md$/) {
+  say "markdown file detected";
+  if (not `which pandoc`) {
+    say "pandoc not found";
+    exit 1;
+  }
+  if (not `which lynx`) {
+    say "lynx not found";
+    exit 1;
+  }
+  `pandoc -s -o /tmp/index.html $_ 2>/dev/null`;
+  system 'lynx', '/tmp/index.html';
+  exit
 }
 
 # file
@@ -22,7 +32,7 @@ if (-r $_) {
   `which xdg-open` && exec 'xdg-open', $_;
   `which /usr/bin/open` && exec '/usr/bin/open', $_;
   `which explorer.exe` && exec 'explorer.exe', $_;
-  print "Unable to open file: $_";
+  say "unable to open file: $_";
   exit 1;
 }
 
@@ -30,8 +40,8 @@ if (-r $_) {
 if ($_) {
   my $gh = (grep {/github/ && s,git@,, && s,:,/, && s/\.git$//} qx{git remote get-url --all origin})[0];
   if ($gh) {
-        system 'gh', 'repo', 'view','--web';
-        exit;
+    system 'gh', 'repo', 'view','--web';
+    exit;
   }
 }
 
@@ -44,4 +54,4 @@ m,^http, or  s,^,https://,;
 my $chrome = '/System/Applications/Google\ Chrome.app';
 `which $chrome` && exec "$chrome", "$_";
 
-print "Unable to determine how to open $_\n";
+say "unable to determine how to open $_";
