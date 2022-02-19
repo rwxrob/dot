@@ -1,0 +1,6 @@
+#!/bin/sh
+clone st3w/neo
+./autogen.sh
+./configure
+make
+sudo make install
