@@ -261,15 +261,15 @@ new-from() {
   [[ ! -d "$GHREPOS" ]] && echo "Not found: $GHREPOS" && return 1
   cd "$GHREPOS" || return 1
   [[ -e "$name" ]] && echo "exists: $name" && return 1
-  gh repo create -p "$template" "$name"
+  gh repo create -p "$template" --private "$name"
   cd "$name" || return 1
 }
 
-new-cmdbox() { new-from rwxrob/template-cmdbox "cmdbox-$1"; }
+new-bonzai() { new-from rwxrob/bonzai-template "bonzai-$1"; }
 new-cmd() { new-from rwxrob/template-bash-command "cmd-$1"; }
 cdz () { cd $(zet get "$@"); }
 
-export -f new-from new-cmdbox new-cmd
+export -f new-from new-bonzai new-cmd
 
 clone() {
   local repo="$1" user
@@ -325,26 +325,3 @@ _source_if "$HOME/.bash_work"
 
 complete -C /usr/bin/terraform terraform
 complete -C /usr/bin/terraform tf
-
-# only use this if you really want libvirt (virtualbox does not need)
-# vagrant(){
-#   docker run -it --rm \
-#     -e LIBVIRT_DEFAULT_URI \
-#     -v /var/run/libvirt/:/var/run/libvirt/ \
-#     -v ~/.vagrant.d:/.vagrant.d \
-#     -v $(realpath "${PWD}"):${PWD} \
-#     -w $(realpath "${PWD}") \
-#     --network host \
-#     vagrantlibvirt/vagrant-libvirt:latest \
-#       vagrant $@
-# } && export -f vagrant
-
-if _have vagrant; then
-export VAGRANT_EXPERIMENTAL="disks"
-# >>>> Vagrant command completion (start)
-. /opt/vagrant/embedded/gems/2.2.19/gems/vagrant-2.2.19/contrib/bash/completion.sh
-# <<<<  Vagrant command completion (end)
- complete -F _vagrant v
-fi
-export DISPLAY=:0.0  #GWSL
-export PULSE_SERVER=tcp:localhost #GWSL

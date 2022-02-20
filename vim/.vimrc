@@ -27,6 +27,9 @@ set tabstop=2
 
 "#######################################################################
 
+" disable visual bell (also disable in .inputrc)
+set t_vb=
+
 let mapleader=","
 
 set softtabstop=2
