@@ -233,6 +233,7 @@ alias coin="clip '(yes|no)'"
 alias grep="pcregrep"
 alias top=bashtop
 alias iam=live
+alias neo="neo -D -c gold"
 
 _have vim && alias vi=vim
 
