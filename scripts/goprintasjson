@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+read -r name
+
+echo "
+func (s $name) MarshalJSON() ([]byte, error) {
+    buf := ""
+    // TODO
+    return []byte(buf),nil
+}
+
+// JSON implements PrintAsJSON multi-line, 2-space indent JSON output.
+func (s $name) JSON() string {b,_ :=s.MarshalJSON();return string(b)}
+
+// Print implements PrintAsJSON.
+func (s $name) Print() { fmt.Println(s.JSON()) }
+
+// Log implements PrintAsJSON.
+func (s $name) Log() { log.Print(s.JSON()) }
+"
