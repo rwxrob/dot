@@ -1,3 +1,4 @@
 #!/bin/sh
-exec "$GOBIN/go1.18beta2" "$@"
+exec /home/rwxrob/Repos/github.com/golang/go/bin/go "$@"
+#exec "$GOBIN/go1.18beta2" "$@"
 
