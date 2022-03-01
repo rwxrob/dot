@@ -1,0 +1,430 @@
+#!/usr/bin/env bash
+
+# Originally written by https://github.com/deyloop/dot
+
+# Formats Markdown tables so that they are readable in text form
+# Parses the table in order to print the formatted form.
+# 
+# Supposed to be used as an UNIX filter, where the unformatted table
+# should be sent to `stdin` and the formatted output will be sent to
+# `stdout`. 
+# If a parsing error occures, prints the unformatted table unchanged,
+# and exits with code 42
+#
+# In order to debug, look at `__fail`
+
+# Does all the parsing in pure bash, in a single process. Printing uses
+# a few subshells as that was convenient.
+
+# TODO: support escaping pipe characters
+# TODO: skipping to just tables when whole markdown document is passed
+# TODO: allow filename to be passed as argument
+
+
+#-------------------------------------------------------------------------
+# The Parsing Grammar used:
+#
+# table       -> newline headingrow delimrow tablebody
+#
+# headingrow  -> pipe? headings pipe? newline
+# headings    -> content pipe headingsB
+# headingsB   -> content / content pipe headingsB
+# content     -> [^pipe]*
+#
+# delimrow    -> pipe? delims pipe? newline
+# delims      -> delim pipe delimsB
+# delimsB     -> delim / delim pipe delimsB
+# delim       -> noalign / leftalign / centeralign / rightalign
+# noalign     -> dash dash dashes
+# leftalign   -> colon dash dashes
+# centeralign -> colon dashes colon
+# rightalign  -> dash dashes colon
+#
+# tablebody   -> nothing / tablerow tablebody
+# tablerow    -> pipe? body pipe? newline
+# body        -> content pipe bodyB
+# bodyB       -> content / content pipe bodyB
+#
+# dashes      -> dash / dash dashes
+# pipe        -> '|'
+# dash        -> '-'
+# colon       -> ':'
+#-------------------------------------------------------------------------
+
+
+fmttable() {
+  local in=/dev/stdin
+
+  local buf
+  buf="$(<"$in")"
+  buf+=$'\n'
+
+  local i=0
+  local c
+
+  local -a contents
+  local col=0
+  local row=0
+  local totalcols=0
+  local -a colwidths
+  local -a colaligns
+
+  # parsing
+  _parse_table
+
+  # print the headings
+  printf "|"
+  for (( x=0; x<totalcols; x++ )); do
+    local w="${colwidths[$x]}"
+    printf "%-${w}s|" "${contents[$x]}"
+  done
+  printf "\n"
+
+  # print the delims
+  printf "|"
+  for (( x=0; x<${totalcols}; x++ )); do
+    local con
+    case ${colaligns[$x]} in
+      left) 
+        con=":$(for ((i=0; i<$((${colwidths[$x]}-1)); i++)); do 
+          printf "-"; 
+        done)"
+        ;;
+      right)
+        con="$(for ((i=0; i<$((${colwidths[$x]}-1)); i++)); do 
+          printf "-"; 
+        done):"
+        ;;
+      center)
+        con=":$(for ((i=0; i<$((${colwidths[$x]}-2)); i++)); do 
+          printf "-"; 
+        done):"
+        ;;
+      none) 
+        con="$(for ((i=0; i<${colwidths[$x]}; i++)); do 
+          printf "-"; 
+        done)"
+        ;;
+    esac
+    local w="${colwidths[$x]}"
+    printf "%-${w}s|" "$con"
+  done
+  printf "\n"
+
+  # print the body
+  for (( y=2; y<row; y++ )); do
+    printf "|"
+    for (( x=0; x<totalcols; x++ )); do
+      local w="${colwidths[$x]}"
+      local a=""
+      [[ ${colaligns[$x]} != right ]] && a="-" 
+      printf "%${a}${w}s|" "${contents[$y*$totalcols+$x]}"
+    done
+    printf "\n"
+  done
+}
+
+__fail(){
+  printf "%s" "$buf"
+  echo
+  echo "$row:$col - $1"
+  exit 42
+}
+
+_parse_table() {
+  _parse_headingrow
+  _parse_delimrow
+  _parse_tablebody
+}
+
+
+_parse_headingrow(){
+  _nextchar
+  [[ $c != '|' ]] && _putback
+
+  _parse_headings
+
+  _nextchar
+  [[ $c != '|' ]] && _putback
+
+  _parse_newline
+
+  totalcols=$col
+  row=$((row+1))
+}
+
+_advance_col() {
+  shopt -s extglob
+
+  local trimed="${contents[$row*$totalcols+$col]}"
+  trimed="${trimed##+([[:space:]])}"
+  trimed="${trimed%%+([[:space:]])}"
+  contents[$row*$totalcols+$col]="$trimed"
+
+  local colw="${#trimed}"
+  local w="${colwidths[$col]}"
+  if [[ $colw -gt $w ]]; then colwidths[$col]="$colw"; fi
+
+  col=$((col+1))
+}
+
+_parse_headings() {
+
+  _parse_content
+  _advance_col
+
+  _parse_pipe
+  _parse_headingsB
+
+}
+
+_parse_content() {
+  _nextchar
+  if [[ $c = '|' || $c = $'\n' ]]; then
+    _putback
+  else 
+    contents[$row*$totalcols+$col]+="$c"
+
+    _parse_content
+  fi
+}
+
+_parse_pipe() {
+  _nextchar
+  [[ $c != '|' ]] && __fail "expected pipe, found '$c'"
+}
+
+_parse_headingsB() {
+  _parse_content
+  _advance_col
+
+  _nextchar
+  if [[ $c = '|' ]]; then
+    _nextchar
+    if [[ $c = $'\n' ]]; then
+      _putback
+      _putback
+    else
+      _putback
+      _putback
+      _parse_pipe
+      _parse_headingsB
+    fi
+  else
+    if [[ $c = $'\n' ]]; then
+      _putback
+    fi
+  fi
+   
+}
+
+_parse_newline() {
+  _nextchar
+  [[ $c != $'\n' ]] && __fail "expected newline, found '$c'"
+}
+
+_parse_delimrow(){
+  col=0
+  _nextchar
+  [[ $c != '|' ]] && _putback
+
+  _parse_delims
+
+  _nextchar
+  [[ $c != '|' ]] && _putback
+
+  _parse_newline
+
+  row=$((row+1))
+}
+
+_parse_delims() {
+  _parse_delim
+  col=$((col+1))
+
+  _parse_pipe
+
+  _parse_delimsB
+}
+
+_parse_delimsB() {
+  _parse_delim
+  col=$((col+1))
+
+  _nextchar
+  if [[ $c = '|' ]]; then
+    _nextchar
+    if [[ $c = $'\n' ]]; then
+      _putback
+      _putback
+    else
+      _putback
+      _putback
+      _parse_pipe
+      _parse_delimsB
+    fi
+  else
+    if [[ $c = $'\n' ]]; then
+      _putback
+    fi
+  fi
+}
+
+_parse_delim() {
+  local remainingbuf=${buf:$i}
+  local lookahead=${remainingbuf%%\|*}
+
+  if [[ $lookahead =~ ^[[:space:]]*:-+:[[:space:]]*$ ]]; then
+    colaligns[$col]="center"
+    _parse_centeralign
+    return
+  fi
+  if [[ $lookahead =~ ^[[:space:]]*:--+[[:space:]]*$ ]]; then
+    colaligns[$col]="left"
+    _parse_leftalign
+    return
+  fi
+  if [[ $lookahead =~ ^[[:space:]]*---+[[:space:]]*$ ]]; then
+    colaligns[$col]="none"
+    _parse_noalign
+    return
+  fi
+  if [[ $lookahead =~ ^[[:space:]]*--+:[[:space:]]*$ ]]; then
+    colaligns[$col]="right"
+    _parse_rightalign
+    return
+  fi
+}
+
+_parse_skipspaces() {
+  _nextchar
+  if [[ $c = ' ' ]]; then
+    _parse_skipspaces 
+  else
+    _putback
+  fi
+}
+
+_parse_noalign() {
+  _parse_skipspaces
+  _parse_dash
+  _parse_dash
+  _parse_dashes
+  _parse_skipspaces
+}
+
+_parse_leftalign() {
+  _parse_skipspaces
+  _parse_colon
+  _parse_dash
+  _parse_dashes
+  _parse_skipspaces
+}
+
+_parse_centeralign(){
+  _parse_skipspaces
+  _parse_colon
+  _parse_dashes
+  _parse_colon
+  _parse_skipspaces
+}
+
+_parse_rightalign() {
+  _parse_skipspaces
+  _parse_dash
+  _parse_dashes
+  _parse_colon
+  _parse_skipspaces
+}
+
+_parse_dash() {
+  _nextchar
+  [[ $c != '-' ]] && __fail "expected dash, found '$c'"
+}
+
+_parse_dashes() {
+  _parse_dash
+
+  _nextchar
+  if [[ $c = '-' ]]; then
+    _putback
+    _parse_dashes
+  else
+    _putback
+  fi
+}
+
+_parse_colon() {
+  _nextchar
+  [[ $c != ':' ]] && __fail "expected colon, fount '$c'"
+}
+
+_parse_tablebody(){
+  local bi=$((${#buf}-1))
+  if [[ $i -lt $bi ]]; then
+    _parse_tablerow
+    _parse_tablebody
+  else
+    return
+  fi
+}
+
+_parse_tablerow() {
+  col=0
+  _nextchar
+  [[ $c != '|' ]] && _putback
+
+  _parse_body
+
+  _nextchar
+  [[ $c != '|' ]] && _putback
+
+  row=$((row+1))
+  _parse_newline
+}
+
+_parse_body() {
+  _parse_content
+  _advance_col
+
+  _parse_pipe
+  _parse_bodyB
+}
+
+_parse_bodyB() {
+  _parse_content
+  _advance_col
+
+  _nextchar
+  if [[ $c = '|' ]]; then
+    _nextchar
+    if [[ $c = $'\n' ]]; then
+      _putback
+      _putback
+    else
+      _putback
+      _putback
+      _parse_pipe
+      _parse_bodyB
+    fi
+  else
+    if [[ $c = $'\n' ]]; then
+      _putback
+    fi
+  fi
+}
+
+_nextchar() {
+  if [[ $i -lt "${#buf}" ]]; then
+    c="${buf:$i:1}"
+    i=$((i+1))
+  else
+    __fail "Unexpectedly reached EOF"
+  fi
+}
+
+_putback() {
+  i=$((i-1))
+}
+
+fmttable
