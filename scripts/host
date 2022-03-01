@@ -1,0 +1,3 @@
+#!/bin/sh
+#open "https://twitch.tv/$1"
+chat /msg "$TWITCH_USER" /host "$1"
