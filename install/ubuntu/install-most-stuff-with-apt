@@ -1,4 +1,4 @@
 #!/bin/sh
 
-sudo apt install nmap jq pcregrep lynx make uidmap ruby weechat-curses python-is-python3 libcurses-perl figlet cmatrix build-essential libncurses-dev autoconf
+sudo apt install nmap jq pcregrep lynx make uidmap ruby weechat-curses python-is-python3 libcurses-perl figlet cmatrix build-essential libncurses-dev autoconf entr
 sudo cpan -I Term::Animation
