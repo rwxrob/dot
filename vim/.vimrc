@@ -213,8 +213,9 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   " github.com/junegunn/vim-plug
 
   call plug#begin('~/.local/share/vim/plugins')
-  Plug 'sheerun/vim-polyglot'
+  "Plug 'sheerun/vim-polyglot'
   Plug 'vim-pandoc/vim-pandoc'
+  Plug 'pegn/pegn-syntax'
   Plug 'rwxrob/vim-pandoc-syntax-simple'
   Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
   Plug 'tpope/vim-fugitive'
