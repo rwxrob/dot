@@ -296,7 +296,7 @@ clone() {
 
 owncomp=(
   pdf md zet yt gl auth pomo config live iam sshkey ws x clip 
-  ./build build b ./k8sapp k8sapp ./setup ./cmd run ./run
+  ./build build b ./k8sapp k8sapp ./setup ./cmd run ./run foo ./foo
 )
 
 for i in "${owncomp[@]}"; do complete -C "$i" "$i"; done
