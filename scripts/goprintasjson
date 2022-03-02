@@ -3,6 +3,9 @@
 read -r name
 
 echo "
+
+// ---------------------------- PrintAsJSON ---------------------------
+
 func (s $name) MarshalJSON() ([]byte, error) {
     buf := ""
     // TODO
@@ -11,6 +14,7 @@ func (s $name) MarshalJSON() ([]byte, error) {
 
 // JSON implements PrintAsJSON multi-line, 2-space indent JSON output.
 func (s $name) JSON() string {b,_ :=s.MarshalJSON();return string(b)}
+func (s $name) JSON() string {b,_ :=json.Marshal(s);return string(b)}
 
 // Print implements PrintAsJSON.
 func (s $name) Print() { fmt.Println(s.JSON()) }
