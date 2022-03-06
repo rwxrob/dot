@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+addcopyright() {
+  file=$(tempfile)
+  cat <(echo "// Copyright 2022 Robert S. Muhlestein
+// SPDX-License-Identifier: Apache-2.0
+  ") "$1" >> "$file"
+  mv "$file" "$1"
+}
+
+for f in "$@"; do addcopyright "$f"; done
