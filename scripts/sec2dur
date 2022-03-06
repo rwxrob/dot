@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 seconds="$1"
 [[ -z "$seconds" ]] && echo "usage: $0 SECONDS" && exit 1
+minus=${seconds:0:1}
+seconds=${seconds#-}
 days=$((seconds/86400))
 (( seconds -= (days*86400) ))
 hours=$((seconds/3600))
 (( seconds -= (hours*3600) ))
 minutes=$((seconds/60))
 (( seconds -= (minutes*60) ))
-printf "%i.%02i.%02i.%02i" "$days" "$hours" "$minutes" "$seconds"
+printf "%s%i.%02i.%02i.%02i" "$minus" "$days" "$hours" "$minutes" "$seconds"

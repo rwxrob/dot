@@ -16,7 +16,8 @@ marquee() {
   pomo="$(pomo)"
   #mode="$(iam mode emoji)"
   zet="zet:$(zet current)"
-  time="$(date +"%A, %B %-e, %Y, %-H:%M %Z%0z")"
+  time="$(date +"%A, %B %-e, %Y, %-I:%M%p %Z%0z")"
+  isosec="$(isosec)"
   tilboost="$(countdown 11:11:11 May 4)"
   #[[ -n "$pomo" ]] && timebar+=("$pomo")
   #[[ -n "$pomo" ]] && topicbar+=("$pomo")
@@ -27,13 +28,13 @@ marquee() {
   topicremain=$(( $(tput cols) - ${#topicbarb} ))
   timeremain=$(( $(tput cols) - ${#timebarb} ))
   topicspace=$(( topicremain - ${#mode} - ${#zet}))
-  timespace=$(( timeremain - ${#mode} - ${#zet} - ${#tilboost}))
+  timespace=$(( timeremain - ${#mode} - ${#zet} - ${#tilboost} - ${#isosec}))
   #if (( $(date +%s)%20 < 10 ));then
     #echo "$topicbarb $(repeat $' ' "$topicspace")              rwxrob.tv"
   #else
     #echo "$mode $timebarb $(repeat $' ' "$timespace") rwxrob.tv $zet"
     #echo "$timebarb $replay [boost in $tilboost] $(repeat $' ' "$timespace") rwxrob.tv"
-    echo "$timebarb [boost: $tilboost]"
+    echo "$timebarb ($isosec) [boost: $tilboost]"
   #fi
 }
 
