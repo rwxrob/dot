@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+_trim() {
+  local it="${1#"${1%%[![:space:]]*}"}"
+  it="${it%%//*}"
+  echo -e "${it%"${it##*[![:space:]]}"}"
+}
+
+
+interface="$1"
+receiver="$2"
+
+while IFS= read -r sig; do
+  sig=$(_trim "$sig")
+  name=${sig%%(*}
+  echo "//$name implements $interface interface."
+  # TODO get fancy with return type detection
+  echo "func (s $receiver) $sig {}"
+done
+
+
