@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+echo '
+	// adjust log output for testing
+	log.SetOutput(os.Stdout)
+	log.SetFlags(0)
+	defer log.SetOutput(os.Stderr)
+	defer log.SetFlags(log.Flags())
+'
