@@ -14,8 +14,8 @@ set autoindent
 " automatically write files when changing when multiple files open
 set autowrite
 
-" activate line numbers
-set number
+" deactivate line numbers
+set nonumber
 
 " turn col and row position on in bottom right
 set ruler " see ruf for formatting
