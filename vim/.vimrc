@@ -54,12 +54,11 @@ if v:version >= 800
 endif
 
 " mark trailing spaces as errors
-if has("match")
-  match ErrorMsg '\s\+$'
-endif
+match WildMenu '\s\+$'
 
 " enough for line numbers + gutter within 80 standard
 set textwidth=72
+set colorcolumn=73
 
 " replace tabs with spaces automatically
 set expandtab
@@ -213,7 +212,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   " github.com/junegunn/vim-plug
 
   call plug#begin('~/.local/share/vim/plugins')
-  "Plug 'sheerun/vim-polyglot'
+  Plug 'frazrepo/vim-rainbow'
   Plug 'vim-pandoc/vim-pandoc'
   Plug 'pegn/pegn-syntax'
   Plug 'rwxrob/vim-pandoc-syntax-simple'
@@ -222,6 +221,9 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   Plug 'hashivim/vim-terraform'
   Plug 'morhetz/gruvbox'
   call plug#end()
+
+  " rainbox
+  let g:rainbow_active = 1
 
   " terraform
   let g:terraform_fmt_on_save = 1
