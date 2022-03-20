@@ -54,11 +54,11 @@ if v:version >= 800
 endif
 
 " mark trailing spaces as errors
-match WildMenu '\s\+$'
+match IncSearch '\s\+$'
 
 " enough for line numbers + gutter within 80 standard
 set textwidth=72
-set colorcolumn=73
+"set colorcolumn=73
 
 " replace tabs with spaces automatically
 set expandtab
