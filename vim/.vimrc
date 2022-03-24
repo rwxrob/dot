@@ -222,8 +222,9 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   Plug 'morhetz/gruvbox'
   call plug#end()
 
-  " rainbox
-  let g:rainbow_active = 1
+  " rainbow
+  " FIXME: only do this for non-pandoc file types
+  "let g:rainbow_active=1
 
   " terraform
   let g:terraform_fmt_on_save = 1
@@ -262,6 +263,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   au FileType go nmap <leader>i :GoInfo<CR>
   au FileType go nmap <leader>l :GoMetaLinter!<CR>
   au FileType go nmap <leader>m ilog.Print("made")<CR><ESC>
+  au FileType go nmap <leader>n iif err != nil {return err}<CR><ESC>
 else
   autocmd vimleavepre *.go !gofmt -w % " backup if fatih fails
 endif
@@ -346,6 +348,7 @@ function! <SID>SynStack()
 endfunc
 endif
 
+
 " start at last place you were editing
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 "au BufWritePost ~/.vimrc so ~/.vimrc
@@ -386,3 +389,4 @@ noremap <C-p> <C-b>
 set rtp^=~/.vimpersonal
 set rtp^=~/.vimprivate
 set rtp^=~/.vimwork
+
