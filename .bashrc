@@ -296,8 +296,9 @@ clone() {
 # ------------- source external dependencies / completion ------------
 
 owncomp=(
-  pdf md zet yt gl auth pomo config live iam sshkey ws x clip 
-  ./build build b ./k8sapp k8sapp ./setup ./cmd run ./run foo ./foo cmds ./cmds
+  pdf md zet yt gl auth pomo config live iam sshkey ws x z clip 
+  ./build build b ./k8sapp k8sapp ./setup ./cmd run ./run 
+  foo ./foo cmds ./cmds z
 )
 
 for i in "${owncomp[@]}"; do complete -C "$i" "$i"; done
