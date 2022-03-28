@@ -261,7 +261,7 @@ new-from() {
   [[ ! -d "$GHREPOS" ]] && echo "Not found: $GHREPOS" && return 1
   cd "$GHREPOS" || return 1
   [[ -e "$name" ]] && echo "exists: $name" && return 1
-  gh repo create -p "$template" --private "$name"
+  gh repo create -p "$template" --public "$name"
   gh repo clone "$name"
   cd "$name" || return 1
 }
