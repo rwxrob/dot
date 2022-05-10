@@ -1,0 +1,3 @@
+user=""
+repo=""
+latest=$(curl -sSL "https://api.github.com/repos/$user/$repo/releases/latest" | jq -r .name)
