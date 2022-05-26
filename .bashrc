@@ -59,6 +59,7 @@ export CGO_ENABLED=0
 export PYTHONDONTWRITEBYTECODE=2 # fucking shit-for-brains var name
 export LC_COLLATE=C
 export CFLAGS="-Wall -Wextra -Werror -O0 -g -fsanitize=address -fno-omit-frame-pointer -finstrument-functions"
+
 export LESS_TERMCAP_mb="[35m" # magenta
 export LESS_TERMCAP_md="[33m" # yellow
 export LESS_TERMCAP_me="" # "0m"
@@ -66,6 +67,7 @@ export LESS_TERMCAP_se="" # "0m"
 export LESS_TERMCAP_so="[34m" # blue
 export LESS_TERMCAP_ue="" # "0m"
 export LESS_TERMCAP_us="[4m"  # underline
+
 export ANSIBLE_INVENTORY="$HOME/.config/ansible/ansible_hosts"
 export DOCKER_HOST=unix:///run/user/$(id -u)/docker.sock
 
@@ -224,6 +226,7 @@ alias ls='ls -h --color=auto'
 alias free='free -h'
 alias df='df -h'
 alias chmox='chmod +x'
+alias diff='diff --color'
 alias sshh='sshpass -f $HOME/.sshpass ssh '
 alias temp='cd $(mktemp -d)'
 alias view='vi -R' # which is usually linked to vim
@@ -238,6 +241,12 @@ alias neo="neo -D -c gold"
 _have vim && alias vi=vim
 
 # ----------------------------- functions ----------------------------
+
+# lesscoloroff() {
+#   while IFS= read -r line; do
+#     unset ${line%%=*}
+#   done < <(env | grep LESS_TERM)
+# } && export -f lesscoloroff
 
 envx() {
   local envfile="${1:-"$HOME/.env"}"
@@ -266,7 +275,7 @@ new-from() {
   cd "$name" || return 1
 }
 
-new-bonzai() { new-from rwxrob/foo "$1"; }
+new-bonzai() { new-from rwxrob/bonzai-example "$1"; }
 new-cmd() { new-from rwxrob/template-bash-command "cmd-$1"; }
 cdz () { cd $(zet get "$@"); }
 
@@ -311,7 +320,6 @@ _have spotify && . <(spotify completion bash 2>/dev/null)
 _have k && complete -o default -F __start_kubectl k
 _have kind && . <(kind completion bash)
 _have kompose && . <(kompose completion bash)
-_have yq && . <(yq shell-completion bash)
 _have helm && . <(helm completion bash)
 _have minikube && . <(minikube completion bash)
 _have conftest && . <(conftest completion bash)
