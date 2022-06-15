@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -e
+
+user="open-policy-agent"
+repo="conftest"
+
+os=$(uname -s)
+arch=$(uname -m)
+latest=$(curl -sSL "https://api.github.com/repos/$user/$repo/releases/latest" | jq -r .name)
+rel="https://github.com/$user/$repo/releases/download/$latest/${repo}_${latest//v/}_${os^}_${arch}.tar.gz"
+
+dir=$(mktemp -d)
+curl -sSL "$rel" -o "$dir/$repo.tar.gz"
+cd "$dir"
+tar xzf "$repo.tar.gz" 
+mv "$dir/$repo" "$HOME/.local/bin"
+rm -rf "$dir"
