@@ -1,33 +1,39 @@
-#!/usr/bin/env bash
-set -e
+# #!/usr/bin/env bash
 
-install_17() { 
-  cd "$(mktemp -d)"
+# 1.18 is the new default
+sudo apt-get -y install golang
 
-  os=linux
-  arch=amd64
-
-  file=$(curl -sSL  "https://golang.org/dl/?mode=json" \
-    | jq -r '.[0].files[]
-      | select(.os == "'"$os"'")
-      | select(.arch == "'"$arch"'")
-      | .filename')
-
-  curl -sSLO \
-    -H "Accept: application/vnd.github.v3+json" \
-     "https://dl.google.com/go/$file"
-
-  sudo tar xzf "$file" -C /usr/local/
-
-  echo "Make sure /usr/local/go/bin is in PATH"
-}
-
-upgrade_18() {
-  /usr/local/go/bin/go install golang.org/dl/go1.18beta2@latest
-  "$GOBIN/go1.18beta2" download
-  go install golang.org/x/tools/gopls@latest
-}
-
-#install_17
-upgrade_18
-
+# 
+# 
+# set -e
+# 
+# install_17() { 
+#   cd "$(mktemp -d)"
+# 
+#   os=linux
+#   arch=amd64
+# 
+#   file=$(curl -sSL  "https://golang.org/dl/?mode=json" \
+#     | jq -r '.[0].files[]
+#       | select(.os == "'"$os"'")
+#       | select(.arch == "'"$arch"'")
+#       | .filename')
+# 
+#   curl -sSLO \
+#     -H "Accept: application/vnd.github.v3+json" \
+#      "https://dl.google.com/go/$file"
+# 
+#   sudo tar xzf "$file" -C /usr/local/
+# 
+#   echo "Make sure /usr/local/go/bin is in PATH"
+# }
+# 
+# upgrade_18() {
+#   /usr/local/go/bin/go install golang.org/dl/go1.18beta2@latest
+#   "$GOBIN/go1.18beta2" download
+#   go install golang.org/x/tools/gopls@latest
+# }
+# 
+# #install_17
+# upgrade_18
+# 
