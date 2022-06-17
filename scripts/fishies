@@ -14,8 +14,8 @@ $SIG{"INT"} = \&handle;
 # Keep in mind that you probably have to install libcurses-perl
 # and Term::Animation from CPAN for this to work:
 #
-#     sudo apt install libcurses-perl
-#     sudo cpan -I Term::Animation
+#   sudo apt install libcurses-perl make
+#   sudo cpan -I Term::Animation
 #
 # Special thanks to @UndeadLeech for adding the transparency. This is
 # the *only* fish/asciiquarium without the default black background.
