@@ -328,10 +328,26 @@ _have podman && _source_if "$HOME/.local/share/podman/completion" # d
 _have docker && _source_if "$HOME/.local/share/docker/completion" # d
 _have docker-compose && complete -F _docker_compose dc # dc
 
+
+_swaggercomp() {
+    # All arguments except the first one
+    args=("${COMP_WORDS[@]:1:$COMP_CWORD}")
+
+    # Only split on newlines
+    local IFS=$'\n'
+
+    # Call completion (note that the first element of COMP_WORDS is
+    # the executable itself)
+    COMPREPLY=($(GO_FLAGS_COMPLETION=1 ${COMP_WORDS[0]} "${args[@]}"))
+    return 0
+} && export -f _swaggercomp
+
+_have swagger && complete -F _swaggercomp swagger
+
 # -------------------- personalized configuration --------------------
 _source_if "$HOME/.bash_personal"
 _source_if "$HOME/.bash_private"
 _source_if "$HOME/.bash_work"
 
-complete -C /usr/bin/terraform terraform
-complete -C /usr/bin/terraform tf
+_have terraform && complete -C /usr/bin/terraform terraform
+_have terraform && complete -C /usr/bin/terraform tf
