@@ -1,9 +1,14 @@
 {
+    "$help": "https://aka.ms/terminal-documentation",
     "$schema": "https://aka.ms/terminal-profiles-schema",
-    "actions":
+    "actions": 
     [
         {
-            "command":
+            "command": "paste",
+            "keys": "ctrl+v"
+        },
+        {
+            "command": 
             {
                 "action": "copy",
                 "singleLine": false
@@ -11,15 +16,11 @@
             "keys": "ctrl+c"
         },
         {
-            "command": "paste",
-            "keys": "ctrl+v"
-        },
-        {
             "command": "find",
             "keys": "ctrl+shift+f"
         },
         {
-            "command":
+            "command": 
             {
                 "action": "splitPane",
                 "split": "auto",
@@ -28,60 +29,48 @@
             "keys": "alt+shift+d"
         }
     ],
-    "alwaysShowTabs": true,
     "copyFormatting": "none",
-    "copyOnSelect": true,
-    "defaultProfile": "{07b52e3e-de2c-5db4-bd2d-ba144ed6c273}",
-    "disableAnimations": true,
-    "initialCols": 80,
-    "launchMode": "default",
-    "profiles":
+    "copyOnSelect": false,
+    "defaultProfile": "{e6f59385-ccc8-4b92-af9e-70e357bd54a8}",
+    "launchMode": "fullscreen",
+    "profiles": 
     {
-        "defaults": {},
-        "list":
+        "defaults": 
+        {
+            "bellStyle": "none",
+            "closeOnExit": "always",
+            "colorScheme": "Gruvbox",
+            "cursorShape": "filledBox",
+            "font": 
+            {
+                "face": "Ubuntu Mono",
+                "size": 28,
+                "weight": "normal"
+            },
+            "scrollbarState": "hidden",
+            "startingDirectory": "%USERPROFILE%",
+            "useAcrylic": false
+        },
+        "list": 
         [
             {
-                "commandline": "powershell.exe",
                 "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
                 "hidden": false,
                 "name": "Windows PowerShell"
             },
             {
-                "bellStyle": "none",
-                "closeOnExit": "always",
-                "colorScheme": "Gruvbox",
-                "commandline": "C:\\Program Files\\Git\\bin\\bash.exe",
-                "fontFace": "UbuntuMono NF",
-                "fontSize": 21,
                 "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
                 "hidden": false,
-                "name": "Git-Bash",
-                "padding": "4",
-                "scrollbarState": "hidden"
+                "name": "Command Prompt"
             },
             {
-                "guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
-                "hidden": false,
-                "name": "Azure Cloud Shell",
-                "source": "Windows.Terminal.Azure"
-            },
-            {
-                "bellStyle": "none",
-                "closeOnExit": "always",
-                "colorScheme": "Gruvbox",
-                "fontFace": "UbuntuMono NF",
-                "fontSize": 21,
-                "guid": "{07b52e3e-de2c-5db4-bd2d-ba144ed6c273}",
-                "hidden": false,
-                "name": "Ubuntu-20.04",
-                "padding": "5",
-                "scrollbarState": "hidden",
-                "source": "Windows.Terminal.Wsl",
-                "startingDirectory": "%USERPROFILE%"
+                "commandline": "C:\\Program Files\\Git\\bin\\bash.exe",
+                "guid": "{e6f59385-ccc8-4b92-af9e-70e357bd54a8}",
+                "name": "git-bash"
             }
         ]
     },
-    "schemes":
+    "schemes": 
     [
         {
             "background": "#0C0C0C",
@@ -130,7 +119,7 @@
             "yellow": "#C19C00"
         },
         {
-            "background": "#282828",
+            "background": "#1A1A1A",
             "black": "#504945",
             "blue": "#458588",
             "brightBlack": "#928374",
@@ -140,7 +129,7 @@
             "brightPurple": "#D3869B",
             "brightRed": "#FB4934",
             "brightWhite": "#EBDBB2",
-            "brightYellow": "#FABD2F",
+            "brightYellow": "#DABD2F",
             "cursorColor": "#EBDBB2",
             "cyan": "#689D6A",
             "foreground": "#EBDBB2",
@@ -314,8 +303,5 @@
             "yellow": "#808000"
         }
     ],
-    "showTabsInTitlebar": true,
-    "showTerminalTitleInTitlebar": false,
-    "startOnUserLogin": true,
-    "theme": "dark"
+    "startOnUserLogin": true
 }
