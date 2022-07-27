@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# This script will monitor the passed script (by path, default is
+# 'build') for changes using entr and run shellcheck when changes are
+# detected.
+
+declare script=build
+
+if [[ -n "$1" ]]; then
+  script=$1
+fi
+
+entr bash -c 'clear; shellcheck '"$script" <<< "$script"
