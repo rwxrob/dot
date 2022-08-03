@@ -56,7 +56,7 @@ export GOPATH="$HOME/.local/share/go"
 export GOBIN="$HOME/.local/bin"
 export GOPROXY=direct
 export CGO_ENABLED=0
-export PYTHONDONTWRITEBYTECODE=2 # fucking shit-for-brains var name
+export PYTHONDONTWRITEBYTECODE=2
 export LC_COLLATE=C
 export CFLAGS="-Wall -Wextra -Werror -O0 -g -fsanitize=address -fno-omit-frame-pointer -finstrument-functions"
 
@@ -119,9 +119,11 @@ pathprepend() {
 
 # remember last arg will be first in path
 pathprepend \
-  /usr/local/bin \
   "$HOME/.local/bin" \
   "$GHREPOS/cmd-"* \
+  /usr/local/go/bin \
+  /usr/local/opt/openjdk/bin \
+  /usr/local/bin \
   "$SCRIPTS" 
 
 pathappend \
@@ -224,6 +226,7 @@ alias scripts='cd $SCRIPTS'
 alias snippets='cd $SNIPPETS'
 alias ls='ls -h --color=auto'
 alias free='free -h'
+alias tree='tree -a'
 alias df='df -h'
 alias chmox='chmod +x'
 alias diff='diff --color'
@@ -307,7 +310,7 @@ clone() {
 owncomp=(
   pdf md zet yt gl auth pomo config live iam sshkey ws x z clip 
   ./build build b ./k8sapp k8sapp ./setup ./cmd run ./run 
-  foo ./foo cmds ./cmds z bonzai
+  foo ./foo cmds ./cmds z bonzai openapi
 )
 
 for i in "${owncomp[@]}"; do complete -C "$i" "$i"; done
