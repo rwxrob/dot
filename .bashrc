@@ -105,7 +105,7 @@ pathappend() {
     PATH=${PATH/%":$arg"/}
     export PATH="${PATH:+"$PATH:"}$arg"
   done
-} && export pathappend
+} && export -f pathappend
 
 pathprepend() {
   for arg in "$@"; do
@@ -115,7 +115,7 @@ pathprepend() {
     PATH=${PATH/%":$arg"/}
     export PATH="$arg${PATH:+":${PATH}"}"
   done
-} && export pathprepend
+} && export -f pathprepend
 
 # remember last arg will be first in path
 pathprepend \
@@ -148,7 +148,9 @@ export CDPATH=".:$GHREPOS:$DOTFILES:$REPOS:/media/$USER:$HOME"
 
 # ------------------------ bash shell options ------------------------
 
-shopt -s checkwinsize
+# shopt is for BASHOPTS, set is for SHELLOPTS
+
+shopt -s checkwinsize  # enables $COLUMNS and $ROWS
 shopt -s expand_aliases
 shopt -s globstar
 shopt -s dotglob
@@ -191,7 +193,7 @@ __ps1() {
   [[ $dir = "$B" ]] && B=.
   countme="$USER$PROMPT_AT$(hostname):$dir($B)\$ "
 
-  [[ $B = master || $B = main ]] && b="$r"
+  [[ $B == master || $B == main ]] && b="$r"
   [[ -n "$B" ]] && B="$g($b$B$g)"
 
   short="$u\u$g$PROMPT_AT$h\h$g:$w$dir$B$p$P$x "
@@ -210,6 +212,8 @@ __ps1() {
 PROMPT_COMMAND="__ps1"
 
 # ----------------------------- keyboard -----------------------------
+
+# only works if you have X and are using graphic Linux desktop
 
 _have setxkbmap && test -n "$DISPLAY" && \
   setxkbmap -option caps:escape &>/dev/null
@@ -331,23 +335,8 @@ _have podman && _source_if "$HOME/.local/share/podman/completion" # d
 _have docker && _source_if "$HOME/.local/share/docker/completion" # d
 _have docker-compose && complete -F _docker_compose dc # dc
 
-
-_swaggercomp() {
-    # All arguments except the first one
-    args=("${COMP_WORDS[@]:1:$COMP_CWORD}")
-
-    # Only split on newlines
-    local IFS=$'\n'
-
-    # Call completion (note that the first element of COMP_WORDS is
-    # the executable itself)
-    COMPREPLY=($(GO_FLAGS_COMPLETION=1 ${COMP_WORDS[0]} "${args[@]}"))
-    return 0
-} && export -f _swaggercomp
-
-_have swagger && complete -F _swaggercomp swagger
-
 # -------------------- personalized configuration --------------------
+
 _source_if "$HOME/.bash_personal"
 _source_if "$HOME/.bash_private"
 _source_if "$HOME/.bash_work"
