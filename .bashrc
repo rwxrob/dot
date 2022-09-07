@@ -311,6 +311,9 @@ clone() {
 
 # ------------- source external dependencies / completion ------------
 
+# for mac
+[[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
+
 owncomp=(
   pdf md zet yt gl auth pomo config live iam sshkey ws x z clip 
   ./build build b ./k8sapp k8sapp ./setup ./cmd run ./run 
