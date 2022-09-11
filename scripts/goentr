@@ -1,0 +1,2 @@
+#!/bin/sh
+exec entr bash -c "clear; go run ." < <(find .)
