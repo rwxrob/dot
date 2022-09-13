@@ -68,7 +68,7 @@ export LESS_TERMCAP_so="[34m" # blue
 export LESS_TERMCAP_ue="" # "0m"
 export LESS_TERMCAP_us="[4m"  # underline
 
-export ANSIBLE_INVENTORY="$HOME/.config/ansible/ansible_hosts"
+export ANSIBLE_INVENTORY="$HOME/.config/ansible/hosts"
 #export DOCKER_HOST=unix:///run/user/$(id -u)/docker.sock
 
 [[ -d /.vim/spell ]] && export VIMSPELL=("$HOME/.vim/spell/*.add")
