@@ -1,6 +1,5 @@
-# My Ansible Stuff
+# Ansible Inventory for Personal Stuff
 
-> ⚠️
-> A lot of this is duplicated in the installer files (for now) until
-> I can migrate it all over.
-
+This is just for my homelab personal inventory stuff. The playbooks that
+I use are in https://github.com/rwxrob/ansible where I can re-use them
+for other things besides homelab stuff as well.
