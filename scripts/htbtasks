@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 
-for (( i=0; i<$1; i++ )) do
+for (( i=1; i<=$1; i++ )) do
   echo "## Task $i"
   echo
   echo "> "
