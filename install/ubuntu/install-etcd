@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+set -e
+
+echo "Are you absolutely sure you want to install the *latest* etcd"
+echo "(which may not be the same as the one for your Kubernetes version)."
+read -p "(y/N) " response
+test "$response" = "y"
+
+user="etcd-io"
+repo="etcd"
+
+os=$(uname -s)
+arch=$(uname -m)
+[[ "$arch" == x86_64 ]] && arch=amd64
+
+latest=$(curl -sSL "https://api.github.com/repos/$user/$repo/releases/latest" | jq -r .name)
+rel="https://github.com/$user/$repo/releases/download/$latest/${repo}-${latest}-${os,,}-${arch}.tar.gz"
+
+dir=$(mktemp -d)
+curl -L "$rel" -o "$dir/$repo.tar.gz"
+cd "$dir"
+tar xzf "$repo.tar.gz"
+
+echo "Do you want to move the following into /usr/local/bin?"
+ls -l $repo-$latest*/etcd*
+read -p "(y/N) " response
+test "$response" = "y"
+sudo mv $repo-$latest*/etcd* /usr/local/bin
+rm -rf "$dir"
