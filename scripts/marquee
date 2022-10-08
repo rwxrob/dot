@@ -34,7 +34,8 @@ marquee() {
   #else
     #echo "$mode $timebarb $(repeat $' ' "$timespace") rwxrob.tv $zet"
     #echo "$timebarb $replay [boost in $tilboost] $(repeat $' ' "$timespace") rwxrob.tv"
-    echo "$timebarb ($isosec) [boost: $tilboost]"
+    #echo "$timebarb ($isosec) [boost: $tilboost]"
+    echo "$timebarb ($isosec)"
   #fi
 }
 

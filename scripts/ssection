@@ -22,7 +22,7 @@ ssection () {
 
     if [[ "$line" =~ $end ]]; then
       in=no
-      printf "$buf"
+      printf "$buf\n\n"
       continue
     fi
 
