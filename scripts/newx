@@ -5,7 +5,7 @@ test ! -n "${1}"  && echo "usage: newscript <name>" && exit 1;
 
 path="${SCRIPTS}/${1}"
 
-if [ -e "${path}" ]; then
+if test -e "${path}"; then
   read -p "${1} already exists. Edit? " yes
   case "${yes}" in
     y|yes|yep|yeppers|yeah|ok|okay) exec vim "${path}"

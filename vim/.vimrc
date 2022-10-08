@@ -105,9 +105,9 @@ set noshowmatch
 " wrap around when searching
 set wrapscan
 
-" Just the defaults, these are changed per filetype by plugins.
-" Most of the utility of all of this has been superceded by the use of
-" modern simplified pandoc for capturing knowledge source instead of
+" Just the formatoptions defaults, these are changed per filetype by
+" plugins. Most of the utility of all of this has been superceded by the use of
+" modern simplified pandoc for capturing knowledge source instead of 
 " arbitrary raw text files.
 
 set fo-=t   " don't auto-wrap text using text width
@@ -199,13 +199,13 @@ au FileType * hi MatchParen ctermbg=236 ctermfg=darkred
 au FileType markdown,pandoc hi Title ctermfg=yellow ctermbg=NONE
 au FileType markdown,pandoc hi Operator ctermfg=yellow ctermbg=NONE
 au FileType yaml hi yamlBlockMappingKey ctermfg=NONE
-au FileType yaml set sw=4
+au FileType yaml set sw=2
 au FileType bash set sw=2
 au FileType c set sw=8
 
 set cinoptions+=:0
 
-" Edit/Reload vimr configuration file
+" Edit/Reload vimrc configuration file
 nnoremap confe :e $HOME/.vimrc<CR>
 nnoremap confr :source $HOME/.vimrc<CR>
 
@@ -217,22 +217,15 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   " github.com/junegunn/vim-plug
 
   call plug#begin('~/.local/share/vim/plugins')
-  Plug 'frazrepo/vim-rainbow'
-  Plug 'vim-pandoc/vim-pandoc'
-  Plug 'pegn/pegn-syntax'
-  Plug 'rwxrob/vim-pandoc-syntax-simple'
-  Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
-  Plug 'tpope/vim-fugitive'
-  Plug 'hashivim/vim-terraform'
+  Plug 'zah/nim.vim'
+  Plug 'conradirwin/vim-bracketed-paste'
   Plug 'morhetz/gruvbox'
+  Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
+  Plug 'vim-pandoc/vim-pandoc'
+  Plug 'rwxrob/vim-pandoc-syntax-simple'
+  "Plug 'pegn/pegn-syntax'
+  Plug 'tpope/vim-fugitive'
   call plug#end()
-
-  " rainbow
-  " FIXME: only do this for non-pandoc file types
-  "let g:rainbow_active=1
-
-  " terraform
-  let g:terraform_fmt_on_save = 1
 
   " pandoc
   let g:pandoc#formatting#mode = 'h' " A'
@@ -261,12 +254,6 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   "let g:go_metalinter_autosave=1
   set updatetime=100
   "let g:go_gopls_analyses = { 'composites' : v:false }
-  au FileType go nmap <leader>t :GoTest!<CR>
-  au FileType go nmap <leader>v :GoVet!<CR>
-  au FileType go nmap <leader>b :GoBuild!<CR>
-  au FileType go nmap <leader>c :GoCoverageToggle<CR>
-  au FileType go nmap <leader>i :GoInfo<CR>
-  au FileType go nmap <leader>l :GoMetaLinter!<CR>
   au FileType go nmap <leader>m ilog.Print("made")<CR><ESC>
   au FileType go nmap <leader>n iif err != nil {return err}<CR><ESC>
 else
@@ -294,7 +281,7 @@ autocmd BufWritePost *.md silent !toemoji %
 autocmd BufWritePost *.md silent !toduck %
 
 " fill in anything beginning with @ with a link to twitch to it
-" autocmd vimleavepre *.md !perl -p -i -e 's, @(\w+), [\\@\1](https://twitch.tv/\1),g' %
+"autocmd vimleavepre *.md !perl -p -i -e 's, @(\w+), [\\@\1](https://twitch.tv/\1),g' %
 
 " make Y consitent with D and C (yank til end)
 map Y y$
@@ -374,8 +361,8 @@ nmap <leader>2 :set paste<CR>i
 "noremap <up> :echoerr "Umm, use k instead"<CR>
 "noremap <down> :echoerr "Umm, use j instead"<CR>
 "noremap <left> :echoerr "Umm, use h instead"<CR>
-" noremap <right> :echoerr "Umm, use l instead"<CR>
-" inoremap <up> <NOP>
+"noremap <right> :echoerr "Umm, use l instead"<CR>
+"inoremap <up> <NOP>
 " inoremap <down> <NOP>
 " inoremap <left> <NOP>
 " inoremap <right> <NOP>

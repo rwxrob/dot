@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+while IFS= read line; do
+  echo ${line^^}
+done

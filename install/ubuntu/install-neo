@@ -1,6 +1,8 @@
 #!/bin/sh
+echo <<EOM
 clone st3w/neo
 ./autogen.sh
 ./configure
 make
 sudo make install
+EOM

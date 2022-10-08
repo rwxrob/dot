@@ -68,7 +68,11 @@ export LESS_TERMCAP_so="[34m" # blue
 export LESS_TERMCAP_ue="" # "0m"
 export LESS_TERMCAP_us="[4m"  # underline
 
-export ANSIBLE_INVENTORY="$HOME/.config/ansible/hosts"
+export ANSIBLE_CONFIG="$HOME/.config/ansible/config.ini"
+export ANSIBLE_INVENTORY="$HOME/.config/ansible/inventory.yaml"
+export ANSIBLE_LOAD_CALLBACK_PLUGINS=1
+#export ANSIBLE_STDOUT_CALLBACK=json
+
 #export DOCKER_HOST=unix:///run/user/$(id -u)/docker.sock
 
 [[ -d /.vim/spell ]] && export VIMSPELL=("$HOME/.vim/spell/*.add")
@@ -120,6 +124,7 @@ pathprepend() {
 # remember last arg will be first in path
 pathprepend \
   "$HOME/.local/bin" \
+  "$HOME/.nimble/bin" \
   "$GHREPOS/cmd-"* \
   /usr/local/go/bin \
   /usr/local/opt/openjdk/bin \
@@ -337,6 +342,16 @@ _have mk && complete -o default -F __start_minikube mk
 _have podman && _source_if "$HOME/.local/share/podman/completion" # d
 _have docker && _source_if "$HOME/.local/share/docker/completion" # d
 _have docker-compose && complete -F _docker_compose dc # dc
+
+_have ansible && . <(register-python-argcomplete3 ansible)
+_have ansible-config && . <(register-python-argcomplete3 ansible-config)
+_have ansible-console && . <(register-python-argcomplete3 ansible-console)
+_have ansible-doc && . <(register-python-argcomplete3 ansible-doc)
+_have ansible-galaxy && . <(register-python-argcomplete3 ansible-galaxy)
+_have ansible-inventory && . <(register-python-argcomplete3 ansible-inventory)
+_have ansible-playbook && . <(register-python-argcomplete3 ansible-playbook)
+_have ansible-pull && . <(register-python-argcomplete3 ansible-pull)
+_have ansible-vault && . <(register-python-argcomplete3 ansible-vault)
 
 # -------------------- personalized configuration --------------------
 

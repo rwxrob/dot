@@ -1,4 +1,5 @@
 # particularly useful for psql
 set editing-mode vi
+set enable-bracketed-paste on
 #set bell-style none          # MAKE IT STOP!!
 set keymap vi
