@@ -352,6 +352,7 @@ _have ansible-inventory && . <(register-python-argcomplete3 ansible-inventory)
 _have ansible-playbook && . <(register-python-argcomplete3 ansible-playbook)
 _have ansible-pull && . <(register-python-argcomplete3 ansible-pull)
 _have ansible-vault && . <(register-python-argcomplete3 ansible-vault)
+_have ssh-agent && . <(ssh-agent)
 
 # -------------------- personalized configuration --------------------
 
