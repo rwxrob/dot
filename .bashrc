@@ -227,6 +227,7 @@ _have setxkbmap && test -n "$DISPLAY" && \
 #      (use exec scripts instead, which work from vim and subprocs)
 
 unalias -a
+alias ip='ip -c'
 alias '?'=duck
 alias '??'=google
 alias '???'=bing
