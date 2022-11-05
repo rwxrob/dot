@@ -320,8 +320,8 @@ clone() {
 [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
 
 owncomp=(
-  pdf md zet yt gl auth pomo config live iam sshkey ws x z clip 
-  ./build build b ./k8sapp k8sapp ./setup ./cmd run ./run 
+  pdf md zet yt gl auth pomo config live iam sshkey ws x z clip
+  ./build build b ./k8sapp k8sapp ./setup ./cmd run ./run
   foo ./foo cmds ./cmds z bonzai openapi
 )
 
@@ -352,7 +352,7 @@ _have ansible-inventory && . <(register-python-argcomplete3 ansible-inventory)
 _have ansible-playbook && . <(register-python-argcomplete3 ansible-playbook)
 _have ansible-pull && . <(register-python-argcomplete3 ansible-pull)
 _have ansible-vault && . <(register-python-argcomplete3 ansible-vault)
-_have ssh-agent && . <(ssh-agent)
+#_have ssh-agent && test -z "$SSH_AGENT_PID" && . <(ssh-agent)
 
 # -------------------- personalized configuration --------------------
 
