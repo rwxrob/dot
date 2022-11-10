@@ -79,7 +79,7 @@ export ANSIBLE_LOAD_CALLBACK_PLUGINS=1
 
 # -------------------------------- gpg -------------------------------
 
-#export GPG_TTY=$(tty)
+export GPG_TTY=$(tty)
 
 # ------------------------------- pager ------------------------------
 
