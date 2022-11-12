@@ -250,7 +250,6 @@ alias grep="pcregrep"
 alias iam=live
 alias neo="neo -D -c gold"
 alias more="less -R"
-alias m="less -R"
 
 _have vim && alias vi=vim
 
