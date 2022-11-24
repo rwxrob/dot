@@ -60,6 +60,7 @@ export PYTHONDONTWRITEBYTECODE=2
 export LC_COLLATE=C
 export CFLAGS="-Wall -Wextra -Werror -O0 -g -fsanitize=address -fno-omit-frame-pointer -finstrument-functions"
 
+export LESS="-R"
 export LESS_TERMCAP_mb="[35m" # magenta
 export LESS_TERMCAP_md="[33m" # yellow
 export LESS_TERMCAP_me="" # "0m"
@@ -249,7 +250,7 @@ alias coin="clip '(yes|no)'"
 alias grep="pcregrep"
 alias iam=live
 alias neo="neo -D -c gold"
-alias more="less -R"
+alias more="less"
 
 _have vim && alias vi=vim
 
