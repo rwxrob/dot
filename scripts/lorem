@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+exec curl -sSL "http://metaphorpsum.com/paragraphs/$1"
