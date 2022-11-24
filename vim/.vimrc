@@ -309,6 +309,7 @@ au bufnewfile,bufRead $SNIPPETS/python/* set ft=python
 au bufnewfile,bufRead $SNIPPETS/perl/* set ft=perl
 au bufnewfile,bufRead user-data set ft=yaml
 au bufnewfile,bufRead meta-data set ft=yaml
+au bufnewfile,bufRead keg set ft=yaml
 au bufnewfile,bufRead *.bash* set ft=bash
 au bufnewfile,bufRead *.{peg,pegn} set ft=config
 au bufnewfile,bufRead *.profile set filetype=sh
