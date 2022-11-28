@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+hidecursor
+trap "setterm --cursor on; echo ${clear}; exit; trap -- - SIGINT SIGTERM" SIGTERM SIGINT
+python /home/rwxrob/Repos/github.com/skilstak/pyfun/lib/pylights.py
+
