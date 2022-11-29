@@ -251,6 +251,7 @@ alias grep="pcregrep"
 alias iam=live
 alias neo="neo -D -c gold"
 alias more="less"
+alias zet="KEG_CURRENT=zet kn"
 
 _have vim && alias vi=vim
 
