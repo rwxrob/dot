@@ -251,8 +251,11 @@ alias grep="pcregrep"
 alias iam=live
 alias neo="neo -D -c gold"
 alias more="less"
-alias zet="KEG_CURRENT=zet keg"
 alias kn="keg"
+
+zet() {
+  KEG_CURRENT=zet keg "$@"
+} && export -f zet
 
 _have vim && alias vi=vim
 
