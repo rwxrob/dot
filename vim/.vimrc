@@ -203,6 +203,8 @@ au FileType yaml hi yamlBlockMappingKey ctermfg=NONE
 au FileType yaml set sw=2
 au FileType bash set sw=2
 au FileType c set sw=8
+au FileType markdown,pandoc noremap j gj
+au FileType markdown,pandoc noremap k gk
 
 set cinoptions+=:0
 
@@ -224,8 +226,6 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
   Plug 'vim-pandoc/vim-pandoc'
   Plug 'rwxrob/vim-pandoc-syntax-simple'
-  "Plug 'pegn/pegn-syntax'
-  Plug 'tpope/vim-fugitive'
   call plug#end()
 
   " pandoc
@@ -312,6 +312,7 @@ au bufnewfile,bufRead meta-data set ft=yaml
 au bufnewfile,bufRead keg set ft=yaml
 au bufnewfile,bufRead *.bash* set ft=bash
 au bufnewfile,bufRead *.{peg,pegn} set ft=config
+au bufnewfile,bufRead *.gotmpl set ft=go
 au bufnewfile,bufRead *.profile set filetype=sh
 au bufnewfile,bufRead *.crontab set filetype=crontab
 au bufnewfile,bufRead *ssh/config set filetype=sshconfig
