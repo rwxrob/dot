@@ -253,10 +253,6 @@ alias neo="neo -D -c gold"
 alias more="less"
 alias kn="keg"
 
-zet() {
-  KEG_CURRENT=zet keg "$@"
-} && export -f zet
-
 _have vim && alias vi=vim
 
 # ----------------------------- functions ----------------------------
