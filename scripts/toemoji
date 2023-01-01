@@ -16,6 +16,7 @@ emoji[tv]=📺
 emoji[update]=📰
 emoji[tux]=🐧
 emoji[tux]=🐧
+emoji[poop]=💩
 emoji[facepalm]=🤦
 
 toemoji() {

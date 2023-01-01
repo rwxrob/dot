@@ -6,4 +6,5 @@ elif [[ $what =~ ^([0-9]+) ]]; then
   what="at $(date -d "${BASH_REMATCH[1]} minutes" +%H:%M)"
 fi
 echo "$what" > ~/.break
-exec bannerfish "back $what"
+#exec bannerfish "back $what"
+exec bannerlights "back $what"
