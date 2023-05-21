@@ -20,7 +20,7 @@ _source_if() { [[ -r "$1" ]] && source "$1"; }
 # ----------------------- environment variables ----------------------
 #                           (also see envx)
 
-export LANG=en_US.UTF_8  # assuming apt install language-pack-en done
+export LANG=en_US.UTF-8  # assuming apt install language-pack-en done
 export USER="${USER:-$(whoami)}"
 export GITUSER="$USER"
 export REPOS="$HOME/Repos"
@@ -248,7 +248,6 @@ alias view='vi -R' # which is usually linked to vim
 alias clear='printf "\e[H\e[2J"'
 alias c='printf "\e[H\e[2J"'
 alias coin="clip '(yes|no)'"
-alias grep="pcregrep"
 alias iam=live
 alias neo="neo -D -c gold"
 alias more="less"
