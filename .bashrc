@@ -20,6 +20,7 @@ _source_if() { [[ -r "$1" ]] && source "$1"; }
 # ----------------------- environment variables ----------------------
 #                           (also see envx)
 
+export LANG=en_US.UTF_8  # assuming apt install language-pack-en done
 export USER="${USER:-$(whoami)}"
 export GITUSER="$USER"
 export REPOS="$HOME/Repos"
