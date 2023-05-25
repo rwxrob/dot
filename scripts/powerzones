@@ -1,0 +1,56 @@
+#!/bin/sh
+
+# maintained in https://github.com/rwxrob/skilstak/ in
+# projects/shell/powersource
+
+if [ -t 1 ]; then
+  w="\e[38;5;237m"
+  b="\e[38;5;39m"
+  g="\e[38;5;46m"
+  s="\e[38;5;112m"
+  y="\e[38;5;190m"
+  o="\e[38;5;208m"
+  r="\e[38;5;160m"
+  v="\e[38;5;93m"
+fi
+
+f=0
+if [ -n "$1" ]; then
+  f="$1"
+elif [ -n "$FTP" ]; then
+  f="$FTP"
+else
+  read -r f
+fi
+
+k=0
+if [ -n "$2" ]; then
+  k="$2"
+elif [ -n "$WEIGHT" ]; then
+  k="$WEIGHT"
+else
+  read -r k
+fi
+
+h=0
+if [ -n "$3" ]; then
+  h="$3"
+elif [ -n "$HEIGHT" ]; then
+  h="$HEIGHT"
+else
+  read -r h
+fi
+
+echo   "          HEIGHT : $h"
+echo   "          WEIGHT : $k"
+echo   "             FTP : $f ($(echo "scale=2;$f/$k"|bc))"
+echo
+printf "${w}Recovery      (1):      😴 - %.0f\n"   "$(echo "$f*.56"|bc)"
+printf "${b}Endurance     (2):     %.0f - %.0f\n" "$(echo "$f*.56"|bc)" "$(echo "$f*.75"|bc)"
+printf "${g}Tempo         (3):     %.0f - %.0f\n" "$(echo "$f*.76"|bc)" "$(echo "$f*.90"|bc)"
+printf "${s}SweetSpot     (3.5):   %.0f - %.0f\n" "$(echo "$f*.84"|bc)" "$(echo "$f*.97"|bc)"
+printf "${y}Threshold     (4):     %.0f - %.0f\n" "$(echo "$f*.91"|bc)" "$(echo "$f*1.05"|bc)"
+printf "${o}VO2 Max       (5):     %.0f - %.0f\n" "$(echo "$f*1.06"|bc)" "$(echo "$f*1.2"|bc)"
+printf "${r}Anaerobic     (6):     %.0f - %.0f\n" "$(echo "$f*1.21"|bc)" "$(echo "$f*1.5"|bc)"
+printf "${v}Neuromuscular (7):     %.0f - 🤮\n" "$(echo "$f*1.5"|bc)"
+
