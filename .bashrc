@@ -23,6 +23,10 @@ _source_if() { [[ -r "$1" ]] && source "$1"; }
 export LANG=en_US.UTF-8  # assuming apt install language-pack-en done
 export USER="${USER:-$(whoami)}"
 export GITUSER="$USER"
+export FTP=242
+export WEIGHT=83.7
+export HEIGHT=174
+export TZ=America/New_York
 export REPOS="$HOME/Repos"
 export GHREPOS="$REPOS/github.com/$GITUSER"
 export DOTFILES="$GHREPOS/dot"
