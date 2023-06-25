@@ -104,6 +104,7 @@ set noshowmatch
 
 " wrap around when searching
 set wrapscan
+set nowrap
 
 " Just the formatoptions defaults, these are changed per filetype by
 " plugins. Most of the utility of all of this has been superceded by the use of
@@ -361,14 +362,14 @@ map <F12> :set fdm=indent<CR>
 nmap <leader>2 :set paste<CR>i
 
 " disable arrow keys (vi muscle memory)
-"noremap <up> :echoerr "Umm, use k instead"<CR>
-"noremap <down> :echoerr "Umm, use j instead"<CR>
-"noremap <left> :echoerr "Umm, use h instead"<CR>
-"noremap <right> :echoerr "Umm, use l instead"<CR>
-"inoremap <up> <NOP>
-" inoremap <down> <NOP>
-" inoremap <left> <NOP>
-" inoremap <right> <NOP>
+noremap <up> :echoerr "Umm, use k instead"<CR>
+noremap <down> :echoerr "Umm, use j instead"<CR>
+noremap <left> :echoerr "Umm, use h instead"<CR>
+noremap <right> :echoerr "Umm, use l instead"<CR>
+inoremap <up> <NOP>
+ inoremap <down> <NOP>
+ inoremap <left> <NOP>
+ inoremap <right> <NOP>
 "
 " better use of arrow keys, number increment/decrement
 nnoremap <up> <C-a>

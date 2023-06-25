@@ -255,7 +255,7 @@ alias coin="clip '(yes|no)'"
 alias iam=live
 alias neo="neo -D -c gold"
 alias more="less"
-alias kn="keg"
+alias disclaimer="clear; now; zet view disclaimer"
 
 _have vim && alias vi=vim
 
