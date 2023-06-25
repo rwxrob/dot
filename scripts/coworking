@@ -1,10 +1,7 @@
 #!/usr/bin/env bash
 
-clear=$'\033[2J'
-
-trap "setterm --cursor on; echo ${clear}; exit; trap -- - SIGINT SIGTERM" SIGTERM SIGINT
-
-echo "${clear}"
+trap "setterm --cursor on; clear; exit; trap -- - SIGINT SIGTERM" SIGTERM SIGINT
+clear
 zet view disclaimer
 now
 setterm --cursor off
