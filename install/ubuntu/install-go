@@ -1,7 +1,20 @@
 #!/usr/bin/env bash
 
-# location into which to untar the go source (per install instructions)
-declare TARGETDIR="$HOME/.local"
+# Installs the latest Go release into $TARGETDIR (default: ~/.local)
+# without requiring root access. Assumes the following suggested
+# environment variables (which need to be set or changed in this script
+# or after install completes):
+#
+#     PATH="~/.local/bin:~/.local/bin/go/bin:$PATH"
+#     GOOS=linux
+#     GOARCH=amd64
+#     GOPATH="~/.local/go"
+#     GOBIN="~/.local/go/bin"
+#
+# Note that the downloaded tar file is not removed and can be found in
+# either $DOWNLOADS or /tmp.
+
+true "${TARGETDIR:="$HOME/.local"}"
 
 # change this to your target (detecting not always reliable)
 declare GOOS=linux
