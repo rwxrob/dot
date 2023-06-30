@@ -1,39 +1,39 @@
-# #!/usr/bin/env bash
+#!/usr/bin/env bash
 
-# 1.18 is the new default
-sudo apt-get -y install golang
+# location into which to untar the go source (per install instructions)
+declare TARGETDIR="$HOME/.local"
 
-# 
-# 
-# set -e
-# 
-# install_17() { 
-#   cd "$(mktemp -d)"
-# 
-#   os=linux
-#   arch=amd64
-# 
-#   file=$(curl -sSL  "https://golang.org/dl/?mode=json" \
-#     | jq -r '.[0].files[]
-#       | select(.os == "'"$os"'")
-#       | select(.arch == "'"$arch"'")
-#       | .filename')
-# 
-#   curl -sSLO \
-#     -H "Accept: application/vnd.github.v3+json" \
-#      "https://dl.google.com/go/$file"
-# 
-#   sudo tar xzf "$file" -C /usr/local/
-# 
-#   echo "Make sure /usr/local/go/bin is in PATH"
-# }
-# 
-# upgrade_18() {
-#   /usr/local/go/bin/go install golang.org/dl/go1.18beta2@latest
-#   "$GOBIN/go1.18beta2" download
-#   go install golang.org/x/tools/gopls@latest
-# }
-# 
-# #install_17
-# upgrade_18
-# 
+# change this to your target (detecting not always reliable)
+declare GOOS=linux
+declare GOARCH=amd64
+
+lookup_file() {
+	curl -sSL "https://go.dev/dl/?mode=json" |
+		jq -r '.[0].files[]
+       | select(.os == "'"$GOOS"'")
+       | select(.arch == "'"$GOARCH"'")
+       | .filename'
+}
+
+fetch() {
+	local filename
+	filename="$(lookup_file)"
+	[[ -z "$filename" ]] && echo "unable to fetch filename" 1>&2 && return 1
+	local path="/tmp/$filename"
+	[[ -n "$DOWNLOADS" ]] && [[ -d "$DOWNLOADS" ]] && path="$DOWNLOADS/$filename"
+	curl -L "https://go.dev/dl/$filename" -o "$path"
+	echo "$path"
+}
+
+install_latest_go() {
+	local dir="$1" path
+	[[ -z "$dir" ]] && dir="$TARGETDIR"
+	[[ -z "$dir" ]] && dir="$HOME/.local"
+	mkdir -p "$dir" 2>/dev/null
+	path="$(fetch)"
+	[[ -z "$path" ]] && echo "unable to fetch go tarball" 1>&2 && return 1
+	rm -rf "$dir/go" && tar -C "$dir" -xzf "$path" # rm is required by instructions
+	echo "Add $dir/go/bin to your path and optionally set GOBIN=~/.local/bin" 1>&2
+}
+
+install_latest_go

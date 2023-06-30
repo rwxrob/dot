@@ -3,7 +3,7 @@
 
 case $- in
 *i*) ;; # interactive
-*) return ;; 
+*) return ;;
 esac
 
 # ------------------------- distro detection -------------------------
@@ -14,13 +14,13 @@ export DISTRO
 
 # ---------------------- local utility functions ---------------------
 
-_have()      { type "$1" &>/dev/null; }
+_have() { type "$1" &>/dev/null; }
 _source_if() { [[ -r "$1" ]] && source "$1"; }
 
 # ----------------------- environment variables ----------------------
 #                           (also see envx)
 
-export LANG=en_US.UTF-8  # assuming apt install language-pack-en done
+export LANG=en_US.UTF-8 # assuming apt install language-pack-en done
 export USER="${USER:-$(whoami)}"
 export GITUSER="$USER"
 export FTP=242
@@ -57,7 +57,7 @@ export EDITOR=vi
 export VISUAL=vi
 export EDITOR_PREFIX=vi
 export GOPRIVATE="github.com/$GITUSER/*,gitlab.com/$GITUSER/*"
-export GOPATH="$HOME/.local/share/go"
+export GOPATH="$HOME/.local/go"
 export GOBIN="$HOME/.local/bin"
 export GOPROXY=direct
 export CGO_ENABLED=0
@@ -68,10 +68,10 @@ export CFLAGS="-Wall -Wextra -Werror -O0 -g -fsanitize=address -fno-omit-frame-p
 export LESS="-FXR"
 export LESS_TERMCAP_mb="[35m" # magenta
 export LESS_TERMCAP_md="[33m" # yellow
-export LESS_TERMCAP_me="" # "0m"
-export LESS_TERMCAP_se="" # "0m"
+export LESS_TERMCAP_me=""      # "0m"
+export LESS_TERMCAP_se=""      # "0m"
 export LESS_TERMCAP_so="[34m" # blue
-export LESS_TERMCAP_ue="" # "0m"
+export LESS_TERMCAP_ue=""      # "0m"
 export LESS_TERMCAP_us="[4m"  # underline
 
 export ANSIBLE_CONFIG="$HOME/.config/ansible/config.ini"
@@ -90,68 +90,68 @@ export GPG_TTY=$(tty)
 # ------------------------------- pager ------------------------------
 
 if [[ -x /usr/bin/lesspipe ]]; then
-  export LESSOPEN="| /usr/bin/lesspipe %s";
-  export LESSCLOSE="/usr/bin/lesspipe %s %s";
+	export LESSOPEN="| /usr/bin/lesspipe %s"
+	export LESSCLOSE="/usr/bin/lesspipe %s %s"
 fi
 
 # ----------------------------- dircolors ----------------------------
 
 if _have dircolors; then
-  if [[ -r "$HOME/.dircolors" ]]; then
-    eval "$(dircolors -b "$HOME/.dircolors")"
-  else
-    eval "$(dircolors -b)"
-  fi
+	if [[ -r "$HOME/.dircolors" ]]; then
+		eval "$(dircolors -b "$HOME/.dircolors")"
+	else
+		eval "$(dircolors -b)"
+	fi
 fi
 
 # ------------------------------- path -------------------------------
 
 pathappend() {
-  declare arg
-  for arg in "$@"; do
-    test -d "$arg" || continue
-    PATH=${PATH//":$arg:"/:}
-    PATH=${PATH/#"$arg:"/}
-    PATH=${PATH/%":$arg"/}
-    export PATH="${PATH:+"$PATH:"}$arg"
-  done
+	declare arg
+	for arg in "$@"; do
+		test -d "$arg" || continue
+		PATH=${PATH//":$arg:"/:}
+		PATH=${PATH/#"$arg:"/}
+		PATH=${PATH/%":$arg"/}
+		export PATH="${PATH:+"$PATH:"}$arg"
+	done
 } && export -f pathappend
 
 pathprepend() {
-  for arg in "$@"; do
-    test -d "$arg" || continue
-    PATH=${PATH//:"$arg:"/:}
-    PATH=${PATH/#"$arg:"/}
-    PATH=${PATH/%":$arg"/}
-    export PATH="$arg${PATH:+":${PATH}"}"
-  done
+	for arg in "$@"; do
+		test -d "$arg" || continue
+		PATH=${PATH//:"$arg:"/:}
+		PATH=${PATH/#"$arg:"/}
+		PATH=${PATH/%":$arg"/}
+		export PATH="$arg${PATH:+":${PATH}"}"
+	done
 } && export -f pathprepend
 
 # remember last arg will be first in path
 pathprepend \
-  "$HOME/.local/bin" \
-  "$HOME/.nimble/bin" \
-  "$GHREPOS/cmd-"* \
-  /usr/local/go/bin \
-  /usr/local/opt/openjdk/bin \
-  /usr/local/bin \
-  "$SCRIPTS" 
+	"$HOME/.local/bin" \
+	"$HOME/.local/go/bin" \
+	"$HOME/.nimble/bin" \
+	"$GHREPOS/cmd-"* \
+	/usr/local/go/bin \
+	/usr/local/opt/openjdk/bin \
+	/usr/local/bin \
+	"$SCRIPTS"
 
 pathappend \
-  /usr/local/opt/coreutils/libexec/gnubin \
-  '/mnt/c/Program Files/Oracle/VirtualBox' \
-  '/mnt/c/Windows' \
-  '/mnt/c/Program Files (x86)/VMware/VMware Workstation' \
-  /mingw64/bin \
-  /usr/local/bin \
-  /usr/local/sbin \
-  /usr/local/games \
-  /usr/games \
-  /usr/sbin \
-  /usr/bin \
-  /snap/bin \
-  /sbin \
-  /bin
+	/usr/local/opt/coreutils/libexec/gnubin \
+	'/mnt/c/Windows' \
+	'/mnt/c/Program Files (x86)/VMware/VMware Workstation' \
+	/mingw64/bin \
+	/usr/local/bin \
+	/usr/local/sbin \
+	/usr/local/games \
+	/usr/games \
+	/usr/sbin \
+	/usr/bin \
+	/snap/bin \
+	/sbin \
+	/bin
 
 # ------------------------------ cdpath ------------------------------
 
@@ -161,7 +161,7 @@ export CDPATH=".:$GHREPOS:$DOTFILES:$REPOS:/media/$USER:$HOME"
 
 # shopt is for BASHOPTS, set is for SHELLOPTS
 
-shopt -s checkwinsize  # enables $COLUMNS and $ROWS
+shopt -s checkwinsize # enables $COLUMNS and $ROWS
 shopt -s expand_aliases
 shopt -s globstar
 shopt -s dotglob
@@ -191,33 +191,33 @@ PROMPT_MAX=95
 PROMPT_AT=@
 
 __ps1() {
-  local P='$' dir="${PWD##*/}" B countme short long double\
-    r='\[\e[31m\]' g='\[\e[30m\]' h='\[\e[34m\]' \
-    u='\[\e[33m\]' p='\[\e[34m\]' w='\[\e[35m\]' \
-    b='\[\e[36m\]' x='\[\e[0m\]'
+	local P='$' dir="${PWD##*/}" B countme short long double \
+		r='\[\e[31m\]' g='\[\e[30m\]' h='\[\e[34m\]' \
+		u='\[\e[33m\]' p='\[\e[34m\]' w='\[\e[35m\]' \
+		b='\[\e[36m\]' x='\[\e[0m\]'
 
-  [[ $EUID == 0 ]] && P='#' && u=$r && p=$u # root
-  [[ $PWD = / ]] && dir=/
-  [[ $PWD = "$HOME" ]] && dir='~'
+	[[ $EUID == 0 ]] && P='#' && u=$r && p=$u # root
+	[[ $PWD = / ]] && dir=/
+	[[ $PWD = "$HOME" ]] && dir='~'
 
-  B=$(git branch --show-current 2>/dev/null)
-  [[ $dir = "$B" ]] && B=.
-  countme="$USER$PROMPT_AT$(hostname):$dir($B)\$ "
+	B=$(git branch --show-current 2>/dev/null)
+	[[ $dir = "$B" ]] && B=.
+	countme="$USER$PROMPT_AT$(hostname):$dir($B)\$ "
 
-  [[ $B == master || $B == main ]] && b="$r"
-  [[ -n "$B" ]] && B="$g($b$B$g)"
+	[[ $B == master || $B == main ]] && b="$r"
+	[[ -n "$B" ]] && B="$g($b$B$g)"
 
-  short="$u\u$g$PROMPT_AT$h\h$g:$w$dir$B$p$P$x "
-  long="$g╔ $u\u$g$PROMPT_AT$h\h$g:$w$dir$B\n$g╚ $p$P$x "
-  double="$g╔ $u\u$g$PROMPT_AT$h\h$g:$w$dir\n$g║ $B\n$g╚ $p$P$x "
+	short="$u\u$g$PROMPT_AT$h\h$g:$w$dir$B$p$P$x "
+	long="$g╔ $u\u$g$PROMPT_AT$h\h$g:$w$dir$B\n$g╚ $p$P$x "
+	double="$g╔ $u\u$g$PROMPT_AT$h\h$g:$w$dir\n$g║ $B\n$g╚ $p$P$x "
 
-  if (( ${#countme} > PROMPT_MAX )); then
-    PS1="$double"
-  elif (( ${#countme} > PROMPT_LONG )); then
-    PS1="$long"
-  else
-    PS1="$short"
-  fi
+	if ((${#countme} > PROMPT_MAX)); then
+		PS1="$double"
+	elif ((${#countme} > PROMPT_LONG)); then
+		PS1="$long"
+	else
+		PS1="$short"
+	fi
 }
 
 PROMPT_COMMAND="__ps1"
@@ -226,8 +226,8 @@ PROMPT_COMMAND="__ps1"
 
 # only works if you have X and are using graphic Linux desktop
 
-_have setxkbmap && test -n "$DISPLAY" && \
-  setxkbmap -option caps:escape &>/dev/null
+_have setxkbmap && test -n "$DISPLAY" &&
+	setxkbmap -option caps:escape &>/dev/null
 
 # ------------------------------ aliases -----------------------------
 #      (use exec scripts instead, which work from vim and subprocs)
@@ -268,57 +268,57 @@ _have vim && alias vi=vim
 # } && export -f lesscoloroff
 
 envx() {
-  local envfile="${1:-"$HOME/.env"}"
-  [[ ! -e "$envfile" ]] && echo "$envfile not found" && return 1
-  while IFS= read -r line; do
-    name=${line%%=*}
-    value=${line#*=}
-    [[ -z "${name}" || $name =~ ^# ]] && continue
-    export "$name"="$value"
-  done < "$envfile"
+	local envfile="${1:-"$HOME/.env"}"
+	[[ ! -e "$envfile" ]] && echo "$envfile not found" && return 1
+	while IFS= read -r line; do
+		name=${line%%=*}
+		value=${line#*=}
+		[[ -z "${name}" || $name =~ ^# ]] && continue
+		export "$name"="$value"
+	done <"$envfile"
 } && export -f envx
 
 [[ -e "$HOME/.env" ]] && envx "$HOME/.env"
 
-new-from() { 
-  local template="$1"
-  local name="$2"
-  ! _have gh && echo "gh command not found" && return 1
-  [[ -z "$name" ]] && echo "usage: $0 <name>" && return 1
-  [[ -z "$GHREPOS" ]] && echo "GHREPOS not set" && return 1
-  [[ ! -d "$GHREPOS" ]] && echo "Not found: $GHREPOS" && return 1
-  cd "$GHREPOS" || return 1
-  [[ -e "$name" ]] && echo "exists: $name" && return 1
-  gh repo create -p "$template" --public "$name"
-  gh repo clone "$name"
-  cd "$name" || return 1
+new-from() {
+	local template="$1"
+	local name="$2"
+	! _have gh && echo "gh command not found" && return 1
+	[[ -z "$name" ]] && echo "usage: $0 <name>" && return 1
+	[[ -z "$GHREPOS" ]] && echo "GHREPOS not set" && return 1
+	[[ ! -d "$GHREPOS" ]] && echo "Not found: $GHREPOS" && return 1
+	cd "$GHREPOS" || return 1
+	[[ -e "$name" ]] && echo "exists: $name" && return 1
+	gh repo create -p "$template" --public "$name"
+	gh repo clone "$name"
+	cd "$name" || return 1
 }
 
 new-bonzai() { new-from rwxrob/bonzai-example "$1"; }
 new-cmd() { new-from rwxrob/template-bash-command "cmd-$1"; }
-cdz () { cd $(zet get "$@"); }
+cdz() { cd $(zet get "$@"); }
 
 export -f new-from new-bonzai new-cmd
 
 clone() {
-  local repo="$1" user
-  local repo="${repo#https://github.com/}"
-  local repo="${repo#git@github.com:}"
-  if [[ $repo =~ / ]]; then
-    user="${repo%%/*}"
-  else
-    user="$GITUSER"
-    [[ -z "$user" ]] && user="$USER"
-  fi
-  local name="${repo##*/}"
-  local userd="$REPOS/github.com/$user"
-  local path="$userd/$name"
-  [[ -d "$path" ]] && cd "$path" && return
-  mkdir -p "$userd"
-  cd "$userd"
-  echo gh repo clone "$user/$name" -- --recurse-submodule
-  gh repo clone "$user/$name" -- --recurse-submodule
-  cd "$name"
+	local repo="$1" user
+	local repo="${repo#https://github.com/}"
+	local repo="${repo#git@github.com:}"
+	if [[ $repo =~ / ]]; then
+		user="${repo%%/*}"
+	else
+		user="$GITUSER"
+		[[ -z "$user" ]] && user="$USER"
+	fi
+	local name="${repo##*/}"
+	local userd="$REPOS/github.com/$user"
+	local path="$userd/$name"
+	[[ -d "$path" ]] && cd "$path" && return
+	mkdir -p "$userd"
+	cd "$userd"
+	echo gh repo clone "$user/$name" -- --recurse-submodule
+	gh repo clone "$user/$name" -- --recurse-submodule
+	cd "$name"
 } && export -f clone
 
 # ------------- source external dependencies / completion ------------
@@ -327,9 +327,9 @@ clone() {
 [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
 
 owncomp=(
-  pdf md zet keg kn yt gl auth pomo config live iam sshkey ws x z clip
-  ./build build b ./k8sapp k8sapp ./setup ./cmd run ./run
-  foo ./foo cmds ./cmds z bonzai openapi
+	pdf md zet keg kn yt gl auth pomo config live iam sshkey ws x z clip
+	./build build b ./k8sapp k8sapp ./setup ./cmd run ./run
+	foo ./foo cmds ./cmds z bonzai openapi
 )
 
 for i in "${owncomp[@]}"; do complete -C "$i" "$i"; done
@@ -348,7 +348,7 @@ _have conftest && . <(conftest completion bash)
 _have mk && complete -o default -F __start_minikube mk
 _have podman && _source_if "$HOME/.local/share/podman/completion" # d
 _have docker && _source_if "$HOME/.local/share/docker/completion" # d
-_have docker-compose && complete -F _docker_compose dc # dc
+_have docker-compose && complete -F _docker_compose dc            # dc
 
 _have ansible && . <(register-python-argcomplete3 ansible)
 _have ansible-config && . <(register-python-argcomplete3 ansible-config)
