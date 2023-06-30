@@ -272,6 +272,17 @@ endfun
 "autocmd FileType perl autocmd BufWritePre <buffer> call s:Perltidy()
 endif
 
+" format shell on save
+if has("eval") " vim-tiny detection
+" TODO check for shfmt and shellcheck before defining
+fun! s:FormatShell()
+  let l:pos = getcurpos()
+  silent execute '%!shfmt'
+  call setpos('.', l:pos)
+endfun
+autocmd FileType sh autocmd BufWritePre <buffer> call s:FormatShell()
+endif
+
 "autocmd vimleavepre *.md !perl -p -i -e 's,(?<!\[)my `(\w+)` (package|module|repo|command|utility),[my `\1` \2](https://gitlab.com/rwxrob/\1),g' %
 
 " fill in empty markdown links with duck.com search
