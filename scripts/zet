@@ -1,0 +1,3 @@
+#!/bin/sh
+export KEG_CURRENT="$HOME/Repos/github.com/rwxrob/zet/docs"
+exec keg "$@"
