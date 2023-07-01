@@ -172,7 +172,8 @@ shopt -s extglob
 
 # -------------------------- stty annoyances -------------------------
 
-stty stop undef # disable control-s accidental terminal stops
+#stty stop undef # disable control-s accidental terminal stops
+stty -ixon # disable control-s/control-q tty flow control
 
 # ------------------------------ history -----------------------------
 
