@@ -275,6 +275,7 @@ endif
 " format shell on save
 if has("eval") " vim-tiny detection
 " TODO check for shfmt and shellcheck before defining
+" FIXME stop from blowing away file when there is shell error
 fun! s:FormatShell()
   let l:pos = getcurpos()
   silent execute '%!shfmt'
@@ -333,6 +334,7 @@ au bufnewfile,bufRead *gitconfig set filetype=gitconfig
 au bufnewfile,bufRead /tmp/psql.edit.* set syntax=sql
 au bufnewfile,bufRead *.go set spell spellcapcheck=0
 au bufnewfile,bufRead commands.yaml set spell
+au bufnewfile,bufRead *.txt set spell
 
 "fix bork bash detection
 if has("eval")  " vim-tiny detection
@@ -373,18 +375,18 @@ map <F12> :set fdm=indent<CR>
 nmap <leader>2 :set paste<CR>i
 
 " disable arrow keys (vi muscle memory)
-noremap <up> :echoerr "Umm, use k instead"<CR>
-noremap <down> :echoerr "Umm, use j instead"<CR>
-noremap <left> :echoerr "Umm, use h instead"<CR>
-noremap <right> :echoerr "Umm, use l instead"<CR>
-inoremap <up> <NOP>
- inoremap <down> <NOP>
- inoremap <left> <NOP>
- inoremap <right> <NOP>
-"
+" noremap <up> :echoerr "Umm, use k instead"<CR>
+" noremap <down> :echoerr "Umm, use j instead"<CR>
+" noremap <left> :echoerr "Umm, use h instead"<CR>
+" noremap <right> :echoerr "Umm, use l instead"<CR>
+" inoremap <up> <NOP>
+"  inoremap <down> <NOP>
+"  inoremap <left> <NOP>
+"  inoremap <right> <NOP>
+
 " better use of arrow keys, number increment/decrement
-nnoremap <up> <C-a>
-nnoremap <down> <C-x>
+" nnoremap <up> <C-a>
+" nnoremap <down> <C-x>
 
 " Better page down and page up
 noremap <C-n> <C-d>
