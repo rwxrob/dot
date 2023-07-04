@@ -336,6 +336,7 @@ owncomp=(
 for i in "${owncomp[@]}"; do complete -C "$i" "$i"; done
 
 _have gh && . <(gh completion -s bash)
+_have goreleaser && . <(goreleaser completion bash 2>/dev/null)
 _have pandoc && . <(pandoc --bash-completion)
 _have kubectl && . <(kubectl completion bash 2>/dev/null)
 _have spotify && . <(spotify completion bash 2>/dev/null)
