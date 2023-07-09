@@ -9,7 +9,18 @@ set nocompatible
 "####################### Vi Compatible (~/.exrc) #######################
 
 " automatically indent new lines
-set autoindent
+set autoindent " (alpine)
+
+set noflash " (alpine-ish only)
+
+" replace tabs with spaces automatically
+set expandtab " (alpine)
+
+" number of spaces to replace a tab with when expandtab
+set tabstop=2 " (alpine)
+
+" use case when searching
+set noignorecase
 
 " automatically write files when changing when multiple files open
 set autowrite
@@ -22,8 +33,6 @@ set ruler " see ruf for formatting
 
 " show command and insert mode
 set showmode
-
-set tabstop=2
 
 "#######################################################################
 
@@ -59,9 +68,6 @@ match IncSearch '\s\+$'
 " enough for line numbers + gutter within 80 standard
 set textwidth=72
 "set colorcolumn=73
-
-" replace tabs with spaces automatically
-set expandtab
 
 " disable relative line numbers, remove no to sample it
 set norelativenumber
@@ -108,7 +114,7 @@ set nowrap
 
 " Just the formatoptions defaults, these are changed per filetype by
 " plugins. Most of the utility of all of this has been superceded by the use of
-" modern simplified pandoc for capturing knowledge source instead of 
+" modern simplified pandoc for capturing knowledge source instead of
 " arbitrary raw text files.
 
 set fo-=t   " don't auto-wrap text using text width
@@ -227,7 +233,13 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
   Plug 'vim-pandoc/vim-pandoc'
   Plug 'rwxrob/vim-pandoc-syntax-simple'
+  Plug 'dense-analysis/ale'
   call plug#end()
+
+  let g:ale_sign_error = '☠'
+  let g:ale_sign_warning = '🙄'
+   let g:ale_linters = {'go': ['gometalinter', 'gofmt','gobuild']}
+
 
   " pandoc
   let g:pandoc#formatting#mode = 'h' " A'
@@ -251,9 +263,9 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   let g:go_highlight_diagnostic_warnings = 1
   "let g:go_auto_type_info = 1 " forces 'Press ENTER' too much
   let g:go_auto_sameids = 0
-  "let g:go_metalinter_command='golangci-lint'
-  "let g:go_metalinter_command='golint'
-  "let g:go_metalinter_autosave=1
+  "    let g:go_metalinter_command='golangci-lint'
+  "    let g:go_metalinter_command='golint'
+  "    let g:go_metalinter_autosave=1
   set updatetime=100
   "let g:go_gopls_analyses = { 'composites' : v:false }
   au FileType go nmap <leader>m ilog.Print("made")<CR><ESC>
@@ -278,7 +290,7 @@ if has("eval") " vim-tiny detection
 " FIXME stop from blowing away file when there is shell error
 fun! s:FormatShell()
   let l:pos = getcurpos()
-  silent execute '%!shfmt'
+  "silent execute '%!shfmt' " FIXME: bug report to shfmt
   call setpos('.', l:pos)
 endfun
 autocmd FileType sh autocmd BufWritePre <buffer> call s:FormatShell()
@@ -297,7 +309,7 @@ autocmd BufWritePost *.md silent !toduck %
 " fill in anything beginning with @ with a link to twitch to it
 "autocmd vimleavepre *.md !perl -p -i -e 's, @(\w+), [\\@\1](https://twitch.tv/\1),g' %
 
-" make Y consitent with D and C (yank til end)
+" make Y consistent with D and C (yank til end)
 map Y y$
 
 " better command-line completion
@@ -380,9 +392,9 @@ nmap <leader>2 :set paste<CR>i
 " noremap <left> :echoerr "Umm, use h instead"<CR>
 " noremap <right> :echoerr "Umm, use l instead"<CR>
 " inoremap <up> <NOP>
-"  inoremap <down> <NOP>
-"  inoremap <left> <NOP>
-"  inoremap <right> <NOP>
+" inoremap <down> <NOP>
+" inoremap <left> <NOP>
+" inoremap <right> <NOP>
 
 " better use of arrow keys, number increment/decrement
 " nnoremap <up> <C-a>
