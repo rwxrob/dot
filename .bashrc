@@ -57,7 +57,7 @@ export EDITOR=vi
 export VISUAL=vi
 export EDITOR_PREFIX=vi
 export GOPRIVATE="github.com/$GITUSER/*,gitlab.com/$GITUSER/*"
-export GOPATH="$HOME/.local/go"
+#export GOPATH="$HOME/.local/go"
 export GOBIN="$HOME/.local/bin"
 export GOPROXY=direct
 export CGO_ENABLED=0
@@ -337,6 +337,7 @@ for i in "${owncomp[@]}"; do complete -C "$i" "$i"; done
 
 _have gh && . <(gh completion -s bash)
 _have goreleaser && . <(goreleaser completion bash 2>/dev/null)
+_have klogin && . <(klogin completion bash 2>/dev/null)
 _have pandoc && . <(pandoc --bash-completion)
 _have kubectl && . <(kubectl completion bash 2>/dev/null)
 _have spotify && . <(spotify completion bash 2>/dev/null)
