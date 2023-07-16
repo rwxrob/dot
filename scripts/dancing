@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+what="$*"
+exec bannerneo "pause for dancing"
