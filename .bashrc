@@ -328,7 +328,7 @@ clone() {
 [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
 
 owncomp=(
-	pdf md zet keg kn yt gl auth pomo config live iam sshkey ws x z clip
+	pdf zet keg kn yt gl auth pomo config live iam sshkey ws x z clip
 	./build build b ./k8sapp k8sapp ./setup ./cmd run ./run
 	foo ./foo cmds ./cmds z bonzai openapi
 )
@@ -336,6 +336,7 @@ owncomp=(
 for i in "${owncomp[@]}"; do complete -C "$i" "$i"; done
 
 _have gh && . <(gh completion -s bash)
+_have glow && . <(glow completion  bash)
 _have goreleaser && . <(goreleaser completion bash 2>/dev/null)
 _have klogin && . <(klogin completion bash 2>/dev/null)
 _have pandoc && . <(pandoc --bash-completion)
