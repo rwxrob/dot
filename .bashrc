@@ -237,7 +237,7 @@ unalias -a
 alias ip='ip -c'
 alias '?'=duck
 alias '??'=google
-alias '???'=bing
+alias '???'=gpt
 alias dot='cd $DOTFILES'
 alias scripts='cd $SCRIPTS'
 alias snippets='cd $SNIPPETS'
