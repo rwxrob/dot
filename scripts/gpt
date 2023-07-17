@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+
 _have() { type "$1" &>/dev/null; }
+
+declare OPENAI_API_TOKEN
+OPENAI_API_TOKEN="$(head -1 "$HOME/.config/gpt/token")"
+export OPENAI_API_TOKEN
+
 ! _have mods && echo "requires charmbracelet/mods" && exit 1
 mods -f "$*"
