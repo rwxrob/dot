@@ -235,8 +235,8 @@ _have setxkbmap && test -n "$DISPLAY" &&
 
 unalias -a
 alias ip='ip -c'
-alias '?'=gpt
-alias '??'=duck
+alias '?'=duck
+alias '??'=gpt
 alias '???'=google
 alias dot='cd $DOTFILES'
 alias scripts='cd $SCRIPTS'
