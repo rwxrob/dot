@@ -161,6 +161,9 @@ filetype plugin on
 " high contrast for streaming, etc.
 set background=dark
 
+" make gutter less annoying
+hi SignColumn ctermbg=NONE
+
 " base default color changes (gruvbox dark friendly)
 hi StatusLine ctermfg=black ctermbg=NONE
 hi StatusLineNC ctermfg=black ctermbg=NONE
