@@ -241,7 +241,13 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
 
   let g:ale_sign_error = '☠'
   let g:ale_sign_warning = '🙄'
-   let g:ale_linters = {'go': ['gometalinter', 'gofmt','gobuild']}
+  let g:ale_linters = {'go': ['gometalinter', 'gofmt','gobuild']}
+
+  " force ale to close loclist
+  augroup CloseLoclistWindowGroup
+    autocmd!
+    autocmd QuitPre * if empty(&buftype) | lclose | endif
+  augroup END
 
 
   " pandoc
