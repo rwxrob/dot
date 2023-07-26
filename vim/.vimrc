@@ -243,13 +243,6 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   let g:ale_sign_warning = '🙄'
   let g:ale_linters = {'go': ['gometalinter', 'gofmt','gobuild']}
 
-  " force ale to close loclist
-  augroup CloseLoclistWindowGroup
-    autocmd!
-    autocmd QuitPre * if empty(&buftype) | lclose | endif
-  augroup END
-
-
   " pandoc
   let g:pandoc#formatting#mode = 'h' " A'
   let g:pandoc#formatting#textwidth = 72
@@ -282,6 +275,12 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
 else
   autocmd vimleavepre *.go !gofmt -w % " backup if fatih fails
 endif
+
+" force loclist to always close when buffer does (affects vim-go, etc.)
+augroup CloseLoclistWindowGroup
+  autocmd!
+  autocmd QuitPre * if empty(&buftype) | lclose | endif
+augroup END
 
 " format perl on save
 if has("eval") " vim-tiny detection
