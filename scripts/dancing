@@ -1,3 +1,6 @@
-#!/usr/bin/env bash
+#!/bin/sh
 what="$*"
-exec bannerneo "pause for dancing"
+if [ -z "$what" ]; then
+  what="pause for dancing"
+fi
+exec bannerfish "$what"
