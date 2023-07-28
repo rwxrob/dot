@@ -83,6 +83,10 @@ export ANSIBLE_LOAD_CALLBACK_PLUGINS=1
 
 [[ -d /.vim/spell ]] && export VIMSPELL=("$HOME/.vim/spell/*.add")
 
+# ----------------------------- PostgreSQL ----------------------------
+
+export PGDATABASE=cowork
+
 # -------------------------------- gpg -------------------------------
 
 export GPG_TTY=$(tty)
