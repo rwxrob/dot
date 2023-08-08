@@ -1,0 +1,59 @@
+#!/usr/bin/bash
+shopt -s extglob
+
+# (ripped from deyloop)
+
+# Aligns input lines so that the occurrence of given character(s) matches up
+# among the lines
+#
+# example: 
+#
+# get this_variable = whatever
+# get whatever= this_thing
+# get this_other_thing = whatever this is
+#
+# becomes
+#
+# get this_variable    = whatever
+# get whatever         = this_thing
+# get this_other_thing = whatever this is
+#
+# if the alignment point is the '='
+
+# ------------------------------------------------------------------------
+
+_aln() {
+  local char i max_len
+  local -A lines_pre lines_post
+  char="$1"
+  max_len=0
+  i=0
+
+  while IFS= read -r line; do
+    # characters preceding the alignment point
+    lines_pre["$i"]="${line%%$char*}"
+
+    # Trim trailing white space
+    lines_pre["$i"]="${lines_pre[$i]%%*( )}"
+
+    pre_len="${#lines_pre["$i"]}"
+
+    if [[ $max_len < $pre_len ]]; then
+      max_len="$pre_len"
+    fi
+
+    # characters proceeding the alignment point
+    lines_post["$i"]="${line#*$char}"
+
+    i=$(( i + 1 ))  
+  done
+
+  max_len=$(( max_len + 1 ))
+
+  for (( j=0; j < i; j++ )); do
+    printf "%-*s%s%s\n" "$max_len" "${lines_pre[$j]}" "$char" "${lines_post[$j]}"
+  done
+
+}
+
+_aln "$@"
