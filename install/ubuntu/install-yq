@@ -6,7 +6,6 @@ dir=$(mktemp -d)
 cleanup () {
   rm -rf "$dir"
 }
-
 trap cleanup EXIT
 
 curl -L "$url"  -o "$dir/yq"

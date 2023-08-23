@@ -49,4 +49,4 @@ install_latest_go() {
 	echo "Add $dir/go/bin to your path and optionally set GOBIN=~/.local/bin" 1>&2
 }
 
-install_latest_go
+install_latest_go "$@"

@@ -1,0 +1,17 @@
+#!/bin/sh
+set -e
+
+file="discord.deb"
+url="https://discord.com/api/download?platform=linux&format=deb"
+
+dir="$(mktemp -d)"
+path="$dir/$file"
+
+cleanup () {
+  rm -rf "$dir"
+}
+trap cleanup EXIT
+
+curl -L "$url" -o "$path"
+sudo apt-get install -y "$path"
+

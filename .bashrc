@@ -261,6 +261,8 @@ alias iam=live
 alias neo="neo -D -c gold"
 alias more="less"
 alias disclaimer="clear; now; zet view disclaimer"
+alias main="obs scene Main"
+alias tight="obs scene Closeup"
 
 _have vim && alias vi=vim
 
@@ -334,7 +336,7 @@ clone() {
 owncomp=(
 	pdf zet keg kn yt gl auth pomo config live iam sshkey ws x z clip
 	./build build b ./k8sapp k8sapp ./setup ./cmd run ./run
-	foo ./foo cmds ./cmds z bonzai openapi
+	foo ./foo cmds ./cmds z bonzai openapi obs
 )
 
 for i in "${owncomp[@]}"; do complete -C "$i" "$i"; done

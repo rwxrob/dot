@@ -10,9 +10,9 @@ export OPENAI_API_KEY
 
 #if test -t 0; then
 #  if _have glow; then
-    mods --status-text "Ummm" -f "$*" | glow
+#    mods --status-text "Ummm" -f "$*" | glow
 #  else
-#    mods --status-text "Ummm" "$*"
+    mods --status-text "Ummm" "$*"
 #  fi
 #else
 #  mods --quiet "$*" | sed -E 's,[?25l [0D[2K[?25h[?1002l[?1003l,,g'
