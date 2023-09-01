@@ -215,6 +215,7 @@ au FileType bash set sw=2
 au FileType c set sw=8
 au FileType markdown,pandoc noremap j gj
 au FileType markdown,pandoc noremap k gk
+au FileType sh set noet
 
 set cinoptions+=:0
 
