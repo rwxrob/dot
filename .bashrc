@@ -238,6 +238,7 @@ _have setxkbmap && test -n "$DISPLAY" &&
 #      (use exec scripts instead, which work from vim and subprocs)
 
 unalias -a
+alias todo='vi ~/.todo'
 alias ip='ip -c'
 alias '?'=duck
 alias '??'=gpt
