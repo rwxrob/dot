@@ -1,0 +1,13 @@
+#!/bin/sh
+
+if [ -z "$(which k9s)" ]; then
+  echo "Warning, doesn't look like you have k9s installed."
+	exit 1
+fi
+
+if [ -d ~/.config/k9s ]; then
+	mv ~/.config/k9s "$HOME/.config/k9s_$(date -u +%Y%m%d%H%M%S)"
+fi
+
+ln -sf "$PWD" "$HOME/.config/k9s"
+
