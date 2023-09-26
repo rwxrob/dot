@@ -264,6 +264,7 @@ alias more="less"
 alias disclaimer="clear; now; zet view disclaimer"
 alias main="obs scene Main"
 alias tight="obs scene Closeup"
+alias pixel="scrcpy -t -s 1A141FDF600AJ4"
 
 _have vim && alias vi=vim
 
@@ -348,6 +349,7 @@ _have goreleaser && . <(goreleaser completion bash 2>/dev/null)
 _have klogin && . <(klogin completion bash 2>/dev/null)
 _have pandoc && . <(pandoc --bash-completion)
 _have kubectl && . <(kubectl completion bash 2>/dev/null)
+_have istioctl && . <(istioctl completion bash 2>/dev/null)
 #_have clusterctl && . <(clusterctl completion bash)
 _have k && complete -o default -F __start_kubectl k
 _have kind && . <(kind completion bash)

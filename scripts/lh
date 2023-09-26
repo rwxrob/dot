@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 while read -r line;do
-	[[ $line =~ ^##\ [^\ ] ]] && echo "* ${line#*# }"
+	[[ $line =~ ^##+\ [^\ ] ]] && echo "* ${line#*# }"
 done < "$1"
 
 exit 0
