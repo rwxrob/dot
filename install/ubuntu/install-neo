@@ -11,7 +11,7 @@ mkdir -p "$(basename "$dir")"
 if [ ! -d "$dir" ]; then
 gh repo clone st3w/neo "$dir"
 fi
-cd "$dir"
+cd "$dir" || exit
 ./autogen.sh
 ./configure
 make
