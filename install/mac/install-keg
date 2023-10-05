@@ -1,0 +1,20 @@
+#!/bin/sh
+
+url="https://github.com/rwxrob/keg/releases/latest/download/keg-darwin-amd64"
+exe=keg
+
+dir=$(mktemp -d)
+
+cleanup () {
+  rm -rf "$dir"
+}
+trap cleanup EXIT
+
+curl -L "$url"  -o "$dir/$exe"
+chmod +x "$dir/$exe"
+
+# mkdir -p is not POSIX compliant
+[ ! -d ~/.local ] && mkdir ~/.local
+[ ! -d ~/.local/bin ] && mkdir ~/.local/bin
+
+cp "$dir/$exe" ~/.local/bin
