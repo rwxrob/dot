@@ -1,0 +1,11 @@
+#!/bin/sh
+
+if [ -z "$(which pip3)"  ]; then
+  echo "Warning, doesn't look like you have pip3 installed."
+	exit 1
+fi
+
+pip install mkdocs mkdocs-material mkdocs-awesome-pages-plugin\
+	markdown-emdash mkdocs-git-revision-date-localized-plugin
+
+
