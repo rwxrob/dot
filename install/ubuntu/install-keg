@@ -1,0 +1,21 @@
+#!/bin/sh
+set -e
+
+user=rwxrob
+name=keg
+target=~/.local/bin
+
+arch=$(uname -m)
+[ "$arch" = x86_64 ] && arch=amd64
+
+latest="https://api.github.com/repos/$user/$name/releases/latest"
+ver=$(curl -sS "$latest" | jq -r .zipball_url) && test -n "$ver"
+ver=${ver##*/}
+ver=${ver#v}
+exe="${name}-linux-${arch}"
+url="https://github.com/$user/$name/releases/download/v${ver}/$exe"
+mkdir -p "$target" || true
+cd "$target"
+curl -LO "$url"
+chmod ug+x "$exe"
+mv "$exe" "$name"
