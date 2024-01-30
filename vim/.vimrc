@@ -330,6 +330,7 @@ nnoremap <C-L> :nohl<CR><C-L>
 
 " enable omni-completion
 set omnifunc=syntaxcomplete#Complete
+imap <tab><tab> <c-x><c-o>
 
 " force some files to be specific file type
 au bufnewfile,bufRead $SNIPPETS/md/* set ft=pandoc
