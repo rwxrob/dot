@@ -1,0 +1,4 @@
+#!/bin/sh
+
+go install github.com/goreleaser/goreleaser@latest
+
