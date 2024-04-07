@@ -79,7 +79,8 @@ export ANSIBLE_INVENTORY="$HOME/.config/ansible/inventory.yaml"
 export ANSIBLE_LOAD_CALLBACK_PLUGINS=1
 #export ANSIBLE_STDOUT_CALLBACK=json
 
-#export DOCKER_HOST=unix:///run/user/$(id -u)/docker.sock
+export DOCKER_HOST=unix:///run/user/$(id -u)/docker.sock
+
 
 [[ -d /.vim/spell ]] && export VIMSPELL=("$HOME/.vim/spell/*.add")
 
