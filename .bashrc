@@ -384,3 +384,9 @@ _source_if "$HOME/.bash_work"
 
 _have terraform && complete -C /usr/bin/terraform terraform
 _have terraform && complete -C /usr/bin/terraform tf
+
+# ------------------------- NVM bullshit ahead ------------------------
+# (keep as is or nvm idiotic installer will re-add to bashrc next time)
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
