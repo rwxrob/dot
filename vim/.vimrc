@@ -237,6 +237,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   Plug 'morhetz/gruvbox'
   Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
   Plug 'vim-pandoc/vim-pandoc'
+  Plug 'dahu/vim-asciidoc'
   Plug 'rwxrob/vim-pandoc-syntax-simple'
   Plug 'dense-analysis/ale'
   call plug#end()
@@ -324,6 +325,10 @@ map Y y$
 
 " better command-line completion
 set wildmenu
+
+" better cursor movement
+"set virtualedit=all
+set wrap
 
 " disable search highlighting with <C-L> when refreshing screen
 nnoremap <C-L> :nohl<CR><C-L>
