@@ -39,3 +39,4 @@ aliases:
         } ' | jq -r '.data.viewer.organizations[][] | .id + " " + .name'
     defmain: |
         !gh api -X PATCH "repos/$1" -f default_branch="main" | jq .default_branch
+version: "1"
