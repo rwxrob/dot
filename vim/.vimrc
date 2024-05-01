@@ -350,6 +350,7 @@ au bufnewfile,bufRead $SNIPPETS/python/* set ft=python
 au bufnewfile,bufRead $SNIPPETS/perl/* set ft=perl
 au bufnewfile,bufRead user-data set ft=yaml
 au bufnewfile,bufRead meta-data set ft=yaml
+au bufnewfile,bufRead .goreleaser set ft=yaml
 au bufnewfile,bufRead *.ddl set ft=sql
 au bufnewfile,bufRead keg set ft=yaml
 au bufnewfile,bufRead *.bash* set ft=bash
