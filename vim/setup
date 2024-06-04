@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
-if [ -z "$(which vim)" -o -z "$(which vimtutor)" ]; then
+if [[ -z "$(which vim)" || -z "$(which vimtutor)" ]]; then
   echo "Warning, doesn't look like you have full Vim version."
 fi
 
