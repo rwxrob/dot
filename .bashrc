@@ -141,6 +141,7 @@ pathprepend \
 	/usr/local/go/bin \
 	/usr/local/opt/openjdk/bin \
 	/usr/local/bin \
+	/opt/homebrew/bin \
 	"$SCRIPTS"
 
 pathappend \
