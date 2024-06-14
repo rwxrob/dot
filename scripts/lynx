@@ -6,6 +6,7 @@
 
 lynxpath=/usr/bin/lynx
 [[ ! -x $lynxpath ]] && lynxpath=/usr/local/bin/lynx
+[[ ! -x $lynxpath ]] && lynxpath=/opt/homebrew/bin/lynx
 
 useragent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_0) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.79 Safari/537.1 Lynx"
 
