@@ -52,6 +52,7 @@ export CLIP_DATA="$GHREPOS/cmd-clip/data"
 export CLIP_VOLUME=0
 export CLIP_SCREEN=0
 export TERM=xterm-256color
+export CLICOLOR=1
 export HRULEWIDTH=73
 export EDITOR=vi
 export VISUAL=vi
@@ -141,6 +142,7 @@ pathprepend \
 	/usr/local/go/bin \
 	/usr/local/opt/openjdk/bin \
 	/usr/local/bin \
+	/opt/homebrew/bin \
 	"$SCRIPTS"
 
 pathappend \

@@ -47,7 +47,7 @@ if ($_) {
 
 # bare url
 m,^http, or  s,^,https://,;
-`which lynx` && exec 'lynx', $_;
+#`which lynx` && exec 'lynx', $_;
 `which /usr/bin/open` && exec '/usr/bin/open', $_;
 `which explorer.exe` && exec 'explorer.exe', $_;
 `which google-chrome` && exec 'google-chrome', $_;
