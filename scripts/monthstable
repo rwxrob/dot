@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+declare months=(
+  January
+  February
+  March
+  April
+  May
+  June
+  July
+  August
+  September
+  October
+  November
+  December
+)
+
+printf "| %-11s | REPLACE\n" Month
+printf "| %-11s | -\n" "-"
+for month in "${months[@]}";do
+	printf "| %-11s | \n" "$month"
+  done
+
+
