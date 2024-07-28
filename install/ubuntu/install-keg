@@ -13,6 +13,7 @@ ver=$(curl -sS "$latest" | jq -r .zipball_url) && test -n "$ver"
 ver=${ver##*/}
 ver=${ver#v}
 exe="${name}-linux-${arch}"
+#exe="${name}-windows-${arch}.exe"
 url="https://github.com/$user/$name/releases/download/v${ver}/$exe"
 mkdir -p "$target" || true
 cd "$target"
