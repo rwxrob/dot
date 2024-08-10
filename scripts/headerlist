@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+declare -a headers lines
+while IFS= read -r line; do
+	lines+=("$line")
+	[[ "$line" =~ \#\#\  ]] && headers+=("$line")
+done
+
+for header in "${headers[@]}"; do
+	echo "* ${header##\#\# }"
+done
+
+echo
+
+for line in "${lines[@]}"; do
+	echo "$line"
+done
+
+
