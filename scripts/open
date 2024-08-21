@@ -37,13 +37,13 @@ if (-r $_) {
 }
 
 # git repo
-if ($_) {
-  my $gh = (grep {/github/ && s,git@,, && s,:,/, && s/\.git$//} qx{git remote get-url --all origin})[0];
-  if ($gh) {
-    system 'gh', 'repo', 'view','--web';
-    exit;
-  }
-}
+# if ($_) {
+#   my $gh = (grep {/github/ && s,git@,, && s,:,/, && s/\.git$//} qx{git remote get-url --all origin})[0];
+#   if ($gh) {
+#     system 'gh', 'repo', 'view','--web';
+#     exit;
+#   }
+# }
 
 # bare url
 m,^http, or  s,^,https://,;
