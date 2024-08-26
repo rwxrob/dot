@@ -1,5 +1,5 @@
-#!bash
-# shellcheck disable=SC1090
+#!/bin/bash
+# shellcheck disable=SC1090,SC1091
 
 case $- in
 *i*) ;; # interactive
@@ -80,9 +80,6 @@ export ANSIBLE_INVENTORY="$HOME/.config/ansible/inventory.yaml"
 export ANSIBLE_LOAD_CALLBACK_PLUGINS=1
 #export ANSIBLE_STDOUT_CALLBACK=json
 
-export DOCKER_HOST=unix:///run/user/$(id -u)/docker.sock
-
-
 [[ -d /.vim/spell ]] && export VIMSPELL=("$HOME/.vim/spell/*.add")
 
 # ----------------------------- PostgreSQL ----------------------------
@@ -91,7 +88,8 @@ export PGDATABASE=cowork
 
 # -------------------------------- gpg -------------------------------
 
-export GPG_TTY=$(tty)
+GPG_TTY=$(tty)
+export GPG_TTY
 
 # ------------------------------- pager ------------------------------
 
@@ -308,7 +306,7 @@ new-from() {
 
 new-bonzai() { new-from rwxrob/bonzai-example "$1"; }
 new-cmd() { new-from rwxrob/template-bash-command "cmd-$1"; }
-cdz() { cd $(zet get "$@"); }
+cdz() { cd "$(zet get "$@")" || exit; }
 
 export -f new-from new-bonzai new-cmd
 
