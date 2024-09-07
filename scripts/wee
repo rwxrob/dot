@@ -2,7 +2,7 @@
 
 buf="$*"
 
-if test -n "$buf"; then
+if test -n "$buf" ; then
   #echo "*$buf" >$WEECHAT_FIFO
   tmux -L live send -t 2 "$buf" Enter
   exit
