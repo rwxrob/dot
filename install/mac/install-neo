@@ -1,0 +1,13 @@
+#!/bin/bash
+
+latest=$(gh release list --json   tagName -q '.[0].tagName')
+gh release download "$latest"
+
+export LDFLAGS="-L/opt/homebrew/opt/ncurses/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/ncurses/include"
+
+tar xzf neo*.tar.gz
+cd neo-* || exit
+./configure
+make
+sudo make install
