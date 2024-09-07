@@ -1,6 +1,6 @@
 #!/bin/sh
 
-exec brew install coreutils binutils diffutils ed findutils gawk gnu-indent gnu-sed gnu-tar gnu-which gnutls grep gzip screen tmux watch wdiff curl wget bash m4 make file-formula git less openssh python rsync unzip vim gpg jq bash lynx golang gpg kubectl gh pandoc nmap utm shellcheck shfmt helm entr
+exec brew install coreutils binutils diffutils ed findutils gawk gnu-indent gnu-sed gnu-tar gnu-which gnutls grep gzip screen tmux watch wdiff curl wget bash m4 make file-formula git less openssh python rsync unzip vim gpg jq bash lynx golang gpg kubectl gh pandoc nmap utm shellcheck shfmt helm entr mods
 
 echo "Now don't forget:"
 echo "  Add /usr/local/bin/bash to /etc/shells"
