@@ -1,18 +1,13 @@
 #!/bin/sh
-sudo apt install autoconf
-sudo apt install build-essentials
-sudo apt install ncurses-base
-sudo apt-get install libncurses5-dev
+
+sudo apt install autoconf build-essentials ncurses-base libncurses5-dev
+
 [ -z "$(command -v gh)" ] && echo "gh required" && exit
-[ -z "$(command -v make)" ] && echo "make required (build-essentials)" && exit
-[ -z "$(command -v autoconf)" ] && echo "autoconf required" && exit
-dir="$REPOS/github.com/st3w/neo"
-mkdir -p "$(basename "$dir")"
-if [ ! -d "$dir" ]; then
-gh repo clone st3w/neo "$dir"
-fi
-cd "$dir" || exit
-./autogen.sh
+latest=$(gh release list --json   tagName -q '.[0].tagName')
+gh release download "$latest"
+
+tar xzf neo*.tar.gz
+cd neo-* || exit
 ./configure
 make
 sudo make install
