@@ -1,6 +1,6 @@
 #!/bin/bash
 
-latest=$(gh release list --json   tagName -q '.[0].tagName')
+latest=$(curl -sSL "https://api.github.com/repos/st3w/neo/releases/latest" | jq -r .name)
 gh release download "$latest"
 
 export LDFLAGS="-L/opt/homebrew/opt/ncurses/lib"
