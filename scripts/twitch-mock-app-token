@@ -1,0 +1,4 @@
+#!/bin/bash
+
+curl -sS -X POST "http://localhost:8080/auth/token?client_id=$(twitch-mock-clientid)&client_secret=$(twitch-mock-clientsecret)&grant_type=client_credentials" | jq -r '.access_token'
+
