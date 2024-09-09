@@ -1,23 +1,10 @@
-#!/bin/sh
+#!/bin/bash
+set -e
 
-url="https://github.com/rwxrob/keg/releases/latest/download/keg-darwin-amd64"
-if [ $(uname -p) = arm ];then
-	url="https://github.com/rwxrob/keg/releases/latest/download/keg-darwin-arm64"
-fi
-exe=keg
+mkdir -p ~/.local/bin || true
+tmpfile=$(mktemp)
+latest=$(curl -sSL "https://api.github.com/repos/rwxrob/keg/releases/latest" | jq -r .name)
+gh release download "$latest" -R rwxrob/keg -O "$tmpfile" -p "*$(uname -p)*" --clobber
+mv "$tmpfile" ~/.local/bin/keg
+chmod +x ~/.local/bin/keg
 
-dir=$(mktemp -d)
-
-cleanup () {
-  rm -rf "$dir"
-}
-trap cleanup EXIT
-
-curl -L "$url"  -o "$dir/$exe"
-chmod +x "$dir/$exe"
-
-# mkdir -p is not POSIX compliant
-[ ! -d ~/.local ] && mkdir ~/.local
-[ ! -d ~/.local/bin ] && mkdir ~/.local/bin
-
-cp "$dir/$exe" ~/.local/bin
