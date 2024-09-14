@@ -1,0 +1,4 @@
+#!/bin/sh
+# TODO make aware of linux or mac
+last=$(find ~/Movies/ -name '*.mkv' |tail -1)
+exec open "$last"

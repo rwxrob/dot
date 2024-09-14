@@ -1,19 +1,21 @@
 #!/usr/bin/env bash
 
 clear=$'\033[2J'
+curoff=$'\033[?25h'
+curon=$'\033[?25h'
 top=$'\033[H'
 
-trap "setterm --cursor on; echo ${clear}; exit; trap -- - SIGINT SIGTERM" SIGTERM SIGINT
+trap 'echo "${curon}"; echo "${clear}"; exit; trap -- - SIGINT SIGTERM' SIGTERM SIGINT
 
 what="$*"
 if [ -z "${what}" ]; then
-  read -p "Text: " what
+  read -rp "Text: " what
 fi
 
 echo "${clear}"
 while true; do
   echo "${top}"
   figl <<<"$what" | lolcat
-  setterm --cursor off
+	echo "${curoff}"
   sleep 2
 done

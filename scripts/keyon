@@ -1,2 +1,7 @@
-#!/bin/sh
-exec screenkey
+#!/usr/bin/env bash
+
+case "$OSTYPE" in 
+	*arwin*) osascript -e 'tell application "KeyCastr" to activate';;
+	*) exec screenkey;;
+esac
+

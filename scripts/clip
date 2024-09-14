@@ -1,0 +1,313 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC2016
+set -e
+
+# Copyright 2021 Rob Muhlestein <rob@rwx.gg>
+# Released under Apache-2.0 License
+# Please mention https://youtube.com/rwxrob
+
+: "${CLIP_DATA:="$HOME/.config/clip/data"}"
+: "${CLIP_DIR:="$HOME/Movies/clips"}"
+: "${CLIP_SCREEN:=1}"
+: "${CLIP_VOLUME:=-50}"
+: "${PAGER:=more}"
+: "${EDITOR:=vi}"
+: "${HELP_BROWSER:=}"
+
+EXE="${0##*/}"
+
+declare -A help
+
+help[main]='
+The `clip` utility (a bash script) is for downloading managing and
+playing clips from videos in full screen from the command line.
+
+## Dependencies
+
+Required:
+
+* `bash` (4+)
+* `mpv`
+* `yt-dlp`
+
+Will use if detected:
+
+* `keyon` / `keyoff`
+* `pandoc`
+
+Environment variables:
+
+```
+: ${CLIP_DATA:="$HOME/.config/clip/data"}
+: ${CLIP_DIR:="$HOME/Videos/clips"}
+: ${CLIP_SCREEN:=1}
+: ${CLIP_VOLUME:=-50}
+: ${PAGER:=more}
+: ${EDITOR:=vi}
+: ${HELP_BROWSER:=}
+```
+
+## Usage
+
+```
+clip dir
+clip data [<name>]
+clip add <name> <url>
+clip edit
+clip help [<command>]
+clip list
+clip (play) [<name>]
+clip usage
+```
+## Commands
+
+* [usage] - print usage summary 
+* [play]  - play clip, randomize if duplicates, select menu if none
+* [list]  - print list of all clips by name
+* [data]  - print data for name (random if dupicates)
+* [dir]   - print directory path containing clip videos
+* [add]   - download and add video from YouTube URL
+* [edit]  - open data file for editing with `$EDITOR`
+* [help]  - display help for all or specified command
+
+[usage]: help-clip-usage.html
+[play]: help-clip-play.html
+[list]: help-clip-list.html
+[data]: help-clip-data.html
+[dir]: help-clip-dir.html
+[add]: help-clip-add.html
+[edit]: help-clip-edit.html
+[help]: help-clip-help.html
+
+## Data File Format
+
+The data file containing clip name, volume, and source information can be edited with the `edit` command and is updated by the `add` command when adding new clips. The first two numbers after the file name (separated by commas) are for the start second (including decimals) and the length. To add another segment from the same file, add a semicolon and another start and length, and so on. Clips that have the same name will be randomized. The `play` commands accepts a regular expression which can also be used to randomize between several clips.
+
+```
+working 100 dXjcvIPSBr4.mkv,19,20
+revenge 100 _oyP0QHjty8.webm,17,30
+rick 100 dQw4w9WgXcQr.mkv,0,9001
+shit 120 seKLsHOkN1U.mkv,2,4.3
+shutup 100 k8QE4-BEy4E.mkv,0,10
+guy 120 _uMEE7eaaUA.mp4,9.5,9001
+verse 240 VX58scb5_B0.mkv,-16.9,14
+element 140 gINEJhFyQmk.mp4,5.4,1.9
+opinion 140 j95kNwZw8YY.mp4,2,15
+code 110 sMMpYiiuEMc.webm,-13,2.2
+dance 110 wCDIYvFmgW8.webm,43,24
+walken 110 wCDIYvFmgW8.webm,43,24
+fever 120 cVsQLlk-T0s.mkv,255.6,1.7
+yes 100 lNEX0fbGePg.mkv,120,6.2
+lobot 70 taUSotxNaGA.mkv,20.5,1.7
+stupid 100 yf8Y85Lfrwk.mkv,35.2,3
+fish 100 KezvwARhBIc.mp4,0,9001
+no 100 CQ_eDE0OMds.mp4,106.8,6.5
+word 110 dTRKCXC0JFg.mp4,-4.2,2.2
+phone 110 6xZif3WmG7I.mkv,142,6.5
+everyone 100 mX-qK4qG2EY.mkv,127.4,2.1
+hack 120 u3CKgkyc7Qo.mkv,21,1.5
+planet 120 u3CKgkyc7Qo.mkv,21,1.5
+game 100 KXzNo0vR_dU.mkv,60.4,4
+ping 180 jr0JaXfKj68.mkv,10.5,2
+shark 130 Cs9M1m-dpgM.mp4,6,14
+hack 130 u8qgehH3kEQ.mkv,0,5
+scan 130 u8qgehH3kEQ.mkv,0,5
+stop 120 Iur1d9CP6bA.mkv,206.5,2.25
+cube 100 u1Ds9CeG-VY.mkv,0,9001
+hack 100 u1Ds9CeG-VY.mkv,7,13
+dance 100 u1Ds9CeG-VY.mkv,100.5,2.3
+hdance 100 u1Ds9CeG-VY.mkv,100.5,2.3
+unix 120 dxIPcbmo1_U.mkv,8.5,2.5
+helm 120 9FHw2aItRlw.mkv,0,9001
+danger 100 HdKqAVpUOwI.mkv,0,3
+irc 180 O2rGTXHvPCQ.mp4,17.5,8
+gui 140 hkDD03yeLnU.mkv,0,13
+lawn 101 Ho8o92Ro-Ig.mp4,58.8,1.5
+excellent 150 lVhATSQHw9k.mkv,3.2,1.4
+developers 80 KMU0tzLwhbE.mkv,0,9001
+clap 200 DdCYMvaUcrA.mkv,26.8,1.6
+```
+
+'
+
+help[edit]='
+The `edit` command opens the clip data file (`CLIP_DATA`) with the current `$EDITOR` (default: `vi`).
+'
+
+x_edit() { "$EDITOR" "$CLIP_DATA"; }
+
+help[data]='
+The `data` command returns a line from the data file (`$CLIP_DATA`) that
+matches the argument passed, which can be simply a string or an extended
+regular expression. If more than one line matches, then one will randomly be returned.'
+
+x_data() {
+  _filter "$@"
+  local -a data
+  mapfile -t data < "$CLIP_DATA"
+  local -a matches
+  IFS=$'\n'
+  for c in "${data[@]}";do
+    [[ $c =~ ^$1 ]] && matches+=($c)
+  done
+  echo "${matches[$((RANDOM%${#matches[@]}))]}"
+}
+
+help[play]='
+The `play` command (which is the default when no command is passed)
+takes the basename of a video in the `$CLIP_DIR` and plays it with
+passed volume (100), starting point (0), and length (10). If the name
+passed refers to one or more clips, a random clip from among them will
+be select. Also, rather than a specific, any Bash-compatible regular
+expression may be passed allowing for interesting combinations. For
+example, a `coin` alias could be created to select randomly from between
+the *yes* and *no* clips, which could themselves also have multiple in
+their groups. (See `man mpv` for more details on how the videos are
+played.)'
+
+x_play() {
+  if [[ -z "$1" ]]; then
+    select c in $(x_list); do
+      x_play "$c" || true
+    done
+    return $?
+  fi
+  type keyoff &>/dev/null && (keyoff || true)
+  local -a data
+  data=($(x_data "$@"))
+  local -i volume="$CLIP_VOLUME"
+  volume+=${data[1]:-100}
+  mpv --fs \
+    "--volume=$volume" \
+    "edl://$CLIP_DIR/${data[2]//;/;$CLIP_DIR/${data[2]%%,*},}" \
+    &>/dev/null
+
+#   mpv --fs \
+#     "--volume=$volume" \
+#     "--fs-screen=$CLIP_SCREEN" \
+#     "edl://$CLIP_DIR/${data[2]//;/;$CLIP_DIR/${data[2]%%,*},}" \
+#     &>/dev/null
+
+  type keyon &>/dev/null && (keyon || true)
+}
+
+help[add]='
+The `add` command will download the provided YouTube URL into the
+`$CLIP_DIR` directory and name it according the YouTube identifier
+preserving the same file suffix. It then add an entry to the clips data
+file (`$CLIP_DATA`) with default settings which can be changed easily
+with `edit` later. Be sure to use the shareable URL (rather than the one
+in the omnibox) so that the ID is extracted correctly.'
+
+x_add() {
+  _filter "$@"
+  (( $# == 2 )) || (echo "usage: $EXE add <name> <video>" && return 1)
+  cd "$CLIP_DIR"
+  local url="$2"
+  local id="${url##*/}"
+  yt-dlp "$url" -o "$id.%(ext)s"
+  local name base
+  path=$(ls "$CLIP_DIR/$id".*)
+  file=${path##*/}
+  base=${file%.*}
+  echo "$1 100 $file,0,9001" >> "$CLIP_DATA"
+  cd -
+}
+
+help[list]='
+The `list` command display a space-delimited list of all possible, unique clip names sorted alphalexically.
+'
+
+x_list() {
+  mapfile data < "$CLIP_DATA"
+  data=($(printf "%s\n" "${data[@]%% *}" | sort -u))
+  echo "${data[@]%% *}" 
+}
+
+help[dir]='The `dir` command prints the full path to the directory containing the videos used for all clips (`$CLIP_DIR`).'
+
+x_dir() { echo "$CLIP_DIR"; }
+
+help[usage]='The `usage` command print a summary of usage for this command.'
+
+x_usage() {
+    local cmds="${COMMANDS[*]}"
+    printf "usage: %s (%s)\n" "${0##*/}" "${cmds// /|}"
+}
+
+help[help]='
+The `help` command prints help information. If no argument is passed
+displays general help information (main). Otherwise, the documentation
+for the specific argument keyword is displayed, which usually
+corresponds to a command name (but not necessarily). All documentation
+is written in CommonMark (Markdown) and will displayed as Web page if
+`pandoc` and `$HELP_BROWSER` are detected, otherwise, just the Markdown is
+sent to `$PAGER` (default: more).'
+
+x_help() { 
+  local name="$1"
+  if [[ -z "$name" ]];then
+    for c in "${COMMANDS[@]}";do
+      x_help "$c" buildonly
+    done
+    x_help main
+    return 0
+  fi
+  local title="$EXE $name"
+  [[ $name = main ]] && title="$EXE"
+  local file="/tmp/help-$EXE-$name.html"
+  if _have pandoc ; then
+    if _have "$HELP_BROWSER" ;then
+      pandoc -s --metadata title="$title" \
+        -o "$file" <<< "${help[$name]}"
+      [[ -z "$2" ]] && cd /tmp && exec "$HELP_BROWSER" "$file"
+      return 0
+    fi
+    pandoc -s --metadata title="$title" \
+      -t plain <<< "${help[$name]}" | "$PAGER"
+    return 0
+  fi
+  echo "${help[$name]}" | "$PAGER"
+}
+
+# --------------------- completion and delegation --------------------
+
+_have(){ type "$1" &>/dev/null; }
+
+_filter(){
+  (( $# > 0 )) && return 0
+  while IFS= read -ra args; do
+    "${FUNCNAME[1]}" "${args[@]}"
+  done
+}
+
+while IFS= read -r line; do
+    [[ $line =~ ^declare\ -f\ x_ ]] || continue
+    COMMANDS+=( "${line##declare -f x_}" )
+done < <(declare -F)
+
+if [[ -n $COMP_LINE ]]; then
+    line=${COMP_LINE#* }
+    for c in "${COMMANDS[@]}" $(x_list); do
+        [[ ${c:0:${#line}} == "${line,,}" ]] && echo "$c"
+    done
+    exit
+fi
+
+for c in "${COMMANDS[@]}"; do
+    if [[ $c == "$EXE" ]]; then
+        "x_$EXE" "$@"
+        exit $?
+    fi
+done
+
+declare cmd="$1"; shift || true
+for c in "${COMMANDS[@]}"; do
+    if [[ $c == "$cmd" ]]; then
+        "x_$cmd" "$@"
+        exit $?
+    fi
+done
+
+x_play "$cmd"
+

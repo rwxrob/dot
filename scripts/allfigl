@@ -1,7 +1,6 @@
 #!/bin/sh
-for font in /usr/share/figlet/*.flf; do
-  clear
+fontsd="$REPOS/github.com/rwxrob/fonts/figlet"
+for font in "$fontsd"/*.flf; do
   echo "FONT: $font"
-  figlet -f "${font}" hello
-  read line
+  figlet -d "$fontsd" -f "${font}" hello
 done

@@ -1,2 +1,6 @@
-#!/bin/sh
-exec pkill screenkey
+#!/usr/bin/env bash
+
+case "$OSTYPE" in 
+	*arwin*) osascript -e 'tell application "KeyCastr" to quit';;
+	*) pkill screenkey;;
+esac

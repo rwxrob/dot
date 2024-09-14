@@ -14,7 +14,7 @@ figl() {
   done
   #clear
   for line in "${buf[@]}"; do
-    figlet -f "$font" -c -t "${line}" | head -6
+    figlet -d "$REPOS/github.com/rwxrob/fonts/figlet" -f "$font" -c  "${line}" | head -6
   done
 }
 
