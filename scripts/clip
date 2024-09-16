@@ -188,7 +188,7 @@ x_play() {
 #     "edl://$CLIP_DIR/${data[2]//;/;$CLIP_DIR/${data[2]%%,*},}" \
 #     &>/dev/null
 
-  type keyon &>/dev/null && (keyon || true)
+  #type keyon &>/dev/null && (keyon || true)
 }
 
 help[add]='
