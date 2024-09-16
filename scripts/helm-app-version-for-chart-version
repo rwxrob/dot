@@ -1,0 +1,9 @@
+#!/bin/sh
+chart="$1"
+version="$2"
+if test -z "$chart" || test -z "$version"; then
+	echo "usage: $0 CHART VERSION"
+	exit 1
+fi
+helm search repo "$chart" -o json --version "$version" |
+	jq -r '.[0].app_version'
