@@ -364,6 +364,7 @@ _have helm && . <(helm completion bash)
 _have minikube && . <(minikube completion bash)
 _have conftest && . <(conftest completion bash)
 _have yq && . <(yq completion bash)
+_have kt && . <(kt completion bash)
 _have mk && complete -o default -F __start_minikube mk
 _have podman && _source_if "$HOME/.local/share/podman/completion" # d
 _have docker && _source_if "$HOME/.local/share/docker/completion" # d
