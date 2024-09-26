@@ -1,4 +1,5 @@
 #!/bin/sh
 
-sudo apt-get install nmap jq pcregrep lynx make uidmap ruby weechat-curses python-is-python3 libcurses-perl figlet cmatrix build-essential libncurses-dev autoconf entr pip curl bash-completion skopeo buildah
+sudo apt-get install nmap jq pcregrep lynx make uidmap ruby weechat-curses python-is-python3 libcurses-perl figlet cmatrix build-essential libncurses-dev autoconf entr pip curl bash-completion skopeo buildah postgresql-client-common
+
 sudo cpan -I Term::Animation
