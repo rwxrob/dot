@@ -84,7 +84,10 @@ export ANSIBLE_LOAD_CALLBACK_PLUGINS=1
 
 # ----------------------------- PostgreSQL ----------------------------
 
-export PGDATABASE=cowork
+export PGPASS=~/.pgpass
+# export PGHOST=localhost
+# export PGUSER=myuser
+# export PGDATABASE=mydatabase
 
 # -------------------------------- gpg -------------------------------
 
