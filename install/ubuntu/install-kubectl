@@ -3,15 +3,12 @@ set -e
 
 VERSION=$(curl -L -s https://dl.k8s.io/release/stable.txt)
 
-install_kube_thing() {
-  thing=$1
-  curl -sSLO "https://dl.k8s.io/release/${VERSION}/bin/linux/amd64/$thing"
-  curl -sSLO "https://dl.k8s.io/${VERSION}/bin/linux/amd64/$thing.sha256"
-  echo "$(head -1 "$thing".sha256) $thing" | sha256sum --check
-  sudo mv "$thing" /usr/bin && sudo chmod +x "/usr/bin/$thing"
-  rm "$thing.sha256"
-}
+curl -fsSL "https://pkgs.k8s.io/core:/stable:/${VERSION}/deb/Release.key" \
+	| sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 
-install_kube_thing kubectl
-~
+echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.   k8s.io/core:/stable:/$VERSION/deb/ /" \
+	| sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+sudo apt-get update
+sudo apt-get install -y kubectl
 
