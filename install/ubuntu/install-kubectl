@@ -5,7 +5,8 @@ VERSION=$(curl -L -s https://dl.k8s.io/release/stable.txt)
 VERSION=${VERSION%.*}
 printf "Installing version: %s\n" "${VERSION}"
 url="https://pkgs.k8s.io/core:/stable:/${VERSION}/deb/Release.key"
-curl -fsSL "$url"| sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring. gpg
+curl -fsSL "$url" \
+	| sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.   k8s.io/core:/stable:/$VERSION/deb/ /" | sudo tee /etc/apt/sources.list.d/          kubernetes.list
 sudo apt-get update
 sudo apt-get install -y kubectl
