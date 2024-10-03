@@ -1,10 +1,13 @@
 #!/bin/sh
 
-sudo apt install autoconf build-essentials ncurses-base libncurses5-dev
+sudo apt install autoconf build-essential ncurses-base libncurses-dev
 
 [ -z "$(command -v gh)" ] && echo "gh required" && exit
-latest=$(curl -sSL "https://api.github.com/repos/st3w/neo/releases/latest" | jq -r .name)
-gh release download "$latest"
+latest=$( 
+	curl -sSL "https://api.github.com/repos/st3w/neo/releases/latest" \
+		| jq -r .tag_name
+	)
+gh release download --repo st3w/neo "$latest"
 
 tar xzf neo*.tar.gz
 cd neo-* || exit
