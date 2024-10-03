@@ -1,0 +1,17 @@
+#!/bin/sh
+set -e
+
+VERSION=$(curl -L -s https://dl.k8s.io/release/stable.txt)
+
+install_kube_thing() {
+  thing=$1
+  curl -sSLO "https://dl.k8s.io/release/${VERSION}/bin/linux/amd64/$thing"
+  curl -sSLO "https://dl.k8s.io/${VERSION}/bin/linux/amd64/$thing.sha256"
+  echo "$(head -1 "$thing".sha256) $thing" | sha256sum --check
+  sudo mv "$thing" /usr/bin && sudo chmod +x "/usr/bin/$thing"
+  rm "$thing.sha256"
+}
+
+install_kube_thing kubectl
+~
+
