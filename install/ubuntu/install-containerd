@@ -34,8 +34,7 @@ import os
 with open("/etc/containerd/config.toml","r") as t:
   conf = toml.load(t)
 
-conf['plugins']['io.containerd.grpc.v1.
-cri']['containerd']['runtimes']['runc']['options']['SystemdCgroup'] = True
+conf['plugins']['io.containerd.grpc.v1.cri']['containerd']['runtimes']['runc']['options']['SystemdCgroup'] = True
 
 with open(f'/tmp/containerd-config.toml', 'w') as f:
   toml.dump(conf, f)
