@@ -29,6 +29,10 @@ _install_service() {
 	sudo systemctl status containerd
 }
 
+_install_containerd_bash_completion() {
+	sudo curl -sSL https://raw.githubusercontent.com/containerd/containerd/refs/heads/main/contrib/autocomplete/ctr -o /etc/bash_completion.d/ctr
+}
+
 _install_runc() {
 	user="opencontainers"
 	repo="runc"
@@ -46,12 +50,12 @@ _install_runc() {
 	runc --version
 }
 
-_install_containerd_bash_completion() {
-	sudo curl -sSL https://raw.githubusercontent.com/containerd/containerd/refs/heads/main/contrib/autocomplete/ctr -o /etc/bash_completion.d/ctr
+_install_runc_bash_completion() {
+	sudo curl -L https://raw.githubusercontent.com/opencontainers/runc/master/contrib/completions/bash/runc -o /etc/bash_completion.d/runc
 }
 
 #_install_containerd
 #_install_containerd_service
-_install_containerd_bash_completion
-#_install_runc
-#_install_runc_bash_completion
+#_install_containerd_bash_completion
+_install_runc
+_install_runc_bash_completion
