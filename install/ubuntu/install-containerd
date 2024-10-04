@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-_install_release() {
+_install_containerd() {
 	user="containerd"
 	repo="containerd"
 
@@ -29,6 +29,29 @@ _install_service() {
 	sudo systemctl status containerd
 }
 
-#_install_release
-_install_service
-#_enable_service
+_install_runc() {
+	user="opencontainers"
+	repo="runc"
+
+	os=$(uname -s)
+	arch=$(uname -m)
+
+	[[ "$arch" == x86_64 ]] && arch=amd64
+
+	latest_url="https://api.github.com/repos/$user/$repo/releases/latest"
+	version=$(curl -sSL "$latest_url" | jq -r .tag_name)
+
+	sudo curl -sSL "https://github.com/opencontainers/runc/releases/download/$version/runc.amd64" -o /usr/local/bin/runc
+	sudo chmod +x /usr/local/bin/runc
+	runc --version
+}
+
+_install_containerd_bash_completion() {
+	sudo curl -L https://raw.githubusercontent.com/containerd/containerd/main/script/completion/bash/ctr -o /etc/bash_completion.d/ctr
+}
+
+#_install_containerd
+#_install_containerd_service
+_install_containerd_bash_completion
+#_install_runc
+#_install_runc_bash_completion
