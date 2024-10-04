@@ -47,7 +47,7 @@ _install_runc() {
 }
 
 _install_containerd_bash_completion() {
-	sudo curl -sSL https://raw.githubusercontent.com/containerd/containerd/main/script/completion/bash/ctr -o /etc/bash_completion.d/ctr
+	sudo curl -sSL https://raw.githubusercontent.com/containerd/containerd/refs/heads/main/contrib/autocomplete/ctr -o /etc/bash_completion.d/ctr
 }
 
 #_install_containerd
