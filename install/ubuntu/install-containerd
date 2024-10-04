@@ -23,19 +23,25 @@ _install_service() {
 	sudo systemctl status containerd
 }
 
-_containerd_set_systemcgroup() {
-	python3 <-'EOM'
-		import toml
-		import os
 
-		with open("/etc/containerd/config.toml","r") as t:
-				conf = toml.load(t)
+_install_containerd_set_systemcgroup() {
+	sudo mkdir /etc/containerd 2>/dev/null || true
+	sudo bash -c "containerd config default > /etc/containerd/config.toml"
+	 python3 <<'EOM'
+import toml
+import os
 
-		conf['plugins']['io.containerd.grpc.v1.cri']['containerd']['runtimes']['runc']['options']['SystemdCgroup'] = True
+with open("/etc/containerd/config.toml","r") as t:
+  conf = toml.load(t)
 
-		with open(f'/tmp/containerd-config.toml', 'w') as f:
-				toml.dump(conf, f)
-	EOM
+conf['plugins']['io.containerd.grpc.v1.
+cri']['containerd']['runtimes']['runc']['options']['SystemdCgroup'] = True
+
+with open(f'/tmp/containerd-config.toml', 'w') as f:
+  toml.dump(conf, f)
+EOM
+	sudo mv /tmp/containerd-config.toml /etc/containerd/config.toml
+	systemctl restart containerd
 }
 
 _install_containerd_cni_plugins() {
@@ -47,10 +53,6 @@ _install_containerd_cni_plugins() {
 	sudo tar Cxzvf /opt/cni/bin "$tmpdir/cni-plugins.tgz"
 	rm -rf "$tmpdir"
 	sudo chown root:root /opt/cni/bin
-	sudo mkdir /etc/containerd
-	sudo bash -c "containerd config default > /etc/containerd/config.toml"
-  systemctl restart containerd
-	_containerd_set_systemcgroup
 }
 
 _install_containerd_bash_completion() {
@@ -69,9 +71,10 @@ _install_runc_bash_completion() {
 	sudo curl -L https://raw.githubusercontent.com/opencontainers/runc/master/contrib/completions/bash/runc -o /etc/bash_completion.d/runc
 }
 
-#_install_containerd
-#_install_containerd_service
+_install_containerd
+_install_containerd_service
 _install_containerd_cni_plugins
-#_install_containerd_bash_completion
-#_install_runc
-#_install_runc_bash_completion
+_install_containerd_set_systemdcgroup
+_install_containerd_bash_completion
+_install_runc
+_install_runc_bash_completion
