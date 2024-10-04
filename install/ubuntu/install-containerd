@@ -20,7 +20,7 @@ _install_containerd_service() {
 	sudo curl -sSL "https://raw.githubusercontent.com/containerd/containerd/main/containerd.service" -o /usr/lib/systemd/system/containerd.service
 	sudo systemctl daemon-reload
 	sudo systemctl enable --now containerd
-	sudo systemctl status containerd
+	sudo systemctl status containerd --no-pager
 }
 
 
