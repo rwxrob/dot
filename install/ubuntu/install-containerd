@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-_install() {
+_install_release() {
 	user="containerd"
 	repo="containerd"
 
@@ -21,4 +21,14 @@ _install() {
 	rm -rf "$tmpdir"
 }
 
-_install
+_install_service() {
+	echo would install service
+	sudo curl -sSL "https://raw.githubusercontent.com/containerd/containerd/main/containerd.service" -o /usr/lib/systemd/system/containerd.service
+	sudo systemctl daemon-reload
+	sudo systemctl enable --now containerd
+	sudo systemctl status containerd
+}
+
+#_install_release
+_install_service
+#_enable_service
