@@ -13,5 +13,5 @@ rel="https://github.com/$user/$repo/releases/download/$version/${repo}-${version
 dir=$(mktemp -d)
 curl -sSL "$rel" -o "$dir/$repo.tar.gz"
 cd "$dir"
-tar Cxzvf /usr/local "$repo.tar.gz"
+sudo tar Cxzvf /usr/local "$repo.tar.gz"
 rm -rf "$dir"
