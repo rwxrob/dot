@@ -23,6 +23,21 @@ _install_service() {
 	sudo systemctl status containerd
 }
 
+_containerd_set_systemcgroup() {
+	python3 <-'EOM'
+		import toml
+		import os
+
+		with open("/etc/containerd/config.toml","r") as t:
+				conf = toml.load(t)
+
+		conf['plugins']['io.containerd.grpc.v1.cri']['containerd']['runtimes']['runc']['options']['SystemdCgroup'] = True
+
+		with open(f'/tmp/containerd-config.toml', 'w') as f:
+				toml.dump(conf, f)
+	EOM
+}
+
 _install_containerd_cni_plugins() {
 	latest="https://api.github.com/repos/containernetworking/plugins/releases/latest"
 	version=$(curl -sSL "$latest" | jq -r .tag_name)
@@ -31,6 +46,11 @@ _install_containerd_cni_plugins() {
 	curl -sSL "$release" -o "$tmpdir/cni-plugins.tgz"
 	sudo tar Cxzvf /opt/cni/bin "$tmpdir/cni-plugins.tgz"
 	rm -rf "$tmpdir"
+	sudo chown root:root /opt/cni/bin
+	sudo mkdir /etc/containerd
+	sudo bash -c "containerd config default > /etc/containerd/config.toml"
+  systemctl restart containerd
+	_containerd_set_systemcgroup
 }
 
 _install_containerd_bash_completion() {
