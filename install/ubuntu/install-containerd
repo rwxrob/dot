@@ -9,10 +9,9 @@ arch=$(uname -m)
 [[ "$arch" == x86_64 ]] && arch=amd64
 
 version=$(curl -sSL "https://api.github.com/repos/$user/$repo/releases/latest" | jq -r .tag_name)
-rel="https://github.com/$user/$repo/releases/download/$version/${repo}-${version}-${os,,}-${arch}.tar.gz"
-
+rel="https://github.com/$user/$repo/releases/download/$version/${repo}-${version#v}-${os,,}-${arch}.tar.gz"
 dir=$(mktemp -d)
-curl -L "$rel" -o "$dir/$repo.tar.gz"
+curl -sSL "$rel" -o "$dir/$repo.tar.gz"
 cd "$dir"
 tar Cxzvf /usr/local "$repo.tar.gz"
 rm -rf "$dir"
