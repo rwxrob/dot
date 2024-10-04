@@ -24,7 +24,7 @@ _install_service() {
 }
 
 
-_install_containerd_set_systemcgroup() {
+_install_containerd_set_systemdcgroup() {
 	sudo mkdir /etc/containerd 2>/dev/null || true
 	sudo bash -c "containerd config default > /etc/containerd/config.toml"
 	 python3 <<'EOM'
@@ -41,7 +41,7 @@ with open(f'/tmp/containerd-config.toml', 'w') as f:
   toml.dump(conf, f)
 EOM
 	sudo mv /tmp/containerd-config.toml /etc/containerd/config.toml
-	systemctl restart containerd
+	sudo systemctl restart containerd
 }
 
 _install_containerd_cni_plugins() {
