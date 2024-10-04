@@ -26,10 +26,10 @@ _install_service() {
 _install_containerd_cni_plugins() {
 	latest="https://api.github.com/repos/containernetworking/plugins/releases/latest"
 	version=$(curl -sSL "$latest" | jq -r .tag_name)
-	release="https://github.com/containerd/containerd/releases/download/$version/cni-plugins-${OS,,}-${ARCH}-${version}.tar.gz"
+	release="https://github.com/containernetworking/plugins/releases/download/$version/cni-plugins-${OS,,}-${ARCH}-${version}.tgz"
 	tmpdir=$(mktemp -d)
-	curl -sSL "$release" -o "$tmpdir/cni-plugins.tar.gz"
-	sudo tar Cxzvf /opt/cni/bin "$tmpdir/cni-plugins.tar.gz"
+	curl -sSL "$release" -o "$tmpdir/cni-plugins.tgz"
+	sudo tar Cxzvf /opt/cni/bin "$tmpdir/cni-plugins.tgz"
 	rm -rf "$tmpdir"
 }
 
