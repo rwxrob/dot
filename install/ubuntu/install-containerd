@@ -67,7 +67,7 @@ _install_runc() {
 }
 
 _install_runc_bash_completion() {
-	sudo curl -L https://raw.githubusercontent.com/opencontainers/runc/master/contrib/completions/bash/runc -o /etc/bash_completion.d/runc
+	sudo curl -sSL https://raw.githubusercontent.com/opencontainers/runc/master/contrib/completions/bash/runc -o /etc/bash_completion.d/runc
 }
 
 _install_containerd
