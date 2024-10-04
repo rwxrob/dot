@@ -9,7 +9,7 @@ _install_containerd() {
 	latest_url="https://api.github.com/repos/containerd/containerd/releases/latest"
 	version=$(curl -sSL "$latest_url" | jq -r .tag_name)
 	tmpdir=$(mktemp -d)
-	tar_url="https://github.com/containerd/containerd/releases/download/$version/containerd-${version#v}-${os,,}-${arch}.tar.gz"
+	tar_url="https://github.com/containerd/containerd/releases/download/$version/containerd-${version#v}-${OS,,}-${ARCH}.tar.gz"
 	curl -sSL "$tar_url" -o "$tmpdir/$repo.tar.gz"
 	sudo tar Cxzvf /usr/local "$tmpdir/$repo.tar.gz"
 	rm -rf "$tmpdir"
@@ -23,22 +23,23 @@ _install_service() {
 	sudo systemctl status containerd
 }
 
+_install_containerd_cni_plugins() {
+	latest="https://api.github.com/repos/containernetworking/plugins/releases/latest"
+	version=$(curl -sSL "$latest" | jq -r .tag_name)
+	release="https://github.com/containerd/containerd/releases/download/$version/cni-plugins-${OS,,}-${ARCH}-${version}.tar.gz"
+	tmpdir=$(mktemp -d)
+	curl -sSL "$release" -o "$tmpdir/cni-plugins.tar.gz"
+	sudo tar Cxzvf /opt/cni/bin "$tmpdir/cni-plugins.tar.gz"
+	rm -rf "$tmpdir"
+}
+
 _install_containerd_bash_completion() {
 	sudo curl -sSL https://raw.githubusercontent.com/containerd/containerd/refs/heads/main/contrib/autocomplete/ctr -o /etc/bash_completion.d/ctr
 }
 
 _install_runc() {
-	user="opencontainers"
-	repo="runc"
-
-	os=$(uname -s)
-	arch=$(uname -m)
-
-	[[ "$arch" == x86_64 ]] && arch=amd64
-
-	latest_url="https://api.github.com/repos/$user/$repo/releases/latest"
+	latest_url="https://api.github.com/repos/opencontainers/runc/releases/latest"
 	version=$(curl -sSL "$latest_url" | jq -r .tag_name)
-
 	sudo curl -sSL "https://github.com/opencontainers/runc/releases/download/$version/runc.amd64" -o /usr/local/bin/runc
 	sudo chmod +x /usr/local/bin/runc
 	runc --version
@@ -50,6 +51,7 @@ _install_runc_bash_completion() {
 
 #_install_containerd
 #_install_containerd_service
+_install_containerd_cni_plugins
 #_install_containerd_bash_completion
-_install_runc
-_install_runc_bash_completion
+#_install_runc
+#_install_runc_bash_completion
