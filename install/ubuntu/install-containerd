@@ -15,7 +15,7 @@ _install_containerd() {
 	rm -rf "$tmpdir"
 }
 
-_install_service() {
+_install_containerd_service() {
 	echo would install service
 	sudo curl -sSL "https://raw.githubusercontent.com/containerd/containerd/main/containerd.service" -o /usr/lib/systemd/system/containerd.service
 	sudo systemctl daemon-reload
