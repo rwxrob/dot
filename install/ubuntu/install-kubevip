@@ -1,15 +1,24 @@
 #!/bin/bash
 set -e
 
-declare OS ARCH VIP INTERFACE
+declare version vip interface
 
-OS=$(uname -s)
-ARCH=$(uname -m)
-[[ "$ARCH" == x86_64 ]] && ARCH=amd64
+vip=192.168.1.200
 
-# set to your own consistent virtual IP
-export VIP=192.168.1.200
-export INTERFACE=$(ip -j route | jq -r '.[] | select(.dst == "default") | .dev')
+interface=$(ip -j route | jq -r '.[] | select(.dst == "default") | .dev')
 
 latest_url="https://api.github.com/repos/kube-vip/kube-vip/releases/latest"
-version=$(curl -sSL "$latest_url" | jq -r .tag_name)
+version=$(curl -sSL "$latest_url" | jq -r .name)
+
+sudo ctr image pull "ghcr.io/kube-vip/kube-vip:$version"
+yaml=$(sudo ctr run --rm --net-host "ghcr.io/kube-vip/kube-vip:$version" \
+	vip /kube-vip manifest pod\
+	--interface "$interface" \
+	--address "$vip" \
+	--controlplane \
+	--services \
+	--arp \
+	--leaderElection)
+
+sudo tee /etc/kubernetes/manifests/kube-vip.yaml <<< "$yaml"
+
