@@ -1,0 +1,15 @@
+#!/bin/bash
+set -e
+
+declare OS ARCH VIP INTERFACE
+
+OS=$(uname -s)
+ARCH=$(uname -m)
+[[ "$ARCH" == x86_64 ]] && ARCH=amd64
+
+# set to your own consistent virtual IP
+export VIP=192.168.1.200
+export INTERFACE=$(ip -j route | jq -r '.[] | select(.dst == "default") | .dev')
+
+latest_url="https://api.github.com/repos/kube-vip/kube-vip/releases/latest"
+version=$(curl -sSL "$latest_url" | jq -r .tag_name)
