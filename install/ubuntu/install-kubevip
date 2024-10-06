@@ -16,7 +16,6 @@ yaml=$(sudo ctr run --rm --net-host "ghcr.io/kube-vip/kube-vip:$version" \
 	--interface "$interface" \
 	--address "$vip" \
 	--controlplane \
-	--services \
 	--arp \
 	--leaderElection)
 
