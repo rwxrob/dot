@@ -31,7 +31,7 @@ enable_ip_forward() {
 	cat <<EOF | sudo tee /etc/sysctl.d/kubeadm.conf
 net.ipv4.ip_forward = 1
 EOF
-	sudo sysctl --system
+	sudo sysctl --system |grep ip_forward
 }
 
 install_pkg
