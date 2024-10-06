@@ -19,8 +19,7 @@ yaml=$(sudo ctr run --rm --net-host "ghcr.io/kube-vip/kube-vip:$version" \
 	--arp \
 	--leaderElection)
 
-sudo tee /etc/kubernetes/manifests/kube-vip.yaml <<< "$yaml"
-
 # https://github.com/kube-vip/kube-vip/issues/684
-sudo perl -p -i -e 's,/etc/kubernetes/admin.conf,/etc/kubernetes/super-admin.conf,'  /etc/kubernetes/manifests/kube-vip.yaml
+yaml=${yaml//kubernetes\/admin.conf/kubernetes/super-admin.conf}
 
+sudo tee /etc/kubernetes/manifests/kube-vip.yaml <<< "$yaml"
