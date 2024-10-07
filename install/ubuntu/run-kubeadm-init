@@ -1,5 +1,6 @@
 #!/bin/bash
 
+sudo kudeadm reset -f
 sudo kubeadm init \
   --control-plane-endpoint 192.168.1.200 \
   --pod-network-cidr 10.98.0.0/12 \
