@@ -11,17 +11,13 @@ latest_url="https://api.github.com/repos/kube-vip/kube-vip/releases/latest"
 version=$(curl -sSL "$latest_url" | jq -r .name)
 
 sudo ctr image pull "ghcr.io/kube-vip/kube-vip:$version"
-yaml=$(sudo ctr run --rm --net-host "ghcr.io/kube-vip/kube-vip:$version" \
+sudo bash -c 'ctr run --rm --net-host "ghcr.io/kube-vip/kube-vip:'$version'" \
 	vip /kube-vip manifest pod\
-	--interface "$interface" \
-	--address "$vip" \
+	--interface "'$interface'" \
+	--address "'$vip'" \
 	--controlplane \
 	--arp \
-	--leaderElection)
-
-#yaml=${yaml//kubernetes\/admin.conf/kubernetes/super-admin.conf}
+	--leaderElection > /etc/kubernetes/manifests/kube-vip.yaml'
 
 echo "WARNING: if this is the first control-plane change last admin.conf to super-admin.conf!"
 echo "(https://github.com/kube-vip/kube-vip/issues/684)"
-
-sudo tee /etc/kubernetes/manifests/kube-vip.yaml <<< "$yaml"
