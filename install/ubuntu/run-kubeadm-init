@@ -2,7 +2,10 @@
 
 set -e
 
-test -f /etc/kubernetes/manifests/kube-vip.yaml
+if [[ ! -f /etc/kubernetes/manifests/kube-vip.yaml ]];then
+	echo "First install-kubevip"
+	exit 1
+fi
 
 sudo kubeadm init \
   --control-plane-endpoint 192.168.1.200 \
