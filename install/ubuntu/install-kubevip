@@ -19,7 +19,9 @@ yaml=$(sudo ctr run --rm --net-host "ghcr.io/kube-vip/kube-vip:$version" \
 	--arp \
 	--leaderElection)
 
-# https://github.com/kube-vip/kube-vip/issues/684
-yaml=${yaml//kubernetes\/admin.conf/kubernetes/super-admin.conf}
+#yaml=${yaml//kubernetes\/admin.conf/kubernetes/super-admin.conf}
+
+echo "WARNING: if this is the first control-plane change last admin.conf to super-admin.conf!"
+echo "(https://github.com/kube-vip/kube-vip/issues/684)"
 
 sudo tee /etc/kubernetes/manifests/kube-vip.yaml <<< "$yaml"
