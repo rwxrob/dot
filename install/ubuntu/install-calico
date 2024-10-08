@@ -5,7 +5,7 @@ _install_calico() {
 	latest_url="https://api.github.com/repos/projectcalico/calico/releases/latest"
 	version=$(curl -sSL "$latest_url" | jq -r .tag_name)
   url="https://raw.githubusercontent.com/projectcalico/calico/$version/manifests/calico.yaml"
-	sudo kubectl apply -f "$url"
+	kubectl apply -f "$url"
 }
 
 _install_calico
