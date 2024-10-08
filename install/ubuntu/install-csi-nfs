@@ -1,27 +1,58 @@
 #!/bin/bash
 
-# Originally derived from following:
-# https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/$version/deploy/install-driver.sh
-
 set -euo pipefail
 
-latest_url="https://api.github.com/repos/kubernetes-csi/csi-driver-nfs/releases/latest"
-ver=$(curl -sSL "$latest_url" | jq -r '.tag_name')
-repo="https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/$ver/deploy/$ver"
+server=192.168.1.31
+share=/srv/nfs/k8s
 
-echo "Installing NFS CSI driver, version: $ver ..."
-kubectl apply -f $repo/rbac-csi-nfs.yaml
-kubectl apply -f $repo/csi-nfs-driverinfo.yaml
-kubectl apply -f $repo/csi-nfs-controller.yaml
-kubectl apply -f $repo/csi-nfs-node.yaml
+####################################################
+## Originally derived from following:
+## https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/$version/deploy/install-driver.sh
 
-if [[ "$#" -gt 1 ]]; then
-  if [[ "$2" == *"snapshot"* ]]; then
-    echo "install snapshot driver ..."
-    kubectl apply -f $repo/crd-csi-snapshot.yaml
-    kubectl apply -f $repo/rbac-snapshot-controller.yaml
-    kubectl apply -f $repo/csi-snapshot-controller.yaml
-  fi
-fi
+install_csi() {
+	latest_url="https://api.github.com/repos/kubernetes-csi/csi-driver-nfs/releases/latest"
+	ver=$(curl -sSL "$latest_url" | jq -r '.tag_name')
+	repo="https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/$ver/deploy/$ver"
 
-echo 'NFS CSI driver installed successfully.'
+	echo "Installing NFS CSI driver, version: $ver ..."
+	kubectl apply -f $repo/rbac-csi-nfs.yaml
+	kubectl apply -f $repo/csi-nfs-driverinfo.yaml
+	kubectl apply -f $repo/csi-nfs-controller.yaml
+	kubectl apply -f $repo/csi-nfs-node.yaml
+
+	if [[ "$#" -gt 1 ]]; then
+		if [[ "$2" == *"snapshot"* ]]; then
+			echo "install snapshot driver ..."
+			kubectl apply -f $repo/crd-csi-snapshot.yaml
+			kubectl apply -f $repo/rbac-snapshot-controller.yaml
+			kubectl apply -f $repo/csi-snapshot-controller.yaml
+		fi
+	fi
+
+	echo 'NFS CSI driver installed successfully.'
+}
+
+create_storage_class() {
+	server=$1
+	share=$2
+
+	kubectl apply -f - <<EOM
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: nfs-csi
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true"
+provisioner: nfs.csi.k8s.io
+parameters:
+  server: '$server'
+  share: '$share'
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+EOM
+
+}
+
+install_csi
+create_storage_class "$server" "$share"
+
