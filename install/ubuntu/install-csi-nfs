@@ -1,5 +1,27 @@
 #!/bin/bash
 
+# Originally derived from following:
+# https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/$version/deploy/install-driver.sh
+
+set -euo pipefail
+
 latest_url="https://api.github.com/repos/kubernetes-csi/csi-driver-nfs/releases/latest"
-version=$(curl -sSL "$latest_url")
-curl -sSL "https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/$version/deploy/install-driver.sh" | bash
+ver=$(curl -sSL "$latest_url" | jq -r '.tag_name')
+repo="https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/$ver/deploy/$ver"
+
+echo "Installing NFS CSI driver, version: $ver ..."
+kubectl apply -f $repo/rbac-csi-nfs.yaml
+kubectl apply -f $repo/csi-nfs-driverinfo.yaml
+kubectl apply -f $repo/csi-nfs-controller.yaml
+kubectl apply -f $repo/csi-nfs-node.yaml
+
+if [[ "$#" -gt 1 ]]; then
+  if [[ "$2" == *"snapshot"* ]]; then
+    echo "install snapshot driver ..."
+    kubectl apply -f $repo/crd-csi-snapshot.yaml
+    kubectl apply -f $repo/rbac-snapshot-controller.yaml
+    kubectl apply -f $repo/csi-snapshot-controller.yaml
+  fi
+fi
+
+echo 'NFS CSI driver installed successfully.'
