@@ -1,2 +1,2 @@
-#!/usr/bin/bash
-exec kubectl config view --minify -o jsonpath={.contexts[0].context.namespace}$'\n'
+#!/usr/bin/env bash
+exec kubectl config view --minify -o jsonpath="{.contexts[0].context.namespace}"$'\n'
