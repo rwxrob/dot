@@ -1,0 +1,5 @@
+#!/bin/bash
+
+latest_url="https://api.github.com/repos/kubernetes-csi/csi-driver-nfs/releases/latest"
+version=$(curl -sSL "$latest_url")
+curl -sSL "https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/$version/deploy/install-driver.sh" | bash
