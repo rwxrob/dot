@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -e
+
+if [[ ! -f /etc/kubernetes/manifests/kube-vip.yaml ]];then
+	echo "First install-kubevip"
+	exit 1
+fi
+
+sudo kubeadm init \
+  --control-plane-endpoint 192.168.1.200 \
+  --pod-network-cidr 10.98.0.0/12 \
+  --upload-certs

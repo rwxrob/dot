@@ -1,0 +1,40 @@
+#!/bin/sh
+set -e
+
+install_pkg() {
+	VERSION=$(curl -L -s https://dl.k8s.io/release/stable.txt)
+	VERSION=${VERSION%.*}
+
+	printf "Installing version: %s\n" "${VERSION}"
+
+	url="https://pkgs.k8s.io/core:/stable:/${VERSION}/deb/Release.key"
+
+	curl -fsSL "$url" \
+		| sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
+	echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/$VERSION/deb/ /" \
+		| sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+	sudo apt-get update
+	sudo apt-get install -y kubeadm
+	sudo apt-mark hold kubeadm
+}
+
+disable_swap() {
+	sudo swapoff -a
+	sudo perl -p -i -e  's,^/swap,#/swap,' /etc/fstab
+	sudo swapon --show
+	echo "Don't forget to reboot to have swap disabled"
+}
+
+enable_ip_forward() {
+	cat <<EOF | sudo tee /etc/sysctl.d/kubeadm.conf
+net.ipv4.ip_forward = 1
+EOF
+	sudo sysctl --system |grep ip_forward
+}
+
+install_pkg
+sudo apt-get install socat
+disable_swap
+enable_ip_forward

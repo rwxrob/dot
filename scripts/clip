@@ -8,7 +8,7 @@ set -e
 
 : "${CLIP_DATA:="$HOME/.config/clip/data"}"
 : "${CLIP_DIR:="$HOME/Movies/clips"}"
-: "${CLIP_SCREEN:=1}"
+: "${CLIP_SCREEN:=2}"
 : "${CLIP_VOLUME:=-50}"
 : "${PAGER:=more}"
 : "${EDITOR:=vi}"

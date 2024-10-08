@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-url="https://chatgpt.com?q=$(urlencode "$*")"
-open "$url"
+#url="https://chatgpt.com?q=$(urlencode "$*")"
+#open "$url"
 
-#_have() { type "$1" &>/dev/null; }
-#! _have mods && echo "requires charmbracelet/mods" && exit 1
-#mods "$*"
+_have() { type "$1" &>/dev/null; }
+! _have mods && echo "requires charmbracelet/mods" && exit 1
+mods "$*"
