@@ -1,4 +1,5 @@
 #!/bin/sh
 
+# yeah, they fucking suck
 curl -sL https://firebase.tools | bash
 
