@@ -1,0 +1,3 @@
+#!/bin/bash
+
+sudo fio --name=randread --ioengine=libaio --iodepth=16 --rw=randread --bs=4k --size=1G --numjobs=4 --runtime=60 --group_reporting
