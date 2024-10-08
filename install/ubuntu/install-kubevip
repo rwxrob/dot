@@ -4,14 +4,16 @@ set -e
 declare version vip interface
 
 vip=192.168.1.200
+range_global=192.168.1.201-192.168.1.254
 
 interface=$(ip -j route | jq -r '.[] | select(.dst == "default") | .dev')
 
-latest_url="https://api.github.com/repos/kube-vip/kube-vip/releases/latest"
-version=$(curl -sSL "$latest_url" | jq -r .name)
+install_static_pod() {
+	latest_url="https://api.github.com/repos/kube-vip/kube-vip/releases/latest"
+	version=$(curl -sSL "$latest_url" | jq -r .name)
 
-sudo ctr image pull "ghcr.io/kube-vip/kube-vip:$version"
-sudo bash -c 'ctr run --rm --net-host "ghcr.io/kube-vip/kube-vip:'$version'" \
+	sudo ctr image pull "ghcr.io/kube-vip/kube-vip:$version"
+	sudo bash -c 'ctr run --rm --net-host "ghcr.io/kube-vip/kube-vip:'$version'" \
 	vip /kube-vip manifest pod\
 	--interface "'$interface'" \
 	--address "'$vip'" \
@@ -20,5 +22,18 @@ sudo bash -c 'ctr run --rm --net-host "ghcr.io/kube-vip/kube-vip:'$version'" \
 	--arp \
 	--leaderElection > /etc/kubernetes/manifests/kube-vip.yaml'
 
-echo "WARNING: if this is the first control-plane change last admin.conf to super-admin.conf!"
-echo "(https://github.com/kube-vip/kube-vip/issues/684)"
+	echo "WARNING: if this is the first control-plane change last admin.conf to super-admin.conf!"
+	echo "(https://github.com/kube-vip/kube-vip/issues/684)"
+}
+
+install_cloud_controller() {
+	kubectl apply -f https://raw.githubusercontent.com/kube-vip/kube-vip-cloud-provider/main/manifest/kube-vip-cloud-controller.yaml
+}
+
+install_configmap() {
+	kubectl create configmap -n kube-system kubevip --from-literal range-global="$range_global"
+}
+
+install_static_pod
+install_cloud_controller
+install_configmap
