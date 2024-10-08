@@ -1,7 +1,0 @@
-#!/bin/sh
-set -e
-
-VERSION="v1.27.1"  # Check for the latest version of crictl
-wget https://github.com/kubernetes-sigs/cri-tools/releases/download/$VERSION/crictl-$VERSION-linux-amd64.tar.gz
-sudo tar zxvf crictl-$VERSION-linux-amd64.tar.gz -C /usr/local/bin
-rm crictl-$VERSION-linux-amd64.tar.gz
