@@ -1,4 +1,6 @@
 #!/bin/sh
 
 sudo apt-install update
-sudo apt-get -y install nmap jq yq pcregrep lynx make uidmap ruby python-is-python3 libcurses-perl build-essential libncurses-dev autoconf entr pip curl bash-completion skopeo buildah postgresql-client-common apt-transport-https ca-certificates curl gpg shellcheck shfmt tree
+sudo apt-get -y install nmap jq pcregrep lynx make uidmap ruby python-is-python3 libcurses-perl build-essential libncurses-dev autoconf entr pip curl bash-completion skopeo buildah postgresql-client-common apt-transport-https ca-certificates curl gpg shellcheck shfmt tree
+
+# yq is missing because the apt version is the shitty python version
