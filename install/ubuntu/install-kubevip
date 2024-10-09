@@ -1,22 +1,28 @@
 #!/bin/bash
 set -e
 
-declare version vip interface
+declare vip interface range_global
 
 vip=192.168.1.200
 range_global=192.168.1.201-192.168.1.254
 
-interface=$(ip -j route | jq -r '.[] | select(.dst == "default") | .dev')
+get_default_interface() {
+	ip -j route | jq -r '.[] | select(.dst == "default") | .dev'
+}
+
+get_latest_version() {
+	latest_url="https://api.github.com/repos/kube-vip/kube-vip/releases/latest"
+	curl -sSL "$latest_url" | jq -r .tag_name
+}
 
 install_static_pod() {
-	latest_url="https://api.github.com/repos/kube-vip/kube-vip/releases/latest"
-	version=$(curl -sSL "$latest_url" | jq -r .name)
-
+	version=$(get_latest_version)
+	interface=$(get_default_interface)
 	sudo ctr image pull "ghcr.io/kube-vip/kube-vip:$version"
-	sudo bash -c 'ctr run --rm --net-host "ghcr.io/kube-vip/kube-vip:'$version'" \
+	sudo bash -c 'ctr run --rm --net-host "ghcr.io/kube-vip/kube-vip:'"$version"'" \
 	vip /kube-vip manifest pod\
-	--interface "'$interface'" \
-	--address "'$vip'" \
+	--interface "'"$interface"'" \
+	--address "'"$vip"'" \
 	--controlplane \
 	--services \
 	--arp \
