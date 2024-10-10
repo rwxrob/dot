@@ -1,0 +1,27 @@
+#!/bin/bash
+
+[[ ! $# == 1 ]] && echo "usage: $0 NEWHOSTNAME" && exit 0
+hostname=$1
+
+set_hostname() {
+	sudo hostnamectl set-hostname "$hostname"
+	sudo perl -p -i -e "s/renameme/$hostname" /etc/hosts
+	sudo systemctl restart systemd-networkd
+}
+
+regen_hostkeys() {
+	sudo rm /etc/ssh/ssh_host*
+	sudo ssh-keygen -A
+	sudo systemctl restart ssh
+}
+
+setup_avahi() {
+	sudo apt-get install -y avahi-daemon
+	sudo systemctl enable avahi-daemon
+	sudo systemctl start avahi-daemon
+	sudo systemctl restart systemd-networkd
+}
+
+set_hostname "$hostname"
+setup_avahi
+regen_hostkeys
