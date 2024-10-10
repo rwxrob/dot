@@ -22,6 +22,15 @@ setup_avahi() {
 	sudo systemctl restart systemd-networkd
 }
 
+regen_machine_id() {
+	sudo truncate -s 0 /etc/machine-id
+	sudo rm -f /var/lib/dbus/machine-id
+	sudo systemd-machine-id-setup
+	cat /etc/machine-id
+	sudo systemctl restart dbus
+}
+
 set_hostname "$hostname"
 setup_avahi
 regen_hostkeys
+regen_machine_id
