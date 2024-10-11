@@ -245,7 +245,12 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
 
   let g:ale_sign_error = '☠'
   let g:ale_sign_warning = '🙄'
-  let g:ale_linters = {'go': ['gometalinter', 'gofmt','gobuild']}
+  let g:ale_linters = {
+  \  'go': ['gometalinter', 'gofmt','gobuild'],
+  \  'sh': ['shellcheck'],
+  \  'ksh': ['shellcheck'],
+  \  'bash': ['shellcheck'],
+  \}
 
   " pandoc
   let g:pandoc#formatting#mode = 'h' " A'
