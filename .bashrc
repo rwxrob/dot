@@ -347,7 +347,7 @@ fi
 owncomp=(
 	pdf zet keg kn yt gl auth pomo config live iam sshkey ws x clip
 	./build build b ./k8sapp k8sapp ./setup ./cmd run ./run
-	foo ./foo cmds ./cmds z bonzai openapi obs
+	foo ./foo cmds ./cmds z bonzai openapi obs vault
 )
 
 for i in "${owncomp[@]}"; do complete -C "$i" "$i"; done
@@ -401,3 +401,4 @@ _have terraform && complete -C /usr/bin/terraform tf
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
