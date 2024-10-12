@@ -243,11 +243,19 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   Plug 'dense-analysis/ale'
   call plug#end()
 
+  set signcolumn=yes
+  let g:ale_set_signs = 1
   let g:ale_sign_error = '☠'
   let g:ale_sign_warning = '🙄'
+
   let g:ale_linters = {'go': ['gometalinter', 'gofmt','gobuild']}
   let g:ale_linter_aliases = {'bash': 'sh'}
-  let g:ale_fixer_aliases = {'bash': 'sh'}
+
+  let g:ale_fixers = {
+        \'sh': ['shfmt'],
+        \'bash': ['shfmt'],
+        \}
+  let g:ale_fix_on_save = 1
 
   " pandoc
   let g:pandoc#formatting#mode = 'h' " A'
@@ -287,28 +295,6 @@ augroup CloseLoclistWindowGroup
   autocmd!
   autocmd QuitPre * if empty(&buftype) | lclose | endif
 augroup END
-
-" format perl on save
-" if has("eval") " vim-tiny detection
-" fun! s:Perltidy()
-"   let l:pos = getcurpos()
-"   silent execute '%!perltidy -i=2'
-"   call setpos('.', l:pos)
-" endfun
-" "autocmd FileType perl autocmd BufWritePre <buffer> call s:Perltidy()
-" endif
-
-" format shell on save
-"if has("eval") " vim-tiny detection
-" TODO check for shfmt and shellcheck before defining
-" FIXME stop from blowing away file when there is shell error
-"fun! s:FormatShell()
-"  let l:pos = getcurpos()
-"   "silent execute '%!shfmt' " FIXME: bug report to shfmt
-"   call setpos('.', l:pos)
-" endfun
-" autocmd FileType sh autocmd BufWritePre <buffer> call s:FormatShell()
-" endif
 
 "autocmd vimleavepre *.md !perl -p -i -e 's,(?<!\[)my `(\w+)` (package|module|repo|command|utility),[my `\1` \2](https://gitlab.com/rwxrob/\1),g' %
 
@@ -363,6 +349,7 @@ au bufnewfile,bufRead *.profile set filetype=sh
 au bufnewfile,bufRead *.crontab set filetype=crontab
 au bufnewfile,bufRead *ssh/config set filetype=sshconfig
 au bufnewfile,bufRead .dockerignore set filetype=gitignore
+au bufnewfile,bufRead .bashrc,.bash_profile set filetype=bash
 au bufnewfile,bufRead *gitconfig set filetype=gitconfig
 au bufnewfile,bufRead /tmp/psql.edit.* set syntax=sql
 au bufnewfile,bufRead *.go set spell spellcapcheck=0
