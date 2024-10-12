@@ -6,12 +6,6 @@ case $- in
 *) return ;;
 esac
 
-# ------------------------- distro detection -------------------------
-
-export DISTRO
-[[ $(uname -r) =~ Microsoft ]] && DISTRO=WSL2 #TODO distinguish WSL1
-#TODO add the rest
-
 # ---------------------- local utility functions ---------------------
 
 _have() { type "$1" &>/dev/null; }
@@ -340,7 +334,7 @@ clone() {
 
 # for mac
 if [[ "$OSTYPE" == "darwin"* ]]; then
-  brew_prefix="$(brew --prefix)"
+	brew_prefix="$(brew --prefix)"
 	[[ -r "$brew_prefix/etc/profile.d/bash_completion.sh" ]] && . "$brew_prefix/etc/profile.d/bash_completion.sh"
 fi
 
@@ -354,7 +348,7 @@ for i in "${owncomp[@]}"; do complete -C "$i" "$i"; done
 
 _have gh && . <(gh completion -s bash)
 _have z && . <(z completion bash)
-_have glow && . <(glow completion  bash)
+_have glow && . <(glow completion bash)
 _have goreleaser && . <(goreleaser completion bash 2>/dev/null)
 _have klogin && . <(klogin completion bash 2>/dev/null)
 _have pandoc && . <(pandoc --bash-completion)
@@ -399,6 +393,5 @@ _have terraform && complete -C /usr/bin/terraform tf
 # ------------------------- NVM bullshit ahead ------------------------
 # (keep as is or nvm idiotic installer will re-add to bashrc next time)
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
