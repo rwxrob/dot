@@ -213,11 +213,11 @@ au FileType markdown,pandoc set tw=0
 au FileType markdown,pandoc set wrap
 au FileType yaml hi yamlBlockMappingKey ctermfg=NONE
 au FileType yaml set sw=2
-au FileType bash set sw=2
+au FileType sh,bash set sw=2
 au FileType c set sw=8
 au FileType markdown,pandoc noremap j gj
 au FileType markdown,pandoc noremap k gk
-au FileType sh set noet
+au FileType sh,bash set noet
 
 set cinoptions+=:0
 
@@ -245,12 +245,9 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
 
   let g:ale_sign_error = '☠'
   let g:ale_sign_warning = '🙄'
-  let g:ale_linters = {
-  \  'go': ['gometalinter', 'gofmt','gobuild'],
-  \  'sh': ['shellcheck'],
-  \  'ksh': ['shellcheck'],
-  \  'bash': ['shellcheck'],
-  \}
+  let g:ale_linters = {'go': ['gometalinter', 'gofmt','gobuild']}
+  let g:ale_linter_aliases = {'bash': 'sh'}
+  let g:ale_fixer_aliases = {'bash': 'sh'}
 
   " pandoc
   let g:pandoc#formatting#mode = 'h' " A'
@@ -292,26 +289,26 @@ augroup CloseLoclistWindowGroup
 augroup END
 
 " format perl on save
-if has("eval") " vim-tiny detection
-fun! s:Perltidy()
-  let l:pos = getcurpos()
-  silent execute '%!perltidy -i=2'
-  call setpos('.', l:pos)
-endfun
-"autocmd FileType perl autocmd BufWritePre <buffer> call s:Perltidy()
-endif
+" if has("eval") " vim-tiny detection
+" fun! s:Perltidy()
+"   let l:pos = getcurpos()
+"   silent execute '%!perltidy -i=2'
+"   call setpos('.', l:pos)
+" endfun
+" "autocmd FileType perl autocmd BufWritePre <buffer> call s:Perltidy()
+" endif
 
 " format shell on save
-if has("eval") " vim-tiny detection
+"if has("eval") " vim-tiny detection
 " TODO check for shfmt and shellcheck before defining
 " FIXME stop from blowing away file when there is shell error
-fun! s:FormatShell()
-  let l:pos = getcurpos()
-  "silent execute '%!shfmt' " FIXME: bug report to shfmt
-  call setpos('.', l:pos)
-endfun
-autocmd FileType sh autocmd BufWritePre <buffer> call s:FormatShell()
-endif
+"fun! s:FormatShell()
+"  let l:pos = getcurpos()
+"   "silent execute '%!shfmt' " FIXME: bug report to shfmt
+"   call setpos('.', l:pos)
+" endfun
+" autocmd FileType sh autocmd BufWritePre <buffer> call s:FormatShell()
+" endif
 
 "autocmd vimleavepre *.md !perl -p -i -e 's,(?<!\[)my `(\w+)` (package|module|repo|command|utility),[my `\1` \2](https://gitlab.com/rwxrob/\1),g' %
 
@@ -359,7 +356,7 @@ au bufnewfile,bufRead meta-data set ft=yaml
 au bufnewfile,bufRead .goreleaser set ft=yaml
 au bufnewfile,bufRead *.ddl set ft=sql
 au bufnewfile,bufRead keg set ft=yaml
-au bufnewfile,bufRead *.bash* set ft=bash
+au bufnewfile,bufRead *.sh* set ft=sh
 au bufnewfile,bufRead *.{peg,pegn} set ft=config
 au bufnewfile,bufRead *.gotmpl set ft=go
 au bufnewfile,bufRead *.profile set filetype=sh
@@ -375,7 +372,9 @@ au bufnewfile,bufRead *.txt set spell
 "fix bork bash detection
 if has("eval")  " vim-tiny detection
 fun! s:DetectBash()
-    if getline(1) == '#!/usr/bin/bash' || getline(1) == '#!/bin/bash'
+    if getline(1) == '#!/usr/bin/bash' 
+          \ || getline(1) == '#!/bin/bash'
+          \ || getline(1) == '#!/usr/bin/env bash'
         set ft=bash
         set shiftwidth=2
     endif
