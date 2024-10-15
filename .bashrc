@@ -261,6 +261,7 @@ alias disclaimer="clear; now; zet view disclaimer"
 alias main="obs scene Main"
 alias tight="obs scene Closeup"
 alias pixel="scrcpy -t -s 1A141FDF600AJ4"
+alias gitl="git log -n 5 --graph --decorate --oneline"
 
 _have vim && alias vi=vim
 
