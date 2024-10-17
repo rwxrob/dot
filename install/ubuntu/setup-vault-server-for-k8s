@@ -1,0 +1,31 @@
+#!/bin/bash
+set -e
+
+#black=$'\e[30m'
+red=$'\e[31m'
+#green=$'\e[32m'
+#yellow=$'\e[33m'
+#blue=$'\e[34m'
+mag=$'\e[35m'
+#cyan=$'\e[36m'
+#white=$'\e[37m'
+x=$'\e[0m'
+
+check-deps() {
+	for cmd in vault kubectl helm; do
+		if [[ -z "$(command -y "$cmd")" ]]; then
+			echo "${mag}${cmd}${red} not found${x}"
+			exit 1
+		fi
+	done
+}
+
+install-external-secrets-chart() {
+	helm repo add external-secrets https://charts.external-secrets.io
+	helm repo update external-secrets
+	helm install external-secrets external-secrets/external-secrets
+}
+
+
+
+#check-deps

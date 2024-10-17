@@ -11,7 +11,7 @@ set nocompatible
 " automatically indent new lines
 set autoindent " (alpine)
 
-set noflash " (alpine-ish only)
+"set noflash " (alpine-ish only)
 
 " replace tabs with spaces automatically
 set expandtab " (alpine)
@@ -162,64 +162,10 @@ filetype plugin on
 " high contrast for streaming, etc.
 set background=dark
 
-" make gutter less annoying
-hi SignColumn ctermbg=NONE
-
-" base default color changes (gruvbox dark friendly)
-hi StatusLine ctermfg=black ctermbg=NONE
-hi StatusLineNC ctermfg=black ctermbg=NONE
-hi Normal ctermbg=NONE
-hi Special ctermfg=cyan
-hi LineNr ctermfg=black ctermbg=NONE
-hi SpecialKey ctermfg=black ctermbg=NONE
-hi ModeMsg ctermfg=black cterm=NONE ctermbg=NONE
-hi MoreMsg ctermfg=black ctermbg=NONE
-hi NonText ctermfg=black ctermbg=NONE
-hi vimGlobal ctermfg=black ctermbg=NONE
-hi ErrorMsg ctermbg=234 ctermfg=darkred cterm=NONE
-hi Error ctermbg=234 ctermfg=darkred cterm=NONE
-hi SpellBad ctermbg=234 ctermfg=darkred cterm=NONE
-hi SpellRare ctermbg=234 ctermfg=darkred cterm=NONE
-hi Search ctermbg=236 ctermfg=darkred
-hi vimTodo ctermbg=236 ctermfg=darkred
-hi Todo ctermbg=236 ctermfg=darkred
-hi IncSearch ctermbg=236 cterm=NONE ctermfg=darkred
-hi MatchParen ctermbg=236 ctermfg=darkred
-
-" color overrides
-au FileType * hi StatusLine ctermfg=black ctermbg=NONE
-au FileType * hi StatusLineNC ctermfg=black ctermbg=NONE
-au FileType * hi Normal ctermbg=NONE
-au FileType * hi Special ctermfg=cyan
-au FileType * hi LineNr ctermfg=black ctermbg=NONE
-au FileType * hi SpecialKey ctermfg=black ctermbg=NONE
-au FileType * hi ModeMsg ctermfg=black cterm=NONE ctermbg=NONE
-au FileType * hi MoreMsg ctermfg=black ctermbg=NONE
-au FileType * hi NonText ctermfg=black ctermbg=NONE
-au FileType * hi vimGlobal ctermfg=black ctermbg=NONE
-au FileType * hi goComment ctermfg=black ctermbg=NONE
-au FileType * hi ErrorMsg ctermbg=234 ctermfg=darkred cterm=NONE
-au FileType * hi Error ctermbg=234 ctermfg=darkred cterm=NONE
-au FileType * hi SpellBad ctermbg=234 ctermfg=darkred cterm=NONE
-au FileType * hi SpellRare ctermbg=234 ctermfg=darkred cterm=NONE
-au FileType * hi Search ctermbg=236 ctermfg=darkred
-au FileType * hi vimTodo ctermbg=236 ctermfg=darkred
-au FileType * hi Todo ctermbg=236 ctermfg=darkred
-au FileType * hi IncSearch ctermbg=236 cterm=NONE ctermfg=darkred
-au FileType * hi MatchParen ctermbg=236 ctermfg=darkred
-au FileType markdown,pandoc hi Title ctermfg=yellow ctermbg=NONE
-au FileType markdown,pandoc hi Operator ctermfg=yellow ctermbg=NONE
-au FileType markdown,pandoc set tw=0
-au FileType markdown,pandoc set wrap
-au FileType yaml hi yamlBlockMappingKey ctermfg=NONE
-au FileType yaml set sw=2
-au FileType sh,bash set sw=2
-au FileType c set sw=8
-au FileType markdown,pandoc noremap j gj
-au FileType markdown,pandoc noremap k gk
-au FileType sh,bash set noet
-
 set cinoptions+=:0
+
+" just one status line instead of two
+set laststatus=0
 
 " Edit/Reload vimrc configuration file
 nnoremap confe :e $HOME/.vimrc<CR>
@@ -236,15 +182,21 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   Plug 'zah/nim.vim'
   Plug 'conradirwin/vim-bracketed-paste'
   Plug 'morhetz/gruvbox'
+  Plug 'sainnhe/gruvbox-material'
   Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
   Plug 'vim-pandoc/vim-pandoc'
   Plug 'dahu/vim-asciidoc'
   Plug 'rwxrob/vim-pandoc-syntax-simple'
   Plug 'dense-analysis/ale'
+  if has('nvim')
+    Plug 'neoclide/coc.nvim', {'branch': 'release'}
+    Plug 'NStefan002/screenkey.nvim'
+  endif
   call plug#end()
 
   set signcolumn=yes
   let g:ale_set_signs = 1
+  let g:ale_sign_info = '❗️'
   let g:ale_sign_error = '‼️'
   let g:ale_sign_warning = '⁉️'
 
@@ -286,9 +238,68 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   "let g:go_gopls_analyses = { 'composites' : v:false }
   au FileType go nmap <leader>m ilog.Print("made")<CR><ESC>
   au FileType go nmap <leader>n iif err != nil {return err}<CR><ESC>
+
+  " gruvbox-material (colorscheme MUST come last)
+  let g:gruvbox_material_disable_italic_comment = 1
+  colorscheme gruvbox-material
+
 else
   autocmd vimleavepre *.go !gofmt -w % " backup if fatih fails
 endif
+
+" base default color changes (gruvbox dark friendly)
+hi StatusLine ctermfg=black ctermbg=NONE
+hi StatusLineNC ctermfg=black ctermbg=NONE
+hi Normal ctermbg=NONE
+hi Special ctermfg=cyan
+hi LineNr ctermfg=black ctermbg=NONE
+hi SpecialKey ctermfg=black ctermbg=NONE
+hi ModeMsg ctermfg=black cterm=NONE ctermbg=NONE
+hi MoreMsg ctermfg=black ctermbg=NONE
+hi NonText ctermfg=black ctermbg=NONE
+hi vimGlobal ctermfg=black ctermbg=NONE
+hi ErrorMsg ctermbg=234 ctermfg=darkred cterm=NONE
+hi Error ctermbg=234 ctermfg=darkred cterm=NONE
+hi SpellBad ctermbg=234 ctermfg=darkred cterm=NONE
+hi SpellRare ctermbg=234 ctermfg=darkred cterm=NONE
+hi Search ctermbg=236 ctermfg=darkred
+hi vimTodo ctermbg=236 ctermfg=darkred
+hi Todo ctermbg=236 ctermfg=darkred
+hi IncSearch ctermbg=236 cterm=NONE ctermfg=darkred
+hi MatchParen ctermbg=236 ctermfg=darkred
+hi SignColumn ctermbg=NONE " make gutter less annoying
+" color overrides
+au FileType * hi StatusLine ctermfg=black ctermbg=NONE
+au FileType * hi StatusLineNC ctermfg=black ctermbg=NONE
+au FileType * hi Normal ctermbg=NONE
+au FileType * hi Special ctermfg=cyan
+au FileType * hi LineNr ctermfg=black ctermbg=NONE
+au FileType * hi SpecialKey ctermfg=black ctermbg=NONE
+au FileType * hi ModeMsg ctermfg=black cterm=NONE ctermbg=NONE
+au FileType * hi MoreMsg ctermfg=black ctermbg=NONE
+au FileType * hi NonText ctermfg=black ctermbg=NONE
+au FileType * hi vimGlobal ctermfg=black ctermbg=NONE
+au FileType * hi Comment ctermfg=black ctermbg=NONE
+au FileType * hi ErrorMsg ctermbg=234 ctermfg=darkred cterm=NONE
+au FileType * hi Error ctermbg=234 ctermfg=darkred cterm=NONE
+au FileType * hi SpellBad ctermbg=234 ctermfg=darkred cterm=NONE
+au FileType * hi SpellRare ctermbg=234 ctermfg=darkred cterm=NONE
+au FileType * hi Search ctermbg=236 ctermfg=darkred
+au FileType * hi vimTodo ctermbg=236 ctermfg=darkred
+au FileType * hi Todo ctermbg=236 ctermfg=darkred
+au FileType * hi IncSearch ctermbg=236 cterm=NONE ctermfg=darkred
+au FileType * hi MatchParen ctermbg=236 ctermfg=darkred
+au FileType markdown,pandoc hi Title ctermfg=yellow ctermbg=NONE
+au FileType markdown,pandoc hi Operator ctermfg=yellow ctermbg=NONE
+au FileType markdown,pandoc set tw=0
+au FileType markdown,pandoc set wrap
+au FileType yaml hi yamlBlockMappingKey ctermfg=NONE
+au FileType yaml set sw=2
+au FileType sh,bash set sw=2
+au FileType c set sw=8
+au FileType markdown,pandoc noremap j gj
+au FileType markdown,pandoc noremap k gk
+au FileType sh,bash set noet
 
 " force loclist to always close when buffer does (affects vim-go, etc.)
 augroup CloseLoclistWindowGroup
