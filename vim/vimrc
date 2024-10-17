@@ -200,7 +200,6 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   if has('nvim')
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
     Plug 'NStefan002/screenkey.nvim'
-    Screenkey
     nnoremap sc :Screenkey<CR>
   endif
   call plug#end()
