@@ -38,6 +38,7 @@ set showmode
 
 " disable bell (also disable in .inputrc)
 set noerrorbells
+set visualbell
 set vb t_vb=
 
 let mapleader=","
@@ -135,12 +136,6 @@ set fo+=m   " multi-byte character line break support
 set fo+=M   " don't add space before or after multi-byte char
 set fo-=B   " don't add space between two multi-byte chars
 set fo+=1   " don't break a line after a one-letter word
-
-" requires PLATFORM env variable set (in ~/.bashrc)
-if $PLATFORM == 'mac'
-  " required for mac delete to work
-  set backspace=indent,eol,start
-endif
 
 " stop complaints about switching buffer with changes
 set hidden
