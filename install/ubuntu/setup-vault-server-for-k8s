@@ -26,6 +26,5 @@ install-external-secrets-chart() {
 	helm install external-secrets external-secrets/external-secrets
 }
 
-
-
 #check-deps
+install-external-secrets-charts

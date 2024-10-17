@@ -263,8 +263,8 @@ alias tight="obs scene Closeup"
 alias pixel="scrcpy -t -s 1A141FDF600AJ4"
 alias gitl="git log -n 5 --graph --decorate --oneline"
 
-_have vim && alias vi=vim
-_have nvim && alias vi=nvim
+_have vim && alias vi=vim && EDITOR=vim
+_have nvim && alias vi=nvim && EDITOR=nvim
 
 # ----------------------------- functions ----------------------------
 
