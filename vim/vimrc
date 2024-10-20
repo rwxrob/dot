@@ -160,7 +160,7 @@ set background=dark
 set cinoptions+=:0
 
 " just one status line instead of two
-set laststatus=0
+set laststatus=0 " for none
 
 " Edit/Reload vimrc configuration file
 nnoremap confe :e $HOME/.vimrc<CR>
@@ -199,7 +199,9 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   Plug 'dense-analysis/ale'
   if has('nvim')
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
+    let g:screenkey_statusline_component=1 
     Plug 'NStefan002/screenkey.nvim'
+    set winbar=%{%v:lua.require('screenkey').get_keys()%}
     nnoremap sc :Screenkey<CR>
   endif
   call plug#end()
