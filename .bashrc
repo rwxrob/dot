@@ -333,7 +333,9 @@ clone() {
 # for mac
 if [[ "$OSTYPE" == "darwin"* ]]; then
 	brew_prefix="$(brew --prefix)"
-	[[ -r "$brew_prefix/etc/profile.d/bash_completion.sh" ]] && . "$brew_prefix/etc/profile.d/bash_completion.sh"
+	if [[ -r "$brew_prefix/etc/profile.d/bash_completion.sh" ]]; then
+		source "$brew_prefix/etc/profile.d/bash_completion.sh"
+	fi
 fi
 
 owncomp=(
