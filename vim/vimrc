@@ -287,6 +287,8 @@ hi Todo ctermbg=236 ctermfg=darkred
 hi IncSearch ctermbg=236 cterm=NONE ctermfg=darkred
 hi MatchParen ctermbg=236 ctermfg=darkred
 hi SignColumn ctermbg=NONE " make gutter less annoying
+hi WinBar ctermfg=black ctermbg=NONE cterm=NONE
+
 " color overrides
 au FileType * hi StatusLine ctermfg=black ctermbg=NONE
 au FileType * hi StatusLineNC ctermfg=black ctermbg=NONE
