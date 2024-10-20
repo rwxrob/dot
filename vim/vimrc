@@ -206,6 +206,12 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   endif
   call plug#end()
 
+  if has('nvim')
+    lua <<EOF
+require('screenkey').setup({win_opts={width=90}})
+EOF
+  endif
+
   set signcolumn=yes
   let g:ale_set_signs = 1
   let g:ale_sign_info = '❗️'
