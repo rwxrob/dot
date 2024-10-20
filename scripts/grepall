@@ -1,11 +1,7 @@
 #!/bin/sh
 
-pager=less
-[ -n "$PAGER" ] && pager=$PAGER
-
 exec find . \
 	-name '.git' \
 	-prune -o \
-	-exec grep -i --color=always "$1" {} \
-	/dev/null \; 2>/dev/null |
-	"$pager"
+	-exec grep -i "$1" {} \
+	/dev/null \; 2>/dev/null
