@@ -170,7 +170,7 @@ set ruf=%30(%=%#LineNr#%.50F\ [%{strlen(&ft)?&ft:'none'}]\ %l:%c\ %p%%%)
 
 
 if has('nvim')
-lua << EOF
+:lua << EOF
 -- Customize the sign for errors
 vim.fn.sign_define('DiagnosticSignError', { text = '🔥', texthl = 'DiagnosticError' })
 -- Customize the sign for warnings
@@ -207,7 +207,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   call plug#end()
 
   if has('nvim')
-    lua <<EOF
+    :lua <<EOF
 require('screenkey').setup({win_opts={width=90}})
 EOF
   endif
