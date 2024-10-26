@@ -28,7 +28,7 @@ title:		normal:			magenta
 tt:		dim:			brightmagenta:	black
 h1:		bold:			white:		blue
 label:		normal:			magenta
-q:		normal:			yellow:		magenta
+q:		normal:			yellow:		black
 small:		dim:			default
 big:		bold:			yellow
 sup:		bold:			yellow

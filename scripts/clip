@@ -142,15 +142,15 @@ matches the argument passed, which can be simply a string or an extended
 regular expression. If more than one line matches, then one will randomly be returned.'
 
 x_data() {
-  _filter "$@"
-  local -a data
-  mapfile -t data < "$CLIP_DATA"
-  local -a matches
-  IFS=$'\n'
-  for c in "${data[@]}";do
-    [[ $c =~ ^$1 ]] && matches+=($c)
-  done
-  echo "${matches[$((RANDOM%${#matches[@]}))]}"
+	_filter "$@"
+	local -a data
+	mapfile -t data <"$CLIP_DATA"
+	local -a matches
+	IFS=$'\n'
+	for c in "${data[@]}"; do
+		[[ $c =~ ^$1 ]] && matches+=($c)
+	done
+	echo "${matches[$((RANDOM % ${#matches[@]}))]}"
 }
 
 help[play]='
@@ -166,29 +166,29 @@ their groups. (See `man mpv` for more details on how the videos are
 played.)'
 
 x_play() {
-  if [[ -z "$1" ]]; then
-    select c in $(x_list); do
-      x_play "$c" || true
-    done
-    return $?
-  fi
-  type keyoff &>/dev/null && (keyoff || true)
-  local -a data
-  data=($(x_data "$@"))
-  local -i volume="$CLIP_VOLUME"
-  volume+=${data[1]:-100}
-  mpv --fs \
-    "--volume=$volume" \
-    "edl://$CLIP_DIR/${data[2]//;/;$CLIP_DIR/${data[2]%%,*},}" \
-    &>/dev/null
+	if [[ -z "$1" ]]; then
+		select c in $(x_list); do
+			x_play "$c" || true
+		done
+		return $?
+	fi
+	type keyoff &>/dev/null && (keyoff || true)
+	local -a data
+	data=($(x_data "$@"))
+	local -i volume="$CLIP_VOLUME"
+	volume+=${data[3]:-100}
+	mpv --fs \
+		"--volume=$volume" \
+		"edl://$CLIP_DIR/${data[2]//;/;$CLIP_DIR/${data[2]%%,*},}" \
+		&>/dev/null
 
-#   mpv --fs \
-#     "--volume=$volume" \
-#     "--fs-screen=$CLIP_SCREEN" \
-#     "edl://$CLIP_DIR/${data[2]//;/;$CLIP_DIR/${data[2]%%,*},}" \
-#     &>/dev/null
+	#   mpv --fs \
+	#     "--volume=$volume" \
+	#     "--fs-screen=$CLIP_SCREEN" \
+	#     "edl://$CLIP_DIR/${data[2]//;/;$CLIP_DIR/${data[2]%%,*},}" \
+	#     &>/dev/null
 
-  #type keyon &>/dev/null && (keyon || true)
+	#type keyon &>/dev/null && (keyon || true)
 }
 
 help[add]='
@@ -200,18 +200,18 @@ with `edit` later. Be sure to use the shareable URL (rather than the one
 in the omnibox) so that the ID is extracted correctly.'
 
 x_add() {
-  _filter "$@"
-  (( $# == 2 )) || (echo "usage: $EXE add <name> <video>" && return 1)
-  cd "$CLIP_DIR"
-  local url="$2"
-  local id="${url##*/}"
-  yt-dlp "$url" -o "$id.%(ext)s"
-  local name base
-  path=$(ls "$CLIP_DIR/$id".*)
-  file=${path##*/}
-  base=${file%.*}
-  echo "$1 100 $file,0,9001" >> "$CLIP_DATA"
-  cd -
+	_filter "$@"
+	(($# == 2)) || (echo "usage: $EXE add <name> <video>" && return 1)
+	cd "$CLIP_DIR"
+	local url="$2"
+	local id="${url##*/}"
+	yt-dlp "$url" -o "$id.%(ext)s"
+	local name base
+	path=$(ls "$CLIP_DIR/$id".*)
+	file=${path##*/}
+	base=${file%.*}
+	echo "$1 100 $file,0,9001" >>"$CLIP_DATA"
+	cd -
 }
 
 help[list]='
@@ -219,9 +219,9 @@ The `list` command display a space-delimited list of all possible, unique clip n
 '
 
 x_list() {
-  mapfile data < "$CLIP_DATA"
-  data=($(printf "%s\n" "${data[@]%% *}" | sort -u))
-  echo "${data[@]%% *}" 
+	mapfile data <"$CLIP_DATA"
+	data=($(printf "%s\n" "${data[@]%% *}" | sort -u))
+	echo "${data[@]%% *}"
 }
 
 help[dir]='The `dir` command prints the full path to the directory containing the videos used for all clips (`$CLIP_DIR`).'
@@ -231,8 +231,8 @@ x_dir() { echo "$CLIP_DIR"; }
 help[usage]='The `usage` command print a summary of usage for this command.'
 
 x_usage() {
-    local cmds="${COMMANDS[*]}"
-    printf "usage: %s (%s)\n" "${0##*/}" "${cmds// /|}"
+	local cmds="${COMMANDS[*]}"
+	printf "usage: %s (%s)\n" "${0##*/}" "${cmds// /|}"
 }
 
 help[help]='
@@ -244,70 +244,70 @@ is written in CommonMark (Markdown) and will displayed as Web page if
 `pandoc` and `$HELP_BROWSER` are detected, otherwise, just the Markdown is
 sent to `$PAGER` (default: more).'
 
-x_help() { 
-  local name="$1"
-  if [[ -z "$name" ]];then
-    for c in "${COMMANDS[@]}";do
-      x_help "$c" buildonly
-    done
-    x_help main
-    return 0
-  fi
-  local title="$EXE $name"
-  [[ $name = main ]] && title="$EXE"
-  local file="/tmp/help-$EXE-$name.html"
-  if _have pandoc ; then
-    if _have "$HELP_BROWSER" ;then
-      pandoc -s --metadata title="$title" \
-        -o "$file" <<< "${help[$name]}"
-      [[ -z "$2" ]] && cd /tmp && exec "$HELP_BROWSER" "$file"
-      return 0
-    fi
-    pandoc -s --metadata title="$title" \
-      -t plain <<< "${help[$name]}" | "$PAGER"
-    return 0
-  fi
-  echo "${help[$name]}" | "$PAGER"
+x_help() {
+	local name="$1"
+	if [[ -z "$name" ]]; then
+		for c in "${COMMANDS[@]}"; do
+			x_help "$c" buildonly
+		done
+		x_help main
+		return 0
+	fi
+	local title="$EXE $name"
+	[[ $name = main ]] && title="$EXE"
+	local file="/tmp/help-$EXE-$name.html"
+	if _have pandoc; then
+		if _have "$HELP_BROWSER"; then
+			pandoc -s --metadata title="$title" \
+				-o "$file" <<<"${help[$name]}"
+			[[ -z "$2" ]] && cd /tmp && exec "$HELP_BROWSER" "$file"
+			return 0
+		fi
+		pandoc -s --metadata title="$title" \
+			-t plain <<<"${help[$name]}" | "$PAGER"
+		return 0
+	fi
+	echo "${help[$name]}" | "$PAGER"
 }
 
 # --------------------- completion and delegation --------------------
 
-_have(){ type "$1" &>/dev/null; }
+_have() { type "$1" &>/dev/null; }
 
-_filter(){
-  (( $# > 0 )) && return 0
-  while IFS= read -ra args; do
-    "${FUNCNAME[1]}" "${args[@]}"
-  done
+_filter() {
+	(($# > 0)) && return 0
+	while IFS= read -ra args; do
+		"${FUNCNAME[1]}" "${args[@]}"
+	done
 }
 
 while IFS= read -r line; do
-    [[ $line =~ ^declare\ -f\ x_ ]] || continue
-    COMMANDS+=( "${line##declare -f x_}" )
+	[[ $line =~ ^declare\ -f\ x_ ]] || continue
+	COMMANDS+=("${line##declare -f x_}")
 done < <(declare -F)
 
 if [[ -n $COMP_LINE ]]; then
-    line=${COMP_LINE#* }
-    for c in "${COMMANDS[@]}" $(x_list); do
-        [[ ${c:0:${#line}} == "${line,,}" ]] && echo "$c"
-    done
-    exit
+	line=${COMP_LINE#* }
+	for c in "${COMMANDS[@]}" $(x_list); do
+		[[ ${c:0:${#line}} == "${line,,}" ]] && echo "$c"
+	done
+	exit
 fi
 
 for c in "${COMMANDS[@]}"; do
-    if [[ $c == "$EXE" ]]; then
-        "x_$EXE" "$@"
-        exit $?
-    fi
+	if [[ $c == "$EXE" ]]; then
+		"x_$EXE" "$@"
+		exit $?
+	fi
 done
 
-declare cmd="$1"; shift || true
+declare cmd="$1"
+shift || true
 for c in "${COMMANDS[@]}"; do
-    if [[ $c == "$cmd" ]]; then
-        "x_$cmd" "$@"
-        exit $?
-    fi
+	if [[ $c == "$cmd" ]]; then
+		"x_$cmd" "$@"
+		exit $?
+	fi
 done
 
 x_play "$cmd"
-
