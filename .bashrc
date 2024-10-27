@@ -193,9 +193,10 @@ PROMPT_AT=@
 
 __ps1() {
 	local P='$' dir="${PWD##*/}" B countme short long double \
-		r='\[\e[31m\]' g='\[\e[30m\]' h='\[\e[34m\]' \
+		r='\[\e[31m\]' h='\[\e[34m\]' \
 		u='\[\e[33m\]' p='\[\e[34m\]' w='\[\e[35m\]' \
-		b='\[\e[36m\]' x='\[\e[0m\]'
+		b='\[\e[36m\]' x='\[\e[0m\]' \
+		g="\[\033[38;2;90;82;76m\]"
 
 	[[ $EUID == 0 ]] && P='#' && u=$r && p=$u # root
 	[[ $PWD = / ]] && dir=/
@@ -209,8 +210,8 @@ __ps1() {
 	[[ -n "$B" ]] && B="$g($b$B$g)"
 
 	short="$u\u$g$PROMPT_AT$h\h$g:$w$dir$B$p$P$x "
-	long="$g╔ $u\u$g$PROMPT_AT$h\h$g:$w$dir$B\n$g╚ $p$P$x "
-	double="$g╔ $u\u$g$PROMPT_AT$h\h$g:$w$dir\n$g║ $B\n$g╚ $p$P$x "
+	long="${g}╔$u\u$g$PROMPT_AT$h\h$g:$w$dir$B\n${g}╚$p$P$x "
+	double="${g}╔$u\u$g$PROMPT_AT$h\h$g:$w$dir\n${g}║$B\n${g}╚$p$P$x "
 
 	if ((${#countme} > PROMPT_MAX)); then
 		PS1="$double"
