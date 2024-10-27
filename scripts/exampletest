@@ -1,0 +1,4 @@
+#!/bin/bash
+
+buf="create a golang example function named Example$(</dev/stdin) and only include the example function with no markdown or commentary do not use markdown codefences"
+gpt <<<"$buf"
