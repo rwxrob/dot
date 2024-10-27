@@ -1,0 +1,9 @@
+#!/bin/bash
+
+curl -sSL "https://pastebin.com/raw/$1"
+
+# curl -X POST -d "api_dev_key=$(<~/.local/config/pastbinapikey)" \
+# 	-d "api_option=copy" \
+# 	-d "api_paste_code=$(<yourfile.txt)" \
+# 	-d "api_paste_name=MyPaste" \
+# 	https://pastebin.com/api/api_post.php
