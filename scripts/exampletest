@@ -1,7 +1,0 @@
-#!/bin/bash
-
-line=$(</dev/stdin)
-fn=${line#*.}
-pkg=${line%.*}
-buf="create a golang example function named Example$fn and add $pkg. to the beginning of the function name in the body of the function only include the example function with no markdown or commentary do not use markdown codefences"
-gpt <<<"$buf"
