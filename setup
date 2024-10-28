@@ -9,7 +9,7 @@ ln -sf "$PWD/.profile" "$HOME/.bash_profile"
 ln -sf "$PWD/scripts" "$HOME/Scripts"
 
 mkdir -p "$HOME/.config/alacritty"
-ln -sf "$PWD/alacritty.yml" "$HOME/.config/alacritty/alacritty.yml"
+ln -sf "$PWD/alacritty.toml" "$HOME/.config/alacritty/alacritty.toml"
 
 for i in vim lynx gh git tmux docker podman iam; do
 	cd $i && ./setup
