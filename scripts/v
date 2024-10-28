@@ -1,3 +1,3 @@
 #!/bin/sh
 
-tmux rename-window "$1" && exec vi "$1"
+tmux rename-window "$1" && exec "$EDITOR" "$1"
