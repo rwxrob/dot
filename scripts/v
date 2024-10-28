@@ -1,0 +1,3 @@
+#!/bin/sh
+
+tmux rename-window "$1" && exec vi "$1"

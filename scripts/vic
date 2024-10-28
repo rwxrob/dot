@@ -1,3 +1,3 @@
 #!/bin/sh
 cmd=$(command -v "$1")
-test -n "$cmd" && exec "$EDITOR" "$cmd"
+test -n "$cmd" && tmux rename-window "$1" && exec vi "$cmd"
