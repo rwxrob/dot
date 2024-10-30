@@ -1,0 +1,23 @@
+#!/bin/bash
+
+print_error() {
+	name="$1"
+	thing="$2"
+
+	cat <<EOM
+// ---------------------------- $name ----------------------------
+
+type $name struct {
+	$thing string
+}
+
+func (e $name) Error() string {
+	return fmt.Sprintf("something: %v", e.$thing)
+}
+
+EOM
+}
+
+while read -r name thing; do
+	print_error "$name" "$thing"
+done
