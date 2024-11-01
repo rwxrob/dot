@@ -1,3 +1,15 @@
-#!/bin/sh
+#!/bin/bash
 
-tmux rename-window "$*" && exec "$EDITOR" "$@"
+out=''
+for arg in "$@"; do
+	base=${arg##*/}
+	if [[ ! $arg =~ / ]]; then
+		arg="$PWD"
+	fi
+	dir=${arg%/*}
+	dir=${dir##*/}
+	dir+=/
+	out+=$dir$base" "
+done
+
+tmux rename-window "$out" && exec "$EDITOR" "$@"
