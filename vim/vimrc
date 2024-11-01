@@ -168,7 +168,6 @@ nnoremap confr :source $HOME/.vimrc<CR>
 
 set ruf=%30(%=%#LineNr#%.50F\ [%{strlen(&ft)?&ft:'none'}]\ %l:%c\ %p%%%)
 
-
 if has('nvim')
 :lua << EOF
 -- Customize the sign for errors

@@ -3,11 +3,13 @@
 out=''
 for arg in "$@"; do
 	base=${arg##*/}
-	if [[ ! $arg =~ / ]]; then
+	if [[ $arg =~ / ]]; then
+		dir=${arg%/*}
+		dir=${dir##*/}
+	else
 		arg="$PWD"
+		dir=${arg##*/}
 	fi
-	dir=${arg%/*}
-	dir=${dir##*/}
 	dir+=/
 	out+=$dir$base" "
 done
