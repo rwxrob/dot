@@ -220,7 +220,18 @@ __ps1() {
 	else
 		PS1="$short"
 	fi
+
+	if _have tmux && [[ -n "$TMUX" ]]; then
+		tmux rename-window "$(wd) "
+	fi
 }
+
+wd() {
+	dir="${PWD##*/}"
+	parent="${PWD%"/${dir}"}"
+	parent="${parent##*/}"
+	echo "$parent/$dir"
+} && export wd
 
 PROMPT_COMMAND="__ps1"
 

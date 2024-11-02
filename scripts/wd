@@ -1,0 +1,6 @@
+#!/bin/bash
+
+dir="${PWD##*/}"
+parent="${PWD%"/${dir}"}"
+parent="${parent##*/}"
+echo "$parent/$dir"

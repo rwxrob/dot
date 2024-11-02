@@ -6,7 +6,7 @@
 # development with a bloated IDE. (Also see Monitoring for other ideas for
 # running real-time evaluations during development)
 
-tmux rename-window TEST" "
+tmux rename-window "TEST $(wd) "
 clear
 got "$@"
 onchange got "$@"
