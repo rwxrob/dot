@@ -1,3 +1,0 @@
-#!/bin/sh
-test -z "$1" && latest && exit;
-git tag -f "$1" && git push -f origin "$1"
