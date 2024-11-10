@@ -1,3 +1,0 @@
-#!/bin/sh
-
-exec lynx "https://godoc.org/github.com/$1"
