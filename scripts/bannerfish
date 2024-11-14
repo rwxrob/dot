@@ -4,4 +4,6 @@ if [ -z "${what}" ]; then
   read -r -p "Text: " what
 fi
 cols=$(tput lines)
-tmux split-window \; resize-pane -y $((cols-6)) \; send -t 1 "banner \"$what\"" Enter \; send -t 2 "fishies" Enter
+tmux split-window \; resize-pane -y $((cols-6)) \; send -t 1 "banner \"$what\"" Enter 
+sleep 1
+tmux send -t 2 "fishies" Enter
