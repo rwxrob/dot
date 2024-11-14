@@ -274,6 +274,9 @@ alias main="obs scene Main"
 alias tight="obs scene Closeup"
 alias pixel="scrcpy -t -s 1A141FDF600AJ4"
 alias gitl="git log -n 5 --graph --decorate --oneline"
+alias gp="git push"
+alias gptags="git push origin --tags"
+alias km="kimono"
 
 _have vim && alias vi=vim && EDITOR=vim
 _have nvim && alias vi=nvim && EDITOR=nvim
