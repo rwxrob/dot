@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# This script reliably compares the differences between two YAML files
+# even with differeing nested values (useful for Helm values files
+# comparisons and more). Note that the resulting diff CANNOT be reliably
+# used as a patch against the YAML file since the comments are stripped
+# during the comparison.
+
+[[ -z $(command -v yq) ]] && echo "missing yq command" && exit 1
+exec diff <(yq 'sort_keys(..)' -P "$1") <(yq 'sort_keys(..)' -P "$2")
