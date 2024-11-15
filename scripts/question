@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+exec gh issue create --label "question"
