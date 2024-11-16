@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+open http://localhost:8080
+godoc -http=localhost:8080 &>/dev/null &

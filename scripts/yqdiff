@@ -7,4 +7,4 @@
 # during the comparison.
 
 [[ -z $(command -v yq) ]] && echo "missing yq command" && exit 1
-exec diff <(yq 'sort_keys(..)' -P "$1") <(yq 'sort_keys(..)' -P "$2")
+exec diff <(yq 'sort_keys(..) | ... comments=""' -P "$1") <(yq 'sort_keys(..) | ... comments=""' -P "$2")

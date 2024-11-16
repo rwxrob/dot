@@ -1,0 +1,2 @@
+using module mode; GOMOD=/Users/rwxrob/Repos/github.com/rwxrob/dot/go.mod
+2024/11/15 22:10:44 ListenAndServe :8080: listen tcp :8080: bind: address already in use

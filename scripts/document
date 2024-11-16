@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+#!/bin/bash
+
+exec gh issue create --label documentation
