@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 #!/bin/bash
 
-exec gh issue create --label enhancement
+exec gh issue create --label enhancement --title "$*"
