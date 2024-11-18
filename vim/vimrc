@@ -193,7 +193,9 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   Plug 'sainnhe/gruvbox-material'
   Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
   Plug 'vim-pandoc/vim-pandoc'
-  Plug 'dahu/vim-asciidoc'
+  if !has('nvim') 
+    Plug 'dahu/vim-asciidoc'
+  endif
   Plug 'rwxrob/vim-pandoc-syntax-simple'
   Plug 'dense-analysis/ale'
   if has('nvim')
