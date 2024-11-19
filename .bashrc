@@ -44,8 +44,6 @@ export CLIP_SCREEN=0
 export TERM=xterm-256color
 export CLICOLOR=1
 export HRULEWIDTH=73
-export EDITOR=vi
-export VISUAL=vi
 export EDITOR_PREFIX=vi
 export GOPRIVATE="github.com/$GITUSER/*,gitlab.com/$GITUSER/*"
 #export GOPATH="$HOME/.local/go"
@@ -278,8 +276,8 @@ alias gp="git push"
 alias gptags="git push origin --tags"
 alias km="kimono"
 
-_have vim && alias vi=vim && EDITOR=vim
-_have nvim && alias vi=nvim && EDITOR=nvim
+_have vim && alias vi=vim && export EDITOR=vim && export VISUAL=vim
+_have nvim && alias vi=nvim && export EDITOR=nvim && export VISUAL=nvim
 
 # ----------------------------- functions ----------------------------
 
