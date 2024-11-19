@@ -8,11 +8,11 @@ path="${SCRIPTS}/${1}"
 if test -e "${path}"; then
   read -p "${1} already exists. Edit? " yes
   case "${yes}" in
-    y|yes|yep|yeppers|yeah|ok|okay) exec vim "${path}"
+    y|yes|yep|yeppers|yeah|ok|okay) exec "$EDITOR" "${path}"
   esac
   exit 0
 fi
 
 printf "#!/usr/bin/env bash\n\n" > "${path}"
 chmod +x "${path}" 
-exec vim +2 "${path}"
+exec "$EDITOR" +2 "${path}"
