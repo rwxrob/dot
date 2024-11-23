@@ -211,7 +211,7 @@ __ps1() {
 	fi
 
 	if _have tmux && [[ -n "$TMUX" ]]; then
-		tmux rename-window "$(wd) "
+		tmux rename-window "$(wd)"
 	fi
 }
 
