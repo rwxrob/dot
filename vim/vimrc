@@ -65,7 +65,7 @@ if v:version >= 800
 endif
 
 " mark trailing spaces as errors (break Makefiles, etc.)
-match IncSearch '\s\+$'
+match Visual '\s\+$'
 
 " enough for line numbers + gutter within 80 standard
 set textwidth=72
@@ -187,7 +187,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   endif
   Plug 'rwxrob/vim-pandoc-syntax-simple'
   Plug 'dense-analysis/ale'
-  if has('nvim') && exists('$NVIM_SCREENKEY')
+  if has('nvim')
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
     let g:screenkey_statusline_component=1
     Plug 'NStefan002/screenkey.nvim'
@@ -196,7 +196,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   endif
   call plug#end()
 
-  if has('nvim') && exists('$NVIM_SCREENKEY')
+  if has('nvim')
     :lua <<EOF
 require('screenkey').setup({win_opts={width=90}})
 EOF
