@@ -64,8 +64,8 @@ if v:version >= 800
   set nofoldenable
 endif
 
-" mark trailing spaces as errors (alacritty broke colors)   
-"match IncSearch '\s\+$'
+" mark trailing spaces as errors (break Makefiles, etc.)
+match IncSearch '\s\+$'
 
 " enough for line numbers + gutter within 80 standard
 set textwidth=72
@@ -73,12 +73,6 @@ set textwidth=72
 
 " disable relative line numbers, remove no to sample it
 set norelativenumber
-
-" makes ~ effectively invisible
-"highlight NonText guifg=bg
-
-" turn on default spell checking
-"set spell
 
 " disable spellcapcheck
 set spc=
@@ -89,9 +83,6 @@ set noswapfile
 set nowritebackup
 
 set icon
-
-" center the cursor always on the screen
-"set scrolloff=999
 
 " highlight search hits
 set hlsearch
@@ -155,7 +146,7 @@ set ttyfast
 filetype plugin on
 
 " high contrast for streaming, etc.
-set background=dark
+"set background=dark
 
 set cinoptions+=:0
 
@@ -173,9 +164,9 @@ if has('nvim')
 -- Customize the sign for errors
 vim.fn.sign_define('DiagnosticSignError', { text = '🔥', texthl = 'DiagnosticError' })
 -- Customize the sign for warnings
-vim.fn.sign_define('DiagnosticSignWarn', { text = '⚠️', texthl = 'DiagnosticWarn' })
+vim.fn.sign_define('DiagnosticSignWarn', { text = '❗️', texthl = 'DiagnosticWarn' })
 -- Customize the sign for information
-vim.fn.sign_define('DiagnosticSignInfo', { text = 'ℹ️', texthl = 'DiagnosticInfo' })
+vim.fn.sign_define('DiagnosticSignInfo', { text = '✨', texthl = 'DiagnosticInfo' })
 -- Customize the sign for hints
 vim.fn.sign_define('DiagnosticSignHint', { text = '💡', texthl = 'DiagnosticHint' })
 EOF
@@ -187,27 +178,25 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   " github.com/junegunn/vim-plug
 
   call plug#begin('~/.local/share/vim/plugins')
-  Plug 'zah/nim.vim'
   Plug 'conradirwin/vim-bracketed-paste'
-  Plug 'morhetz/gruvbox'
   Plug 'sainnhe/gruvbox-material'
   Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
   Plug 'vim-pandoc/vim-pandoc'
-  if !has('nvim') 
+  if !has('nvim')
     Plug 'dahu/vim-asciidoc'
   endif
   Plug 'rwxrob/vim-pandoc-syntax-simple'
   Plug 'dense-analysis/ale'
-  if has('nvim')
+  if has('nvim') && exists('$NVIM_SCREENKEY')
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
-    let g:screenkey_statusline_component=1 
+    let g:screenkey_statusline_component=1
     Plug 'NStefan002/screenkey.nvim'
     set winbar=%{%v:lua.require('screenkey').get_keys()%}
     nnoremap sc :Screenkey<CR>
   endif
   call plug#end()
 
-  if has('nvim')
+  if has('nvim') && exists('$NVIM_SCREENKEY')
     :lua <<EOF
 require('screenkey').setup({win_opts={width=90}})
 EOF
@@ -215,9 +204,10 @@ EOF
 
   set signcolumn=yes
   let g:ale_set_signs = 1
-  let g:ale_sign_info = '❗️'
-  let g:ale_sign_error = '‼️'
-  let g:ale_sign_warning = '⁉️'
+  let g:ale_sign_info = '✨'
+  let g:ale_sign_error = '🔥'
+  let g:ale_sign_warning = '❗️'
+  let g:ale_sign_hint = '💡'
 
   let g:ale_linters = {'go': ['gometalinter', 'gofmt','gobuild']}
   let g:ale_linter_aliases = {'bash': 'sh'}
@@ -249,13 +239,10 @@ EOF
   let g:go_highlight_diagnostic_errors = 1
   let g:go_highlight_diagnostic_warnings = 1
   let g:go_code_completion_enabled = 1
-  "let g:go_auto_type_info = 1 " forces 'Press ENTER' too much
   let g:go_auto_sameids = 0
-  "    let g:go_metalinter_command='golangci-lint'
-  "    let g:go_metalinter_command='golint'
-  "    let g:go_metalinter_autosave=1
   set updatetime=100
-  "let g:go_gopls_analyses = { 'composites' : v:false }
+
+  " common go macros
   au FileType go nmap <leader>m ilog.Print("made")<CR><ESC>
   au FileType go nmap <leader>n iif err != nil {return err}<CR><ESC>
 
@@ -328,18 +315,7 @@ augroup CloseLoclistWindowGroup
   autocmd QuitPre * if empty(&buftype) | lclose | endif
 augroup END
 
-"autocmd vimleavepre *.md !perl -p -i -e 's,(?<!\[)my `(\w+)` (package|module|repo|command|utility),[my `\1` \2](https://gitlab.com/rwxrob/\1),g' %
-
-" fill in empty markdown links with duck.com search
-" [some thing]() -> [some thing](https://duck.com/lite?kae=t&q=some thing)
-" s,/foo,/bar,g
-"autocmd vimleavepre *.md !perl -p -i -e 's,\[([^\]]+)\]\(\),[\1](https://duck.com/lite?kd=-1&kp=-1&q=\1),g' %
-
 autocmd BufWritePost *.md silent !toemoji %
-"autocmd BufWritePost *.md silent !toduck %
-
-" fill in anything beginning with @ with a link to twitch to it
-"autocmd vimleavepre *.md !perl -p -i -e 's, @(\w+), [\\@\1](https://twitch.tv/\1),g' %
 
 " make Y consistent with D and C (yank til end)
 map Y y$
@@ -400,10 +376,8 @@ function! <SID>SynStack()
 endfunc
 endif
 
-
 " start at last place you were editing
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-"au BufWritePost ~/.vimrc so ~/.vimrc
 
 " functions keys
 map <F1> :set number!<CR> :set relativenumber!<CR>
@@ -426,16 +400,14 @@ nmap <leader>2 :set paste<CR>i
 " inoremap <left> <NOP>
 " inoremap <right> <NOP>
 
-" better use of arrow keys, number increment/decrement
-" nnoremap <up> <C-a>
-" nnoremap <down> <C-x>
-
-" Better page down and page up
+" better page down and page up
 noremap <C-n> <C-d>
 noremap <C-p> <C-b>
 
-" Set TMUX window name to name of file
-"au fileopened * !tmux rename-window TESTING
+" set TMUX window name to name of file
+if exists('$TMUX')
+    autocmd BufEnter * call system('tmux rename-window ' . expand('%:p:h:t') . '/' . expand('%:t'))
+endif
 
 " read personal/private vim configuration (keep last to override)
 set rtp^=~/.vimpersonal
