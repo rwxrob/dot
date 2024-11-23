@@ -43,6 +43,7 @@ export HRULEWIDTH=73
 export GOPATH="$HOME/.local/go"
 export GOBIN="$HOME/.local/bin"
 export GOPROXY=direct
+export NVIM_SCREENKEY=1
 export CGO_ENABLED=0
 export PYTHONDONTWRITEBYTECODE=2
 export LC_COLLATE=C

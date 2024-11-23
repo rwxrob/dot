@@ -187,7 +187,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   endif
   Plug 'rwxrob/vim-pandoc-syntax-simple'
   Plug 'dense-analysis/ale'
-  if has('nvim')
+  if has('nvim') && exists('$NVIM_SCREENKEY')
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
     let g:screenkey_statusline_component=1
     Plug 'NStefan002/screenkey.nvim'
@@ -196,7 +196,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   endif
   call plug#end()
 
-  if has('nvim')
+  if has('nvim') && exists('$NVIM_SCREENKEY')
     :lua <<EOF
 require('screenkey').setup({win_opts={width=90}})
 EOF
@@ -315,7 +315,7 @@ augroup CloseLoclistWindowGroup
   autocmd QuitPre * if empty(&buftype) | lclose | endif
 augroup END
 
-autocmd BufWritePost *.md silent !toemoji %
+autocmd BufWritePost *.{md,adoc} silent !toemoji %
 
 " make Y consistent with D and C (yank til end)
 map Y y$
