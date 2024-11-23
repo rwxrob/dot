@@ -305,8 +305,8 @@ au FileType yaml hi yamlBlockMappingKey ctermfg=NONE
 au FileType yaml set sw=2
 au FileType sh,bash set sw=2
 au FileType c set sw=8
-au FileType markdown,pandoc noremap j gj
-au FileType markdown,pandoc noremap k gk
+au FileType markdown,pandoc,asciidoc noremap j gj
+au FileType markdown,pandoc,asciidoc noremap k gk
 au FileType sh,bash set noet
 
 " force loclist to always close when buffer does (affects vim-go, etc.)
