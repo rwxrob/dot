@@ -20,7 +20,6 @@ export TZ=America/New_York
 export REPOS="$HOME/Repos"
 export GHREPOS="$REPOS/github.com/$GITUSER"
 export DOTFILES="$GHREPOS/dot"
-export SNIPPETS="$DOTFILES/snippets"
 export HELP_BROWSER=lynx
 export DESKTOP="$HOME/Desktop"
 export DOCUMENTS="$HOME/Documents"
@@ -34,9 +33,6 @@ export MUSIC="$HOME/Music"
 export VIDEOS="$HOME/Movies"
 export PDFS="$HOME/usb/pdfs"
 export VIRTUALMACHINES="$HOME/VirtualMachines"
-export WORKSPACES="$HOME/Workspaces" # container home dirs for mounting
-export ZETDIR="$GHREPOS/zet"
-export ZETTELCASTS="$VIDEOS/ZettelCasts"
 export CLIP_DIR="$VIDEOS/clips"
 export CLIP_DATA="$GHREPOS/clip/data"
 export CLIP_VOLUME=0
@@ -44,9 +40,7 @@ export CLIP_SCREEN=0
 export TERM=xterm-256color
 export CLICOLOR=1
 export HRULEWIDTH=73
-export EDITOR_PREFIX=vi
-export GOPRIVATE="github.com/$GITUSER/*,gitlab.com/$GITUSER/*"
-#export GOPATH="$HOME/.local/go"
+export GOPATH="$HOME/.local/go"
 export GOBIN="$HOME/.local/bin"
 export GOPROXY=direct
 export CGO_ENABLED=0
@@ -54,14 +48,16 @@ export PYTHONDONTWRITEBYTECODE=2
 export LC_COLLATE=C
 export CFLAGS="-Wall -Wextra -Werror -O0 -g -fsanitize=address -fno-omit-frame-pointer -finstrument-functions"
 
+# gruvbox-material
+export LS_COLORS="di=38;5;245:fi=38;5;223:ln=38;5;179:ex=38;5;108:*.txt=38;5;223"
 export LESS="-FXR"
-export LESS_TERMCAP_mb="[35m" # magenta
-export LESS_TERMCAP_md="[33m" # yellow
-export LESS_TERMCAP_me=""      # "0m"
-export LESS_TERMCAP_se=""      # "0m"
-export LESS_TERMCAP_so="[34m" # blue
-export LESS_TERMCAP_ue=""      # "0m"
-export LESS_TERMCAP_us="[4m"  # underline
+export LESS_TERMCAP_md=$'\e[1;33m'       # start bold (yellow)
+export LESS_TERMCAP_mb=$'\e[1;35m'       # start blinking (magenta)
+export LESS_TERMCAP_me=$'\e[0m'          # end bold/blinking
+export LESS_TERMCAP_so=$'\e[38;5;108;1m' # start standout (green bold)
+export LESS_TERMCAP_se=$'\e[0m'          # end standout
+export LESS_TERMCAP_us=$'\e[4m'          # start underline
+export LESS_TERMCAP_ue=$'\e[0m'          # end underline
 
 export ANSIBLE_CONFIG="$HOME/.config/ansible/config.ini"
 export ANSIBLE_INVENTORY="$HOME/.config/ansible/inventory.yaml"
@@ -128,7 +124,6 @@ pathprepend() {
 pathprepend \
 	"$HOME/.local/bin" \
 	"$HOME/.local/go/bin" \
-	"$HOME/.nimble/bin" \
 	"$GHREPOS/cmd-"* \
 	/usr/local/go/bin \
 	/usr/local/opt/openjdk/bin \
@@ -165,12 +160,8 @@ shopt -s globstar
 shopt -s dotglob
 shopt -s extglob
 
-#shopt -s nullglob # bug kills completion for some
-#set -o noclobber
-
 # -------------------------- stty annoyances -------------------------
 
-#stty stop undef # disable control-s accidental terminal stops
 stty -ixon # disable control-s/control-q tty flow control
 
 # ------------------------------ history -----------------------------
@@ -263,14 +254,9 @@ alias temp='cd $(mktemp -d)'
 alias view='vi -R' # which is usually linked to vim
 alias clear='printf "\e[H\e[2J"'
 alias c='printf "\e[H\e[2J"'
-alias coin="clip '(yes|no)'"
-alias iam=live
+alias env='env -u LESS_TERMCAP_mb -u LESS_TERMCAP_md -u LESS_TERMCAP_me -u LESS_TERMCAP_so -u LESS_TERMCAP_se -u LESS_TERMCAP_us -u LESS_TERMCAP_ue'
 alias neo="neo -D -c gold"
 alias more="less"
-alias disclaimer="clear; now; zet view disclaimer"
-alias main="obs scene Main"
-alias tight="obs scene Closeup"
-alias pixel="scrcpy -t -s 1A141FDF600AJ4"
 alias gitl="git log -n 5 --graph --decorate --oneline"
 alias gp="git push"
 alias gptags="git push origin --tags"
@@ -280,12 +266,6 @@ _have vim && alias vi=vim && export EDITOR=vim && export VISUAL=vim
 _have nvim && alias vi=nvim && export EDITOR=nvim && export VISUAL=nvim
 
 # ----------------------------- functions ----------------------------
-
-# lesscoloroff() {
-#   while IFS= read -r line; do
-#     unset ${line%%=*}
-#   done < <(env | grep LESS_TERM)
-# } && export -f lesscoloroff
 
 envx() {
 	local envfile="${1:-"$HOME/.env"}"
@@ -312,13 +292,7 @@ new-from() {
 	gh repo create -p "$template" --public "$name"
 	gh repo clone "$name"
 	cd "$name" || return 1
-}
-
-new-bonzai() { new-from rwxrob/bonzai-example "$1"; }
-new-cmd() { new-from rwxrob/template-bash-command "cmd-$1"; }
-cdz() { cd "$(zet get "$@")" || exit; }
-
-export -f new-from new-bonzai new-cmd
+} && export -f new-from
 
 clone() {
 	local repo="$1" user
@@ -361,7 +335,6 @@ owncomp=(
 for i in "${owncomp[@]}"; do complete -C "$i" "$i"; done
 
 _have gh && . <(gh completion -s bash)
-_have z && . <(z completion bash)
 _have glow && . <(glow completion bash)
 _have goreleaser && . <(goreleaser completion bash 2>/dev/null)
 _have klogin && . <(klogin completion bash 2>/dev/null)
@@ -370,19 +343,14 @@ _have kubectl && . <(kubectl completion bash 2>/dev/null)
 _have kubeadm && . <(kubeadm completion bash 2>/dev/null)
 _have k && complete -o default -F __start_kubectl k
 _have istioctl && . <(istioctl completion bash 2>/dev/null)
-#_have clusterctl && . <(clusterctl completion bash)
 _have kind && . <(kind completion bash)
-_have cobra && . <(cobra completion bash)
 _have kompose && . <(kompose completion bash)
 _have helm && . <(helm completion bash)
 _have minikube && . <(minikube completion bash)
 _have conftest && . <(conftest completion bash)
 _have yq && . <(yq completion bash)
-_have kt && . <(kt completion bash)
 _have mk && complete -o default -F __start_minikube mk
 _have podman && _source_if "$HOME/.local/share/podman/completion" # d
-_have docker && _source_if "$HOME/.local/share/docker/completion" # d
-_have docker-compose && complete -F _docker_compose dc            # dc
 
 _have ansible && . <(register-python-argcomplete3 ansible)
 _have ansible-config && . <(register-python-argcomplete3 ansible-config)
@@ -404,7 +372,7 @@ _source_if "$HOME/.bash_work"
 _have terraform && complete -C /usr/bin/terraform terraform
 _have terraform && complete -C /usr/bin/terraform tf
 
-# ------------------------- NVM bullshit ahead ------------------------
+# ------------------------- NVM trash ahead ------------------------
 # (keep as is or nvm idiotic installer will re-add to bashrc next time)
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
