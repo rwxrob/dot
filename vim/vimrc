@@ -350,7 +350,7 @@ au bufnewfile,bufRead *gitconfig set filetype=gitconfig
 au bufnewfile,bufRead /tmp/psql.edit.* set syntax=sql
 au bufnewfile,bufRead *.go set spell spellcapcheck=0
 au bufnewfile,bufRead commands.yaml set spell
-au bufnewfile,bufRead *.txt set spell
+au bufnewfile,bufRead *.{txt,md,adoc} set spell
 
 "fix bork bash detection
 if has("eval")  " vim-tiny detection
