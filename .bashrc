@@ -330,7 +330,7 @@ owncomp=(
 	pdf zet keg kn yt gl auth pomo config live iam sshkey ws x clip
 	./build build b ./k8sapp k8sapp ./setup ./cmd run ./run
 	foo ./foo cmds ./cmds z bon openapi obs vault var sunrise multicall
-	kimono tag
+	kimono tag cm
 )
 
 for i in "${owncomp[@]}"; do complete -C "$i" "$i"; done
