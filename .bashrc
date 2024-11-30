@@ -333,7 +333,9 @@ owncomp=(
 	kimono tag cm rwxrob-books
 )
 
-for i in "${owncomp[@]}"; do complete -C "$i" "$i"; done
+for i in "${owncomp[@]}"; do
+	complete -C "$i" "$i"
+done
 
 _have gh && . <(gh completion -s bash)
 _have glow && . <(glow completion bash)
