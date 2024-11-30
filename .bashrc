@@ -69,11 +69,6 @@ export K8SAPP_CLUSTER=dev
 
 [[ -d /.vim/spell ]] && export VIMSPELL=("$HOME/.vim/spell/*.add")
 
-# -------------------------------- ruby -------------------------------
-
-export GEM_HOME="$HOME/.gem"
-export PATH="$GEM_HOME/bin:$PATH"
-
 # ----------------------------- PostgreSQL ----------------------------
 
 export PGPASS=~/.pgpass
