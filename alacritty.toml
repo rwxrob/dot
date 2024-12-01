@@ -47,3 +47,6 @@ yellow = "0xd8a657"
 [colors.primary]
 background = "0x282828"
 foreground = "0xd4be98"
+
+[terminal.shell]
+program = "/opt/homebrew/bin/bash"
