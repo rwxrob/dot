@@ -3,13 +3,11 @@ set -e
 
 ln -sf "$PWD/.bashrc" "$HOME/.bashrc"
 ln -sf "$PWD/.dircolors" "$HOME/.dircolors"
+ln -sf "$PWD/.wezterm.lua" "$HOME/.wezterm.lua"
 ln -sf "$PWD/.inputrc" "$HOME/.inputrc"
 ln -sf "$PWD/.profile" "$HOME/.profile"
 ln -sf "$PWD/.profile" "$HOME/.bash_profile"
 ln -sf "$PWD/scripts" "$HOME/Scripts"
-
-mkdir -p "$HOME/.config/alacritty"
-ln -sf "$PWD/alacritty.toml" "$HOME/.config/alacritty/alacritty.toml"
 
 for i in vim lynx gh git tmux docker podman iam; do
 	cd $i && ./setup

@@ -180,6 +180,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   call plug#begin('~/.local/share/vim/plugins')
   Plug 'conradirwin/vim-bracketed-paste'
   Plug 'sainnhe/gruvbox-material'
+  Plug 'xolox/vim-lua-ftplugin'
   Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
   Plug 'vim-pandoc/vim-pandoc'
   if !has('nvim')
