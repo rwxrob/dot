@@ -36,6 +36,7 @@ toemoji() {
 			line=${line//:$k:/${emoji[$k]}}
 			[[ $line =~ ^--- ]] && continue
 			line=${line//---/—}
+			line=${line//:bullet:/•}
 		done
 		echo "$line" >>"$out"
 	done <"$in"
