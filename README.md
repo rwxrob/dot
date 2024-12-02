@@ -1,7 +1,12 @@
-# Personal Dotfiles and Scripts
+# Dotfiles, scripts, and stuff
 
-Pilfer at your own peril. Mention rwxrob.tv if you do. Stop by and chat sometime.
+*You probably want [`dot-template`](https://github.com/rwxrob/dot-template) instead.*
 
-Be aware that most of what is in `scripts` is being (slowly) ported into my [`z` stateful command tree monolith utility](https://github.com/rwxrob/z). I'm even going to bundle my `.vimrc` and `.bashrc` files as embedded so I can setup my environment with a single command, anywhere.
+Pilfer at your own peril. I'd love it if you mentioned me if you do, but yeah. [Stop by and chat sometime.](https://linktr.ee/rwxrob)
 
-For questions about design decisions and setup consider my [zet notes](https://github.com/rwxrob/zet).
+## Legal
+
+Copyright 2024 Robert S. Muhlestein (<mailto:rob@rwx.gg>)  
+SPDX-License-Identifier: Apache-2.0
+
+This license makes you safe to use anything in here pretty much anywhere—including at work. But you do it at your own peril.

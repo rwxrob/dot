@@ -156,6 +156,7 @@ set laststatus=0 " for none
 " Edit/Reload vimrc configuration file
 nnoremap confe :e $HOME/.vimrc<CR>
 nnoremap confr :source $HOME/.vimrc<CR>
+nnoremap coming i_Coming soon..._<Esc>
 
 set ruf=%30(%=%#LineNr#%.50F\ [%{strlen(&ft)?&ft:'none'}]\ %l:%c\ %p%%%)
 
