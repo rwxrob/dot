@@ -186,6 +186,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   Plug 'vim-pandoc/vim-pandoc'
   if !has('nvim')
     Plug 'dahu/vim-asciidoc'
+    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
   endif
   Plug 'rwxrob/vim-pandoc-syntax-simple'
   Plug 'dense-analysis/ale'
