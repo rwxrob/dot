@@ -41,7 +41,7 @@ export TERM=xterm-256color
 export CLICOLOR=1
 export HRULEWIDTH=73
 export GOPATH="$HOME/.local/go"
-#export GOBIN="$HOME/.local/bin"
+export GOBIN="$HOME/.local/bin"
 export GOPROXY=direct
 export NVIM_SCREENKEY=1
 export CGO_ENABLED=0
@@ -330,7 +330,7 @@ owncomp=(
 	pdf zet keg kn yt gl auth pomo config live iam sshkey ws x clip
 	./build build b ./k8sapp k8sapp ./setup ./cmd run ./run
 	foo ./foo cmds ./cmds z bon openapi obs vault var sunrise multicall
-	kimono tag cm rwxrob-books
+	kimono tag cm
 )
 
 for i in "${owncomp[@]}"; do complete -C "$i" "$i"; done

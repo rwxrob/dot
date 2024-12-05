@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
-> /tmp/buf
-while IFS= read -r line;do
-  echo "$line" >> /tmp/buf
-  echo "$line"
+
+: >/tmp/buf
+
+while IFS= read -r line; do
+	echo "$line" >>/tmp/buf
+	echo "$line"
 done
+
+type pbcopy &>/dev/null && pbcopy </tmp/buf

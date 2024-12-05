@@ -6,7 +6,7 @@ endif
 
 set nocompatible
 
-"####################### Vi Compatible (~/.exrc) #######################
+"#################### Vi Compatible (~/.exrc) #######################
 
 " automatically indent new lines
 set autoindent " (alpine)
@@ -34,7 +34,7 @@ set ruler " see ruf for formatting
 " show command and insert mode
 set showmode
 
-"#######################################################################
+"###################################################################
 
 " disable bell (also disable in .inputrc)
 set noerrorbells
@@ -106,9 +106,9 @@ set wrapscan
 set nowrap
 
 " Just the formatoptions defaults, these are changed per filetype by
-" plugins. Most of the utility of all of this has been superceded by the use of
-" modern simplified pandoc for capturing knowledge source instead of
-" arbitrary raw text files.
+" plugins. Most of the utility of all of this has been superceded by the
+" use of modern simplified pandoc for capturing knowledge source instead
+" of arbitrary raw text files.
 
 set fo-=t   " don't auto-wrap text using text width
 set fo+=c   " autowrap comments using textwidth with leader
@@ -177,29 +177,36 @@ endif
 if filereadable(expand("~/.vim/autoload/plug.vim"))
 
   " github.com/junegunn/vim-plug
-
   call plug#begin('~/.local/share/vim/plugins')
-  Plug 'conradirwin/vim-bracketed-paste'
-  Plug 'sainnhe/gruvbox-material'
-  Plug 'xolox/vim-lua-ftplugin'
-  Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
-  Plug 'vim-pandoc/vim-pandoc'
-  if !has('nvim')
-    Plug 'dahu/vim-asciidoc'
-    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-  endif
-  Plug 'rwxrob/vim-pandoc-syntax-simple'
-  Plug 'dense-analysis/ale'
-  if has('nvim') && exists('$NVIM_SCREENKEY')
-    Plug 'neoclide/coc.nvim', {'branch': 'release'}
-    let g:screenkey_statusline_component=1
-    Plug 'NStefan002/screenkey.nvim'
-    set winbar=%{%v:lua.require('screenkey').get_keys()%}
-    nnoremap sc :Screenkey<CR>
-  endif
+
+    Plug 'conradirwin/vim-bracketed-paste'
+    Plug 'sainnhe/gruvbox-material'
+    Plug 'fatih/vim-go' " GoInstallBinaries separately
+    Plug 'vim-pandoc/vim-pandoc'
+    Plug 'rwxrob/vim-pandoc-syntax-simple'
+    Plug 'dense-analysis/ale'
+
+    if has('nvim')
+      Plug 'xolox/vim-misc'
+      Plug 'xolox/vim-lua-ftplugin'
+      if v:version >= 800
+        Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+        Plug 'neoclide/coc.nvim', {'branch': 'release'}
+        if exists('$NVIM_SCREENKEY')
+          Plug 'NStefan002/screenkey.nvim'
+        endif
+      endif
+
+    else
+      Plug 'dahu/vim-asciidoc'
+    endif
+
   call plug#end()
 
-  if has('nvim') && exists('$NVIM_SCREENKEY')
+  if has('nvim') && exists('$NVIM_SCREENKEY') &&  luaeval('pcall(require, "screenkey")')
+    let g:screenkey_statusline_component=1
+    set winbar=%{%v:lua.require('screenkey').get_keys()%}
+    nnoremap sc :Screenkey<CR>
     :lua <<EOF
 require('screenkey').setup({win_opts={width=90}})
 EOF
@@ -249,9 +256,13 @@ EOF
   au FileType go nmap <leader>m ilog.Print("made")<CR><ESC>
   au FileType go nmap <leader>n iif err != nil {return err}<CR><ESC>
 
-  " gruvbox-material (colorscheme MUST come last)
-  let g:gruvbox_material_disable_italic_comment = 1
-  colorscheme gruvbox-material
+  if !exists('g:colors_name') || g:colors_name !=# 'gruvbox-material'
+    try
+      colorscheme gruvbox-material
+    catch /^Vim\%((\a\+)\)\=:E185/
+      colorscheme desert
+    endtry
+  endif
 
 else
   autocmd vimleavepre *.go !gofmt -w % " backup if fatih fails
