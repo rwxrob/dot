@@ -160,57 +160,34 @@ nnoremap coming i_Coming soon..._<Esc>
 
 set ruf=%30(%=%#LineNr#%.50F\ [%{strlen(&ft)?&ft:'none'}]\ %l:%c\ %p%%%)
 
-if has('nvim')
-:lua << EOF
--- Customize the sign for errors
-vim.fn.sign_define('DiagnosticSignError', { text = '🔥', texthl = 'DiagnosticError' })
--- Customize the sign for warnings
-vim.fn.sign_define('DiagnosticSignWarn', { text = '❗️', texthl = 'DiagnosticWarn' })
--- Customize the sign for information
-vim.fn.sign_define('DiagnosticSignInfo', { text = '✨', texthl = 'DiagnosticInfo' })
--- Customize the sign for hints
-vim.fn.sign_define('DiagnosticSignHint', { text = '💡', texthl = 'DiagnosticHint' })
-EOF
-endif
-
 " only load plugins if Plug detected
 if filereadable(expand("~/.vim/autoload/plug.vim"))
 
   " github.com/junegunn/vim-plug
+  " There can only be one plug#begin block so all this
+  " has to be here instead of split into init.lua as well.
+ 
   call plug#begin('~/.local/share/vim/plugins')
-
     Plug 'conradirwin/vim-bracketed-paste'
     Plug 'sainnhe/gruvbox-material'
     Plug 'fatih/vim-go' " GoInstallBinaries separately
     Plug 'vim-pandoc/vim-pandoc'
     Plug 'rwxrob/vim-pandoc-syntax-simple'
     Plug 'dense-analysis/ale'
-
+    if has('nvim-0.8')
+      Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+      Plug 'neoclide/coc.nvim', {'branch': 'release'}
+      if exists('$NVIM_SCREENKEY')
+        Plug 'NStefan002/screenkey.nvim'
+      endif
+    endif
     if has('nvim')
       Plug 'xolox/vim-misc'
       Plug 'xolox/vim-lua-ftplugin'
-      if v:version >= 800
-        Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-        Plug 'neoclide/coc.nvim', {'branch': 'release'}
-        if exists('$NVIM_SCREENKEY')
-          Plug 'NStefan002/screenkey.nvim'
-        endif
-      endif
-
     else
       Plug 'dahu/vim-asciidoc'
     endif
-
   call plug#end()
-
-  if has('nvim') && exists('$NVIM_SCREENKEY') &&  luaeval('pcall(require, "screenkey")')
-    let g:screenkey_statusline_component=1
-    set winbar=%{%v:lua.require('screenkey').get_keys()%}
-    nnoremap sc :Screenkey<CR>
-    :lua <<EOF
-require('screenkey').setup({win_opts={width=90}})
-EOF
-  endif
 
   set signcolumn=yes
   let g:ale_set_signs = 1

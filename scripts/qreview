@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+declare -i n start
+n=1
+test -n "$1" && n=$1
+start=$n
+while read -r line; do
+	echo "$line" "<$n>"
+	n+=1
+done
+
+echo
+
+for ((i = start; i < n; i++)); do
+	echo "<$i> initial"
+done
