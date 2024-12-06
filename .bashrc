@@ -37,7 +37,6 @@ export CLIP_DIR="$VIDEOS/clips"
 export CLIP_DATA="$GHREPOS/clip/data"
 export CLIP_VOLUME=0
 export CLIP_SCREEN=0
-export TERM=xterm-256color
 export CLICOLOR=1
 export HRULEWIDTH=73
 export GOPATH="$HOME/.local/go"
