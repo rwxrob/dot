@@ -262,7 +262,7 @@ alias gp="git push"
 alias gptags="git push origin --tags"
 alias km="kimono"
 alias s=wee
-alias cur=vi ~/.currently
+alias cur="vi ~/.currently"
 
 _have vim && alias vi=vim && export EDITOR=vim && export VISUAL=vim
 _have nvim && alias vi=nvim && export EDITOR=nvim && export VISUAL=nvim
