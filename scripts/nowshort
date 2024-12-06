@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [[ "$OSTYPE" =~ ^(darwin|bsd) ]]; then
+	if [[ -z "$1" ]]; then
+		date "+%a %b %e %Y %l:%M%p %Z" | perl -pe 's, +, ,g'
+	else
+		date -v"$*" "+%a %b %e %Y %l:%M%p %Z" | perl -pe 's, +, ,g'
+	fi
+	exit
+fi
+
+if [[ -z "$1" ]]; then
+	date "+%a %b %e %Y %l:%M%p %Z" | perl -pe 's, +, ,g'
+else
+	date "+%a %b %e %Y %l:%M%p %Z" -d "$*" | perl -pe 's, +, ,g'
+fi
