@@ -264,8 +264,15 @@ alias km="kimono"
 alias s=wee
 alias cur="vi ~/.currently"
 
-_have vim && alias vi=vim && export EDITOR=vim && export VISUAL=vim
-_have nvim && alias vi=nvim && export EDITOR=nvim && export VISUAL=nvim
+set-editor() {
+	export EDITOR="$1"
+	export VISUAL="$1"
+	export GH_EDITOR="$1"
+	export GIT_EDITOR="$1"
+	alias vi="\$EDITOR"
+}
+_have "vim" && set-editor vi
+_have "nvim" && set-editor nvim
 
 # ----------------------------- functions ----------------------------
 
