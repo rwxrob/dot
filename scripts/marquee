@@ -1,42 +1,43 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
 declare clear=$'\034[2J'
 declare top=$'\033[H'
 
 repeat() {
-  for ((i=0;i<$2;i++)); do echo -n "$1"; done
+	for ((i = 0; i < $2; i++)); do echo -n "$1"; done
 }
 
 marquee() {
-  local topic time right cols pomo
-  local -i topicremain timeremain timew topicw
-  local -a timebar topicbar
-  #topic="$(topic)" topic="${topic#* }"
-  topic="$(head -1 ~/.currently)"
-  pomo="$(pomo)"
-  #mode="$(iam mode emoji)"
-  zet="zet:$(zet current)"
-  time="$(date +"%A, %B %-e, %Y, %-I:%M%p %Z%0z")"
-  isosec="$(isosec)"
-  tilboost="$(countdown 11:11:11 May 4)"
-  #[[ -n "$pomo" ]] && timebar+=("$pomo")
-  #[[ -n "$pomo" ]] && topicbar+=("$pomo")
-  [[ -n "$time" ]] && timebar+=("$time")
-  [[ -n "$topic" ]] && topicbar+=("$topic")
-  timebarb="${timebar[*]}"
-  topicbarb="${topicbar[*]}"
-  topicremain=$(( $(tput cols) - ${#topicbarb} ))
-  timeremain=$(( $(tput cols) - ${#timebarb} ))
-  topicspace=$(( topicremain - ${#mode} - ${#zet}))
-  timespace=$(( timeremain - ${#mode} - ${#zet} - ${#tilboost} - ${#isosec}))
-  #if (( $(date +%s)%20 < 10 ));then
-    #echo "$topicbarb $(repeat $' ' "$topicspace")              rwxrob.tv"
-  #else
-    #echo "$mode $timebarb $(repeat $' ' "$timespace") rwxrob.tv $zet"
-    #echo "$timebarb $replay [boost in $tilboost] $(repeat $' ' "$timespace") rwxrob.tv"
-    #echo "$timebarb ($isosec) [boost: $tilboost]"
-    echo "$timebarb ($isosec)"
-  #fi
+	local topic time right cols pomo
+	local -i topicremain timeremain timew topicw
+	local -a timebar topicbar
+	#topic="$(topic)" topic="${topic#* }"
+	topic="$(head -1 ~/.currently)"
+	#  pomo="$(pomo)"
+	#mode="$(iam mode emoji)"
+	#	zet="zet:$(zet current)"
+	time="$(date +"%A, %B %-e, %Y, %-I:%M%p %Z%0z")"
+	isosec="$(isosec)"
+	tilboost="$(countdown 11:11:11 May 4)"
+	#[[ -n "$pomo" ]] && timebar+=("$pomo")
+	#[[ -n "$pomo" ]] && topicbar+=("$pomo")
+	[[ -n "$time" ]] && timebar+=("$time")
+	[[ -n "$topic" ]] && topicbar+=("$topic")
+	timebarb="${timebar[*]}"
+	topicbarb="${topicbar[*]}"
+	topicremain=$(($(tput cols) - ${#topicbarb}))
+	timeremain=$(($(tput cols) - ${#timebarb}))
+	topicspace=$((topicremain - ${#mode} - ${#zet}))
+	timespace=$((timeremain - ${#mode} - ${#zet} - ${#tilboost} - ${#isosec}))
+	#if (( $(date +%s)%20 < 10 ));then
+	#echo "$topicbarb $(repeat $' ' "$topicspace")              rwxrob.tv"
+	#else
+	#echo "$mode $timebarb $(repeat $' ' "$timespace") rwxrob.tv $zet"
+	#echo "$timebarb $replay [boost in $tilboost] $(repeat $' ' "$timespace") rwxrob.tv"
+	#echo "$timebarb ($isosec) [boost: $tilboost]"
+	#echo "$timebarb ($isosec)"
+	echo "$topic (sorry, no youtube chat on screen)"
+	#fi
 }
 
 marquee "$@"

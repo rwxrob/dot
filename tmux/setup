@@ -1,5 +1,8 @@
-#!/bin/sh
-test type tmux >/dev/null 2>&1 && echo "TMUX isn't installed. Skipping." && exit 1
+#!/usr/bin/env bash
+if [[ ! $(type tmux) ]]; then
+	echo "TMUX isn't installed. Skipping."
+	exit 1
+fi
 ln -sf "$PWD/.tmux.conf" "$HOME/.tmux.conf"
 ln -sf "$PWD/.tmux-live.conf" "$HOME/.tmux-live.conf"
 ln -sf "$PWD/.tmux-plain.conf" "$HOME/.tmux-plain.conf"

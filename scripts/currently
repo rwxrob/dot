@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+new="$*"
+test -z "$new" && head -1 ~/.currently && exit

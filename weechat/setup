@@ -18,6 +18,7 @@ fi
 cat <<EOF >"$fifo"
 */set weechat.color.chat_bg 235
 */set weechat.color.chat_fg 223
+*/set weechat.color.chat_nick_self 214
 */set weechat.color.chat_prefix_error 124
 */set weechat.color.chat_prefix_network 66
 */set weechat.color.chat_prefix_action 214
@@ -27,16 +28,27 @@ cat <<EOF >"$fifo"
 */set weechat.color.chat_buffer 214
 */set weechat.color.separator 243
 */set weechat.look.prefix_join "👋"
-*/set weechat.look.prefix_action "✨"
-*/set weechat.look.prefix_error "🤬"
+*/set weechat.look.prefix_action "🌟"
+*/set weechat.look.prefix_error "💢"
+*/set weechat.bar.input_items ",input_text"
 */bar hide buflist
 */bar hide status
 */bar hide title
 */bar hide input
 */server add twitch irc.chat.twitch.tv/6667 -ssl
+*/set irc.color.nicks ""
 */set irc.server.twitch.autoconnect on
+*/set irc.server.twitch.tls off
 */set irc.server.twitch.username "$user"
-*/set irc.server.twitch.password "$token"
 */set irc.server.twitch.autojoin "#${channels//,/,#}"
+*/filter add hide_quit irc.* irc_quit *
+*/filter add hide_part irc.* irc_part *
 */save
 EOF
+
+if test -n "$token"; then
+	cat <<EOF >"$fifo"
+*/set irc.server.twitch.password "$token"
+*/save
+EOF
+fi

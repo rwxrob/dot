@@ -261,6 +261,7 @@ alias gitl="git log -n 5 --graph --decorate --oneline"
 alias gp="git push"
 alias gptags="git push origin --tags"
 alias km="kimono"
+alias s=wee
 
 _have vim && alias vi=vim && export EDITOR=vim && export VISUAL=vim
 _have nvim && alias vi=nvim && export EDITOR=nvim && export VISUAL=nvim
