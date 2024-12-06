@@ -8,6 +8,7 @@ read -rp "Paste (starting with 'oauth:'): " token
 
 mkdir -p ~/.weechat
 fifo=~/.weechat/fifo
+log=~/.weechat/log
 if [[ ! -p "$fifo" ]]; then
 	echo "Error: WeeChat FIFO pipe not found at $fifo."
 	echo "Enable it in WeeChat with: /set fifo.pipe.enabled on"
@@ -16,6 +17,8 @@ if [[ ! -p "$fifo" ]]; then
 fi
 
 cat <<EOF >"$fifo"
+*/set logger.file.path "$log"
+*/set logger.file.flush_delay 1
 */set weechat.color.chat_bg 235
 */set weechat.color.chat_fg 223
 */set weechat.color.chat_nick_self 214

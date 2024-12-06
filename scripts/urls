@@ -2,16 +2,15 @@
 
 tmp=$(mktemp)
 IFS=$'\n'
-while read -r line; do 
-    [[ $line =~ https: ]] || continue
-    line="http${line##*http}"
-    line=${line%% *}
-    echo $line 
-done < "$WEECHAT_LOG" > "$tmp"
-if isterm; then
-    tail -10 "$tmp" |lolcat
+while read -r line; do
+	[[ $line =~ https: ]] || continue
+	line="http${line##*http}"
+	line=${line%% *}
+	echo "$line"
+done <~/.weechat/log/irc.twitch.#rwxrob.weechatlog >"$tmp"
+if [[ -t 0 ]]; then
+	tail -10 "$tmp" | lolcat
 else
-    tail -10 "$tmp"
+	tail -10 "$tmp"
 fi
 rm "$tmp"
-

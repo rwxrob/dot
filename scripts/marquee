@@ -36,7 +36,7 @@ marquee() {
 	#echo "$timebarb $replay [boost in $tilboost] $(repeat $' ' "$timespace") rwxrob.tv"
 	#echo "$timebarb ($isosec) [boost: $tilboost]"
 	#echo "$timebarb ($isosec)"
-	echo "$topic (sorry, no youtube chat on screen)"
+	echo "$topic"
 	#fi
 }
 
