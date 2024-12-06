@@ -1,16 +1,18 @@
 #!/bin/bash
 
-if [[ "$OSTYPE" =~ ^(darwin|bsd) ]]; then
+if [[ $OSTYPE =~ ^(darwin|bsd) ]]; then
 	if [[ -z "$1" ]]; then
-		date "+%a %b %e %Y %l:%M%p %Z" | perl -pe 's, +, ,g'
+		out=$(date "+%a %b %e %Y %l:%M%p %Z")
 	else
-		date -v"$*" "+%a %b %e %Y %l:%M%p %Z" | perl -pe 's, +, ,g'
+		out=$(date -v"$*" "+%a %b %e %Y %l:%M%p %Z")
 	fi
+	echo "${out//  / }"
 	exit
 fi
 
 if [[ -z "$1" ]]; then
-	date "+%a %b %e %Y %l:%M%p %Z" | perl -pe 's, +, ,g'
+	out=$(date "+%a %b %e %Y %l:%M%p %Z")
 else
-	date "+%a %b %e %Y %l:%M%p %Z" -d "$*" | perl -pe 's, +, ,g'
+	out=$(date "+%a %b %e %Y %l:%M%p %Z" -d "$*")
+	echo "${out//  / }"
 fi

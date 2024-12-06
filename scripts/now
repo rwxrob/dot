@@ -2,15 +2,17 @@
 
 if [[ "$OSTYPE" =~ ^(darwin|bsd) ]]; then
 	if [[ -z "$1" ]]; then
-		date "+%A, %B %e, %Y, %l:%M:%S%p %Z" | perl -pe 's, +, ,g'
+		out=$(date "+%A, %B %e, %Y, %l:%M:%S%p %Z")
 	else
-		date -v"$*" "+%A, %B %e, %Y, %l:%M:%S%p %Z" | perl -pe 's, +, ,g'
+		out=$(date -v"$*" "+%A, %B %e, %Y, %l:%M:%S%p %Z")
 	fi
+	echo "${out//  / }"
 	exit
 fi
 
 if [[ -z "$1" ]]; then
-	date "+%A, %B %e, %Y, %l:%M:%S%p %Z" | perl -pe 's, +, ,g'
+	out=$(date "+%A, %B %e, %Y, %l:%M:%S%p %Z")
 else
-	date "+%A, %B %e, %Y, %l:%M:%S%p %Z" -d "$*" | perl -pe 's, +, ,g'
+	out=$(date "+%A, %B %e, %Y, %l:%M:%S%p %Z" -d "$*")
+	echo "${out//  / }"
 fi
