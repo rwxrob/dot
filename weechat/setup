@@ -3,7 +3,7 @@
 user=rwxrob
 channels=rwxrob
 
-echo "Generate your OAuth token here: https://twitchapps.com/tmi/"
+echo "Generate your OAuth token here: https://antiscuff.com/oauth"
 read -rp "Paste (starting with 'oauth:'): " token
 
 mkdir -p ~/.weechat
