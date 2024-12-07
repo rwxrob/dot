@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+wee < <(head -1 ~/.currently)
