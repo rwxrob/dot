@@ -14,6 +14,9 @@ vim.fn.sign_define('DiagnosticSignWarn', { text = '❗️', texthl = 'Diagnostic
 vim.fn.sign_define('DiagnosticSignInfo', { text = '✨', texthl = 'DiagnosticInfo' })
 vim.fn.sign_define('DiagnosticSignHint', { text = '💡', texthl = 'DiagnosticHint' })
 
+-- Set cursor highlight with background color
+vim.cmd("highlight Cursor guibg=#928374 guifg=NONE")
+
 local screenkey_available = vim.fn.has("nvim-0.8") == 1
   and vim.fn.getenv("NVIM_SCREENKEY") ~= nil
   and pcall(require, "screenkey")

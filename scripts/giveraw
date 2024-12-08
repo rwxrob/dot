@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+# Get the repository remote URL
+remote_url=$(git remote get-url origin)
+
+# Convert SSH (git@) URL to HTTPS if needed
+if [[ "$remote_url" == git@* ]]; then
+	remote_url=$(echo "$remote_url" | perl -p -e 's#git@(.*?):#https://\1/#')
+fi
+
+# Convert to RawGitHub URL
+raw_url=${remote_url/github.com/raw.githubusercontent.com}
+raw_url=${raw_url%.git} # Corrected to use %.git
+
+# Add HEAD and the file path
+file_path=$1
+if [ -z "$file_path" ]; then
+	echo "Usage: $0 <file-path>"
+	exit 1
+fi
+
+echo "${raw_url}/HEAD/${file_path}"
