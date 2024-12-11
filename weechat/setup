@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# see https://github.com/rwxrob/dot-template for reusable version
+
 user=rwxrob
 channels=rwxrob
 
@@ -38,11 +40,11 @@ cat <<EOF >"$fifo"
 */bar hide status
 */bar hide title
 */bar hide input
-*/server add twitch irc.chat.twitch.tv/6667 -ssl
 */set irc.color.nicks ""
-*/set irc.server.twitch.autoconnect on
-*/set irc.server.twitch.tls off
+*/server add twitch irc.chat.twitch.tv/6667 -ssl
 */set irc.server.twitch.username "$user"
+*/set irc.server.twitch.tls off
+*/set irc.server.twitch.autoconnect on
 */set irc.server.twitch.autojoin "#${channels//,/,#}"
 */filter add hide_quit irc.* irc_quit *
 */filter add hide_part irc.* irc_part *
