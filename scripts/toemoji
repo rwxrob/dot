@@ -17,6 +17,9 @@ emoji[update]=📰
 emoji[tux]=🐧
 emoji[tux]=🐧
 emoji[leftarrow]=←
+emoji["<--"]=←
+emoji[rightarrow]=→
+emoji["-->"]=→
 emoji[poop]=💩
 emoji[yoga]=🧘
 emoji[facepalm]=🤦
@@ -36,6 +39,7 @@ toemoji() {
 			line=${line//:$k:/${emoji[$k]}}
 			[[ $line =~ ^--- ]] && continue
 			line=${line//---/—}
+			line=${line//--\>/→}
 			line=${line//:bullet:/•}
 		done
 		echo "$line" >>"$out"
