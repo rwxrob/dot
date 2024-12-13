@@ -20,4 +20,4 @@ hash=$(git rev-parse --short HEAD)
 owner=$(basename -s / "$(dirname "$remote")")
 url="https://github.com/$owner/$repo/commit/$hash"
 
-echo "*/me pushed to $repo: $message [$url]" >~/.weechat/fifo
+echo "*/me pushed to $repo: $message → $url" >~/.weechat/fifo
