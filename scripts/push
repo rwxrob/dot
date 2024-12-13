@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+if ! git push "$@"; then
+	echo "Push failed."
+	exit 1
+fi
+
+test -p ~/.weechat/fifo || exit
+
+message=$(git log -1 --pretty=%B)
+repo=$(basename -s .git "$(git config --get remote.origin.url)")
+hash=$(git rev-parse HEAD)
+remote=$(git config --get remote.origin.url)
+owner=$(basename -s / "$(dirname "$remote")")
+url="https://github.com/$owner/$repo/commit/$hash"
+
+echo "*/me pushed to $repo: $message [$url]" >~/.weechat/fifo

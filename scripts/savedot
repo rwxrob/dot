@@ -6,4 +6,9 @@ message="$*"
 cd dot || exit
 git add -A .
 git commit -m "$message"
-git push
+
+if type push; then
+	exec push
+else
+	git push
+fi
