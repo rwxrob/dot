@@ -15,7 +15,7 @@ fi
 
 message=$(git log -1 --pretty=%B)
 repo=$(basename -s .git "$(git config --get remote.origin.url)")
-hash=$(git rev-parse HEAD)
+hash=$(git rev-parse --short HEAD)
 
 owner=$(basename -s / "$(dirname "$remote")")
 url="https://github.com/$owner/$repo/commit/$hash"
