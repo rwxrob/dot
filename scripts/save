@@ -1,77 +1,45 @@
 #!/usr/bin/env bash
 
-# WARNING: This script assumes you are using GitLab for everything and
-# only work on the master branch.
-
-# The init function creates and initializes a git repo and then pushes it
-# as a private project to GitLab (without needing to first create it on
-# GitLab)
-
-init () {
-  declare repo y
-  read -p "Not a git repo. Create? " y
-  if [[ $y =~ ^[yY] ]]; then
-      touch README.md
-      read -p "GitLab path (<id>/<proj>): " repo
-      if [[ -z "$repo" ]]; then
-        return init
-      fi
-      git init
-      git remote add origin "git@gitlab.com:$repo.git"
-      git add .
-      git commit  -m initial
-      git push -u origin master
-  fi
-  return 0
+in-repo() {
+	git rev-parse --count HEAD >/dev/null 2>&1
+	return $?
 }
 
-check-for-git () {
-  declare user=$(git config user.name);
-  if [[ -z "$user" ]]; then
-    echo "Git doesn't look configured yet. Try:"
-    echo "  git config -g user.name <name>"
-    echo "  git config -g user.email <email>"
-    return 1
-  fi
-  return 0
+has-local-changes() {
+	test -n "$(git status --porcelain)"
+	return $?
 }
 
-in-repo ()  {
- git rev-parse --count HEAD > /dev/null 2>&1
- return $?
+gitsave() {
+	git pull
+	git add -A .
+	local message="$*"
+	if test -n "$message"; then
+		git commit -a -m "$message"
+	elif test -e /tmp/commitmsg; then
+		git commit -a -F /tmp/commitmsg
+		mv /tmp/commitmsg "/tmp/commitmsg.$(date +%s)"
+	else
+		git commit -a -m "save"
+	fi
+	if type push; then
+		push
+	else
+		git push
+	fi
 }
 
-has-local-changes () {
-  test -n "$(git status --porcelain)"
-  return $?
+main() {
+	if ! in-repo; then
+		echo "Not in a repo."
+		return 1
+	fi
+	if ! has-local-changes; then
+		echo "Already at the latest."
+		return 0
+	fi
+	gitsave "$@"
+	return $?
 }
 
-gitsave () {
-  git pull
-  git add -A .
-  if [ ! -z "$*" ]; then
-    git commit  -a -m "$*"
-  elif [ -e /tmp/commitmsg ]; then
-    git commit  -a -F /tmp/commitmsg
-    mv /tmp/commitmsg /tmp/commitmsg.$(date +%s)
-  else
-    git commit  -a -m "wip"
-  fi
-  git push -u origin master
-}
-
-main () { 
-  check-for-git || exit 1
-  if ! in-repo; then
-    init
-    return 0
-  fi;
-  if ! has-local-changes; then
-    echo Already at the latest.
-    return 0
-  fi;
-  gitsave "$@"
-  return $?
-}
-
-main $*
+main "$@"
