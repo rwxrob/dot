@@ -7,10 +7,16 @@ fi
 
 test -p ~/.weechat/fifo || exit
 
+remote=$(git config --get remote.origin.url)
+if [[ $remote =~ ^git@ ]]; then
+	remote=${remote#git@}
+	remote="https://${remote/:/\/}"
+fi
+
 message=$(git log -1 --pretty=%B)
 repo=$(basename -s .git "$(git config --get remote.origin.url)")
 hash=$(git rev-parse HEAD)
-remote=$(git config --get remote.origin.url)
+
 owner=$(basename -s / "$(dirname "$remote")")
 url="https://github.com/$owner/$repo/commit/$hash"
 
