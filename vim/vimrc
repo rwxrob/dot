@@ -196,14 +196,24 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   let g:ale_sign_warning = '❗️'
   let g:ale_sign_hint = '💡'
 
-  let g:ale_linters = {'go': ['gometalinter', 'gofmt','gobuild']}
+  " perl stuff needs cpan install (brew also works):
+  "   Perl::Tidy
+  "   Perl::Critic
+
+  let g:ale_linters = {
+        \'go': ['gometalinter','gofmt','gobuild'],
+        \'perl': ['perl','perlcritic'],
+        \}
   let g:ale_linter_aliases = {'bash': 'sh'}
+  let g:ale_perl_perlcritic_options = '--severity 3'
 
   let g:ale_fixers = {
         \'sh': ['shfmt'],
         \'bash': ['shfmt'],
+        \'perl': ['perltidy'],
         \}
   let g:ale_fix_on_save = 1
+  let g:ale_perl_perltidy_options = '-b'
 
   " pandoc
   let g:pandoc#formatting#mode = 'h' " A'
