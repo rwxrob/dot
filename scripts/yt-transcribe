@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+cd ~/Downloads || exit
+yt-dlp --write-auto-sub --sub-lang en --skip-download "$1" -o "yt-transcription.%(ext)s"
