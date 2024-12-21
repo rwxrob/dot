@@ -1,6 +1,2 @@
-#!/usr/bin/env perl
-
-while (<>) {
-    /var (\S*Cmd)/ and print( `htitle $1` . "\n" );
-    print $_;
-}
+#!/usr/bin/env perl -pn
+/var (\S*Cmd)/ and print( `htitle $1` . "\n" );
