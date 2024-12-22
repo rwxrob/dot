@@ -2,7 +2,7 @@ local wezterm = require("wezterm")
 
 return {
 
-  font_size = 36,
+  font_size = 34,
   font = wezterm.font("UbuntuMono Nerd Font"),
 
   window_padding = {
