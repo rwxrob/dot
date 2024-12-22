@@ -12,7 +12,7 @@ return {
    bottom = 0,
   },
 
-  term = "xterm-254color",
+  term = "xterm-256color",
   animation_fps = 60,
   max_fps = 60,
   window_decorations = "RESIZE",
