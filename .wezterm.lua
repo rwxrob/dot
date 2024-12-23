@@ -4,7 +4,7 @@ return {
   default_prog = {'/opt/homebrew/bin/bash','--login'},
   color_scheme = 'Gruvbox Material (Gogh)',
   font = wezterm.font('UbuntuMono Nerd Font'),
-  font_size = 35,
+  font_size = 34,
   colors = {
     cursor_bg = '#928374',
     cursor_border = '#928374',
