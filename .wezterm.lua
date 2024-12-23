@@ -12,6 +12,12 @@ return {
   term = "xterm-256color",
   window_decorations = "RESIZE",
   hide_tab_bar_if_only_one_tab = true,
+  window_padding = {
+   left = 40,
+   right = 0,
+   top = 50,
+   bottom = 0,
+  },
 }
 
 
