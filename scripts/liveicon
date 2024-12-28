@@ -1,0 +1,8 @@
+#!/bin/sh
+
+sec=$(date +%s)
+if [ $((sec % 2)) -eq 0 ]; then
+	echo 🟥
+else
+	echo "  "
+fi

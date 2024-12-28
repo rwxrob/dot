@@ -1,0 +1,5 @@
+#!/bin/bash
+blink=$'\e[5m'
+reset=$'\e[0m'
+it="$blink🟥$reset"
+echo "$it" > ~/.liveicon

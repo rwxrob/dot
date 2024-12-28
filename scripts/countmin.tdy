@@ -1,11 +1,6 @@
-#!/usr/bin/perl -p
-
-($minutes) = /(\d+)m/;
-$total += $minutes;
-
-END {
-    print "TOTAL MINUTES: $total\n";
-}
+#!/usr/bin/perl -T
+use strict;
+use warnings;
 
 __END__
 min=0

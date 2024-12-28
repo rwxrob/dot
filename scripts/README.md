@@ -2,8 +2,7 @@
 
 Pilfer at your own peril. You'll find a bit of everything, but mostly
 just bash and perl. If that's not your thing, don’t waste your time —
-especially if you use `zsh-it` for anything. If you have questions, come
-ask me on <https://rwxrob.tv>.
+especially if you use `zsh-it` for anything.
 
 More substantial commands have their own repos prefixed with [`cmd-`]
 derived [`template-bash-command`]. Other commands (like the popular
