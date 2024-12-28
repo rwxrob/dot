@@ -1,6 +1,9 @@
 #!/bin/sh
 
 sec=$(date +%s)
+
+! test -e ~/.state/recording && exit
+
 if [ $((sec % 2)) -eq 0 ]; then
 	echo 🟥
 else
