@@ -1,8 +1,7 @@
 #!/bin/sh
-
 file=~/.state/recording
 if test -e "$file"; then
 	rm "$file"
 else
-	touch ~/.state/recording
+	touch "$file"
 fi

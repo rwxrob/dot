@@ -1,2 +1,7 @@
 #!/bin/sh
-echo 🔇 > ~/.liveicon
+file=~/.state/muted
+if test -e "$file"; then
+	rm "$file"
+else
+	touch "$file"
+fi

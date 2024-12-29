@@ -7,6 +7,7 @@ endif
 set nocompatible
 
 "#################### Vi Compatible (~/.exrc) #######################
+"
 
 " automatically indent new lines
 set autoindent " (alpine)
@@ -60,8 +61,11 @@ if v:version >= 800
   set listchars=space:*,trail:*,nbsp:*,extends:>,precedes:<,tab:\|>
 
   " i hate automatic folding
-  set foldmethod=manual
-  set nofoldenable
+"  set foldmethod=manual
+"  set nofoldenable
+ set foldenable
+  set foldmethod=syntax
+  set foldlevelstart=99  " Open all folds by default
 endif
 
 " mark trailing spaces as errors (break Makefiles, etc.)
@@ -173,6 +177,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
     Plug 'fatih/vim-go' " GoInstallBinaries separately
     Plug 'vim-pandoc/vim-pandoc'
     Plug 'rwxrob/vim-pandoc-syntax-simple'
+    Plug 'habamax/vim-asciidoctor'
     Plug 'dense-analysis/ale'
     if has('nvim-0.8')
       Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}

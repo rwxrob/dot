@@ -2,6 +2,8 @@
 
 sec=$(date +%s)
 
+test -e ~/.state/muted && echo "🔇" && exit
+
 ! test -e ~/.state/recording && exit
 
 if [ $((sec % 2)) -eq 0 ]; then
