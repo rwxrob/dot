@@ -1,0 +1,31 @@
+#!/usr/bin/perl
+
+# See __END__ for documentation
+
+# total the hours from the main index.adoc page
+open my $fh, '<', './docs/index.adoc' or die "Could not open file: $!";
+local $/;
+my $buf = <$fh>;
+map { $tot += $_ } $buf =~ /hours="(\d+)"/g;
+
+# set the exact date and time of the build
+my ( $sec, $min, $hour, $mday, $mon, $year ) = localtime();
+$year += 1900;
+$mon  += 1;
+my $date = sprintf "%04d-%02d-%02d %02d:%02d:%02d",
+  $year, $mon, $mday, $hour, $min, $sec;
+
+# run asciidoctor to do the build
+qx{ asciidoctor \\
+  -D docs \\
+  -a date="$date" \\
+  -a hours="$tot" \\
+  -o index.html \\
+  ./docs/index.adoc
+};
+
+__END__
+
+=head1 NAME
+
+buildadoc - build AsciiDoc with rwxrob preferences
