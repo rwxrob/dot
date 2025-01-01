@@ -1,12 +1,13 @@
 #!/usr/bin/perl
 
-# See __END__ for documentation
-
 # total the hours from the main index.adoc page
 open my $fh, '<', './docs/index.adoc' or die "Could not open file: $!";
 local $/;
 my $buf = <$fh>;
-map { $tot += $_ } $buf =~ /hours="(\d+)"/g;
+map { $hours_mentor += $_ } $buf =~ /hours="(\d+)"/g;
+my $hours_self  = $hours_mentor * 2;
+my $hours_total = $hours_self + $hours_mentor;
+my $hours_week  = $hours_total / 15;
 
 # set the exact date and time of the build
 my ( $sec, $min, $hour, $mday, $mon, $year ) = localtime();
@@ -15,12 +16,43 @@ $mon  += 1;
 my $date = sprintf "%04d-%02d-%02d %02d:%02d:%02d",
   $year, $mon, $mday, $hour, $min, $sec;
 
-# run asciidoctor to do the build
+# HTML
 qx{ asciidoctor \\
   -D docs \\
   -a date="$date" \\
-  -a hours="$tot" \\
+  -a hours_mentor="$hours_mentor" \\
+  -a hours_self="$hours_self" \\
+  -a hours_total="$hours_total" \\
+  -a hours_week="$hours_week" \\
   -o index.html \\
+  ./docs/index.adoc
+};
+
+my $pwd = `pwd`;
+$pwd =~ s/\R$//;    # chomp no longer works in modern perl
+my ( $parent, $name ) = $pwd =~ m,/([^/]+)/([^/]+)$,m;
+
+# PDF
+qx{ asciidoctor-pdf \\
+  -D docs \\
+  -a date="$date" \\
+  -a hours_mentor="$hours_mentor" \\
+  -a hours_self="$hours_self" \\
+  -a hours_total="$hours_total" \\
+  -a hours_week="$hours_week" \\
+  -o "$parent-$name.pdf" \\
+  ./docs/index.adoc
+};
+
+#EPUB
+qx{ asciidoctor-epub3 \\
+  -D docs \\
+  -a date="$date" \\
+  -a hours_mentor="$hours_mentor" \\
+  -a hours_self="$hours_self" \\
+  -a hours_total="$hours_total" \\
+  -a hours_week="$hours_week" \\
+  -o "$parent-$name.epub" \\
   ./docs/index.adoc
 };
 

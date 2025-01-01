@@ -13,43 +13,45 @@ $| = 1;
 
 # markdown file
 if (/\.md$/) {
-  say "markdown file detected";
-  if (not `which pandoc`) {
-    say "pandoc not found";
-    exit 1;
-  }
-  if (not `which lynx`) {
-    say "lynx not found";
-    exit 1;
-  }
-  `pandoc -s -o /tmp/index.html $_ 2>/dev/null`;
-  system 'lynx', '/tmp/index.html';
-  exit
+    say "markdown file detected";
+    if ( not `which pandoc` ) {
+        say "pandoc not found";
+        exit 1;
+    }
+    if ( not `which lynx` ) {
+        say "lynx not found";
+        exit 1;
+    }
+    `pandoc -s -o /tmp/index.html $_ 2>/dev/null`;
+    system 'lynx', '/tmp/index.html';
+    exit;
 }
 
 # file
-if (-r $_) {
-  `which xdg-open` && exec 'xdg-open', $_;
-  `which /usr/bin/open` && exec '/usr/bin/open', $_;
-  `which explorer.exe` && exec 'explorer.exe', $_;
-  say "unable to open file: $_";
-  exit 1;
+if ( -T $_ ) {
+    `which xdg-open`      && exec 'xdg-open',      $_;
+    `which /usr/bin/open` && exec '/usr/bin/open', $_;
+    `which explorer.exe`  && exec 'explorer.exe',  $_;
+    say "unable to open file: $_";
+    exit 1;
 }
 
 # git repo
-# if ($_) {
-#   my $gh = (grep {/github/ && s,git@,, && s,:,/, && s/\.git$//} qx{git remote get-url --all origin})[0];
-#   if ($gh) {
-#     system 'gh', 'repo', 'view','--web';
-#     exit;
-#   }
-# }
+if ($_) {
+    my $gh = ( grep { /github/ && s,git@,, && s,:,/, && s/\.git$// }
+          qx{git remote get-url --all origin} )[0];
+    if ($gh) {
+        system 'gh', 'repo', 'view', '--web';
+        exit;
+    }
+}
 
 # bare url
-m,^http, or  s,^,https://,;
+m,^http, or s,^,https://,;
+
 #`which lynx` && exec 'lynx', $_;
 `which /usr/bin/open` && exec '/usr/bin/open', $_;
-`which explorer.exe` && exec 'explorer.exe', $_;
+`which explorer.exe`  && exec 'explorer.exe',  $_;
 `which google-chrome` && exec 'google-chrome', $_;
 my $chrome = '/System/Applications/Google\ Chrome.app';
 `which $chrome` && exec "$chrome", "$_";

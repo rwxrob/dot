@@ -1,2 +1,3 @@
 #!/bin/sh
-exec ./build "$@"
+test -x ./build && exec ./build "$@"
+test -r docs/index.adoc && exec buildadoc "$@"
