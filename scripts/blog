@@ -16,4 +16,8 @@ if [ -z "$hasfile" ]; then
 	perl -p -i -e "s,$mark,$mark\n\ninclude::./$file\[\]," docs/index.adoc
 fi
 
+if [ ! -e docs/"$file" ]; then
+	printf "= %s\n\n" "$*" >"docs/$file"
+fi
+
 exec "$EDITOR" "docs/$file"
