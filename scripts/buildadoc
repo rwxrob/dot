@@ -20,6 +20,7 @@ my $date = sprintf "%04d-%02d-%02d %02d:%02d:%02d",
 qx{ asciidoctor \\
   -D docs \\
   -a date="$date" \\
+  -a allow-uri-read \\
   -a hours_mentor="$hours_mentor" \\
   -a hours_self="$hours_self" \\
   -a hours_total="$hours_total" \\
@@ -32,6 +33,7 @@ qx{ asciidoctor \\
   -D docs \\
   -a date="$date" \\
   -a toc! \\
+  -a allow-uri-read \\
   -a hours_mentor="$hours_mentor" \\
   -a hours_self="$hours_self" \\
   -a hours_total="$hours_total" \\
@@ -48,6 +50,7 @@ my ( $parent, $name ) = $pwd =~ m,/([^/]+)/([^/]+)$,m;
 qx{ asciidoctor-pdf \\
   -D docs \\
   -a date="$date" \\
+  -a allow-uri-read \\
   -a hours_mentor="$hours_mentor" \\
   -a hours_self="$hours_self" \\
   -a hours_total="$hours_total" \\
@@ -60,6 +63,7 @@ qx{ asciidoctor-pdf \\
 qx{ asciidoctor-epub3 \\
   -D docs \\
   -a date="$date" \\
+  -a allow-uri-read \\
   -a hours_mentor="$hours_mentor" \\
   -a hours_self="$hours_self" \\
   -a hours_total="$hours_total" \\
