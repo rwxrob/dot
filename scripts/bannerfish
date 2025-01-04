@@ -1,12 +1,18 @@
 #!/usr/bin/env perl
 use v5.36;
+use File::Basename;
 
 # TODO check for figl and lolcat deps
+
+not `command -v figl` and say 'figl not found' and exit 1;
+
+__END__
 
 my $clear  = "[2J";
 my $curoff = "[?25l";
 my $curon  = "[?25h";
 my $top    = "[H";
+my $lines  = `tput lines` - 6;
 
 my $what = join ' ', @ARGV;
 
@@ -26,16 +32,6 @@ $SIG{'TERM'} = \&cleanup;
 
 print $clear. $curoff;
 while (1) {
-    print $top. `echo "BLAH" | figl | lolcat -f`;
-    sleep 2;
+    print $top. `echo "$what" | figl | lolcat -f`;
+    sleep 1;
 }
-
-__END__
-
-
-lines=$(tput lines)
-tmux split-window
-tmux resize-pane -y $((lines - 6))
-tmux send -t 1 "banner \"$what\"" Enter
-sleep 1
-tmux send -t 2 "fishies" Enter

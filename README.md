@@ -29,3 +29,6 @@ Check out my [FAQ](https://github.com/rwxrob/faq) for answers about my preferenc
 
 For other dependencies see the scripts that begin with `install` and `config`.
 
+## Perl shell dependency
+
+The Perl scripts assume a POSIX Unix shell underneath and regularly use backtick pipelines and commands and shell builtins such as `which`, `type`, and `command`. Perl is just far better than Bash for everything that requires more than POSIX shell—especially when it involves text processing or math in any way.

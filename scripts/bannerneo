@@ -1,4 +1,7 @@
 #!/bin/sh
+#my $script = basename($0);
+#my ($proggy) = $script =~ /^banner(\S+)/;
+
 what="$*"
 if [ -z "${what}" ]; then
 	echo "Text: "
