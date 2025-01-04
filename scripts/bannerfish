@@ -11,6 +11,10 @@ my $cyan    = "[36m";
 my $white   = "[37m";
 my $blink   = "[5m";
 my $reset   = "[0m";
+my $clear   = "[2J";
+my $curoff  = "[?25h";
+my $curon   = "[?25h";
+my $top     = "[H";
 
 my $what = join ' ', @ARGV;
 
