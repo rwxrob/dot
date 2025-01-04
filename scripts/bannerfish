@@ -1,9 +1,42 @@
-#!/usr/bin/env bash
-what="$*"
-if [ -z "${what}" ]; then
-  read -r -p "Text: " what
+#!/usr/bin/env perl
+
+__END__
+WHAT="$*"
+if test -z "$WHAT"; then
+	echo "Text: "
+	read -r WHAT
 fi
-cols=$(tput lines)
-tmux split-window \; resize-pane -y $((cols-6)) \; send -t 1 "banner \"$what\"" Enter 
+
+# requires WHAT
+banner() {
+	clear="\033[2J"
+	curoff="\033[?25h"
+	curon="\033[?25h"
+	top="\033[H"
+
+	trap 'printf "$curon$clear"; exit; trap -- - SIGINT SIGTERM' TERM INT
+
+	printf "%s" "$clear"
+
+	while true; do
+		printf "%s" "$top"
+		echo "$WHAT" | figl | lolcat
+		printf "%s" "$curoff"
+		sleep 2
+	done
+
+}
+
+script=$(basename "$0")
+case "$script" in
+banner) banner "$@" ;;
+esac
+
+exit
+
+lines=$(tput lines)
+tmux split-window
+tmux resize-pane -y $((lines - 6))
+tmux send -t 1 "banner \"$what\"" Enter
 sleep 1
 tmux send -t 2 "fishies" Enter

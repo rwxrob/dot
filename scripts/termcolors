@@ -9,49 +9,36 @@
 # instead and don't forget to wrap them within ${}. Omits (and overrides
 # any inherited) colors when not interactive/piped.
 
-black=""
-red=""
-green=""
-yellow=""
-blue=""
-magenta=""
-cyan=""
-white=""
-blink=""
-reset=""
+case "$1" in
 
-if test -t 1; then
-  black="\e[30m"
-  red="\e[31m"
-  green="\e[32m"
-  yellow="\e[33m"
-  blue="\e[34m"
-  magenta="\e[35m"
-  cyan="\e[36m"
-  white="\e[37m"
-  blink="\e[5m"
-  reset="\e[0m"
-fi
-echo POSIX
-printf "${black}black=\"\\\e[30m\"
-${red}red=\"\\\e[31m\"
-${green}green=\"\\\e[32m\"
-${yellow}yellow=\"\\\e[33m\"
-${blue}blue=\"\\\e[34m\"
-${magenta}magenta=\"\\\e[35m\"
-${cyan}cyan=\"\\\e[36m\"
-${white}white=\"\\\e[37m\"
-reset=\"\\\e[0m\"
-"
-echo
-echo BASH:
-printf "${black}black=$'\\\e[30m'
-${red}red=$'\\\e[31m'
-${green}green=$'\\\e[32m'
-${yellow}yellow=$'\\\e[33m'
-${blue}blue=$'\\\e[34m'
-${magenta}magenta=$'\\\e[35m'
-${cyan}cyan=$'\\\e[36m'
-${white}white=$'\\\e[37m'
-reset=$'\\\e[0m'
-"
+shell)
+	cat <<EOM
+black="[30m"
+red="[31m"
+green="[32m"
+yellow="[33m"
+blue="[34m"
+magenta="[35m"
+cyan="[36m"
+white="[37m"
+blink="[5m"
+reset="[0m"
+EOM
+	;;
+
+perl)
+	cat <<EOM
+my black="[30m";
+my red="[31m";
+my green="[32m";
+my yellow="[33m";
+my blue="[34m";
+my magenta="[35m";
+my cyan="[36m";
+my white="[37m";
+my blink="[5m";
+my reset="[0m";
+EOM
+	;;
+
+esac

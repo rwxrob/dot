@@ -6,7 +6,7 @@ Unlike other projects, I regularly just commit to main with short commit message
 
 ## Working style
 
-I'm an old SysAdmin, a Software Developer Engineer, an SRE, a hacker, a writer, and educator. This means that while I do have a favorite, cozy dev environment on my 14" Macbook Pro, I still want my dotfiles to work anywhere.
+I'm an old SysAdmin, SysDE, SRE, black-hat, writer, and educator. This means that while I do have a favorite, cozy dev environment on my 14" Unix system with custom GUI desktop manager, I still want my dotfiles to work anywhere. It's also the reason I have my multicall binary monolith (think BusyBox) here as well.
 
 I've designed this repo to be something I can quickly clone to any system and just run [setup](setup) plus a few `install` scripts for the stuff I need to get immediately up and running. This process is so fast that I consider all the other Git clones read-only and only pull from changes made to this central repo. That way I never have a merge conflict and can use these dotfiles without fear that committing from a system that isn't one I own could give a company full ownership of the entire repo per IP policies (go watch season one of Silicon Valley).
 
