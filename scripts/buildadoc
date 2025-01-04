@@ -28,6 +28,18 @@ qx{ asciidoctor \\
   ./docs/index.adoc
 };
 
+qx{ asciidoctor \\
+  -D docs \\
+  -a date="$date" \\
+  -a toc! \\
+  -a hours_mentor="$hours_mentor" \\
+  -a hours_self="$hours_self" \\
+  -a hours_total="$hours_total" \\
+  -a hours_week="$hours_week" \\
+  -o notoc.html \\
+  ./docs/index.adoc
+};
+
 my $pwd = `pwd`;
 $pwd =~ s/\R$//;    # chomp no longer works in modern perl
 my ( $parent, $name ) = $pwd =~ m,/([^/]+)/([^/]+)$,m;
