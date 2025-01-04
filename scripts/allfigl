@@ -1,6 +1,6 @@
 #!/bin/sh
 fontsd="$REPOS/github.com/rwxrob/fonts/figlet"
 for font in "$fontsd"/*.flf; do
-  echo "FONT: $font"
-  figlet -d "$fontsd" -f "${font}" hello
+	echo "FONT: $font"
+	figlet -d "$fontsd" -f "${font}" hello
 done

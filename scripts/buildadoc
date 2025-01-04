@@ -1,9 +1,11 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
+use v5.36;
 
 # total the hours from the main index.adoc page
 open my $fh, '<', './docs/index.adoc' or die "Could not open file: $!";
 local $/;
-my $buf = <$fh>;
+my $buf          = <$fh>;
+my $hours_mentor = 0;
 map { $hours_mentor += $_ } $buf =~ /hours="(\d+)"/g;
 my $hours_self  = $hours_mentor * 2;
 my $hours_total = $hours_self + $hours_mentor;
@@ -33,6 +35,7 @@ qx{ asciidoctor \\
   -D docs \\
   -a date="$date" \\
   -a toc! \\
+  -a notoc=true \\
   -a allow-uri-read \\
   -a hours_mentor="$hours_mentor" \\
   -a hours_self="$hours_self" \\
@@ -43,7 +46,7 @@ qx{ asciidoctor \\
 };
 
 my $pwd = `pwd`;
-$pwd =~ s/\R$//;    # chomp no longer works in modern perl
+$pwd =~ s/\R$//;
 my ( $parent, $name ) = $pwd =~ m,/([^/]+)/([^/]+)$,m;
 
 # PDF
