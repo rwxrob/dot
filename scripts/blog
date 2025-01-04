@@ -17,7 +17,7 @@ if [ -z "$hasfile" ]; then
 fi
 
 if [ ! -e docs/"$file" ]; then
-	printf "= %s\n\n" "$*" >"docs/$file"
+	printf "= %s\n\n%s\n\n\n" "$*" "$(inow)" >"docs/$file"
 fi
 
 exec "$EDITOR" "docs/$file"
