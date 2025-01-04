@@ -23,21 +23,29 @@ cyan="[36m"
 white="[37m"
 blink="[5m"
 reset="[0m"
+clear="[2J"
+curoff="[?25h"
+curon="[?25h"
+top="[H"
 EOM
 	;;
 
 perl)
-	cat <<EOM
-my black="[30m";
-my red="[31m";
-my green="[32m";
-my yellow="[33m";
-my blue="[34m";
-my magenta="[35m";
-my cyan="[36m";
-my white="[37m";
-my blink="[5m";
-my reset="[0m";
+	cat <<'EOM'
+my $black="[30m";
+my $red="[31m";
+my $green="[32m";
+my $yellow="[33m";
+my $blue="[34m";
+my $magenta="[35m";
+my $cyan="[36m";
+my $white="[37m";
+my $blink="[5m";
+my $reset="[0m";
+my $clear="[2J";
+my $curoff="[?25h";
+my $curon="[?25h";
+my $top="[H";
 EOM
 	;;
 

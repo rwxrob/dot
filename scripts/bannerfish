@@ -1,18 +1,29 @@
 #!/usr/bin/env perl
+use v5.36;
+
+my $black   = "[30m";
+my $red     = "[31m";
+my $green   = "[32m";
+my $yellow  = "[33m";
+my $blue    = "[34m";
+my $magenta = "[35m";
+my $cyan    = "[36m";
+my $white   = "[37m";
+my $blink   = "[5m";
+my $reset   = "[0m";
+
+my $what = join ' ', @ARGV;
+
+if ( not $what ) {
+    print "Text: ";
+    $what = <STDIN>;
+    chomp $what;
+}
 
 __END__
-WHAT="$*"
-if test -z "$WHAT"; then
-	echo "Text: "
-	read -r WHAT
-fi
 
 # requires WHAT
 banner() {
-	clear="\033[2J"
-	curoff="\033[?25h"
-	curon="\033[?25h"
-	top="\033[H"
 
 	trap 'printf "$curon$clear"; exit; trap -- - SIGINT SIGTERM' TERM INT
 
