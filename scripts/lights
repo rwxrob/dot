@@ -1,0 +1,29 @@
+#!/usr/bin/env perl
+
+my $clear  = "[2J";
+my $curoff = "[?25l";
+my $curon  = "[?25h";
+
+sub cleanup {
+    print "$curon$clear";
+    exit 0;
+}
+$SIG{'INT'}  = \&cleanup;
+$SIG{'TERM'} = \&cleanup;
+
+print $curoff;
+
+my $pid = fork();
+if ( !defined $pid ) {
+    die "Failed to fork: $!";
+}
+
+if ( $pid == 0 ) {
+    exec 'python3', "$ENV{REPOS}/github.com/skilstak/pyfun/lib/pylights.py"
+      or die "Failed to exec pylights";
+}
+else {
+    waitpid( $pid, 0 );
+    print $curon;
+}
+

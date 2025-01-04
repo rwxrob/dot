@@ -4,4 +4,4 @@ if test -z "$what"; then
 	what="in a bit"
 fi
 echo "$what" >~/.break
-exec bannerfish "back $what"
+exec bannerneo "back $what"

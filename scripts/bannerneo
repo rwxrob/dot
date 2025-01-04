@@ -8,7 +8,8 @@ if [ -z "${what}" ]; then
 	read -r what
 fi
 lines=$(tput lines)
-if type pomo 2>/dev/null; then
-	pomo stop
-fi
-tmux split-window \; resize-pane -y $((lines - 6)) \; send -t 1 "banner \"$what\"" Enter \; sleep 1 \; send -t 2 "neo" Enter
+tmux split-window
+tmux resize-pane -y $((lines - 6))
+tmux send -t 1 "banner \"$what\"" Enter
+sleep 1
+tmux send -t 2 "neo" Enter
