@@ -4,7 +4,7 @@ use v5.36;
 # TODO check for figl and lolcat deps
 
 my $clear  = "[2J";
-my $curoff = "[?25h";
+my $curoff = "[?25l";
 my $curon  = "[?25h";
 my $top    = "[H";
 
@@ -24,10 +24,9 @@ sub cleanup {
 $SIG{'INT'}  = \&cleanup;
 $SIG{'TERM'} = \&cleanup;
 
-print $clear;
+print $clear. $curoff;
 while (1) {
-    print $top.$curoff;
-    print `echo "BLAH" | figl | lolcat -f`;
+    print $top. `echo "BLAH" | figl | lolcat -f`;
     sleep 2;
 }
 
