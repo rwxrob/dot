@@ -6,6 +6,21 @@ case $- in
 *) return ;;
 esac
 
+export black="[30m"
+export red="[31m"
+export green="[32m"
+export yellow="[33m"
+export blue="[34m"
+export magenta="[35m"
+export cyan="[36m"
+export white="[37m"
+export blink="[5m"
+export reset="[0m"
+export clear="[2J"
+export curoff="[?25h"
+export curon="[?25h"
+export top="[H"
+
 # ---------------------- local utility functions ---------------------
 
 _have() { type "$1" &>/dev/null; }
