@@ -4,7 +4,7 @@ return {
   default_prog = {'/opt/homebrew/bin/bash','--login'},
   color_scheme = 'Gruvbox Material (Gogh)',
   font = wezterm.font('UbuntuMono Nerd Font'),
-  font_size = 34,
+  font_size = 28,
   colors = {
     cursor_bg = '#928374',
     cursor_border = '#928374',
@@ -13,9 +13,9 @@ return {
   window_decorations = "RESIZE",
   hide_tab_bar_if_only_one_tab = true,
   window_padding = {
-   left = 40,
+   left = 10,
    right = 0,
-   top = 50,
+   top = 20,
    bottom = 0,
   },
 }

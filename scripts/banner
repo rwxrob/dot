@@ -9,10 +9,8 @@ my $clear  = "[2J";
 my $curoff = "[?25l";
 my $curon  = "[?25h";
 my $top    = "[H";
-my $lines  = `tput lines` - 6;
 
 my $what = join ' ', @ARGV;
-
 if ( not $what ) {
     print "Text: ";
     $what = <STDIN>;
