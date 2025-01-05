@@ -1,6 +1,8 @@
 #!/bin/sh
+# shellcheck disable=SC2059
 fontsd="$REPOS/github.com/rwxrob/fonts/figlet"
 for font in "$fontsd"/*.flf; do
 	echo "FONT: $font"
+	printf "$(rand-color)"
 	figlet -d "$fontsd" -f "${font}" hello
 done
