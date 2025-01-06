@@ -1,8 +1,5 @@
 #!/bin/sh
-
-# Outputs the seconds since the thing identified by the first argument
-# was last modified (not created).
-
+# Prints seconds since first argument was last modified (not created)
 path="$1"
 if ! test -e "$path"; then
 	echo 'usage: ageof <path>'

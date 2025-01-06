@@ -3,12 +3,10 @@
 |Script|Description|
 |-|-|
 |[255color](255color)| Print 255 color samples as numbers
-|[F](F)| Split lines of input into fields (ex: 1..3,5)
-|[README.md](README.md)| Description
-|[ageof](ageof)| Description
-|[allcow](allcow)| Description
-|[allfigl](allfigl)| Description
-|[b](b)| Description
+|[fields](fields)| Split lines of input into fields (`1..3,5`)
+|[ageof](ageof)| Prints seconds since first argument was last modified
+|[allcow](allcow)| Cycle through display of all different cows
+|[allfigl](allfigl)| Cycle through display of all different figlet fonts
 |[back](back)| Description
 |[bandit](bandit)| Description
 |[banner](banner)| Description
