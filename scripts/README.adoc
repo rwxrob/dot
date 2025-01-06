@@ -4,7 +4,7 @@
 |===
 
 |255color| Print 255 color samples as numbers
-|F| Description
+|F| Split lines of input into fields (ex: 1..3,5)
 |README.md| Description
 |ageof| Description
 |allcow| Description
