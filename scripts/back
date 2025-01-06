@@ -2,7 +2,7 @@
 use v5.36;
 my $what = join ' ', @ARGV;
 $what ||= 'in a bit';
-`prepend ~/.current "💤 $what"`;
+`prepend ~/.currently "💤 $what"`;
 my @files = grep { -f && /^banner\S/ } glob("*");
 my $file  = $files[ int( rand( scalar(@files) ) ) ];
-exec $file "back $what"
+exec "$file back $what"
