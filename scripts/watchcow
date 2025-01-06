@@ -1,10 +1,39 @@
-#!/bin/sh
+#!/usr/bin/env perl
+use v5.36;
+use File::Basename;
 
-hidecursor
-while true; do
-  clear
-  echo 
-  #fortune -s | cowsay -f dragon |lolcat
-  fortune -s | cowsay |lolcat
-  sleep 10
-done
+not `command -v cowsay`  and say 'cowsay not found'  and exit 1;
+not `command -v lolcat`  and say 'lolcat not found'  and exit 1;
+not `command -v fortune` and say 'fortune not found' and exit 1;
+
+my $clear  = "[2J";
+my $curoff = "[?25l";
+my $curon  = "[?25h";
+my $top    = "[H";
+
+sub cleanup {
+    print "$curon$clear";
+    exit 0;
+}
+$SIG{'INT'}  = \&cleanup;
+$SIG{'TERM'} = \&cleanup;
+
+print $clear . $curoff;
+
+while (1) {
+    my $pid = fork();
+    if ( !defined $pid ) {
+        die "Failed to fork: $!";
+    }
+    if ( $pid == 0 ) {
+        print $curoff. $clear . $top;
+        exec
+"fortune -s | cowsay -W 50 -f '$ENV{REPOS}/github.com/rwxrob/dot/config/cowsay/default.cow' | indent 15 | lolcat -ft | cat"
+          or die "Failed to exec cowsay";
+    }
+    else {
+        waitpid( $pid, 0 );
+        sleep 10;
+    }
+}
+
