@@ -3,7 +3,7 @@ use v5.36;
 use File::Basename;
 my $what = join ' ', @ARGV;
 $what ||= 'in a bit';
-`prepend ~/.currently "💤 $what"`;
+`prepend ~/.currently "💤 back $what"`;
 my @paths   = grep { -f && m,/banner\S.*$, } glob( dirname($0) . '/*' );
 my @scripts = map  { basename($_) } @paths;
 my $script  = $scripts[ int( rand( scalar(@scripts) ) ) ];
