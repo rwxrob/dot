@@ -35,6 +35,7 @@ cat <<EOF >"$fifo"
 */set weechat.look.prefix_join "👋"
 */set weechat.look.prefix_action "🌟"
 */set weechat.look.prefix_error "💢"
+*/set weechat.look.prefix_align_max 10
 */set weechat.bar.input_items ",input_text"
 */bar hide buflist
 */bar hide status

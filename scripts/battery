@@ -1,3 +1,5 @@
-#!/usr/bin/perl
-print grep {/state|to\ full|percentage/}
+#!/usr/bin/env perl
+use v5.36;
+
+print grep { /state|to\ full|percentage/ }
   `upower -i /org/freedesktop/UPower/devices/battery_BAT0`;
