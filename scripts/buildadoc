@@ -31,6 +31,7 @@ qx{ asciidoctor \\
   ./docs/index.adoc
 };
 
+# HTML without table of contents
 qx{ asciidoctor \\
   -D docs \\
   -a date="$date" \\
@@ -74,9 +75,3 @@ qx{ asciidoctor-epub3 \\
   -o "$parent-$name.epub" \\
   ./docs/index.adoc
 };
-
-__END__
-
-=head1 NAME
-
-buildadoc - build AsciiDoc with rwxrob preferences

@@ -28,7 +28,7 @@ while (1) {
     if ( $pid == 0 ) {
         print $curoff. $clear . $top;
         exec
-"fortune -s | cowsay -W 50 -f '$ENV{REPOS}/github.com/rwxrob/dot/config/cowsay/default.cow' | indent 15 | lolcat -ft | cat"
+"fortune $ENV{REPOS}/github.com/rwxrob/dot/fortunes/mrrobot | cowsay -W 50 -f '$ENV{REPOS}/github.com/rwxrob/dot/config/cowsay/default.cow' | indent 15 | lolcat -ft | cat"
           or die "Failed to exec cowsay";
     }
     else {

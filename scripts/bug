@@ -1,3 +1,2 @@
-#!/bin/bash
-
+#!/bin/sh
 exec gh issue create --label bug --title "$*"

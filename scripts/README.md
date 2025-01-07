@@ -7,21 +7,18 @@
 |[ageof](ageof)| Prints seconds since first argument was last modified
 |[allcow](allcow)| Cycle through display of all different cows
 |[allfigl](allfigl)| Cycle through display of all different figlet fonts
-|[back](back)| Description
-|[bandit](bandit)| Description
-|[banner](banner)| Description
-|[bannerfishies](bannerfishies)| Description
-|[bannerlights](bannerlights)| Description
-|[bannerneo](bannerneo)| Description
-|[bannerwatchcow](bannerwatchcow)| Description
-|[battery](battery)| Description
-|[bing](bing)| Description
-|[blankpane](blankpane)| Description
-|[blog](blog)| Description
-|[bug](bug)| Description
-|[build](build)| Description
-|[buildadoc](buildadoc)| Description
-|[bullets](bullets)| Description
+|[back](back)| TMUX "back in a minute" screen with random banner
+|[banner](banner)| Colorful text banner in `figlet` futura font
+|[bannerfishies](bannerfishies)| Banner with fishies in TMUX pane
+|[bannerlights](bannerlights)| Banner with `lights` in TMUX pane
+|[bannerneo](bannerneo)| Banner with `neo` in TMUX pane
+|[bannerwatchcow](bannerwatchcow)| Banner with `watchcow` in TMUX pane
+|[battery](battery)| Print battery usage on Linux or macOS
+|[blog](blog)| Create a new adoc blog post in `./docs/`
+|[bug](bug)| Create new GitHub bug issue with `gh`
+|[build](build)| Call `./build` if found or `buildadoc` if `./docs/`
+|[buildadoc](buildadoc)| Build adoc stuff in `.` or `./docs/`
+|[bullets](bullets)| Joins all fields of line with bullets
 |[cal](cal)| Description
 |[calendar](calendar)| Description
 |[cast](cast)| Description

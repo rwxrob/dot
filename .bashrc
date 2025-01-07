@@ -253,9 +253,10 @@ _have setxkbmap && test -n "$DISPLAY" &&
 unalias -a
 alias todo='vi ~/.todo'
 alias ip='ip -c'
-alias '?'=gpt
+alias '?'=claude
 alias '??'=duck
 alias '???'=google
+alias '????'=bing
 alias dot='cd $DOTFILES'
 alias scripts='cd $SCRIPTS'
 alias snippets='cd $SNIPPETS'
@@ -405,3 +406,5 @@ export NVM_DIR="$HOME/.nvm"
 
 export NAME=Rob
 export PATH=$PATH:/Users/rwxrob/Repos/github.com/rwxrob/lab-sample
+
+fortune "$REPOS/github.com/rwxrob/dot/fortunes/mrrobot" | cowsay -W 50 -f "$REPOS/github.com/rwxrob/dot/config/cowsay/default.cow" | indent 15 | lolcat -ft
