@@ -1,0 +1,2 @@
+#!/bin/sh
+exec bat $(which "$1")

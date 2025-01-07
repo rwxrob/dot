@@ -1,0 +1,3 @@
+#!/usr/bin/env perl -i -n
+print unless $. == 1;
+close ARGV if eof;

@@ -14,17 +14,14 @@
 |[bannerneo](bannerneo)| Banner with `neo` in TMUX pane
 |[bannerwatchcow](bannerwatchcow)| Banner with `watchcow` in TMUX pane
 |[battery](battery)| Print battery usage on Linux or macOS
+|[batc](batc)| Find command in PATH and send to `bat`
 |[blog](blog)| Create a new adoc blog post in `./docs/`
 |[bug](bug)| Create new GitHub bug issue with `gh`
 |[build](build)| Call `./build` if found or `buildadoc` if `./docs/`
 |[buildadoc](buildadoc)| Build adoc stuff in `.` or `./docs/`
 |[bullets](bullets)| Joins all fields of line with bullets
-|[cal](cal)| Description
-|[calendar](calendar)| Description
-|[cast](cast)| Description
-|[catc](catc)| Description
-|[catscript](catscript)| Description
-|[cdpath](cdpath)| Description
+|[cal](cal)| Three month calendar with current date
+|[cdpath](cdpath)| Prints the `CDPATH` one per line
 |[changed](changed)| Description
 |[cheat](cheat)| Description
 |[checkurls](checkurls)| Description
@@ -299,6 +296,8 @@
 |[topics](topics)| Description
 |[tot](tot)| Description
 |[trapterm](trapterm)| Description
+|[trimfirst](trimfirst)| Remove first line of all files given as arguments
+|[trimlast](trimlast)| Remove last line of all files given as arguments
 |[twitch-formats](twitch-formats)| Description
 |[twitch-mock-app-token](twitch-mock-app-token)| Description
 |[twitch-mock-clientid](twitch-mock-clientid)| Description
