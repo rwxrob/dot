@@ -280,6 +280,8 @@ alias gptags="git push origin --tags"
 alias km="kimono"
 alias s=wee
 alias cur="vi ~/.currently"
+alias het_tanis="twitch-view het_tanis"
+alias prime="twitch-view theprimeagen"
 
 set-editor() {
 	export EDITOR="$1"
@@ -406,5 +408,3 @@ export NVM_DIR="$HOME/.nvm"
 
 export NAME=Rob
 export PATH=$PATH:/Users/rwxrob/Repos/github.com/rwxrob/lab-sample
-
-fortune "$REPOS/github.com/rwxrob/dot/fortunes/mrrobot" | cowsay -W 50 -f "$REPOS/github.com/rwxrob/dot/config/cowsay/default.cow" | indent 15 | lolcat -ft

@@ -279,7 +279,7 @@
 |[tbanner](tbanner)| Description
 |[tclip](tclip)| Description
 |[telln](telln)| Description
-|[termcolors](termcolors)| Description
+|[termstuff](termstuff)| Dump variables for terminal ANSI escapes
 |[tf](tf)| Description
 |[tmatrix](tmatrix)| Description
 |[tmuxin](tmuxin)| Description
@@ -298,17 +298,16 @@
 |[trapterm](trapterm)| Description
 |[trimfirst](trimfirst)| Remove first line of all files given as arguments
 |[trimlast](trimlast)| Remove last line of all files given as arguments
-|[twitch-formats](twitch-formats)| Description
-|[twitch-mock-app-token](twitch-mock-app-token)| Description
-|[twitch-mock-clientid](twitch-mock-clientid)| Description
-|[twitch-mock-clientsecret](twitch-mock-clientsecret)| Description
-|[twitch-mock-users-logins](twitch-mock-users-logins)| Description
-|[twitch-view](twitch-view)| Description
+|[twitch-mock-app-token](twitch-mock-app-token)| Fetch an app token from running twitch mock API server
+|[twitch-mock-clientid](twitch-mock-clientid)| Fetch a client ID from running twitch mock API server
+|[twitch-mock-clientsecret](twitch-mock-clientsecret)|  Fetch a client secret from running twitch mock API server
+|[twitch-mock-users-logins](twitch-mock-users-logins)| Fetch list of all users on mock API server
+|[twitch-transcoding](twitch-transcoding)| List all the transcoding options for a Twitch channel
+|[twitch-view](twitch-view)| Watch Twitch without web browser
+|[twitch-games](twitch-games)| List top COUNT (100) categories on Twitch
 |[twitch.sh](twitch.sh)| Description
-|[twitchcat](twitchcat)| Description
-|[twitchcat2yaml](twitchcat2yaml)| Description
 |[twitter](twitter)| Description
-|[txt](txt)| Description
+|[txt](txt)| Render standard input Markdown as plain text with pandoc
 |[uidof](uidof)| Description
 |[underconstruction](underconstruction)| Description
 |[untag](untag)| Description

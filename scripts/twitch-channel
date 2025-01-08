@@ -2,5 +2,4 @@
 name="$1"
 test -z "$1" && name=$TWITCH_LOGIN
 test -z "$name" && echo "TWITCH_LOGIN or first arg required" && exit 1
-url="https://twitch.tv/$name"
-mpv --ontop --ytdl-format=360p "$url" >/dev/null &
+twitch api get channels -q "broadcaster_id=$(twitch-id "$name")"

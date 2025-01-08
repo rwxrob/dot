@@ -45,13 +45,6 @@ current() {
     -H 'Content-Type: application/json' | jq .data[0]
 }
 
-categories() {
-  curl -sSG -X GET 'https://api.twitch.tv/helix/search/categories' \
-    -H "Authorization: Bearer $TOKEN" \
-    -H "Client-Id: $CLIENTID" \
-    --data-urlencode "query=$*" | jq -r '.data[] | .id + " " + .name'
-}
-
 ## ------------------------------- main -------------------------------
 
 command="$1"
@@ -60,5 +53,4 @@ test -n "$command" && shift
 case "$command" in
 title) title "$@" ;;
 current) current "$@" ;;
-categories) categories "$@" ;;
 esac
