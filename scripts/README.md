@@ -22,7 +22,7 @@
 |[bullets](bullets)| Joins all fields of line with bullets
 |[cal](cal)| Three month calendar with current date
 |[cdpath](cdpath)| Prints the `CDPATH` one per line
-|[changed](changed)| Description
+|[changed](changed)| Print full path to all changed files in directory
 |[cheat](cheat)| Description
 |[checkurls](checkurls)| Description
 |[chsuffix](chsuffix)| Description
@@ -262,6 +262,7 @@
 |[sing](sing)| Description
 |[skeys](skeys)| Description
 |[snip](snip)| Description
+|[slugify](slugify)| Convert arguments or stdin lines to slugs
 |[song](song)| Description
 |[songnext](songnext)| Description
 |[ssection](ssection)| Description

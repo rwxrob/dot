@@ -1,0 +1,21 @@
+#!/usr/bin/env perl
+use v5.36;
+
+sub slugify {
+    $_ = lc;
+    s/[^a-z0-9\s-]+/-/g;
+    s/\s+/-/g;
+    s/^-+|-+$//g;
+}
+
+if ( scalar(@ARGV) > 0 ) {
+    $_ = join( ' ', @ARGV );
+    slugify;
+    say;
+    exit;
+}
+
+while (<STDIN>) {
+    slugify;
+    say;
+}
