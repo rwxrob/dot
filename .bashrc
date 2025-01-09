@@ -282,6 +282,7 @@ alias s=wee
 alias cur="vi ~/.currently"
 alias het_tanis="twitch-view het_tanis"
 alias prime="twitch-view theprimeagen"
+alias pookie="twitch-view pookiebutt"
 
 set-editor() {
 	export EDITOR="$1"

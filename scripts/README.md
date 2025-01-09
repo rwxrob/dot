@@ -224,7 +224,7 @@
 |[ppp](ppp)| Description
 |[ppplast](ppplast)| Description
 |[pr](pr)| Description
-|[pre](pre)| Description
+|[pre](pre)| Add a prefix (default: #)
 |[preview](preview)| Description
 |[printfargs](printfargs)| Description
 |[protonum](protonum)| Description
@@ -305,14 +305,17 @@
 |[twitch-transcoding](twitch-transcoding)| List all the transcoding options for a Twitch channel
 |[twitch-view](twitch-view)| Watch Twitch without web browser
 |[twitch-games](twitch-games)| List top COUNT (100) categories on Twitch
-|[twitch.sh](twitch.sh)| Description
-|[twitter](twitter)| Description
+|[twitch-channel](twitch-channel)| Return Twitch channel data
+|[twitch-current](twitch-current)| Return Twitch current title and category for channel
+|[twitch-user](twitch-user)| Return Twitch login user data
+|[twitch-id](twitch-id)| Return Twitch broacast_id for a Twitch channel
+|[twitch-formats](twitch-formats)| Return available Twitch stream quality formats
+|[twitch-channel](twitch-channel)| Return Twitch channel data
+|[twitch-view](twitch-view)| View a Twitch channel with mvp
 |[txt](txt)| Render standard input Markdown as plain text with pandoc
-|[uidof](uidof)| Description
-|[underconstruction](underconstruction)| Description
-|[untag](untag)| Description
-|[uppera](uppera)| Description
-|[upre](upre)| Description
+|[uidof](uidof)| Print owner UID of file
+|[untag](untag)| Remove a git tag locally and remotely
+|[upre](upre)| Remove a prefix (default: #)
 |[urlencode](urlencode)| Description
 |[urls](urls)| Description
 |[usageln](usageln)| Description

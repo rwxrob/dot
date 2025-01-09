@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# see https://github.com/rwxrob/dot-template for reusable version
-
 user=rwxrob
 channels=rwxrob
 

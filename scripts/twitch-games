@@ -1,5 +1,0 @@
-#!/bin/sh
-count="$1"
-test -z "$count" && count=100
-twitch api get games/top -q "first=$count" |
-	jq -r '.data[] | .id + " " + .name'
