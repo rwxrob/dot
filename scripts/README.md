@@ -4,10 +4,10 @@
 |-|-|
 |[255color](255color)| Print 255 color samples as numbers
 |[fields](fields)| Split lines of input into fields (`1..3,5`)
+||[afk](afk)| TMUX AFK screen with random banner
 |[ageof](ageof)| Prints seconds since first argument was last modified
 |[allcow](allcow)| Cycle through display of all different cows
 |[allfigl](allfigl)| Cycle through display of all different figlet fonts
-|[back](back)| TMUX "back in a minute" screen with random banner
 |[banner](banner)| Colorful text banner in `figlet` futura font
 |[bannerfishies](bannerfishies)| Banner with fishies in TMUX pane
 |[bannerlights](bannerlights)| Banner with `lights` in TMUX pane
@@ -24,9 +24,7 @@
 |[cdpath](cdpath)| Prints the `CDPATH` one per line
 |[changed](changed)| Print full path to all changed files in directory
 |[checkurls](checkurls)| Check for broken URLs in web sites
-|[chsuffix](chsuffix)| Description
-|[cl](cl)| Description
-|[clip](clip)| Description
+|[clip](clip)| Play from clips collection
 |[close](close)| Description
 |[cmdhtitles](cmdhtitles)| Description
 |[colorstrip](colorstrip)| Description

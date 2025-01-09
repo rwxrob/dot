@@ -176,7 +176,7 @@ x_play() {
 	local -a data
 	data=($(x_data "$@"))
 	local -i volume="$CLIP_VOLUME"
-	volume+=${data[3]:-100}
+	volume+=${data[1]:-100}
 	mpv --fs \
 		"--volume=$volume" \
 		"edl://$CLIP_DIR/${data[2]//;/;$CLIP_DIR/${data[2]%%,*},}" \
