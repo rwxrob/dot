@@ -23,8 +23,7 @@
 |[cal](cal)| Three month calendar with current date
 |[cdpath](cdpath)| Prints the `CDPATH` one per line
 |[changed](changed)| Print full path to all changed files in directory
-|[cheat](cheat)| Description
-|[checkurls](checkurls)| Description
+|[checkurls](checkurls)| Check for broken URLs in web sites
 |[chsuffix](chsuffix)| Description
 |[cl](cl)| Description
 |[clip](clip)| Description
