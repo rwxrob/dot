@@ -1,0 +1,40 @@
+#!/usr/bin/env perl
+use v5.26;
+
+not `command -v jq` and die "jq not found";
+
+sub lookup_file {
+    my $os   = lc(`uname -s`);
+    my $arch = `uname -m`;
+    chomp( $arch, $os );
+    my $file = `curl -sSL "https://go.dev/dl/?mode=json" \\
+       | jq -r '.[0].files[]
+       | select(.os == "$os")
+       | select(.kind == "archive")
+       | select(.arch == "$arch")
+       | .filename'`;
+    chomp($file);
+    return $file;
+}
+
+sub downloads {
+    my $downloads = $ENV{DOWNLOADS} || '/tmp';
+    my $homedown  = $ENV{HOME} . "/Downloads";
+    $downloads = $homedown if -d $homedown;
+    return $downloads;
+}
+
+my $file = lookup_file();
+not $file and die "no file found to fetch";
+my $downloads = downloads();
+my $path      = $downloads . '/' . $file;
+my $dir       = $ENV{HOME} . "/.local";
+
+say "Installing Go into $dir ... ";
+
+`curl -fL "https://go.dev/dl/$file" -o "$path"`;
+`mkdir -p "$dir"`;
+`rm -rf $dir/go`;
+`tar -C "$dir" -xzf "$path"`;
+
+say "Installed.";

@@ -1,5 +1,6 @@
 local wezterm = require("wezterm")
 return {
+  audible_bell = "Disabled",
   window_close_confirmation = 'NeverPrompt',
   default_prog = {'/opt/homebrew/bin/bash','--login'},
   color_scheme = 'Gruvbox Material (Gogh)',
