@@ -1,7 +1,9 @@
 #!/usr/bin/env perl
 use v5.26;
 
-not `command -v jq` and die "jq not found";
+not `command -v jq`   and die "jq not found";
+not `command -v tar`  and die "tar not found";
+not `command -v curl` and die "curl not found";
 
 sub lookup_file {
     my $os   = lc(`uname -s`);

@@ -3,4 +3,6 @@ name="$1"
 test -z "$1" && name=$TWITCH_LOGIN
 test -z "$name" && echo "TWITCH_LOGIN or first arg required" && exit 1
 url="https://twitch.tv/$name"
-mpv --geometry=99%:15% --ontop --ytdl-format=360p "$url" >/dev/null &
+twitch-status "$name" || exit 1
+wee "/join #$name"
+mpv --geometry=99%:15% --ontop --ytdl-format=480p "$url" >/dev/null &

@@ -1,0 +1,9 @@
+#!/usr/bin/env perl
+use v5.26;
+my $repo = shift;
+my ($script) = $0 =~ m,([^/]+)$,;
+not $repo and die "usage: $script <REPO>\n";
+my @lines = `gh release list --repo "$repo"`;
+not @lines and die "unable to list releases for $repo";
+my @field = split /\s/, $lines[0];
+say $field[3];

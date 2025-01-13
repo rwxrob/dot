@@ -285,11 +285,14 @@ alias km="kimono"
 alias s=wee
 alias x=clip
 alias chan=twitch-channel
-alias status=twitch-current
+alias status=twitch-status
+alias lurk=twitch-view
 alias cur="vi ~/.currently"
-alias het_tanis="twitch-view het_tanis"
+alias het="twitch-view het_tanis"
 alias prime="twitch-view theprimeagen"
+alias lastmiles="twitch-view lastmiles"
 alias pookie="twitch-view pookiebutt"
+alias emily="twitch-view emilymcvicker"
 
 set-editor() {
 	export EDITOR="$1"

@@ -1,0 +1,11 @@
+#!/usr/bin/env perl
+my $gameid = "1469308723";
+`	twitch api get streams -q "game_id=$gameid" |
+		jq -r \
+			--arg red $ \
+			'
+	.data[] |
+	.user_login
+		+ " (" + (.viewer_count | tostring) + ") "
+		+ .title
+'`;
