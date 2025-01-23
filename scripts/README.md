@@ -24,9 +24,8 @@
 |[cdpath](cdpath)| Prints the `CDPATH` one per line
 |[changed](changed)| Print full path to all changed files in directory
 |[checkurls](checkurls)| Check for broken URLs in web sites
-|[clip](clip)| Play from clips collection
-|[close](close)| Description
-|[cmdhtitles](cmdhtitles)| Description
+|[close](close)| Close GitHub issue with `gh`
+|[cmdhtitles](cmdhtitles)| Filter to add htitles to Bonzai `*Cmds`
 |[colorstrip](colorstrip)| Description
 |[commandfrom](commandfrom)| Description
 |[comment](comment)| Description
