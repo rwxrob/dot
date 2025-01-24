@@ -27,7 +27,7 @@
 |[close](close)| Close GitHub issue with `gh`
 |[cmdhtitles](cmdhtitles)| Filter to add htitles to Bonzai `*Cmds`
 |[colortest](colortest)| Print gradian RGB color test strip
-|[comment](comment)| Description
+|[comment](comment)| Same as `gh issue comment "$@"`
 |[commentthis](commentthis)| Description
 |[confirm](confirm)| Description
 |[contexts](contexts)| Description
@@ -106,7 +106,7 @@
 |[gotests](gotests)| Description
 |[gott](gott)| Description
 |[gpgcreate](gpgcreate)| Description
-|[gpt](gpt)| Description
+|[gpt](gpt)| Submit ChatGPT API query through `mods`
 |[grepall](grepall)| Description
 |[gstreamd](gstreamd)| Description
 |[haschanged](haschanged)| Description
