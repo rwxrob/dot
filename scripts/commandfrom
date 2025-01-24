@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-while IFS= read -r line;do
-  key=${line%%=*}
-  echo "x.$key() { x.config $key \"\$@\"; }"
-done

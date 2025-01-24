@@ -27,7 +27,6 @@
 |[close](close)| Close GitHub issue with `gh`
 |[cmdhtitles](cmdhtitles)| Filter to add htitles to Bonzai `*Cmds`
 |[colortest](colortest)| Print gradian RGB color test strip
-|[commandfrom](commandfrom)| Description
 |[comment](comment)| Description
 |[commentthis](commentthis)| Description
 |[confirm](confirm)| Description
