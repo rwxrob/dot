@@ -26,7 +26,7 @@
 |[checkurls](checkurls)| Check for broken URLs in web sites
 |[close](close)| Close GitHub issue with `gh`
 |[cmdhtitles](cmdhtitles)| Filter to add htitles to Bonzai `*Cmds`
-|[colorstrip](colorstrip)| Description
+|[colortest](colortest)| Print gradian RGB color test strip
 |[commandfrom](commandfrom)| Description
 |[comment](comment)| Description
 |[commentthis](commentthis)| Description
@@ -266,7 +266,7 @@
 |[sshspeedtest](sshspeedtest)| Description
 |[starting](starting)| Description
 |[startvms](startvms)| Description
-|[stripesc](stripesc)| Description
+|[stripesc](stripesc)| Strip all ANSI terminal escape sequences
 |[swag](swag)| Description
 |[symlink](symlink)| Description
 |[sysderrors](sysderrors)| Description
