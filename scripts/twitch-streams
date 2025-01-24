@@ -1,4 +1,4 @@
-#!/usr/bin/env perl
+#!/usr/bin/perl
 my $gameid = "1469308723";
 `	twitch api get streams -q "game_id=$gameid" |
 		jq -r \

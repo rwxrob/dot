@@ -1,4 +1,4 @@
-#!/usr/bin/env perl
+#!/usr/bin/perl
 
 my $clear  = "[2J";
 my $curoff = "[?25l";

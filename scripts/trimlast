@@ -1,2 +1,2 @@
-#!/usr/bin/env perl -i -n
+#!/usr/bin/perl -i -n
 print if !eof;

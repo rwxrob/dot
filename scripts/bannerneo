@@ -1,5 +1,5 @@
-#!/usr/bin/env perl
-use v5.36;
+#!/usr/bin/perl
+use v5.26;
 use File::Basename;
 
 my $script   = basename($0);

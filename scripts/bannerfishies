@@ -1,1 +1,22 @@
-bannerneo
+#!/usr/bin/perl
+use v5.26;
+
+my $script   = `basename "$0"`;
+my ($proggy) = $script =~ /^banner(\S+)/;
+my $lines    = `tput lines` - 6;
+
+not `command -v $proggy` and say "$proggy not found" and exit 1;
+not `command -v lolcat`  and say 'lolcat not found'  and exit 1;
+
+my $what = join ' ', @ARGV;
+if ( not $what ) {
+    print "Text: ";
+    $what = <STDIN>;
+    chomp $what;
+}
+
+`tmux split-window`;
+`tmux resize-pane -y $lines`;
+`tmux send -t 1 "banner $what" Enter`;
+sleep 1;
+`tmux send -t 2 "$proggy" Enter`

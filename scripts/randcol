@@ -1,4 +1,4 @@
-#!/usr/bin/env perl
+#!/usr/bin/perl
 my @colors = qw{ [30m [31m [32m [33m [34m [35m [36m [37m };
 print $colors[ int( rand(8) ) ];
 

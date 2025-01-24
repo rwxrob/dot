@@ -1,4 +1,4 @@
-#!/usr/bin/env perl
+#!/usr/bin/perl
 use v5.26;
 my $os   = lc `uame -s` or die "uname required";
 my $arch = lc `uname -m`;
