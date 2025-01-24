@@ -1,5 +1,5 @@
 #!/bin/sh
 name="$1"
-test -z "$1" && name=$TWITCH_LOGIN
-test -z "$name" && echo "TWITCH_LOGIN or first arg required" && exit 1
-twitch-user "$1" | jq -r '.data[].id'
+test -z "$1" && name="$TWITCH_LOGIN"
+test -z "$1" && name=rwxrob
+twitch-user "$name" | jq -r '.data[].id'

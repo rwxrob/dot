@@ -1,0 +1,5 @@
+#!/bin/sh
+name="$1"
+test -z "$name" && name="$TWITCH_LOGIN"
+test -z "$name" && name=rwxrob
+twitch api get users -q login="$name" | jq -r '.data[0]'
