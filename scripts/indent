@@ -1,0 +1,5 @@
+#!/bin/sh
+while IFS= read -r line; do
+	printf "%*s" "$1" ""
+	echo "$line"
+done

@@ -1,2 +1,2 @@
-#!/usr/bin/env bash
-exec sed 's/\x1B\[[0-9;\?]*[a-zA-Z]//g'
+#!/usr/bin/perl -p
+s/\x1B\[[0-9\?]*[a-zA-Z]//g;

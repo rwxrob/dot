@@ -1,5 +1,2 @@
-#!/usr/bin/env bash
-
-while IFS= read -r line; do 
-  echo "${line#* }"
-done
+#!/bin/sh
+while IFS= read -r line; do echo "${line#* }"; done

@@ -1,0 +1,2 @@
+#!/bin/sh
+exec gh pr edit --body "$@"

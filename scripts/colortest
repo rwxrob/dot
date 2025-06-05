@@ -1,0 +1,41 @@
+#!/usr/bin/perl
+use v5.26;
+
+our $reset = "\033[0m";
+
+sub set_bg {
+    my ( $r, $g, $b ) = @_;
+    print "\x1b[48;2;$r;$g;${b}m";
+}
+
+for my $i ( 0 .. 127 ) {
+    set_bg $i, 0, 0;
+    print " ";
+}
+
+for my $i ( reverse 128 .. 255 ) {
+    set_bg $i, 0, 0;
+    print " ";
+}
+
+for my $i ( 0 .. 127 ) {
+    set_bg 0, $i, 0;
+    print " ";
+}
+
+for my $i ( reverse 128 .. 255 ) {
+    set_bg 0, $i, 0;
+    print " ";
+}
+
+for my $i ( 0 .. 127 ) {
+    set_bg 0, 0, $i;
+    print " ";
+}
+
+for my $i ( reverse 128 .. 255 ) {
+    set_bg 0, 0, $i;
+    print " ";
+}
+
+say $reset;

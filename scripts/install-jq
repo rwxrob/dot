@@ -1,0 +1,15 @@
+#!/usr/bin/perl
+use v5.26;
+my $os   = lc `uame -s` or die "uname required";
+my $arch = lc `uname -m`;
+chomp( $os, $arch );
+$os = 'macos' if $os == 'darwin';
+my $file = "jq-$os-$arch";
+
+say `gh release download \\
+	--repo "stedolan/jq" \\
+	--pattern "$file" \\
+	--clobber \\
+  --dir ~/.local/bin`;
+
+# TODO check the checksum for man in the middle attack

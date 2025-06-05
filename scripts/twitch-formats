@@ -1,15 +1,5 @@
 #!/bin/sh
-
 name="$1"
-
-if [ -z "$1" ]; then
-    name=$TWITCH_LOGIN
-fi
-
-if [ -z "${name}" ]; then
-    echo "\$TWITCH_LOGIN not set"
-    exit 1
-fi
-
-youtube-dl -F "https://twitch.tv/$name" \
-    | map 'm,^\d+p(\S+)?, && say $&'
+test -z "$1" && name=$TWITCH_LOGIN
+test -z "$name" && echo "TWITCH_LOGIN or first arg required" && exit 1
+youtube-dl -F "https://twitch.tv/$name" | pae 'm,^\d+p(\S+)?, and say $&'

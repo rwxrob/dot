@@ -1,3 +1,2 @@
-#!/bin/sh
-exec pae '$_=join " • ", @F' 
-
+#!/usr/bin/perl -pa
+$_ = join " • ", @F

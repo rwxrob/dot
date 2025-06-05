@@ -1,4 +1,4 @@
-#!/usr/bin/env perl
+#!/usr/bin/perl
 
 # This is an unoptimized prototype with lots of subshells in preparation
 # for port to Go eventually. In other words, this just works for now.

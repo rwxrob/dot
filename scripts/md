@@ -1,4 +1,9 @@
 #!/bin/sh
-
-test -z "$@"  && test -f ./README.md && exec glow -p ./README.md
-exec glow -p "$@"
+test -z "$@"  && test -f ./README.md && file=./README.md
+if ! type pandoc >/dev/null; then
+	echo "pandoc required"
+	exit 1
+fi
+tmpfile=$(mktemp).html
+pandoc "$file" >"$tmpfile"
+exec lynx "$tmpfile"

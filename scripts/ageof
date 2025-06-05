@@ -1,15 +1,10 @@
-#!/usr/bin/env bash
-
-# Outputs the seconds since the thing identified by the first argument
-# was last modified (not created).
-
-ageof() {
-  local path="$1"
-  if [[ -z "$path" ]]; then
-    echo 'usage: ageof <path>'
-    return 1
-  fi
-  echo $(( $(date +%s) - $(date -r "$path" +%s) ))
-}
-
-ageof "$@"
+#!/bin/sh
+# Prints seconds since first argument was last modified (not created)
+path="$1"
+if ! test -e "$path"; then
+	echo 'usage: ageof <path>'
+	exit 1
+fi
+current=$(date +%s)
+ofpath=$(date -r "$path" +%s)
+echo $((current - ofpath))

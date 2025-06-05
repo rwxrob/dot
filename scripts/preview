@@ -1,13 +1,18 @@
 #!/bin/sh
 
 if ! type browser-sync >/dev/null 2>&1; then
-  echo 'Need to install browser-sync.'
-  exit 1
+	echo 'Need to install browser-sync.'
+	exit 1
+fi
+
+if test -d docs; then
+	cd docs || exit
 fi
 
 browser-sync start \
-  --no-notify --no-ui \
-  --ignore '**/.*' \
-  -sw
-
-
+	--server \
+	--baseDir ./ \
+	--no-notify --no-ui \
+	--no-open \
+	--port 4000 \
+	--ignore '**/.*'

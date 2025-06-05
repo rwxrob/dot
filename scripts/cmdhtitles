@@ -1,2 +1,2 @@
-#!/usr/bin/env perl -pn
+#!/usr/bin/perl -pn
 /var (\S*Cmd)/ and print( `htitle $1` . "\n" );

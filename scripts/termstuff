@@ -1,0 +1,77 @@
+#!/bin/sh
+case "$1" in
+shell)
+	cat <<-'EOM'
+		export RESET='\033[0m'
+		export BOLD='\033[1m'
+		export DIM='\033[2m'
+		export UNDERLINED='\033[4m'
+		export BLINK='\033[5m'
+		export REVERSE='\033[7m'
+		export HIDDEN='\033[8m'
+		export BLACK='\033[30m'
+		export RED='\033[31m'
+		export GREEN='\033[32m'
+		export YELLOW='\033[33m'
+		export BLUE='\033[34m'
+		export MAGENTA='\033[35m'
+		export CYAN='\033[36m'
+		export WHITE='\033[37m'
+		export BG_BLACK='\033[40m'
+		export BG_RED='\033[41m'
+		export BG_GREEN='\033[42m'
+		export BG_YELLOW='\033[43m'
+		export BG_BLUE='\033[44m'
+		export BG_MAGENTA='\033[45m'
+		export BG_CYAN='\033[46m'
+		export BG_WHITE='\033[47m'
+		export CLEAR='\033[2J'
+		export CLEAR_LINE='\033[2K'
+		export CURSOR_SAVE='\033[s'
+		export CURSOR_RESTORE='\033[u'
+		export CURSOR_UP='\033[%dA'
+		export CURSOR_DOWN='\033[%dB'
+		export CURSOR_RIGHT='\033[%dC'
+		export CURSOR_LEFT='\033[%dD'
+		export CURSOR_MOVE='\033[%d;%dH'
+		export TOP='\033[H'
+	EOM
+	;;
+perl)
+	cat <<-'EOM'
+		our $reset       = "\033[0m";
+		our $bold        = "\033[1m";
+		our $dim         = "\033[2m";
+		our $underlined  = "\033[4m";
+		our $blink       = "\033[5m";
+		our $reverse     = "\033[7m";
+		our $hidden      = "\033[8m";
+		our $black       = "\033[30m";
+		our $red         = "\033[31m";
+		our $green       = "\033[32m";
+		our $yellow      = "\033[33m";
+		our $blue        = "\033[34m";
+		our $magenta     = "\033[35m";
+		our $cyan        = "\033[36m";
+		our $white       = "\033[37m";
+		our $bg_black    = "\033[40m";
+		our $bg_red      = "\033[41m";
+		our $bg_green    = "\033[42m";
+		our $bg_yellow   = "\033[43m";
+		our $bg_blue     = "\033[44m";
+		our $bg_magenta  = "\033[45m";
+		our $bg_cyan     = "\033[46m";
+		our $bg_white       = "\033[47m";
+		our $clear          = "\033[2J";
+		our $clear_line     = "\033[2K";
+		our $cursor_save    = "\033[s";
+		our $cursor_restore = "\033[u";
+		our $cursor_up      = "\033[%dA";
+		our $cursor_down    = "\033[%dB";
+		our $cursor_right   = "\033[%dC";
+		our $cursor_left    = "\033[%dD";
+		our $cursor_move    = "\033[%d;%dH";
+		our $top            = "\033[H";
+	EOM
+	;;
+esac

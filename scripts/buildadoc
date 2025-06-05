@@ -1,9 +1,11 @@
 #!/usr/bin/perl
+use v5.26;
 
 # total the hours from the main index.adoc page
 open my $fh, '<', './docs/index.adoc' or die "Could not open file: $!";
 local $/;
-my $buf = <$fh>;
+my $buf          = <$fh>;
+my $hours_mentor = 0;
 map { $hours_mentor += $_ } $buf =~ /hours="(\d+)"/g;
 my $hours_self  = $hours_mentor * 2;
 my $hours_total = $hours_self + $hours_mentor;
@@ -20,6 +22,7 @@ my $date = sprintf "%04d-%02d-%02d %02d:%02d:%02d",
 qx{ asciidoctor \\
   -D docs \\
   -a date="$date" \\
+  -a allow-uri-read \\
   -a hours_mentor="$hours_mentor" \\
   -a hours_self="$hours_self" \\
   -a hours_total="$hours_total" \\
@@ -28,14 +31,30 @@ qx{ asciidoctor \\
   ./docs/index.adoc
 };
 
+# HTML without table of contents
+qx{ asciidoctor \\
+  -D docs \\
+  -a date="$date" \\
+  -a toc! \\
+  -a notoc=true \\
+  -a allow-uri-read \\
+  -a hours_mentor="$hours_mentor" \\
+  -a hours_self="$hours_self" \\
+  -a hours_total="$hours_total" \\
+  -a hours_week="$hours_week" \\
+  -o notoc.html \\
+  ./docs/index.adoc
+};
+
 my $pwd = `pwd`;
-$pwd =~ s/\R$//;    # chomp no longer works in modern perl
+$pwd =~ s/\R$//;
 my ( $parent, $name ) = $pwd =~ m,/([^/]+)/([^/]+)$,m;
 
 # PDF
 qx{ asciidoctor-pdf \\
   -D docs \\
   -a date="$date" \\
+  -a allow-uri-read \\
   -a hours_mentor="$hours_mentor" \\
   -a hours_self="$hours_self" \\
   -a hours_total="$hours_total" \\
@@ -48,6 +67,7 @@ qx{ asciidoctor-pdf \\
 qx{ asciidoctor-epub3 \\
   -D docs \\
   -a date="$date" \\
+  -a allow-uri-read \\
   -a hours_mentor="$hours_mentor" \\
   -a hours_self="$hours_self" \\
   -a hours_total="$hours_total" \\
@@ -55,9 +75,3 @@ qx{ asciidoctor-epub3 \\
   -o "$parent-$name.epub" \\
   ./docs/index.adoc
 };
-
-__END__
-
-=head1 NAME
-
-buildadoc - build AsciiDoc with rwxrob preferences

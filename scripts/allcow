@@ -1,0 +1,43 @@
+#!/usr/bin/perl
+use v5.12;
+use File::Basename;
+use Time::HiRes qw(sleep);
+
+my $reset  = "[0m";
+my $clear  = "[2J";
+my $curon  = "[?25h";
+my $curoff = "[?25l";
+my $top    = "[H";
+my $fontsd = "$ENV{REPOS}/github.com/rwxrob/fonts/figlet";
+my $cowdir = "/opt/homebrew/Cellar/cowsay/3.8.4/share/cowsay/cows";
+
+my $delay = $ARGV[0] || 1;
+
+sub cleanup {
+    print "$curon$clear$top";
+    exit 0;
+}
+$SIG{'INT'}  = \&cleanup;
+$SIG{'TERM'} = \&cleanup;
+
+print $curoff;
+
+for my $cow ( glob("$cowdir/*.cow") ) {
+    print "$clear$top";
+    my ($name) = $cow =~ m,([^/]+)\.[^.]+$,;
+    my $pid = fork();
+    if ( !defined $pid ) {
+        die "Failed to fork: $!";
+    }
+    if ( $pid == 0 ) {
+        exec "cowsay -f $cow hello | lolcat"
+          or die "Failed to exec cowsay";
+    }
+    else {
+        waitpid( $pid, 0 );
+        say `randcol`."\n$name";
+        print $curon;
+    }
+    sleep $delay;
+}
+

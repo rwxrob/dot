@@ -1,0 +1,4 @@
+#!/bin/sh
+vid="$1"
+test -z "$vid" && vid="$(twitch-vid)"
+twitch api get videos/markers -q video_id="$vid"

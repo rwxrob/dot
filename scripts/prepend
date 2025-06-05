@@ -1,0 +1,5 @@
+#!/bin/sh
+[ $# -lt 2 ] && echo "Usage: $0 <file> <line>" && exit 1
+file="$1" && shift
+tmpfile=$(mktemp)
+echo "$*" | cat - "$file" >"$tmpfile" && mv "$tmpfile" "$file"

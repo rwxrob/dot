@@ -1,4 +1,10 @@
-#!/bin/bash
+#!/usr/bin/perl
+use v5.26;
 
-buf='create a comment for this function wrapped at 72 and include the function immediately after with no blank line with no markdown or commentary and add square brackets around any symbol reference that could also have a comment except the function name itself and keep it brief'$'\n'$(</dev/stdin)
-gpt <<<"$buf"
+my $in =
+"create a comment for this function wrapped at 72 and include the function immediately after with no blank line with no markdown or commentary and add square brackets around any symbol reference that could also have a comment except the function name itself and keep it brief\n"
+  . <STDIN>;
+
+open my $fh, '|-', "gpt" or die "Failed to open pipe: $!";
+print $fh $in;
+close $fh or warn "Failed to close pipe: $!";

@@ -1,5 +1,5 @@
 #!/bin/sh
-file=~/.state/muted
+file="$HOME/.state/muted"
 if test -e "$file"; then
 	rm "$file"
 else

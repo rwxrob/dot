@@ -1,0 +1,16 @@
+#!/bin/sh
+mark='// NEW POST HERE'
+markfound=$(grep "$mark" docs/index.adoc)
+if [ -z "$markfound" ]; then
+	echo "no docs/index.adoc with '$mark' found"
+	exit 1
+fi
+file="$(slug "$*").adoc"
+hasfile=$(grep 'include::./'"$file"'\[\]' docs/index.adoc)
+if [ -z "$hasfile" ]; then
+	perl -p -i -e "s,$mark,$mark\n\ninclude::./$file\[\]," docs/index.adoc
+fi
+if [ ! -e docs/"$file" ]; then
+	printf "= %s\n\n%s\n\n\n" "$*" "$(inow)" >"docs/$file"
+fi
+exec "$EDITOR" "docs/$file"

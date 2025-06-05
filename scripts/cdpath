@@ -1,2 +1,3 @@
-#!/usr/bin/env bash
-echo -e "${CDPATH//:/\\n}"
+#!/usr/bin/perl
+use v5.10;
+map { say } split( /:/, $ENV{CDPATH} );
