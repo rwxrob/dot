@@ -10,8 +10,8 @@ _install_containerd() {
 	version=$(curl -sSL "$latest_url" | jq -r .tag_name)
 	tmpdir=$(mktemp -d)
 	tar_url="https://github.com/containerd/containerd/releases/download/$version/containerd-${version#v}-${OS,,}-${ARCH}.tar.gz"
-	curl -sSL "$tar_url" -o "$tmpdir/$repo.tar.gz"
-	sudo tar Cxzvf /usr/local "$tmpdir/$repo.tar.gz"
+	curl -sSL "$tar_url" -o "$tmpdir/some.tar.gz"
+	sudo tar Cxzvf /usr/local "$tmpdir/some.tar.gz"
 	rm -rf "$tmpdir"
 }
 
@@ -23,11 +23,10 @@ _install_containerd_service() {
 	sudo systemctl status containerd --no-pager
 }
 
-
 _install_containerd_set_systemdcgroup() {
 	sudo mkdir /etc/containerd 2>/dev/null || true
 	sudo bash -c "containerd config default > /etc/containerd/config.toml"
-	 python3 <<'EOM'
+	python3 <<'EOM'
 import toml
 import os
 

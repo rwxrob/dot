@@ -31,4 +31,3 @@ if screenkey_available then
     },
   })
 end
-
