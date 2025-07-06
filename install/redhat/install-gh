@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -e
+
+echo "🔧 Installing GitHub CLI (gh)..."
+
+# Ensure dnf plugins are installed
+sudo dnf install -y 'dnf-command(config-manager)' >/dev/null
+
+# Add the official GitHub CLI repo
+sudo dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo
+
+# Install gh
+sudo dnf install -y gh
+
+echo "✅ GitHub CLI installed."
+gh --version
