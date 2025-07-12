@@ -1,21 +1,31 @@
-#!/usr/bin/env bash
+#!/usr/bin/perl
+use v5.26;
+use File::Basename;
 
-clear=$'\033[2J'
-curoff=$'\033[?25h'
-curon=$'\033[?25h'
-top=$'\033[H'
+not `command -v figl` and say 'figl not found' and exit 1;
+not `command -v lolcat` and say 'lolcat not found' and exit 1;
 
-trap 'echo "${curon}"; echo "${clear}"; exit; trap -- - SIGINT SIGTERM' SIGTERM SIGINT
+my $clear  = "[2J";
+my $curoff = "[?25l";
+my $curon  = "[?25h";
+my $top    = "[H";
 
-what="$*"
-if [ -z "${what}" ]; then
-  read -rp "Text: " what
-fi
+my $what = join ' ', @ARGV;
+if ( not $what ) {
+    print "Text: ";
+    $what = <STDIN>;
+    chomp $what;
+}
 
-echo "${clear}"
-while true; do
-  echo "${top}"
-  figl <<<"$what" | lolcat
-	echo "${curoff}"
-  sleep 2
-done
+sub cleanup {
+    print "$curon$clear";
+    exit 0;
+}
+$SIG{'INT'}  = \&cleanup;
+$SIG{'TERM'} = \&cleanup;
+
+print $clear. $curoff;
+while (1) {
+    print $top. `echo "$what" | figl | lolcat -f`;
+    sleep 1;
+}

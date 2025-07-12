@@ -1,2 +1,2 @@
 #!/bin/sh
-exec perl -pi -e "$@"
+exec perl -pi -E "$@"

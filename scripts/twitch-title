@@ -1,0 +1,6 @@
+#!/bin/sh
+name="$1"
+test -z "$1" && name=$TWITCH_LOGIN
+test -z "$name" && echo "TWITCH_LOGIN or first arg required" && exit 2
+twitch api patch channels --body '{"broadcaster_id":"'$(twitch-id "$name")'","game_id":"GAME_ID"}'
+twitch-user "$1" | jq -r '.data[].id'

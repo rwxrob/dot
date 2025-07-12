@@ -1,0 +1,6 @@
+#!/bin/sh
+name="$1"
+test -z "$1" && name=$TWITCH_LOGIN
+test -z "$1" && name=rwxrob
+test -z "$name" && echo "TWITCH_LOGIN or first arg required" && exit 1
+twitch api get videos -q user_id="$(twitch-id "$name")"

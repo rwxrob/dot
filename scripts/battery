@@ -1,3 +1,28 @@
 #!/usr/bin/perl
-print grep {/state|to\ full|percentage/}
-  `upower -i /org/freedesktop/UPower/devices/battery_BAT0`;
+use v5.26;
+my $os = $^O;
+
+if    ( $os eq 'darwin' ) { get_mac_battery() }
+elsif ( $os eq 'linux' )  { get_linux_battery() }
+else                      { die "Unsupported OS: $os" }
+
+sub get_mac_battery {
+    `pmset -g batt 2>/dev/null` =~ /(\d+%)\;\s*(\w+)/
+      ? say "$1 ($2)"
+      : die "Unable to fetch macOS battery status.";
+}
+
+sub get_linux_battery {
+    if (`which upower`) {
+        my $out = `upower -i \$(upower -e | grep 'BAT') 2>/dev/null`;
+        $out =~ /state:\s*(\w+)/   && $out =~ /percentage:\s*(\d+%)/
+          ? say "Battery: $2 ($1)" && return
+          : die "Unable to fetch power with upower";
+    }
+    if (`which acpi`) {
+        `acpi -b 2>/dev/null` =~ /(\d+%)\,\s*(\w+)/
+          and say "Battery: $1 ($2)"
+          and return;
+    }
+    die "No battery tools found (upower/acpi).";
+}

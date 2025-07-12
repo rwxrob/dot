@@ -1,8 +1,5 @@
-#!/bin/bash
-
+#!/bin/sh
 curl -sS -X GET 'http://localhost:8080/units/users' \
--H "Client-Id: $(twitch-mock-clientid)" \
--H "Authorization: Bearer $(twitch-mock-app-token)" \
-| jq -r '.data.[].login'
-
-
+	-H "Client-Id: $(twitch-mock-clientid)" \
+	-H "Authorization: Bearer $(twitch-mock-app-token)" |
+	jq -r '.data.[].login'

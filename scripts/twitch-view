@@ -1,38 +1,8 @@
-#!/usr/bin/perl
-use v5.14;
-
-my ($name, $format);
-
-sub pick_one {
-    my $x=1;
-    chomp @_;
-    map {say "$x. $_[$x-1]"; $x++} @_;
-    my $answer;
-    while ($answer !~ /^\d+$/) {
-        print "? ";
-        $answer = <STDIN>;
-    }
-    return $answer;
-}
-
-sub usage {
-    my @path = split '/', $0;
-    say "$path[-1] <twitch-username>";
-    exit(1);
-}
-
-sub get_format {
-    my @formats = `twitch-formats $name`;
-    say "Pick a format: ";
-    return @formats[pick_one(@formats)-1];
-}
-$name = $ARGV[0];
-not $name and $name = $ENV{"TWITCH_LOGIN"};
-not $name and usage();
-
-my $format = $ARGV[1];
-not $format and $format = get_format();
-say $format;
-
-my $url = "https://twitch.tv/$name";
-exec "mpv --ytdl-format=\"$format\" \"$url\""
+#!/bin/sh
+name="$1"
+test -z "$1" && name=$TWITCH_LOGIN
+test -z "$name" && echo "TWITCH_LOGIN or first arg required" && exit 1
+url="https://twitch.tv/$name"
+twitch-status "$name" || exit 1
+wee "/join #$name"
+mpv --geometry=99%:15% --ontop --ytdl-format=480p "$url" >/dev/null &

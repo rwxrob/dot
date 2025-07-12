@@ -6,6 +6,21 @@ case $- in
 *) return ;;
 esac
 
+export black="[30m"
+export red="[31m"
+export green="[32m"
+export yellow="[33m"
+export blue="[34m"
+export magenta="[35m"
+export cyan="[36m"
+export white="[37m"
+export blink="[5m"
+export reset="[0m"
+export clear="[2J"
+export curoff="[?25h"
+export curon="[?25h"
+export top="[H"
+
 # ---------------------- local utility functions ---------------------
 
 _have() { type "$1" &>/dev/null; }
@@ -39,7 +54,6 @@ export CLIP_VOLUME=0
 export CLIP_SCREEN=0
 export CLICOLOR=1
 export HRULEWIDTH=73
-export GOPATH="$HOME/.local/go"
 export GOBIN="$HOME/.local/bin"
 export GOPROXY=direct
 export NVIM_SCREENKEY=1
@@ -47,6 +61,12 @@ export CGO_ENABLED=0
 export PYTHONDONTWRITEBYTECODE=2
 export LC_COLLATE=C
 export CFLAGS="-Wall -Wextra -Werror -O0 -g -fsanitize=address -fno-omit-frame-pointer -finstrument-functions"
+export BAT_THEME=gruvbox-dark
+
+# explicit to fix wierd defaults (like macOS)
+export XDG_STATE_HOME="$HOME/.local/state"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_CONFIG_HOME="$HOME/.config"
 
 # gruvbox-material
 export LS_COLORS="di=38;5;245:fi=38;5;223:ln=38;5;179:ex=38;5;108:*.txt=38;5;223"
@@ -237,9 +257,10 @@ _have setxkbmap && test -n "$DISPLAY" &&
 unalias -a
 alias todo='vi ~/.todo'
 alias ip='ip -c'
-alias '?'=gpt
+alias '?'=claude
 alias '??'=duck
 alias '???'=google
+alias '????'=bing
 alias dot='cd $DOTFILES'
 alias scripts='cd $SCRIPTS'
 alias snippets='cd $SNIPPETS'
@@ -256,13 +277,22 @@ alias clear='printf "\e[H\e[2J"'
 alias c='printf "\e[H\e[2J"'
 alias env='env -u LESS_TERMCAP_mb -u LESS_TERMCAP_md -u LESS_TERMCAP_me -u LESS_TERMCAP_so -u LESS_TERMCAP_se -u LESS_TERMCAP_us -u LESS_TERMCAP_ue'
 alias neo="neo -D -c gold"
-alias more="less"
+alias more="less -R"
 alias gitl="git log -n 5 --graph --decorate --oneline"
 alias gp="git push"
 alias gptags="git push origin --tags"
 alias km="kimono"
 alias s=wee
+alias x=clip
+alias chan=twitch-channel
+alias status=twitch-status
+alias lurk=twitch-view
 alias cur="vi ~/.currently"
+alias het="twitch-view het_tanis"
+alias prime="twitch-view theprimeagen"
+alias lastmiles="twitch-view lastmiles"
+alias pookie="twitch-view pookiebutt"
+alias emily="twitch-view emilymcvicker"
 
 set-editor() {
 	export EDITOR="$1"

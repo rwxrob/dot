@@ -1,26 +1,29 @@
-#!/usr/bin/env bash
+#!/bin/sh
+# shellcheck disable=2059
 
-declare target="$1"
-declare red=$'\033[38;2;255;0;0m'
-declare grey=$'\033[38;2;100;100;100m'
-declare green=$'\033[38;2;0;255;0m'
-declare x=$'\033[0m'
+target="$1"
+red="\033[38;2;255;0;0m"
+grey="\033[38;2;100;100;100m"
+green="\033[38;2;0;255;0m"
+x="\033[0m"
 
-if [[ -z "$(which muffet)" ]]; then
-  echo "${red}Requires ${grey}https://github.com/raviqqe/muffet ${red}be installed.${x}"
-  exit 1
-fi
-  
-if [[ -z "$target" ]]; then
-  echo "usage: checkurls <pageurl>"
-  exit 1
+if ! command -v muffet; then
+	printf "${red}Requires ${grey}https://github.com/raviqqe/muffet$x\n"
+	exit 1
 fi
 
-if [[ ${1:0:4} != http ]]; then
-  target="http://$1"
+if test -z "$target"; then
+	echo "usage: checkurls <pageurl>"
+	exit 1
 fi
 
-muffet --one-page-only "$target"
-if [[ $? -eq 0 ]];then
-  echo "${green}No Broken URLs detected.${x}"
+if test "$(printf "%.4s" "$1")" != http; then
+	target="http://$1"
 fi
+
+muffet \
+	--one-page-only "$target" \
+	--buffer-size=16384 \
+	--timeout=45 \
+	--max-connections=10 &&
+	printf "${green}No Broken URLs detected.$x\n"

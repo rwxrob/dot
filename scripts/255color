@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
-for i in {0..255}; do
-  printf "\e[38;5;${i}m$i "
+#!/bin/sh
+for i in $(seq 0 255); do
+	printf "\e[38;5;%sm%s " "$i" "$i"
 done
+echo

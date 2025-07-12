@@ -1,0 +1,8 @@
+#!/bin/sh
+name="$1"
+test -z "$1" && name=$TWITCH_LOGIN
+test -z "$1" && name=rwxrob
+json=$(twitch api get streams -q "user_login=$name")
+data=$(echo "$json" | jq -r '.data[]')
+test -z "$data" && echo "$name appears offline" && exit 1
+echo "$data" | jq -r '.user_login + " • "+.title+"" + " • " + .game_name + " • " + (.viewer_count | tostring) + " viewers"'

@@ -1,6 +1,28 @@
-#!/bin/sh
-fontsd="$REPOS/github.com/rwxrob/fonts/figlet"
-for font in "$fontsd"/*.flf; do
-  echo "FONT: $font"
-  figlet -d "$fontsd" -f "${font}" hello
-done
+#!/usr/bin/perl
+use v5.12;
+use File::Basename;
+use Time::HiRes qw(sleep);
+
+my $reset  = "[0m";
+my $clear  = "[2J";
+my $curon  = "[?25h";
+my $curoff = "[?25l";
+my $top    = "[H";
+my $fontsd = "$ENV{REPOS}/github.com/rwxrob/fonts/figlet";
+my $delay  = $ARGV[0] || 1;
+
+sub cleanup {
+    print "$curon$clear$top";
+    exit 0;
+}
+$SIG{'INT'}  = \&cleanup;
+$SIG{'TERM'} = \&cleanup;
+
+print $curoff;
+
+for my $font ( glob("$fontsd/*.flf") ) {
+    print "$clear$top" . `randcol`;
+    my ($name) = $font =~ m,([^/]+)\.[^.]+$,;
+    say "$name\n\n" . `figlet -d "$fontsd" -f "$font" "hello"`;
+    sleep $delay;
+}

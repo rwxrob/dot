@@ -1,0 +1,5 @@
+#!/bin/sh
+name="$1"
+test -z "$1" && name="$TWITCH_LOGIN"
+test -z "$1" && name=rwxrob
+twitch-user "$name" | jq -r '.data[].id'

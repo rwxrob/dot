@@ -1,2 +1,2 @@
-#!/bin/bash
-wee < <(head -1 ~/.currently)
+#!/bin/sh
+head -1 "$HOME/.currently" | wee
