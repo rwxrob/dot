@@ -176,6 +176,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
     Plug 'sainnhe/gruvbox-material'
     Plug 'fatih/vim-go' " GoInstallBinaries separately
     Plug 'vim-pandoc/vim-pandoc'
+    Plug 'hashivim/vim-terraform'
     Plug 'rwxrob/vim-pandoc-syntax-simple'
     Plug 'habamax/vim-asciidoctor'
     "Plug 'kana/vim-textobj-user'
@@ -347,6 +348,7 @@ imap <tab><tab> <c-x><c-o>
 
 " force some files to be specific file type
 au bufnewfile,bufRead .goreleaser set ft=yaml
+au bufnewfile,bufRead *.tf,*.tfvars set ft=terraform
 au bufnewfile,bufRead *.props set ft=jproperties
 au bufnewfile,bufRead *.ddl set ft=sql
 au bufnewfile,bufRead *.sh* set ft=sh
@@ -400,6 +402,7 @@ map <F7> :set spell!<CR>
 map <F12> :set fdm=indent<CR>
 
 set cursorline
+highlight CursorLine ctermbg=8
 
 nmap <leader>2 :set paste<CR>i
 

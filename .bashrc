@@ -257,7 +257,7 @@ _have setxkbmap && test -n "$DISPLAY" &&
 unalias -a
 alias todo='vi ~/.todo'
 alias ip='ip -c'
-alias '?'=claude
+alias '?'=gpt
 alias '??'=duck
 alias '???'=google
 alias '????'=bing
@@ -293,6 +293,8 @@ alias prime="twitch-view theprimeagen"
 alias lastmiles="twitch-view lastmiles"
 alias pookie="twitch-view pookiebutt"
 alias emily="twitch-view emilymcvicker"
+alias contexts="kubectl config get-contexts"
+alias reload='exec $SHELL -l'
 
 set-editor() {
 	export EDITOR="$1"
@@ -301,7 +303,7 @@ set-editor() {
 	export GIT_EDITOR="$1"
 	alias vi="\$EDITOR"
 }
-_have "vim" && set-editor vi
+_have "vim" && set-editor vim
 _have "nvim" && set-editor nvim
 
 # ----------------------------- functions ----------------------------
@@ -391,15 +393,15 @@ _have yq && . <(yq completion bash)
 _have mk && complete -o default -F __start_minikube mk
 _have podman && _source_if "$HOME/.local/share/podman/completion" # d
 
-_have ansible && . <(register-python-argcomplete3 ansible)
-_have ansible-config && . <(register-python-argcomplete3 ansible-config)
-_have ansible-console && . <(register-python-argcomplete3 ansible-console)
-_have ansible-doc && . <(register-python-argcomplete3 ansible-doc)
-_have ansible-galaxy && . <(register-python-argcomplete3 ansible-galaxy)
-_have ansible-inventory && . <(register-python-argcomplete3 ansible-inventory)
-_have ansible-playbook && . <(register-python-argcomplete3 ansible-playbook)
-_have ansible-pull && . <(register-python-argcomplete3 ansible-pull)
-_have ansible-vault && . <(register-python-argcomplete3 ansible-vault)
+_have ansible && _have register-python-argcomplete3 && . <(register-python-argcomplete3 ansible)
+_have ansible-config && _have register-python-argcomplete3 && . <(register-python-argcomplete3 ansible-config)
+_have ansible-console && _have register-python-argcomplete3 && . <(register-python-argcomplete3 ansible-console)
+_have ansible-doc && _have register-python-argcomplete3 && . <(register-python-argcomplete3 ansible-doc)
+_have ansible-galaxy && _have register-python-argcomplete3 && . <(register-python-argcomplete3 ansible-galaxy)
+_have ansible-inventory && _have register-python-argcomplete3 && . <(register-python-argcomplete3 ansible-inventory)
+_have ansible-playbook && _have register-python-argcomplete3 && . <(register-python-argcomplete3 ansible-playbook)
+_have ansible-pull && _have register-python-argcomplete3 && . <(register-python-argcomplete3 ansible-pull)
+_have ansible-vault && _have register-python-argcomplete3 && . <(register-python-argcomplete3 ansible-vault)
 #_have ssh-agent && test -z "$SSH_AGENT_PID" && . <(ssh-agent)
 
 # -------------------- personalized configuration --------------------

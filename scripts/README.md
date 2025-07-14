@@ -28,10 +28,7 @@
 |[cmdhtitles](cmdhtitles)| Filter to add htitles to Bonzai `*Cmds`
 |[colortest](colortest)| Print gradian RGB color test strip
 |[comment](comment)| Same as `gh issue comment "$@"`
-|[commentthis](commentthis)| Description
-|[confirm](confirm)| Description
-|[contexts](contexts)| Description
-|[countdown](countdown)| Description
+|[commentthis](commentthis)| Filter to add comment to any function using AI
 |[countincol](countincol)| Description
 |[countmin](countmin)| Description
 |[countmin.tdy](countmin.tdy)| Description

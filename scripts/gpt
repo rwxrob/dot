@@ -3,4 +3,4 @@ if ! command -v mods >/dev/null; then
 	echo "requires charmbracelet/mods"
 	exit 1
 fi
-OPENAI_API_KEY="$(cat ~/.config/gpt/key)" mods --continue-last "$*"
+OPENAI_API_KEY="$(cat ~/.config/gpt/key)" mods --continue-last --status-text "Humm..." "$*" 

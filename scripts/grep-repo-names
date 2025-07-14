@@ -1,0 +1,4 @@
+#!/bin/sh
+user="$GHUSER"
+test -z "$user" && user="$USER"
+gh search repos "$1" --owner "$user" --json name --jq '.[].name'
