@@ -2,7 +2,7 @@
 #exec w3m "duckduckgo.com/lite?kd=-1&kp=-1&q=$*"
 tmux rename-window "$*"
 url="https://lite.duckduckgo.com/lite?kd=-1&kp=-1&q=$(urlencode "$*")" # 🦆
-wee "🦆 searching: $* $url"
+#wee "🦆 searching: $* $url"
 exec lynx "$url"
 #exec w3m "$url"
 #exec lynx "duckduckgo.com/lite?q=$*" # 🦆

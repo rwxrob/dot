@@ -230,6 +230,8 @@ __ps1() {
 		PS1="$short"
 	fi
 
+	[[ "${VENVS[$PWD]}" =~ ^y ]] && PS1="${PS1//\$/🐍}"
+
 	if _have tmux && [[ -n "$TMUX" ]]; then
 		tmux rename-window "$(wd)"
 	fi
@@ -242,7 +244,26 @@ wd() {
 	echo "$parent/$dir"
 } && export wd
 
-PROMPT_COMMAND="__ps1"
+found-venv() { test -e .venv/bin/activate; }
+venv-is-on() { [[ "$(which python)" =~ \.venv\/bin\/python$ ]]; }
+
+declare -A VENVS
+export VENVS
+
+llvenv() {
+	found-venv || return
+	venv-is-on && return
+	test -n "${VENVS[$PWD]}" && return
+	read -rp "Want to activate the .venv? [Y/n]" answer
+	answer=${answer,,}
+	test -z "$answer" && answer=y
+	VENVS["$PWD"]="$answer"
+	if [[ $answer =~ ^y ]]; then
+		. .venv/bin/activate
+	fi
+}
+
+PROMPT_COMMAND="llvenv; __ps1"
 
 # ----------------------------- keyboard -----------------------------
 
@@ -288,13 +309,10 @@ alias chan=twitch-channel
 alias status=twitch-status
 alias lurk=twitch-view
 alias cur="vi ~/.currently"
-alias het="twitch-view het_tanis"
-alias prime="twitch-view theprimeagen"
-alias lastmiles="twitch-view lastmiles"
-alias pookie="twitch-view pookiebutt"
-alias emily="twitch-view emilymcvicker"
 alias contexts="kubectl config get-contexts"
 alias reload='exec $SHELL -l'
+alias python=python3
+alias pip=pip3
 
 set-editor() {
 	export EDITOR="$1"
@@ -392,6 +410,7 @@ _have conftest && . <(conftest completion bash)
 _have yq && . <(yq completion bash)
 _have mk && complete -o default -F __start_minikube mk
 _have podman && _source_if "$HOME/.local/share/podman/completion" # d
+_have mkdocs && . <(_MKDOCS_COMPLETE=bash_source mkdocs)
 
 _have ansible && _have register-python-argcomplete3 && . <(register-python-argcomplete3 ansible)
 _have ansible-config && _have register-python-argcomplete3 && . <(register-python-argcomplete3 ansible-config)
