@@ -1,0 +1,2 @@
+#!/bin/sh
+oras repo tags "$1" | grep '^\d\d\?\.\d\d\?\.\d\d\?$' | sort -V
