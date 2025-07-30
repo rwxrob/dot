@@ -411,6 +411,7 @@ _have yq && . <(yq completion bash)
 _have mk && complete -o default -F __start_minikube mk
 _have podman && _source_if "$HOME/.local/share/podman/completion" # d
 _have mkdocs && . <(_MKDOCS_COMPLETE=bash_source mkdocs)
+_have kuti && . <(kuti completion bash)
 
 _have ansible && _have register-python-argcomplete3 && . <(register-python-argcomplete3 ansible)
 _have ansible-config && _have register-python-argcomplete3 && . <(register-python-argcomplete3 ansible-config)
