@@ -84,8 +84,6 @@ export ANSIBLE_INVENTORY="$HOME/.config/ansible/inventory.yaml"
 export ANSIBLE_LOAD_CALLBACK_PLUGINS=1
 #export ANSIBLE_STDOUT_CALLBACK=json
 
-export K8SAPP_CLUSTER=dev
-
 [[ -d /.vim/spell ]] && export VIMSPELL=("$HOME/.vim/spell/*.add")
 
 # ----------------------------- PostgreSQL ----------------------------
