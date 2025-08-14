@@ -1,0 +1,6 @@
+#!/usr/bin/perl
+while (<>) {
+    my ( $pre, $val ) = $_ =~ /(^.+:\s*)(\S+)\s*/;
+    my $decoded = `base64 -d <<<"$val"`;
+    print "$pre$decoded\n";
+}
