@@ -397,6 +397,7 @@ _have goreleaser && . <(goreleaser completion bash 2>/dev/null)
 _have klogin && . <(klogin completion bash 2>/dev/null)
 _have pandoc && . <(pandoc --bash-completion)
 _have kubectl && . <(kubectl completion bash 2>/dev/null)
+_have kubectl && . <(kubectl cnpg completion bash 2>/dev/null)
 _have kubeadm && . <(kubeadm completion bash 2>/dev/null)
 _have k && complete -o default -F __start_kubectl k
 _have istioctl && . <(istioctl completion bash 2>/dev/null)
