@@ -275,6 +275,7 @@ _have setxkbmap && test -n "$DISPLAY" &&
 
 unalias -a
 alias todo='vi ~/.todo'
+alias tree='tree -I .git'
 alias ip='ip -c'
 alias '?'=gpt
 alias '??'=duck

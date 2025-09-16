@@ -1,0 +1,2 @@
+#!/usr/bin/perl -pn
+s/; */;\n/g
