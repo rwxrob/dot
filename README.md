@@ -1,5 +1,8 @@
 # Unix/Linux dotfiles, scripts, and stuff
 
+> [!TIP]
+> You are probably looking for the minimal stuff I have installed into the [Beginner Boost](https://github.com/rwxrob/boost) container instead.
+
 Pilfer at your own peril. If you are thinking of following, just know I commit to main about once every three days, if I had several commits I will put them in a draft PR to avoid blowing followers away with commit notifications.
 
 ## Operating system preference
