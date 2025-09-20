@@ -1,6 +1,6 @@
 # Dotfiles, scripts, and stuff
 
-*You probably want [`dot-template`](https://github.com/rwxrob/dot-template) instead.*
+*You probably want [Beginner Boost container](https://github.com/rwxrob/boost) instead.*
 
 Pilfer at your own peril. I'd love it if you mentioned me if you do, but yeah. [Stop by and chat sometime.](https://linktr.ee/rwxrob)
 
