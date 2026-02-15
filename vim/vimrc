@@ -213,6 +213,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   let g:ale_linters = {
         \'go': ['gometalinter','gofmt','gobuild'],
         \'perl': ['perl','perlcritic'],
+        \'python': ['ruff'],
         \}
   let g:ale_linter_aliases = {'bash': 'sh'}
   let g:ale_perl_perlcritic_options = '--severity 3'
@@ -221,6 +222,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
         \'sh': ['shfmt'],
         \'bash': ['shfmt'],
         \'perl': ['perltidy'],
+        \'python': ['black'],
         \}
   let g:ale_fix_on_save = 1
   let g:ale_perl_perltidy_options = '-b'
