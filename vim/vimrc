@@ -6,6 +6,8 @@ endif
 
 set nocompatible
 
+set termguicolors
+
 "#################### Vi Compatible (~/.exrc) #######################
 "
 
