@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+src="${1:-}"
+
+if [[ -n "$src" && -f "$src" ]]; then
+	input="$src"
+else
+	input="$(mktemp)"
+	trap 'rm -f "$input"' EXIT
+	curl -fsSL https://api.github.com/emojis >"$input"
+fi
+
+jq -r '
+to_entries[]
+| .key + " " +
+  (
+    .value
+    | capture("unicode/(?<code>[0-9a-f\\-]+)")
+    | .code
+  )
+' "$input" |
+while read -r name code; do
+	emoji=""
+	IFS='-' read -ra parts <<<"$code"
+	for p in "${parts[@]}"; do
+		printf -v u "\\U$(printf "%08x" "0x$p")"
+		emoji+="$u"
+	done
+	printf ':%s: %s\n' "$name" "$emoji"
+done
