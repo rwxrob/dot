@@ -1,6 +1,24 @@
 #!/usr/bin/env bash
 
 declare -A emoji
+
+load_emojis() {
+	local json="${EMOJI_JSON:-$HOME/.cache/github-emojis.json}"
+	local name code
+
+	while read -r name code; do
+		printf -v emoji["$name"] '%b' "$(printf '\\U%08x' "0x${code%%-*}")"
+	done < <(
+		jq -r '
+			to_entries[]
+			| .key + " " +
+			  (.value | capture("unicode/(?<u>[0-9a-fA-F-]+)\\.png").u)
+		' "$json"
+	)
+}
+
+load_emojis
+
 emoji[smile]=😃
 emoji[bear]=🐻
 emoji[hamburger]=🍔

@@ -181,7 +181,6 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
     Plug 'hashivim/vim-terraform'
     Plug 'rwxrob/vim-pandoc-syntax-simple'
     Plug 'habamax/vim-asciidoctor'
-    "Plug 'kana/vim-textobj-user'
     Plug 'mjakl/vim-asciidoc'
     Plug 'dense-analysis/ale'
     if has('nvim-0.8')

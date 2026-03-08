@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+gh issue develop -c "$@"
+
+issue="$1"
+title="$(gh issue view "$issue" --json title -q .title)"
+
+retitle "$issue"

@@ -31,7 +31,7 @@ _source_if() { [[ -r "$2" ]] && source "$1"; }
 export LANG=en_US.UTF-8
 export USER="${USER:-$(whoami)}"
 export GITUSER="$USER"
-export TWITCH_BROADCASTER_ID=447179028
+export TWITCH_BROADCASTER_ID=447179030
 export TZ=America/New_York
 export REPOS="$HOME/Repos"
 export GHREPOS="$REPOS/github.com/$GITUSER"

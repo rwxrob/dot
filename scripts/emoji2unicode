@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+emoji_to_unicode() {
+
+	local name emoji_json unicode
+
+	name="$1"
+	name="${name#:}"
+	name="${name%:}"
+
+	emoji_json="${HOME}/.cache/github-emojis.json"
+
+	if [[ ! -f "$emoji_json" ]]; then
+		curl -s https://api.github.com/emojis >"$emoji_json"
+	fi
+
+	unicode="$(
+		jq -r --arg name "$name" '
+			.[ $name ] // empty
+		' "$emoji_json"
+	)"
+
+	if [[ "$unicode" =~ unicode/([0-9a-fA-F-]+)\.png ]]; then
+		printf '%b' "$(printf '\\U%08x' "0x${BASH_REMATCH[1]}")"
+	else
+		printf ':%s:' "$name"
+	fi
+}
+
+emoji_to_unicode "$1"
