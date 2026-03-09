@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+title=$(head -1 ~/.titles |toemoji)
+if which pbcopy; then
+	pbcopy <<< "$title"
+fi
+echo "$title"
+
