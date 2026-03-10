@@ -10,11 +10,10 @@ vim.cmd [[
 ]]
 
 vim.fn.sign_define('DiagnosticSignError', { text = '🔥', texthl = 'DiagnosticError' })
-vim.fn.sign_define('DiagnosticSignWarn', { text = '❗️', texthl = 'DiagnosticWarn' })
-vim.fn.sign_define('DiagnosticSignInfo', { text = '✨', texthl = 'DiagnosticInfo' })
-vim.fn.sign_define('DiagnosticSignHint', { text = '💡', texthl = 'DiagnosticHint' })
+vim.fn.sign_define('DiagnosticSignWarn',  { text = '❗️', texthl = 'DiagnosticWarn' })
+vim.fn.sign_define('DiagnosticSignInfo',  { text = '✨', texthl = 'DiagnosticInfo' })
+vim.fn.sign_define('DiagnosticSignHint',  { text = '💡', texthl = 'DiagnosticHint' })
 
--- Set cursor highlight with background color
 vim.cmd("highlight Cursor guibg=#928374 guifg=NONE")
 
 local screenkey_available = vim.fn.has("nvim-0.8") == 1
@@ -32,3 +31,17 @@ if screenkey_available then
   })
 end
 
+-- requires >0.11
+require("nvim-treesitter-textobjects").setup({
+  select = {
+    lookahead = true,
+  },
+})
+
+vim.keymap.set({ "x", "o" }, "af", function()
+  require("nvim-treesitter-textobjects.select").select_textobject("@function.outer", "textobjects")
+end)
+
+vim.keymap.set({ "x", "o" }, "if", function()
+  require("nvim-treesitter-textobjects.select").select_textobject("@function.inner", "textobjects")
+end)

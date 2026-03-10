@@ -186,7 +186,8 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
     "Plug 'mjakl/vim-asciidoc'
     Plug 'dense-analysis/ale'
     if has('nvim-0.8')
-      Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+      Plug 'nvim-treesitter/nvim-treesitter'
+      Plug 'rwxrob/nvim-treesitter-textobjects', {'do': ':TSUpdate'}
       Plug 'neoclide/coc.nvim', {'branch': 'release'}
       if exists('$NVIM_SCREENKEY')
         Plug 'NStefan002/screenkey.nvim'
@@ -400,7 +401,9 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 " functions keys
 map <F1> :set number!<CR> :set relativenumber!<CR>
 nmap <F2> :call <SID>SynStack()<CR>
-set pastetoggle=<F3>
+if ! has('nvim')
+  set pastetoggle=<F3>
+endif
 map <F4> :set list!<CR>
 map <F5> :set cursorline!<CR>
 map <F7> :set spell!<CR>
