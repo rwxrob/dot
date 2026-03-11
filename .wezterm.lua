@@ -1,4 +1,4 @@
-local wezterm = require("wezterm")
+local wezterm = require 'wezterm'
 return {
   audible_bell = "Disabled",
   window_close_confirmation = 'NeverPrompt',
@@ -6,6 +6,8 @@ return {
   color_scheme = 'Gruvbox Material (Gogh)',
   font = wezterm.font('UbuntuMono Nerd Font'),
   font_size = 35.2,
+send_composed_key_when_left_alt_is_pressed = true,
+send_composed_key_when_right_alt_is_pressed = true,
   colors = {
     cursor_bg = '#928374',
     cursor_border = '#928374',
