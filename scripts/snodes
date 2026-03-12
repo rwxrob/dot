@@ -1,0 +1,2 @@
+#!/bin/sh
+scontrol show nodes --json | jq -r '.nodes[].name' | paste -sd,
