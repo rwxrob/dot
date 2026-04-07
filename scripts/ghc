@@ -1,6 +1,6 @@
 #!/bin/sh
 if test -f AGENTS.md; then
-  exec gh copilot -p "Use the following as context for this session:
+  exec gh copilot -- -i "Use the following as context for this session:
 
 $(cat AGENTS.md)"
 else
