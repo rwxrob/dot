@@ -275,7 +275,6 @@ _have setxkbmap && test -n "$DISPLAY" &&
 #      (use exec scripts instead, which work from vim and subprocs)
 
 unalias -a
-alias ghc='gh copilot chat -p "$(cat AGENTS.md 2>/dev/null || echo "No AGENTS.md found.")"'
 alias todo='vi ~/.todo'
 alias tree='tree -a -I .git'
 alias ip='ip -c'

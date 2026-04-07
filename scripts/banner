@@ -26,6 +26,6 @@ $SIG{'TERM'} = \&cleanup;
 
 print $clear. $curoff;
 while (1) {
-    print $top. `echo "$what" | figl | lolcat -f`;
+    print $top. `echo "      $what" | figl | lolcat -f`;
     sleep 1;
 }

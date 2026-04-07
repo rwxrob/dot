@@ -1,7 +1,2 @@
 #!/bin/sh
-file="$HOME/.state/muted"
-if test -e "$file"; then
-	rm "$file"
-else
-	touch "$file"
-fi
+exec topic '🔇 Muted on Conf Call'

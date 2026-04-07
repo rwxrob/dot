@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+/usr/bin/open -a /opt/homebrew/bin/mpv --args \
+  --fs \
+  --force-window=immediate \
+  --ontop \
+  --no-border \
+	"/Users/rwxrob/Movies/clips/-AYUB3tQs80"

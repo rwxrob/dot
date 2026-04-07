@@ -1,0 +1,11 @@
+#!/bin/sh
+osascript <<'EOF'
+tell application "System Events"
+        tell process "ControlCenter"
+                click first menu bar item of menu bar 1 whose description is "Audio and Video Controls"
+        end tell
+end tell
+EOF
+menu bar item 8 of menu bar 1 of application process ControlCenter
+#cliclick c:1432,340
+cliclick c:1345,338
