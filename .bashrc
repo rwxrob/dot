@@ -80,8 +80,8 @@ export LESS_TERMCAP_se=$'\e[0m'          # end standout
 export LESS_TERMCAP_us=$'\e[4m'          # start underline
 export LESS_TERMCAP_ue=$'\e[0m'          # end underline
 
-export ANSIBLE_CONFIG="$HOME/.config/ansible/config.ini"
-export ANSIBLE_INVENTORY="$HOME/.config/ansible/inventory.yaml"
+export ANSIBLE_CONFIG="$GHREPOS/homelab/ansible.cfg"
+export ANSIBLE_INVENTORY="$GHREPOS/homelab/inventory.yaml"
 export ANSIBLE_LOAD_CALLBACK_PLUGINS=1
 #export ANSIBLE_STDOUT_CALLBACK=json
 
@@ -275,6 +275,7 @@ _have setxkbmap && test -n "$DISPLAY" &&
 #      (use exec scripts instead, which work from vim and subprocs)
 
 unalias -a
+alias ghc='gh copilot chat -p "$(cat AGENTS.md 2>/dev/null || echo "No AGENTS.md found.")"'
 alias todo='vi ~/.todo'
 alias tree='tree -a -I .git'
 alias ip='ip -c'
@@ -304,6 +305,7 @@ alias gptags="git push origin --tags"
 alias km="kimono"
 alias s=wee
 alias x=clip
+alias t=topic
 alias chan=twitch-channel
 alias status=twitch-status
 alias lurk=twitch-view
