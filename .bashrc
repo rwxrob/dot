@@ -397,7 +397,7 @@ _have gh && . <(gh completion -s bash)
 _have glow && . <(glow completion bash)
 _have goreleaser && . <(goreleaser completion bash 2>/dev/null)
 _have klogin && . <(klogin completion bash 2>/dev/null)
-_have pandoc && . <(pandoc --bash-completion)
+_have pandoc && . <(pandoc --completion=bash)
 _have kubectl && . <(kubectl completion bash 2>/dev/null)
 _have kubectl && . <(kubectl cnpg completion bash 2>/dev/null)
 _have kubeadm && . <(kubeadm completion bash 2>/dev/null)
@@ -442,3 +442,14 @@ export NVM_DIR="$HOME/.nvm"
 
 export NAME=Rob
 export PATH=$PATH:/Users/rwxrob/Repos/github.com/rwxrob/lab-sample
+
+PATH="/Users/rwxrob/perl5/bin${PATH:+:${PATH}}"
+export PATH
+PERL5LIB="/Users/rwxrob/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"
+export PERL5LIB
+PERL_LOCAL_LIB_ROOT="/Users/rwxrob/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"
+export PERL_LOCAL_LIB_ROOT
+PERL_MB_OPT="--install_base \"/Users/rwxrob/perl5\""
+export PERL_MB_OPT
+PERL_MM_OPT="INSTALL_BASE=/Users/rwxrob/perl5"
+export PERL_MM_OPT
