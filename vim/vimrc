@@ -174,7 +174,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   " github.com/junegunn/vim-plug
   " There can only be one plug#begin block so all this
   " has to be here instead of split into init.lua as well.
- 
+
   call plug#begin('~/.local/share/vim/plugins')
     Plug 'conradirwin/vim-bracketed-paste'
    Plug 'sainnhe/gruvbox-material'
@@ -203,24 +203,27 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
 
   let g:vim_asciidoc_initial_foldlevel=1
 
-  set signcolumn=yes
-  let g:ale_set_signs = 1
-  let g:ale_sign_info = '✨'
-  let g:ale_sign_error = '🔥'
-  let g:ale_sign_warning = '❗️'
-  let g:ale_sign_hint = '💡'
-
   " perl stuff needs cpan install (brew also works):
   "   Perl::Tidy
   "   Perl::Critic
+  "
+  set signcolumn=yes
+
+  " let g:ale_use_neovim_diagnostics_api = 0
+  " let g:ale_set_signs = 1
+  " let g:ale_sign_info = '✨'
+  " let g:ale_sign_error = '🔥'
+  " let g:ale_sign_warning = '❗️'
+  " let g:ale_sign_hint = '💡'
 
   let g:ale_linters = {
         \'go': ['gometalinter','gofmt','gobuild'],
         \'perl': ['perl','perlcritic'],
+        \'sh': ['shellcheck'],
+        \'lua': ['luacheck'],
         \'python': ['ruff'],
         \}
   let g:ale_linter_aliases = {'bash': 'sh'}
-  let g:ale_perl_perlcritic_options = '--severity 3'
 
   let g:ale_fixers = {
         \'sh': ['shfmt'],
@@ -228,8 +231,14 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
         \'perl': ['perltidy'],
         \'python': ['black'],
         \}
+  let g:ale_fixer_aliases = {'bash': 'sh'}
+
   let g:ale_fix_on_save = 1
   let g:ale_perl_perltidy_options = '-b'
+
+  let g:ale_sh_language_server_executable = 'bash-language-server'
+  let g:ale_lua_language_server_executable = 'lua-language-server'
+  let g:ale_perl_perlcritic_options = '--severity 3'
 
   " pandoc
   let g:pandoc#formatting#mode = 'h' " A'

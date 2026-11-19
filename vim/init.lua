@@ -9,10 +9,16 @@ vim.cmd [[
   highlight NonText guibg=NONE
 ]]
 
-vim.fn.sign_define('DiagnosticSignError', { text = '🔥', texthl = 'DiagnosticError' })
-vim.fn.sign_define('DiagnosticSignWarn',  { text = '❗️', texthl = 'DiagnosticWarn' })
-vim.fn.sign_define('DiagnosticSignInfo',  { text = '✨', texthl = 'DiagnosticInfo' })
-vim.fn.sign_define('DiagnosticSignHint',  { text = '💡', texthl = 'DiagnosticHint' })
+vim.diagnostic.config({
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = "🔥",
+      [vim.diagnostic.severity.WARN]  = "❗️",
+      [vim.diagnostic.severity.INFO]  = "✨",
+      [vim.diagnostic.severity.HINT]  = "💡",
+    },
+  },
+})
 
 vim.cmd("highlight Cursor guibg=#928374 guifg=NONE")
 
