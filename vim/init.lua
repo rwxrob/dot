@@ -16,20 +16,52 @@ vim.fn.sign_define('DiagnosticSignHint',  { text = '💡', texthl = 'DiagnosticH
 
 vim.cmd("highlight Cursor guibg=#928374 guifg=NONE")
 
-local screenkey_available = vim.fn.has("nvim-0.8") == 1
-  and vim.fn.getenv("NVIM_SCREENKEY") ~= nil
-  and pcall(require, "screenkey")
+ local screenkey_available = vim.fn.has("nvim-0.8") == 1
+   and vim.fn.getenv("NVIM_SCREENKEY") ~= nil
+   and pcall(require, "Screenkey")
 
 if screenkey_available then
-  vim.g.screenkey_statusline_component = 1
-  vim.o.winbar = "%{%v:lua.require('screenkey').get_keys()%}"
-  vim.api.nvim_set_keymap("n", "sc", ":Screenkey<CR>", { noremap = true, silent = true })
-  require("screenkey").setup({
+   vim.g.screenkey_statusline_component = 1
+   vim.o.winbar = "%{%v:lua.require('screenkey').get_keys()%}"
+   vim.api.nvim_set_keymap("n", "sc", ":Screenkey<CR>", { noremap = true, silent = true })
+   require("screenkey").setup({
+     win_opts = {
+       width = 90,
+     },
+   })
+end
+
+local ok, screenkey = pcall(require, "screenkey")
+if ok then
+  screenkey.setup({
     win_opts = {
       width = 90,
     },
+    -- Escape '%' so it doesn't break winbar formatting
+    keys = {
+      ["%"] = "%%",
+    },
   })
+
+  -- Enable statusline/winbar mode on startup (or toggle via keymap)
+  screenkey.toggle_statusline_component()
+
+  vim.o.winbar = "%{%v:lua.require('screenkey').get_keys()%}"
+
+  -- Force winbar redraw when keys update or clear
+  vim.api.nvim_create_autocmd("User", {
+    pattern = { "ScreenkeyUpdated", "ScreenkeyCleared" },
+    callback = function()
+      vim.cmd("redrawstatus")
+    end,
+  })
+
+  -- Toggle the winbar output with 'sc' (use "<cmd>Screenkey<CR>" for the floating window)
+  vim.keymap.set("n", "sc", function()
+    screenkey.toggle_statusline_component()
+  end, { silent = true, desc = "Toggle Screenkey winbar" })
 end
+
 
 -- requires >0.11
 require("nvim-treesitter-textobjects").setup({

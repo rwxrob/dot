@@ -190,7 +190,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
       Plug 'nvim-treesitter/nvim-treesitter-textobjects', {'branch': 'main'}
       Plug 'neoclide/coc.nvim', {'branch': 'release' }
       if exists('$NVIM_SCREENKEY')
-        Plug 'NStefan002/screenkey.nvim'
+        Plug 'NStefan002/screenkey.nvim', {'branch': 'main'}
       endif
     endif
     if has('nvim')
