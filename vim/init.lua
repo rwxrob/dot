@@ -31,12 +31,12 @@ if screenkey_available then
   })
 end
 
--- requires >0.11
-require("nvim-treesitter-textobjects").setup({
-  select = {
-    lookahead = true,
-  },
-})
+-- requires >0.11 (FIXME)
+-- require("nvim-treesitter-textobjects").setup({
+--   select = {
+--     lookahead = true,
+--   },
+-- })
 
 vim.keymap.set({ "x", "o" }, "af", function()
   require("nvim-treesitter-textobjects.select").select_textobject("@function.outer", "textobjects")
