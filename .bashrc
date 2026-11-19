@@ -17,7 +17,7 @@ export LANG=en_US.UTF-8
 export USER="${USER:-$(whoami)}"
 export GITUSER="$USER"
 export TZ=America/New_York
-export REPOS="$HOME/Repos"
+export REPOS="$HOME/repos"
 export GHREPOS="$REPOS/github.com/$GITUSER"
 export DOTFILES="$GHREPOS/dot"
 export HELP_BROWSER=w3m
@@ -387,5 +387,3 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
 
-export NAME=Rob
-export PATH=$PATH:/Users/rwxrob/Repos/github.com/rwxrob/lab-sample
