@@ -186,9 +186,9 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
     "Plug 'mjakl/vim-asciidoc'
     Plug 'dense-analysis/ale'
     if has('nvim-0.8')
-      Plug 'nvim-treesitter/nvim-treesitter'
-      Plug 'rwxrob/nvim-treesitter-textobjects', {'do': ':TSUpdate'}
-      Plug 'neoclide/coc.nvim', {'branch': 'release'}
+      Plug 'nvim-treesitter/nvim-treesitter', {'branch': 'main'}
+      Plug 'nvim-treesitter/nvim-treesitter-textobjects', {'branch': 'main'}
+      Plug 'neoclide/coc.nvim', {'branch': 'release' }
       if exists('$NVIM_SCREENKEY')
         Plug 'NStefan002/screenkey.nvim'
       endif
