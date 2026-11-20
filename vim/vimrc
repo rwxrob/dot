@@ -143,7 +143,7 @@ set hidden
 set history=100
 
 " here because plugins and stuff need it
-if has("syntax")
+if has('syntax')
   syntax enable
 endif
 
@@ -177,7 +177,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
 
   call plug#begin('~/.local/share/vim/plugins')
     Plug 'conradirwin/vim-bracketed-paste'
-   Plug 'sainnhe/gruvbox-material'
+    Plug 'sainnhe/gruvbox-material'
     Plug 'fatih/vim-go' " GoInstallBinaries separately
     Plug 'vim-pandoc/vim-pandoc'
     "Plug 'hashivim/vim-terraform'
@@ -222,6 +222,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
         \'sh': ['shellcheck'],
         \'lua': ['luacheck'],
         \'python': ['ruff'],
+        \'markdown': ['rumdl'],
         \}
   let g:ale_linter_aliases = {'bash': 'sh'}
 
@@ -230,6 +231,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
         \'bash': ['shfmt'],
         \'perl': ['perltidy'],
         \'python': ['black'],
+        \'markdown': ['rumdl'],
         \}
   let g:ale_fixer_aliases = {'bash': 'sh'}
 
@@ -360,6 +362,12 @@ nnoremap <C-L> :nohl<CR><C-L>
 " enable omni-completion
 set omnifunc=syntaxcomplete#Complete
 imap <tab><tab> <c-x><c-o>
+
+" force location of spellfile
+set spellfile=~/.vim/spell/en.utf-8.add
+nnoremap zg zg:ALELint<CR>
+nnoremap zw zw:ALELint<CR>
+nnoremap zug zug:ALELint<CR>
 
 " force some files to be specific file type
 au bufnewfile,bufRead .goreleaser set ft=yaml

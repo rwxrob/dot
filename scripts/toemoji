@@ -56,7 +56,7 @@ toemoji() {
 		for k in "${!emoji[@]}"; do
 			line=${line//:$k:/${emoji[$k]}}
 			[[ $line =~ ^--- ]] && continue
-			line=${line//---/—}
+			#line=${line//---/—}
 			line=${line//--\>/→}
 			line=${line//:bullet:/•}
 		done
