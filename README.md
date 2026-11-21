@@ -5,6 +5,8 @@
 
 Pilfer at your own peril. If you are thinking of following, just know I commit to main about once every three days, if I had several commits I will put them in a draft PR to avoid blowing followers away with commit notifications.
 
+Don't forget to install [fonts](https://github.com/rwxrob/fonts) as well if you want to use everything in here.
+
 ## Operating system preference
 
 Everything in this repo will work on any Unix or Linux system once the dependencies are satisfied. As for host workstation operating systems I personally prefer the following in order:

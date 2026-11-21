@@ -61,6 +61,7 @@ if v:version >= 800
 
   " better ascii friendly listchars
   set listchars=space:*,trail:*,nbsp:*,extends:>,precedes:<,tab:\|>
+  set listchars+=eol:↩
 
   " i hate automatic folding
   set foldmethod=manual
@@ -208,7 +209,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
 
   call plug#begin('~/.local/share/vim/plugins')
     Plug 'conradirwin/vim-bracketed-paste'
-    Plug 'sainnhe/gruvbox-material'
+    "Plug 'sainnhe/gruvbox-material'
     Plug 'fatih/vim-go' " GoInstallBinaries separately
     Plug 'vim-pandoc/vim-pandoc'
     "Plug 'hashivim/vim-terraform'
@@ -301,14 +302,6 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   " common go macros
   au FileType go nmap <leader>m ilog.Print("made")<CR><ESC>
   au FileType go nmap <leader>n iif err != nil {return err}<CR><ESC>
-
-  if !exists('g:colors_name') || g:colors_name !=# 'gruvbox-material'
-    try
-      colorscheme gruvbox-material
-    catch /^Vim\%((\a\+)\)\=:E185/
-      colorscheme desert
-    endtry
-  endif
 
 else
   " backup if fatih fails
