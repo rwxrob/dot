@@ -314,6 +314,7 @@ alias reload='exec $SHELL -l'
 alias python=python3
 alias pip=pip3
 alias cusage='claude -p "/usage"'
+alias oc=opencode
 
 set-editor() {
 	export EDITOR="$1"
