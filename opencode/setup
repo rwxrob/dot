@@ -6,4 +6,5 @@ src=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 
 mkdir -p "$config_dir"
 ln -sf "$src/cli.json" "$config_dir/cli.json"
-ls -l "$config_dir/cli.json"
+ln -sf "$src/opencode.jsonc" "$config_dir/opencode.jsonc"
+ls -l "$config_dir/cli.json" "$config_dir/opencode.jsonc"
