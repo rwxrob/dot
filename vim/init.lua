@@ -22,21 +22,6 @@ vim.diagnostic.config({
 
 vim.cmd("highlight Cursor guibg=#928374 guifg=NONE")
 
- local screenkey_available = vim.fn.has("nvim-0.8") == 1
-   and vim.fn.getenv("NVIM_SCREENKEY") ~= nil
-   and pcall(require, "Screenkey")
-
-if screenkey_available then
-   vim.g.screenkey_statusline_component = 1
-   vim.o.winbar = "%{%v:lua.require('screenkey').get_keys()%}"
-   vim.api.nvim_set_keymap("n", "sc", ":Screenkey<CR>", { noremap = true, silent = true })
-   require("screenkey").setup({
-     win_opts = {
-       width = 90,
-     },
-   })
-end
-
 local ok, screenkey = pcall(require, "screenkey")
 if ok then
   screenkey.setup({

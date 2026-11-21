@@ -1,14 +1,12 @@
 " designed for vim 8+
 
+set nocompatible
+
 set background=dark
 
 if has("eval")                               " vim-tiny lacks 'eval'
   let skip_defaults_vim = 1
 endif
-
-set nocompatible
-
-set termguicolors
 
 "#################### Vi Compatible (~/.exrc) #######################
 "
@@ -24,7 +22,7 @@ set expandtab " (alpine)
 " number of spaces to replace a tab with when expandtab
 set tabstop=2 " (alpine)
 
-" use case when searching
+" searches are case-sensitive
 set noignorecase
 
 " automatically write files when changing when multiple files open
@@ -33,7 +31,7 @@ set autowrite
 " deactivate line numbers
 set nonumber
 
-" turn col and row position on in bottom right
+" show cursor position (the status line is off, see rulerformat below)
 set ruler " see ruf for formatting
 
 " show command and insert mode
@@ -73,9 +71,17 @@ if v:version >= 800
 endif
 
 " mark trailing spaces as errors (break Makefiles, etc.)
-match Visual '\s\+$'
+" (matchadd is per window, so add it to every window once)
+if has("eval")
+  augroup VimrcTrailing
+    autocmd!
+    autocmd VimEnter,WinEnter,BufWinEnter * if !exists('w:trail_match')
+          \ | let w:trail_match = matchadd('Visual', '\s\+$') | endif
+  augroup END
+endif
 
-" enough for line numbers + gutter within 80 standard
+" wrap text at 72 columns, leaving room for line numbers and the sign
+" column within an 80-column terminal
 set textwidth=72
 "set colorcolumn=73
 
@@ -111,7 +117,6 @@ set noshowmatch
 
 " wrap around when searching
 set wrapscan
-set nowrap
 
 " Just the formatoptions defaults, these are changed per filetype by
 " plugins. Most of the utility of all of this has been superceded by the
@@ -140,21 +145,15 @@ set fo+=1   " don't break a line after a one-letter word
 set hidden
 
 " command history
-set history=100
+set history=1000
 
 " here because plugins and stuff need it
 if has('syntax')
   syntax enable
 endif
 
-" faster scrolling
-set ttyfast
-
 " allow sensing the filetype
 filetype plugin on
-
-" high contrast for streaming, etc.
-"set background=dark
 
 set cinoptions+=:0
 
@@ -162,11 +161,43 @@ set cinoptions+=:0
 set laststatus=0 " for none
 
 " Edit/Reload vimrc configuration file
-nnoremap confe :e $HOME/.vimrc<CR>
-nnoremap confr :source $HOME/.vimrc<CR>
-nnoremap coming i_In development..._<Esc>
+nnoremap <leader>ce :e $MYVIMRC<CR>
+nnoremap <leader>cr :source $MYVIMRC<CR>
+nnoremap <leader>cd i_In development..._<Esc>
 
 set ruf=%30(%=%#LineNr#%.50F\ [%{strlen(&ft)?&ft:'none'}]\ %l:%c\ %p%%%)
+
+" base default color changes (gruvbox dark friendly); reapplied after
+" every colorscheme load so they are not wiped out
+function! s:Colors()
+  hi StatusLine ctermfg=black ctermbg=NONE
+  hi StatusLineNC ctermfg=black ctermbg=NONE
+  hi Normal ctermbg=NONE
+  hi Special ctermfg=cyan
+  hi LineNr ctermfg=black ctermbg=NONE
+  hi SpecialKey ctermfg=black ctermbg=NONE
+  hi ModeMsg ctermfg=black cterm=NONE ctermbg=NONE
+  hi MoreMsg ctermfg=black ctermbg=NONE
+  hi NonText ctermfg=black ctermbg=NONE
+  hi vimGlobal ctermfg=black ctermbg=NONE
+  hi Comment ctermfg=black ctermbg=NONE
+  hi ErrorMsg ctermbg=234 ctermfg=darkred cterm=NONE
+  hi Error ctermbg=234 ctermfg=darkred cterm=NONE
+  hi SpellBad ctermbg=234 ctermfg=darkred cterm=NONE
+  hi SpellRare ctermbg=234 ctermfg=darkred cterm=NONE
+  hi Search ctermbg=236 ctermfg=darkred
+  hi vimTodo ctermbg=236 ctermfg=darkred
+  hi Todo ctermbg=236 ctermfg=darkred
+  hi IncSearch ctermbg=236 cterm=NONE ctermfg=darkred
+  hi MatchParen ctermbg=236 ctermfg=darkred
+  hi SignColumn ctermbg=NONE " make gutter less annoying
+  hi WinBar ctermfg=black ctermbg=NONE cterm=NONE
+endfunction
+
+augroup VimrcColors
+  autocmd!
+  autocmd ColorScheme * call s:Colors()
+augroup END
 
 " only load plugins if Plug detected
 if filereadable(expand("~/.vim/autoload/plug.vim"))
@@ -193,12 +224,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
         Plug 'NStefan002/screenkey.nvim', {'branch': 'main'}
       endif
     endif
-    if has('nvim')
-      Plug 'xolox/vim-misc'
-      Plug 'xolox/vim-lua-ftplugin'
-    else
-      "Plug 'dahu/vim-asciidoc'
-    endif
+    "Plug 'dahu/vim-asciidoc'
   call plug#end()
 
   let g:vim_asciidoc_initial_foldlevel=1
@@ -217,7 +243,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   " let g:ale_sign_hint = '💡'
 
   let g:ale_linters = {
-        \'go': ['gometalinter','gofmt','gobuild'],
+        \'go': ['gopls','staticcheck','gofmt','gobuild'],
         \'perl': ['perl','perlcritic'],
         \'sh': ['shellcheck'],
         \'lua': ['luacheck'],
@@ -233,7 +259,12 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
         \'python': ['black'],
         \'markdown': ['rumdl'],
         \}
-  let g:ale_fixer_aliases = {'bash': 'sh'}
+
+  " coc.nvim (installed only for nvim 0.8+) owns LSP and diagnostics, so
+  " keep ALE to plain linters/fixers there to avoid duplicate diagnostics
+  if has('nvim-0.8')
+    let g:ale_disable_lsp = 1
+  endif
 
   let g:ale_fix_on_save = 1
   let g:ale_perl_perltidy_options = '-b'
@@ -280,63 +311,22 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   endif
 
 else
-  autocmd vimleavepre *.go !gofmt -w % " backup if fatih fails
+  " backup if fatih fails
+  autocmd vimleavepre *.go silent !gofmt -w %
+  call s:Colors() " no colorscheme loaded, so apply directly
 endif
 
-" base default color changes (gruvbox dark friendly)
-hi StatusLine ctermfg=black ctermbg=NONE
-hi StatusLineNC ctermfg=black ctermbg=NONE
-hi Normal ctermbg=NONE
-hi Special ctermfg=cyan
-hi LineNr ctermfg=black ctermbg=NONE
-hi SpecialKey ctermfg=black ctermbg=NONE
-hi ModeMsg ctermfg=black cterm=NONE ctermbg=NONE
-hi MoreMsg ctermfg=black ctermbg=NONE
-hi NonText ctermfg=black ctermbg=NONE
-hi vimGlobal ctermfg=black ctermbg=NONE
-hi ErrorMsg ctermbg=234 ctermfg=darkred cterm=NONE
-hi Error ctermbg=234 ctermfg=darkred cterm=NONE
-hi SpellBad ctermbg=234 ctermfg=darkred cterm=NONE
-hi SpellRare ctermbg=234 ctermfg=darkred cterm=NONE
-hi Search ctermbg=236 ctermfg=darkred
-hi vimTodo ctermbg=236 ctermfg=darkred
-hi Todo ctermbg=236 ctermfg=darkred
-hi IncSearch ctermbg=236 cterm=NONE ctermfg=darkred
-hi MatchParen ctermbg=236 ctermfg=darkred
-hi SignColumn ctermbg=NONE " make gutter less annoying
-hi WinBar ctermfg=black ctermbg=NONE cterm=NONE
-
-" color overrides
-au FileType * hi StatusLine ctermfg=black ctermbg=NONE
-au FileType * hi StatusLineNC ctermfg=black ctermbg=NONE
-au FileType * hi Normal ctermbg=NONE
-au FileType * hi Special ctermfg=cyan
-au FileType * hi LineNr ctermfg=black ctermbg=NONE
-au FileType * hi SpecialKey ctermfg=black ctermbg=NONE
-au FileType * hi ModeMsg ctermfg=black cterm=NONE ctermbg=NONE
-au FileType * hi MoreMsg ctermfg=black ctermbg=NONE
-au FileType * hi NonText ctermfg=black ctermbg=NONE
-au FileType * hi vimGlobal ctermfg=black ctermbg=NONE
-au FileType * hi Comment ctermfg=black ctermbg=NONE
-au FileType * hi ErrorMsg ctermbg=234 ctermfg=darkred cterm=NONE
-au FileType * hi Error ctermbg=234 ctermfg=darkred cterm=NONE
-au FileType * hi SpellBad ctermbg=234 ctermfg=darkred cterm=NONE
-au FileType * hi SpellRare ctermbg=234 ctermfg=darkred cterm=NONE
-au FileType * hi Search ctermbg=236 ctermfg=darkred
-au FileType * hi vimTodo ctermbg=236 ctermfg=darkred
-au FileType * hi Todo ctermbg=236 ctermfg=darkred
-au FileType * hi MatchParen ctermbg=236 ctermfg=darkred
 au FileType markdown,pandoc hi Title ctermfg=yellow ctermbg=NONE
 au FileType markdown,pandoc hi Operator ctermfg=yellow ctermbg=NONE
-au FileType markdown,pandoc set tw=0
-au FileType markdown,pandoc set wrap
+au FileType markdown,pandoc setlocal tw=0
+au FileType markdown,pandoc setlocal wrap
 au FileType yaml hi yamlBlockMappingKey ctermfg=NONE
-au FileType yaml set sw=2
-au FileType sh,bash set sw=2
-au FileType c set sw=8
-au FileType markdown,pandoc,asciidoc noremap j gj
-au FileType markdown,pandoc,asciidoc noremap k gk
-au FileType sh,bash set noet
+au FileType yaml setlocal sw=2
+au FileType sh,bash setlocal sw=2
+au FileType c setlocal sw=8
+au FileType markdown,pandoc,asciidoc nnoremap <buffer> j gj
+au FileType markdown,pandoc,asciidoc nnoremap <buffer> k gk
+au FileType sh,bash setlocal noet
 
 " force loclist to always close when buffer does (affects vim-go, etc.)
 augroup CloseLoclistWindowGroup
@@ -344,10 +334,12 @@ augroup CloseLoclistWindowGroup
   autocmd QuitPre * if empty(&buftype) | lclose | endif
 augroup END
 
-autocmd BufWritePost *.{md,adoc} silent !toemoji %
+" TODO replace with an ALE fixer (g:ale_fixers) instead of a raw save
+" hook, which errors when toemoji is missing and stacks on re-source
+"autocmd BufWritePost *.{md,adoc} silent !toemoji %
 
 " make Y consistent with D and C (yank til end)
-map Y y$
+nnoremap Y y$
 
 " better command-line completion
 set wildmenu
@@ -374,7 +366,7 @@ au bufnewfile,bufRead .goreleaser set ft=yaml
 au bufnewfile,bufRead *.tf,*.tfvars set ft=terraform
 au bufnewfile,bufRead *.props set ft=jproperties
 au bufnewfile,bufRead *.ddl set ft=sql
-au bufnewfile,bufRead *.sh* set ft=sh
+au bufnewfile,bufRead *.sh,*.bash set ft=sh
 au bufnewfile,bufRead *.{peg,pegn} set ft=config
 au bufnewfile,bufRead *.gotmpl set ft=go
 au bufnewfile,bufRead *.profile set filetype=sh
@@ -395,7 +387,7 @@ fun! s:DetectBash()
           \ || getline(1) == '#!/bin/bash'
           \ || getline(1) == '#!/usr/bin/env bash'
         set ft=bash
-        set shiftwidth=2
+        setlocal shiftwidth=2
     endif
 endfun
 autocmd BufNewFile,BufRead * call s:DetectBash()
@@ -404,7 +396,7 @@ endif
 " displays all the syntax rules for current position, useful
 " when writing vimscript syntax plugins
 if has("syntax")
-function! <SID>SynStack()
+function! s:SynStack()
   if !exists("*synstack")
     return
   endif
@@ -413,23 +405,29 @@ endfunc
 endif
 
 " start at last place you were editing
-au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+" (skipped for git commit/rebase buffers, which should start at the top)
+augroup VimrcLastPos
+  autocmd!
+  autocmd BufReadPost * if &ft !~# '^git\(commit\|rebase\)$'
+        \ && line("'\"") > 1 && line("'\"") <= line("$")
+        \ | exe "normal! g'\"" | endif
+augroup END
 
 " functions keys
-map <F1> :set number!<CR> :set relativenumber!<CR>
-nmap <F2> :call <SID>SynStack()<CR>
-if ! has('nvim')
+nnoremap <F1> :set number!<CR> :set relativenumber!<CR>
+nnoremap <F2> :call <SID>SynStack()<CR>
+if !has('nvim') && exists('&pastetoggle')
   set pastetoggle=<F3>
 endif
-map <F4> :set list!<CR>
-map <F5> :set cursorline!<CR>
-map <F7> :set spell!<CR>
-map <F12> :set fdm=indent<CR>
+nnoremap <F4> :set list!<CR>
+nnoremap <F5> :set cursorline!<CR>
+nnoremap <F7> :set spell!<CR>
+nnoremap <F12> :set fdm=indent<CR>
 
 set cursorline
 highlight CursorLine ctermbg=8
 
-nmap <leader>2 :set paste<CR>i
+nnoremap <leader>2 :set paste<CR>i
 
 " disable arrow keys (vi muscle memory)
 " noremap <up> :echoerr "Umm, use k instead"<CR>
@@ -447,7 +445,12 @@ noremap <C-p> <C-b>
 
 " set TMUX window name to name of file
 if exists('$TMUX')
-    autocmd BufEnter * call system('tmux rename-window ' . expand('%:p:h:t') . '/' . expand('%:t'))
+    " list form avoids the shell, so odd filenames can't break or inject
+    augroup VimrcTmux
+      autocmd!
+      autocmd BufEnter * call system(['tmux', 'rename-window',
+            \ expand('%:p:h:t') . '/' . expand('%:t')])
+    augroup END
 endif
 
 " read personal/private vim configuration (keep last to override)
