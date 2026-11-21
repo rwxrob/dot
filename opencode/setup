@@ -1,0 +1,9 @@
+#!/bin/sh
+set -e
+
+config_dir=${XDG_CONFIG_HOME:-$HOME/.config}/opencode
+src=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+
+mkdir -p "$config_dir"
+ln -sf "$src/cli.json" "$config_dir/cli.json"
+ls -l "$config_dir/cli.json"
