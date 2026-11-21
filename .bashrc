@@ -313,6 +313,7 @@ alias contexts="kubectl config get-contexts"
 alias reload='exec $SHELL -l'
 alias python=python3
 alias pip=pip3
+alias cusage='claude -p "/usage"'
 
 set-editor() {
 	export EDITOR="$1"
