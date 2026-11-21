@@ -3,5 +3,8 @@
   "theme": {
     "name": "gruvbox",
     "mode": "dark"
+  },
+  "terminal": {
+    "copy": "manual"
   }
 }
