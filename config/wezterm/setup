@@ -1,0 +1,6 @@
+#!/bin/sh
+set -e
+
+src=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+
+ln -sf "$src/wezterm.lua" "$HOME/.wezterm.lua"

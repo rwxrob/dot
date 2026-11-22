@@ -1,15 +1,10 @@
 #!/bin/sh
 set -e
 
-ln -sf "$PWD/.bashrc" "$HOME/.bashrc"
-ln -sf "$PWD/.dircolors" "$HOME/.dircolors"
-ln -sf "$PWD/.wezterm.lua" "$HOME/.wezterm.lua"
-ln -sf "$PWD/.inputrc" "$HOME/.inputrc"
-ln -sf "$PWD/.profile" "$HOME/.profile"
-ln -sf "$PWD/.profile" "$HOME/.bash_profile"
-ln -sf "$PWD/scripts" "$HOME/Scripts"
+root=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 
-for i in vim lynx gh git tmux docker podman iam opencode; do
-	cd $i && ./setup
-	cd -
+ln -sf "$root/scripts" "$HOME/Scripts"
+
+for i in bash wezterm vim lynx gh git tmux docker podman iam opencode; do
+	(cd "$root/config/$i" && ./setup)
 done

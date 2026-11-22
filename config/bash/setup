@@ -1,0 +1,10 @@
+#!/bin/sh
+set -e
+
+src=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+
+ln -sf "$src/bashrc" "$HOME/.bashrc"
+ln -sf "$src/profile" "$HOME/.profile"
+ln -sf "$src/profile" "$HOME/.bash_profile"
+ln -sf "$src/inputrc" "$HOME/.inputrc"
+ln -sf "$src/dircolors" "$HOME/.dircolors"

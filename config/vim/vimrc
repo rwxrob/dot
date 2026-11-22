@@ -246,6 +246,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
         \'go': ['gopls','staticcheck','gofmt','gobuild'],
         \'perl': ['perl','perlcritic'],
         \'sh': ['shellcheck'],
+        \'bash': ['shellcheck'],
         \'lua': ['luacheck'],
         \'python': ['ruff'],
         \'markdown': ['rumdl'],
@@ -379,6 +380,7 @@ au bufnewfile,bufRead /tmp/psql.edit.* set syntax=sql
 au bufnewfile,bufRead *.go set spell spellcapcheck=0
 au bufnewfile,bufRead commands.yaml set spell
 au bufnewfile,bufRead *.{txt,md,adoc} set spell
+au FileType sh,bash,zsh setlocal nospell
 
 "fix bork bash detection
 if has("eval")  " vim-tiny detection
