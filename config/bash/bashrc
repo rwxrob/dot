@@ -70,8 +70,6 @@ export ANSIBLE_INVENTORY="$GHREPOS/homelab/inventory.yaml"
 export ANSIBLE_LOAD_CALLBACK_PLUGINS=1
 #export ANSIBLE_STDOUT_CALLBACK=json
 
-[[ -d "$HOME/.vim/spell" ]] && export VIMSPELL="$HOME/.vim/spell/*.add"
-
 # ----------------------------- PostgreSQL ----------------------------
 
 export PGPASS=~/.pgpass
