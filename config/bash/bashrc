@@ -386,19 +386,12 @@ if _have terraform; then
 	complete -C "$(command -v terraform)" terraform
 	complete -C "$(command -v terraform)" tf
 fi
-#_have ssh-agent && test -z "$SSH_AGENT_PID" && . <(ssh-agent)
 
 # -------------------- personalized configuration --------------------
 
 _source_if "$HOME/.bash_personal"
 _source_if "$HOME/.bash_private"
 _source_if "$HOME/.bash_work"
-
-# ------------------------- NVM trash ahead ------------------------
-# (keep as is or nvm idiotic installer will re-add to bashrc next time)
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
 
 PATH="$HOME/perl5/bin${PATH:+:${PATH}}"
 export PATH
