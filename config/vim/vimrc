@@ -1,10 +1,14 @@
 " designed for vim 8+
 
-set nocompatible
+scriptencoding utf-8
+
+augroup vimrc
+  autocmd!
+augroup END
 
 set background=dark
 
-if has("eval")                               " vim-tiny lacks 'eval'
+if has('eval')                               " vim-tiny lacks 'eval'
   let skip_defaults_vim = 1
 endif
 
@@ -44,7 +48,7 @@ set noerrorbells
 set visualbell
 set vb t_vb=
 
-let mapleader=","
+let mapleader=','
 
 set softtabstop=2
 
@@ -72,7 +76,7 @@ endif
 
 " mark trailing spaces as errors (break Makefiles, etc.)
 " (matchadd is per window, so add it to every window once)
-if has("eval")
+if has('eval')
   augroup VimrcTrailing
     autocmd!
     autocmd VimEnter,WinEnter,BufWinEnter * if !exists('w:trail_match')
@@ -110,7 +114,7 @@ set shortmess=aoOtTI
 set viminfo='20,<1000,s1000
 
 " not a fan of bracket matching or folding
-if has("eval") " vim-tiny detection
+if has('eval') " vim-tiny detection
   let g:loaded_matchparen=1
 endif
 set noshowmatch
@@ -200,7 +204,7 @@ augroup VimrcColors
 augroup END
 
 " only load plugins if Plug detected
-if filereadable(expand("~/.vim/autoload/plug.vim"))
+if filereadable(expand('~/.vim/autoload/plug.vim'))
 
   " github.com/junegunn/vim-plug
   " There can only be one plug#begin block so all this
@@ -300,8 +304,8 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   set updatetime=100
 
   " common go macros
-  au FileType go nmap <leader>m ilog.Print("made")<CR><ESC>
-  au FileType go nmap <leader>n iif err != nil {return err}<CR><ESC>
+  autocmd vimrc FileType go nmap <leader>m ilog.Print("made")<CR><ESC>
+  autocmd vimrc FileType go nmap <leader>n iif err != nil {return err}<CR><ESC>
 
   if !exists('g:colors_name') || g:colors_name !=# 'gruvbox-material'
     try
@@ -313,21 +317,21 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
 
 else
   " backup if fatih fails
-  autocmd vimleavepre *.go silent !gofmt -w %
+  autocmd vimrc vimleavepre *.go silent !gofmt -w %
   call s:Colors() " no colorscheme loaded, so apply directly
 endif
 
-au FileType markdown,pandoc hi Title ctermfg=yellow ctermbg=NONE
-au FileType markdown,pandoc hi Operator ctermfg=yellow ctermbg=NONE
-au FileType markdown,pandoc setlocal tw=0
-au FileType markdown,pandoc setlocal wrap
-au FileType yaml hi yamlBlockMappingKey ctermfg=NONE
-au FileType yaml setlocal sw=2
-au FileType sh,bash setlocal sw=2
-au FileType c setlocal sw=8
-au FileType markdown,pandoc,asciidoc nnoremap <buffer> j gj
-au FileType markdown,pandoc,asciidoc nnoremap <buffer> k gk
-au FileType sh,bash setlocal noet
+autocmd vimrc FileType markdown,pandoc hi Title ctermfg=yellow ctermbg=NONE
+autocmd vimrc FileType markdown,pandoc hi Operator ctermfg=yellow ctermbg=NONE
+autocmd vimrc FileType markdown,pandoc setlocal tw=0
+autocmd vimrc FileType markdown,pandoc setlocal wrap
+autocmd vimrc FileType yaml hi yamlBlockMappingKey ctermfg=NONE
+autocmd vimrc FileType yaml setlocal sw=2
+autocmd vimrc FileType sh,bash setlocal sw=2
+autocmd vimrc FileType c setlocal sw=8
+autocmd vimrc FileType markdown,pandoc,asciidoc nnoremap <buffer> j gj
+autocmd vimrc FileType markdown,pandoc,asciidoc nnoremap <buffer> k gk
+autocmd vimrc FileType sh,bash setlocal noet
 
 " force loclist to always close when buffer does (affects vim-go, etc.)
 augroup CloseLoclistWindowGroup
@@ -363,43 +367,43 @@ nnoremap zw zw:ALELint<CR>
 nnoremap zug zug:ALELint<CR>
 
 " force some files to be specific file type
-au bufnewfile,bufRead .goreleaser set ft=yaml
-au bufnewfile,bufRead *.tf,*.tfvars set ft=terraform
-au bufnewfile,bufRead *.props set ft=jproperties
-au bufnewfile,bufRead *.ddl set ft=sql
-au bufnewfile,bufRead *.sh,*.bash set ft=sh
-au bufnewfile,bufRead *.{peg,pegn} set ft=config
-au bufnewfile,bufRead *.gotmpl set ft=go
-au bufnewfile,bufRead *.profile set filetype=sh
-au bufnewfile,bufRead *.crontab set filetype=crontab
-au bufnewfile,bufRead *ssh/config set filetype=sshconfig
-au bufnewfile,bufRead .dockerignore set filetype=gitignore
-au bufnewfile,bufRead .bashrc,.bash_profile set filetype=bash
-au bufnewfile,bufRead *gitconfig set filetype=gitconfig
-au bufnewfile,bufRead /tmp/psql.edit.* set syntax=sql
-au bufnewfile,bufRead *.go set spell spellcapcheck=0
-au bufnewfile,bufRead commands.yaml set spell
-au bufnewfile,bufRead *.{txt,md,adoc} set spell
-au FileType sh,bash,zsh setlocal nospell
+autocmd vimrc bufnewfile,bufRead .goreleaser set ft=yaml
+autocmd vimrc bufnewfile,bufRead *.tf,*.tfvars set ft=terraform
+autocmd vimrc bufnewfile,bufRead *.props set ft=jproperties
+autocmd vimrc bufnewfile,bufRead *.ddl set ft=sql
+autocmd vimrc bufnewfile,bufRead *.sh,*.bash set ft=sh
+autocmd vimrc bufnewfile,bufRead *.{peg,pegn} set ft=config
+autocmd vimrc bufnewfile,bufRead *.gotmpl set ft=go
+autocmd vimrc bufnewfile,bufRead *.profile set filetype=sh
+autocmd vimrc bufnewfile,bufRead *.crontab set filetype=crontab
+autocmd vimrc bufnewfile,bufRead *ssh/config set filetype=sshconfig
+autocmd vimrc bufnewfile,bufRead .dockerignore set filetype=gitignore
+autocmd vimrc bufnewfile,bufRead .bashrc,.bash_profile set filetype=bash
+autocmd vimrc bufnewfile,bufRead *gitconfig set filetype=gitconfig
+autocmd vimrc bufnewfile,bufRead /tmp/psql.edit.* set syntax=sql
+autocmd vimrc bufnewfile,bufRead *.go set spell spellcapcheck=0
+autocmd vimrc bufnewfile,bufRead commands.yaml set spell
+autocmd vimrc bufnewfile,bufRead *.{txt,md,adoc} set spell
+autocmd vimrc FileType sh,bash,zsh setlocal nospell
 
 "fix bork bash detection
-if has("eval")  " vim-tiny detection
+if has('eval')  " vim-tiny detection
 fun! s:DetectBash()
-    if getline(1) == '#!/usr/bin/bash' 
-          \ || getline(1) == '#!/bin/bash'
-          \ || getline(1) == '#!/usr/bin/env bash'
+    if getline(1) ==# '#!/usr/bin/bash' 
+          \ || getline(1) ==# '#!/bin/bash'
+          \ || getline(1) ==# '#!/usr/bin/env bash'
         set ft=bash
         setlocal shiftwidth=2
     endif
 endfun
-autocmd BufNewFile,BufRead * call s:DetectBash()
+autocmd vimrc BufNewFile,BufRead * call s:DetectBash()
 endif
 
 " displays all the syntax rules for current position, useful
 " when writing vimscript syntax plugins
-if has("syntax")
+if has('syntax')
 function! s:SynStack()
-  if !exists("*synstack")
+  if !exists('*synstack')
     return
   endif
     echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
