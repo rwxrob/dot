@@ -1,3 +1,3 @@
 #!/bin/sh
-export KEG_CURRENT="$HOME/Repos/github.com/rwxrob/zet/docs"
+export KEG_CURRENT="${REPOS:-$HOME/repos}/github.com/rwxrob/zet/docs"
 exec keg "$@"

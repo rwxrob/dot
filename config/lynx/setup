@@ -1,4 +1,5 @@
 #!/bin/sh
+here=$(CDPATH= cd -- "$(dirname -- "$0")" && { realpath . 2>/dev/null || pwd; })
 
 # WARNING: This setup requires a custom form of lynx (a shell script in
 # scripts) be installed as well as lynx. [For an easier text browsing
@@ -8,5 +9,5 @@
 
 mkdir ~/.config/ 2>/dev/null
 rm -rf ~/.config/lynx 2>/dev/null
-ln -s "$PWD" "$HOME/.config/lynx"
+ln -s "$here" "$HOME/.config/lynx"
 ls -l ~/.config/lynx

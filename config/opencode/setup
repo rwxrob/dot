@@ -3,7 +3,7 @@ set -e
 
 config_dir=${XDG_CONFIG_HOME:-$HOME/.config}/opencode
 ask_dir=${XDG_DATA_HOME:-$HOME/.local/share}/ask
-src=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+src=$(CDPATH= cd -- "$(dirname -- "$0")" && { realpath . 2>/dev/null || pwd; })
 
 mkdir -p "$config_dir"
 ln -sf "$src/cli.json" "$config_dir/cli.json"

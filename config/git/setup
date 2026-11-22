@@ -1,6 +1,7 @@
 #!/bin/sh
+here=$(CDPATH= cd -- "$(dirname -- "$0")" && { realpath . 2>/dev/null || pwd; })
 rm -rf "$HOME/.git-templates"
-ln -sf "$PWD/git-templates" "$HOME/.git-templates"
+ln -sf "$here/git-templates" "$HOME/.git-templates"
 
 # Commit identity is personal, so it is never stored in this repo. The
 # untracked global git config (~/.gitconfig) is AUTHORITATIVE: any value
