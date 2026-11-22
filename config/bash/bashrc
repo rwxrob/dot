@@ -127,6 +127,7 @@ pathappend \
 	'/mnt/c/Windows' \
 	'/mnt/c/Program Files (x86)/VMware/VMware Workstation' \
 	/mingw64/bin \
+	/usr/local/bin \
 	/usr/local/sbin \
 	/usr/local/games \
 	/usr/games \
