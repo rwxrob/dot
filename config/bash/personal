@@ -18,11 +18,6 @@ export CLIP_SCREEN=0
 
 export NVIM_SCREENKEY=1
 
-# opinionated build and tool defaults
-export LC_COLLATE=C
-export GOPROXY=direct
-export CGO_ENABLED=0
-
 # ------------------------------- aliases ----------------------------
 
 alias todo='vi ~/.todo'

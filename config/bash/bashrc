@@ -42,11 +42,14 @@ export HRULEWIDTH=73
 
 # golang
 export GOBIN="$HOME/.local/bin"
+export GOPROXY=direct
+export CGO_ENABLED=0
 
 # python
 export PYTHONDONTWRITEBYTECODE=2
 
 # c
+export LC_COLLATE=C
 export CFLAGS="-Wall -Wextra -Werror -O0 -g -fsanitize=address -fno-omit-frame-pointer -finstrument-functions"
 
 # explicit to fix weird defaults (like macOS)
