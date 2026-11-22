@@ -250,6 +250,7 @@ if filereadable(expand('~/.vim/autoload/plug.vim'))
         \'go': ['gopls','staticcheck','gofmt','gobuild'],
         \'perl': ['perl','perlcritic'],
         \'sh': ['shellcheck'],
+        \'vim': ['vint'],
         \'bash': ['shellcheck'],
         \'lua': ['luacheck'],
         \'python': ['ruff'],
@@ -316,8 +317,6 @@ if filereadable(expand('~/.vim/autoload/plug.vim'))
   endif
 
 else
-  " backup if fatih fails
-  autocmd vimrc vimleavepre *.go silent !gofmt -w %
   call s:Colors() " no colorscheme loaded, so apply directly
 endif
 
