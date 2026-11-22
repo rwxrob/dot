@@ -6,11 +6,30 @@
 dir="${XDG_DATA_HOME:-$HOME/.local/share}/ask"
 mkdir -p "$dir" && cd "$dir" || exit 1
 
-# Works as a Unix filter: use the arguments if given, otherwise slurp
-# all of standard input into one prompt (see _buffer in rot13). With
-# neither (a terminal and no arguments) start the interactive UI.
+# Strip escape sequences (OSC, CSI, two-character) and other control
+# characters except newline and tab so nothing the model says can ever
+# move the cursor, set a title, or otherwise drive the terminal.
+sanitize() {
+	perl -pe 'BEGIN { $| = 1 }
+		s/\e\][^\a\e]*(?:\a|\e\\)//g;
+		s/\e\[[0-9;?]*[ -\/]*[@-~]//g;
+		s/\e[@-Z\\-_]//g;
+		tr/\x00-\x08\x0B-\x1F\x7F//d'
+}
+
+# Works as a Unix filter (see _buffer in rot13). Arguments are the
+# prompt; if standard input is also piped or redirected it is the data
+# the prompt applies to. With only standard input, that is the prompt.
+# With neither (a terminal and no arguments) start the interactive UI.
 if [ $# -gt 0 ]; then
 	prompt="$*"
+	# only a pipe or file, never a tty or /dev/null, so this can't hang
+	if [ ! -t 0 ] && { [ -p /dev/stdin ] || [ -f /dev/stdin ]; }; then
+		data=$(cat)
+		[ -z "$data" ] || prompt="$prompt
+
+$data"
+	fi
 elif [ ! -t 0 ]; then
 	prompt=$(cat)
 else
@@ -25,8 +44,18 @@ fi
 # Color the markdown answer, but only for a person at a terminal so
 # pipes and redirects still get plain text.
 if [ -t 1 ] && command -v bat >/dev/null 2>&1; then
-	opencode run -c "$prompt" | bat -l md -p --paging=never
+	opencode run -c "$prompt" | sanitize | bat -l md -p --paging=never
 	exit
 fi
 
-exec opencode run -c "$prompt"
+# Not interactive: behave as a filter. Only the answer goes to stdout
+# (opencode's status header is on stderr, shown only if it fails).
+err=$(mktemp) || exit 1
+trap 'rm -f "$err"' EXIT
+out=$(opencode run -c "$prompt" 2>"$err")
+rc=$?
+if [ "$rc" -ne 0 ]; then
+	sanitize <"$err" >&2
+	exit "$rc"
+fi
+printf '%s\n' "$out" | sanitize
