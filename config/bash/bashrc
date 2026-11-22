@@ -17,14 +17,14 @@ export white="[37m"
 export blink="[5m"
 export reset="[0m"
 export clear="[2J"
-export curoff="[?25h"
+export curoff="[?25l"
 export curon="[?25h"
 export top="[H"
 
 # ---------------------- local utility functions ---------------------
 
 _have() { type "$1" &>/dev/null; }
-_source_if() { [[ -r "$2" ]] && source "$1"; }
+_source_if() { [[ -r "$1" ]] && source "$1"; }
 
 # ----------------------- environment variables ----------------------
 
@@ -64,7 +64,7 @@ export LC_COLLATE=C
 export CFLAGS="-Wall -Wextra -Werror -O0 -g -fsanitize=address -fno-omit-frame-pointer -finstrument-functions"
 export BAT_THEME=gruvbox-dark
 
-# explicit to fix wierd defaults (like macOS)
+# explicit to fix weird defaults (like macOS)
 export XDG_STATE_HOME="$HOME/.local/state"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_CONFIG_HOME="$HOME/.config"
@@ -85,7 +85,7 @@ export ANSIBLE_INVENTORY="$GHREPOS/homelab/inventory.yaml"
 export ANSIBLE_LOAD_CALLBACK_PLUGINS=1
 #export ANSIBLE_STDOUT_CALLBACK=json
 
-[[ -d /.vim/spell ]] && export VIMSPELL=("$HOME/.vim/spell/*.add")
+[[ -d "$HOME/.vim/spell" ]] && export VIMSPELL="$HOME/.vim/spell/*.add"
 
 # ----------------------------- PostgreSQL ----------------------------
 
@@ -130,9 +130,10 @@ pathappend() {
 } && export -f pathappend
 
 pathprepend() {
+	declare arg
 	for arg in "$@"; do
 		test -d "$arg" || continue
-		PATH=${PATH//:"$arg:"/:}
+		PATH=${PATH//":$arg:"/:}
 		PATH=${PATH/#"$arg:"/}
 		PATH=${PATH/%":$arg"/}
 		export PATH="$arg${PATH:+":${PATH}"}"
@@ -155,7 +156,6 @@ pathappend \
 	'/mnt/c/Windows' \
 	'/mnt/c/Program Files (x86)/VMware/VMware Workstation' \
 	/mingw64/bin \
-	/usr/local/bin \
 	/usr/local/sbin \
 	/usr/local/games \
 	/usr/games \
@@ -237,11 +237,11 @@ __ps1() {
 }
 
 wd() {
-	dir="${PWD##*/}"
+	local dir="${PWD##*/}" parent
 	parent="${PWD%"/${dir}"}"
 	parent="${parent##*/}"
 	echo "$parent/$dir"
-} && export wd
+} && export -f wd
 
 found-venv() { test -e .venv/bin/activate; }
 venv-is-on() { [[ "$(which python)" =~ \.venv\/bin\/python$ ]]; }
@@ -345,7 +345,7 @@ new-from() {
 	local template="$1"
 	local name="$2"
 	! _have gh && echo "gh command not found" && return 1
-	[[ -z "$name" ]] && echo "usage: $0 <name>" && return 1
+	[[ -z "$name" ]] && echo "usage: new-from <template> <name>" && return 1
 	[[ -z "$GHREPOS" ]] && echo "GHREPOS not set" && return 1
 	[[ ! -d "$GHREPOS" ]] && echo "Not found: $GHREPOS" && return 1
 	cd "$GHREPOS" || return 1
@@ -357,8 +357,8 @@ new-from() {
 
 clone() {
 	local repo="$1" user
-	local repo="${repo#https://github.com/}"
-	local repo="${repo#git@github.com:}"
+	repo="${repo#https://github.com/}"
+	repo="${repo#git@github.com:}"
 	if [[ $repo =~ / ]]; then
 		user="${repo%%/*}"
 	else
@@ -370,10 +370,10 @@ clone() {
 	local path="$userd/$name"
 	[[ -d "$path" ]] && cd "$path" && return
 	mkdir -p "$userd"
-	cd "$userd"
-	echo gh repo clone "$user/$name" -- --recurse-submodule
-	gh repo clone "$user/$name" -- --recurse-submodule
-	cd "$name"
+	cd "$userd" || return 1
+	echo gh repo clone "$user/$name" -- --recurse-submodules
+	gh repo clone "$user/$name" -- --recurse-submodules
+	cd "$name" || return 1
 } && export -f clone
 
 # ------------- source external dependencies / completion ------------
@@ -416,16 +416,18 @@ _have podman && _source_if "$HOME/.local/share/podman/completion" # d
 _have mkdocs && . <(_MKDOCS_COMPLETE=bash_source mkdocs)
 _have kuti && . <(kuti completion bash)
 
-_have ansible && _have register-python-argcomplete3 && . <(register-python-argcomplete3 ansible)
-_have ansible-config && _have register-python-argcomplete3 && . <(register-python-argcomplete3 ansible-config)
-_have ansible-console && _have register-python-argcomplete3 && . <(register-python-argcomplete3 ansible-console)
-_have ansible-doc && _have register-python-argcomplete3 && . <(register-python-argcomplete3 ansible-doc)
-_have ansible-galaxy && _have register-python-argcomplete3 && . <(register-python-argcomplete3 ansible-galaxy)
-_have ansible-inventory && _have register-python-argcomplete3 && . <(register-python-argcomplete3 ansible-inventory)
-_have ansible-playbook && _have register-python-argcomplete3 && . <(register-python-argcomplete3 ansible-playbook)
-_have ansible-pull && _have register-python-argcomplete3 && . <(register-python-argcomplete3 ansible-pull)
-_have ansible-vault && _have register-python-argcomplete3 && . <(register-python-argcomplete3 ansible-vault)
-#_have ssh-agent && test -z "$SSH_AGENT_PID" && . <(ssh-agent)
+if _have register-python-argcomplete3; then
+	for i in ansible ansible-config ansible-console ansible-doc \
+		ansible-galaxy ansible-inventory ansible-playbook \
+		ansible-pull ansible-vault; do
+		_have "$i" && . <(register-python-argcomplete3 "$i")
+	done
+fi
+
+if _have terraform; then
+	complete -C "$(command -v terraform)" terraform
+	complete -C "$(command -v terraform)" tf
+fi
 
 # -------------------- personalized configuration --------------------
 
@@ -433,22 +435,19 @@ _source_if "$HOME/.bash_personal"
 _source_if "$HOME/.bash_private"
 _source_if "$HOME/.bash_work"
 
-_have terraform && complete -C /usr/bin/terraform terraform
-_have terraform && complete -C /usr/bin/terraform tf
-
 # ------------------------- NVM trash ahead ------------------------
 # (keep as is or nvm idiotic installer will re-add to bashrc next time)
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
 
-PATH="/Users/rwxrob/perl5/bin${PATH:+:${PATH}}"
+PATH="$HOME/perl5/bin${PATH:+:${PATH}}"
 export PATH
-PERL5LIB="/Users/rwxrob/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"
+PERL5LIB="$HOME/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"
 export PERL5LIB
-PERL_LOCAL_LIB_ROOT="/Users/rwxrob/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"
+PERL_LOCAL_LIB_ROOT="$HOME/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"
 export PERL_LOCAL_LIB_ROOT
-PERL_MB_OPT="--install_base \"/Users/rwxrob/perl5\""
+PERL_MB_OPT="--install_base \"$HOME/perl5\""
 export PERL_MB_OPT
-PERL_MM_OPT="INSTALL_BASE=/Users/rwxrob/perl5"
+PERL_MM_OPT="INSTALL_BASE=$HOME/perl5"
 export PERL_MM_OPT
