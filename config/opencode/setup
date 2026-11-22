@@ -2,9 +2,15 @@
 set -e
 
 config_dir=${XDG_CONFIG_HOME:-$HOME/.config}/opencode
+ask_dir=${XDG_DATA_HOME:-$HOME/.local/share}/ask
 src=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 
 mkdir -p "$config_dir"
 ln -sf "$src/cli.json" "$config_dir/cli.json"
 ln -sf "$src/opencode.jsonc" "$config_dir/opencode.jsonc"
 ls -l "$config_dir/cli.json" "$config_dir/opencode.jsonc"
+
+# working directory for the ask script (see scripts/ask)
+mkdir -p "$ask_dir"
+ln -sf "$src/ask/AGENTS.md" "$ask_dir/AGENTS.md"
+ls -l "$ask_dir/AGENTS.md"

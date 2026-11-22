@@ -1,0 +1,32 @@
+#!/bin/sh
+
+# Always run from one fixed directory so every invocation continues the
+# same ongoing session (sessions are per directory). Put a standing
+# AGENTS.md there for instructions that apply to all generic queries.
+dir="${XDG_DATA_HOME:-$HOME/.local/share}/ask"
+mkdir -p "$dir" && cd "$dir" || exit 1
+
+# Works as a Unix filter: use the arguments if given, otherwise slurp
+# all of standard input into one prompt (see _buffer in rot13). With
+# neither (a terminal and no arguments) start the interactive UI.
+if [ $# -gt 0 ]; then
+	prompt="$*"
+elif [ ! -t 0 ]; then
+	prompt=$(cat)
+else
+	exec opencode -c
+fi
+
+if [ -z "$prompt" ]; then
+	echo "ask: empty prompt" >&2
+	exit 1
+fi
+
+# Color the markdown answer, but only for a person at a terminal so
+# pipes and redirects still get plain text.
+if [ -t 1 ] && command -v bat >/dev/null 2>&1; then
+	opencode run -c "$prompt" | bat -l md -p --paging=never
+	exit
+fi
+
+exec opencode run -c "$prompt"
