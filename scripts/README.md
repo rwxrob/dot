@@ -193,7 +193,7 @@
 |[nowshort](nowshort)| Description
 |[ns](ns)| Description
 |[numweek](numweek)| Description
-|[oc](oc)| Run `opencode` (resumes `ongoing` session with args)
+|[oc](oc)| Run `opencode`, always continuing the last session
 |[off](off)| Description
 |[onchange](onchange)| Description
 |[opacity](opacity)| Description
