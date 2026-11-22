@@ -13,7 +13,7 @@ disable = ["MD013"]
 
 # Additional rules to enable on top of defaults (additive, does not replace)
 # Use this to activate opt-in rules like MD060, MD063, MD072, MD073, MD074
-extend-enable = ["MD060", "MD063"]
+extend-enable = ["MD063"]
 
 # Additional rules to disable on top of the disable list (additive)
 # extend-disable = ["MD041"]
@@ -69,8 +69,8 @@ flavor = "gfm"
 # names = ["rumdl", "Markdown", "GitHub"]  # Proper names that should be capitalized correctly
 # code-blocks = false  # Check code blocks for proper names (default: false, skips code blocks)
 
-[MD060]
-style = "aligned"
+# MD060 (table column alignment) is deliberately not enabled so the fixer
+# leaves table spacing alone. style = "any" still re-aligned in rumdl 0.3.5.
 
 [MD063]
 style = "sentence-case"
