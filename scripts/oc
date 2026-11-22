@@ -1,0 +1,7 @@
+#!/bin/sh
+
+if [ $# -gt 0 ]; then
+	exec opencode run -s ongoing "$*"
+fi
+
+exec opencode
