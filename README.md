@@ -7,6 +7,18 @@ Pilfer at your own peril. If you are thinking of following, just know I commit t
 
 Don't forget to install [fonts](https://github.com/rwxrob/fonts) as well if you want to use everything in here.
 
+## What's here
+
+| Directory  | What it is                                                                                  |
+| ---------- | ------------------------------------------------------------------------------------------- |
+| `config/`  | Configuration, one directory per tool (`bash`, `vim`, `tmux`, `git`, ...), each with a `setup` |
+| `install/` | `install-*` scripts that install tools (`mac`, `ubuntu`, `redhat`, `windows`)               |
+| `scripts/` | Small standalone commands that go on your `PATH`                                            |
+
+Nothing in the repo is a hidden file. Files like `config/bash/bashrc` are plain names so they show up in `ls`, and each tool's `setup` script creates the dotted symlink in `$HOME` (`~/.bashrc`, `~/.tmux.conf`, ...).
+
+To link everything into place run `./setup` from the repo root. To set up just one tool run `./setup` inside its directory, for example `config/vim/setup`.
+
 ## Operating system preference
 
 Everything in this repo will work on any Unix or Linux system once the dependencies are satisfied. As for host workstation operating systems I personally prefer the following in order:
