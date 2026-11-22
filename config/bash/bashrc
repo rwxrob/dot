@@ -14,17 +14,15 @@ _source_if() { [[ -r "$1" ]] && source "$1"; }
 # ----------------------- environment variables ----------------------
 
 export LANG=en_US.UTF-8
-export TZ=America/New_York
 
 _have w3m && export HELP_BROWSER=w3m
 
 export USER="${USER:-$(whoami)}"
 
-# GITUSER and DOTFILES are recorded by config/bash/setup so the login name
+# GITUSER, DOTFILES and TZ are recorded by config/bash/setup so the login name
 # never has to match the GitHub user; fall back to that assumption if absent
 _source_if "${XDG_CONFIG_HOME:-$HOME/.config}/dot/env"
 export GITUSER="${GITUSER:-$USER}"
-export TWITCH_BROADCASTER_ID=447179030
 export REPOS="$HOME/repos"
 export GHREPOS="$REPOS/github.com/$GITUSER"
 export DOTFILES="${DOTFILES:-$GHREPOS/dot}"
@@ -38,28 +36,17 @@ export PRIVATE="$HOME/Private"
 export PICTURES="$HOME/Pictures"
 export MUSIC="$HOME/Music"
 export VIDEOS="$HOME/Movies"
-export PDFS="$HOME/usb/pdfs"
-export VIRTUALMACHINES="$HOME/VirtualMachines"
 
-export CLIP_DIR="$VIDEOS/clips"
-export CLIP_DATA="$GHREPOS/clip/data"
-export CLIP_VOLUME=0
-export CLIP_SCREEN=0
 export CLICOLOR=1
 export HRULEWIDTH=73
 
 # golang
 export GOBIN="$HOME/.local/bin"
-export GOPROXY=direct
-export CGO_ENABLED=0
-
-export NVIM_SCREENKEY=1
 
 # python
 export PYTHONDONTWRITEBYTECODE=2
 
 # c
-export LC_COLLATE=C
 export CFLAGS="-Wall -Wextra -Werror -O0 -g -fsanitize=address -fno-omit-frame-pointer -finstrument-functions"
 
 # explicit to fix weird defaults (like macOS)
@@ -259,7 +246,6 @@ _have setxkbmap && test -n "$DISPLAY" &&
 #      (use exec scripts instead, which work from vim and subprocs)
 
 unalias -a
-alias todo='vi ~/.todo'
 alias tree='tree -a -I .git'
 alias ip='ip -c'
 alias '?'=ask
@@ -271,24 +257,14 @@ alias free='free -h'
 alias df='df -h'
 alias chmox='chmod +x'
 alias diff='diff --color'
-alias sshh='sshpass -f $HOME/.sshpass ssh '
 alias temp='cd $(mktemp -d)'
 alias view='vi -R' # which is usually linked to vim
 alias clear='printf "\e[H\e[2J"'
 alias c='printf "\e[H\e[2J"'
 alias env='env -u LESS_TERMCAP_mb -u LESS_TERMCAP_md -u LESS_TERMCAP_me -u LESS_TERMCAP_so -u LESS_TERMCAP_se -u LESS_TERMCAP_us -u LESS_TERMCAP_ue'
-_have neo && alias neo="neo -D -c gold"
 alias more="less -R"
 alias gitl="git log -n 5 --graph --decorate --oneline"
-alias gp="git push"
-alias gptags="git push origin --tags"
-alias km="kimono"
-alias s=wee
-alias x=clip
-alias t=topic
 alias reload='exec $SHELL -l'
-alias oc=opencode
-alias cusage='claude -p "/usage"'
 
 # python/pip default to python3/pip3 except inside an activated venv,
 # where the venv's own tools must win (uv venvs have no pip3 at all)
@@ -376,16 +352,6 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 	done
 fi
 
-# commands that complete themselves (nothing runs until you press TAB)
-owncomp=(
-	pdf zet keg kn yt gl auth pomo config live iam sshkey ws x clip
-	./build build b ./k8sapp k8sapp ./setup ./cmd run ./run
-	foo ./foo cmds ./cmds z bon openapi obs vault var sunrise multicall
-	kimono tag cm ytwee
-)
-
-for i in "${owncomp[@]}"; do complete -C "$i" "$i"; done
-
 if _have terraform; then
 	complete -C "$(command -v terraform)" terraform
 	complete -C "$(command -v terraform)" tf
@@ -393,6 +359,10 @@ fi
 
 # -------------------- personalized configuration --------------------
 
+# my own customizations that live in the repo (fork and edit config/bash/personal)
+_source_if "$DOTFILES/config/bash/personal"
+
+# private, per-machine files that are never in git
 _source_if "$HOME/.bash_personal"
 _source_if "$HOME/.bash_private"
 _source_if "$HOME/.bash_work"
