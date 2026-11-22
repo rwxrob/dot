@@ -4,22 +4,22 @@
 
 pre='//'
 
-_filter(){
-  [[ -n "$1" ]] && return 1
-  while IFS= read -ra args; do
-    "${FUNCNAME[1]}" "${args[@]}"
-  done
+_filter() {
+	[[ -n "$1" ]] && return 1
+	while IFS= read -ra args; do
+		"${FUNCNAME[1]}" "${args[@]}"
+	done
 }
 
 htitle() {
-  _filter "$@" && return $?
-  local str="$1" char="${2:--}"
-  local -i len=${#str}
-  local -i side=$((((HRULEWIDTH / 2) - len / 2) - 3))
-  local -i left=$side
-  local -i right=$side
-  (( len % 2 == 1 )) && ((right -= 1))
-  echo "$pre $(echon "$char" "$left") "$str" $(echon "$char" "$right")"
+	_filter "$@" && return $?
+	local str="$1" char="${2:--}"
+	local -i len=${#str}
+	local -i side=$((((HRULEWIDTH / 2) - len / 2) - 3))
+	local -i left=$side
+	local -i right=$side
+	((len % 2 == 1)) && ((right -= 1))
+	echo "$pre" "$(echon "$char" "$left")" "$str" "$(echon "$char" "$right")"
 }
 
 htitle "$@"
