@@ -1,3 +1,128 @@
 #!/bin/sh
 rm -rf "$HOME/.git-templates"
 ln -sf "$PWD/git-templates" "$HOME/.git-templates"
+
+# Commit identity is personal, so it is never stored in this repo. It is
+# written to the untracked global git config (~/.gitconfig), asking when
+# run from a terminal. Default order: GIT_NAME / GIT_EMAIL, the value
+# already in git config, then what GitHub knows through gh (the noreply
+# address when the account has no public email). Re-running keeps your
+# earlier answers as the defaults.
+
+name=${GIT_NAME:-}
+[ -n "$name" ] || name=$(git config --global --get user.name 2>/dev/null)
+[ -n "$name" ] || name=$(gh api user -q '.name // empty' 2>/dev/null)
+[ -n "$name" ] || name=${USER:-$(whoami)}
+
+email=${GIT_EMAIL:-}
+[ -n "$email" ] || email=$(git config --global --get user.email 2>/dev/null)
+[ -n "$email" ] || email=$(gh api user -q '.email // empty' 2>/dev/null)
+[ -n "$email" ] || email=$(gh api user -q '"\(.id)+\(.login)@users.noreply.github.com"' 2>/dev/null)
+
+# ask <label> <default> prints the answer, or the default if blank
+ask() {
+	printf 'Git %s [%s]: ' "$1" "$2" >&2
+	read -r answer || answer=
+	echo "${answer:-$2}"
+}
+
+# confirm <question> <y|n default>; never says yes without a terminal so
+# nothing that changes keys or GitHub ever happens unattended
+confirm() {
+	[ -t 0 ] || return 1
+	if [ "$2" = y ]; then hint='Y/n'; else hint='y/N'; fi
+	printf '%s [%s] ' "$1" "$hint" >&2
+	read -r answer || answer=
+	case ${answer:-$2} in [yY]*) return 0 ;; *) return 1 ;; esac
+}
+
+if [ -t 0 ]; then
+	name=$(ask "user.name" "$name")
+	email=$(ask "user.email" "$email")
+fi
+
+if [ -n "$name" ]; then
+	git config --global user.name "$name"
+fi
+if [ -n "$email" ]; then
+	git config --global user.email "$email"
+else
+	echo "warning: no git user.email set; run again with GIT_EMAIL=you@example.com" >&2
+fi
+echo "git user.name='$(git config --global --get user.name)' user.email='$(git config --global --get user.email)'"
+
+# ---------------------------- commit signing ---------------------------
+# SSH signing so commits show as Verified on GitHub. The key path is found
+# per machine (never copied from another one), the private key never
+# leaves ~/.ssh, and nothing here changes GitHub or your key unless you
+# say yes at a terminal.
+
+ssh_dir=$HOME/.ssh
+key=${GIT_SIGNING_KEY:-}
+[ -n "$key" ] || key=$(git config --global --get user.signingkey 2>/dev/null)
+case $key in
+key::* | ssh-*) key= ;; # literal keys are left to the user
+*) [ -r "$key" ] || key= ;; # stale path from another machine
+esac
+if [ -z "$key" ]; then
+	for k in "$ssh_dir/id_ed25519.pub" "$ssh_dir/id_ecdsa.pub" "$ssh_dir/id_rsa.pub"; do
+		if [ -r "$k" ]; then
+			key=$k
+			break
+		fi
+	done
+fi
+
+if [ -z "$key" ]; then
+	if confirm "No SSH key found. Create an ed25519 signing key?" y; then
+		mkdir -p "$ssh_dir" && chmod 700 "$ssh_dir"
+		ssh-keygen -t ed25519 -C "$email" -f "$ssh_dir/id_ed25519" && key=$ssh_dir/id_ed25519.pub
+	fi
+fi
+
+if [ -z "$key" ]; then
+	echo "signing: no SSH key, commit signing not configured (run again at a terminal or set GIT_SIGNING_KEY=~/.ssh/key.pub)" >&2
+	if [ "$(git config --global --get commit.gpgsign)" = true ]; then
+		echo "warning: commit.gpgsign is true but no usable key; commits will fail until one exists" >&2
+	fi
+else
+	git config --global gpg.format ssh
+	git config --global user.signingkey "$key"
+	git config --global commit.gpgsign true
+
+	# let git verify signatures locally (git log --show-signature)
+	signers=${XDG_CONFIG_HOME:-$HOME/.config}/git/allowed_signers
+	mkdir -p "$(dirname "$signers")"
+	line="$email $(cut -d' ' -f1,2 "$key")"
+	grep -qxF "$line" "$signers" 2>/dev/null || echo "$line" >>"$signers"
+	git config --global gpg.ssh.allowedSignersFile "$signers"
+	echo "signing: key=$key allowed_signers=$signers"
+
+	# a key with no passphrase lets anyone who can read the file sign as you
+	priv=${key%.pub}
+	if [ -r "$priv" ] && ssh-keygen -y -P "" -f "$priv" >/dev/null 2>&1; then
+		echo "warning: $priv has no passphrase" >&2
+		if confirm "Add a passphrase now?" n; then
+			ssh-keygen -p -f "$priv"
+		else
+			echo "  later: ssh-keygen -p -f $priv  (macOS: ssh-add --apple-use-keychain $priv)" >&2
+		fi
+	fi
+
+	# is the key registered with GitHub as a signing key?
+	material=$(cut -d' ' -f2 "$key")
+	if command -v gh >/dev/null 2>&1 && registered=$(gh api user/ssh_signing_keys --paginate -q '.[].key' 2>/dev/null); then
+		case $registered in
+		*"$material"*) echo "signing: key is registered on GitHub" ;;
+		*)
+			if confirm "Key is not a GitHub signing key. Add it?" y; then
+				gh ssh-key add "$key" --type signing --title "$(hostname -s) signing"
+			else
+				echo "  later: gh ssh-key add $key --type signing" >&2
+			fi
+			;;
+		esac
+	else
+		echo "signing: cannot check GitHub; to register: gh auth refresh -h github.com -s admin:ssh_signing_key && gh ssh-key add $key --type signing" >&2
+	fi
+fi

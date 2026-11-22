@@ -14,7 +14,9 @@
 - Never assume the login name (`$USER`) is the GitHub user or that the repo is under `~/repos/github.com/<user>/dot`
 - `config/bash/setup` records `GITUSER` and `DOTFILES` once in `~/.config/dot/env` (machine-local, never committed); `bashrc` sources it and only falls back to `$USER` if it is missing
 - The time zone is asked for during `config/bash/setup` (default: previous answer, else the computer's) and stored as `TZ` in that same env file; never hardcode it in `bashrc`
-- Author-specific bash settings (aliases, service IDs, `LC_COLLATE`/Go settings, `owncomp`) live in `config/bash/personal`, sourced automatically from `$DOTFILES`; keep `bashrc` generic. Color themes, the prompt, `PATH` and `set -o vi` and `CFLAGS` (both intentional for everyone) stay in `bashrc`
+- Author-specific bash settings (aliases, service IDs, `owncomp`) live in `config/bash/personal`, sourced automatically from `$DOTFILES`; keep `bashrc` generic. Color themes, the prompt, `PATH` and `set -o vi`, `CFLAGS`, `LC_COLLATE` and the Go settings (all intentional for everyone) stay in `bashrc`
+- Git `user.name` and `user.email` are personal: `config/git/setup` asks for them (defaults: previous answer, then GitHub via `gh`) and writes them to the untracked `~/.gitconfig`; never commit an identity to the repo. `gh`'s `config.yml` has no identity settings
+- Commit signing is SSH-based and configured per machine by `config/git/setup` (finds `~/.ssh/id_*.pub`, writes `user.signingkey`, `gpg.format`, `commit.gpgsign` and an `allowed_signers` file); never hardcode a key path in the repo or commit a private key. Anything that changes keys or GitHub (create key, add passphrase, register signing key) only happens after a yes at a terminal
 - Scripts and `gh` aliases that need the GitHub owner should ask `gh api user -q .login` or use `$GITUSER`, not `$USER`
 
 ## Commits
