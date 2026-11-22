@@ -11,6 +11,23 @@
   ],
   "dictionaries": [
     "spellfile"
+  ],
+  "languageSettings": [
+    {
+      "languageId": "shellscript,bash,sh",
+      "includeRegExpList": ["string"]
+    }
+  ],
+  "overrides": [
+    {
+      "filename": [
+        "**/bashrc",
+        "**/profile",
+        "**/inputrc",
+        "**/scripts/*",
+        "**/install/**/install-*"
+      ],
+      "languageId": "shellscript"
+    }
   ]
 }
-
