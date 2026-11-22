@@ -1,23 +1,24 @@
 #!/bin/bash
+here=$(CDPATH= cd -- "$(dirname -- "$0")" && { realpath . 2>/dev/null || pwd; })
 
 if [[ -z "$(which vim)" || -z "$(which vimtutor)" ]]; then
 	echo "Warning, doesn't look like you have full Vim version."
 fi
 
-ln -sf "$PWD/vimrc" "$HOME/.vimrc"
+ln -sf "$here/vimrc" "$HOME/.vimrc"
 
 mkdir -p "$HOME/.vim/autoload"
-ln -sf "$PWD/plug.vim" "$HOME/.vim/autoload/plug.vim"
+ln -sf "$here/plug.vim" "$HOME/.vim/autoload/plug.vim"
 
 mkdir -p "$HOME/.vim/spell"
-ln -sf "$PWD/en.utf-8.add.spl" "$HOME/.vim/spell/en.utf-8.add.spl"
+ln -sf "$here/en.utf-8.add.spl" "$HOME/.vim/spell/en.utf-8.add.spl"
 mkdir -p "$HOME/.vim/spell"
-ln -sf "$PWD/en.utf-8.add" "$HOME/.vim/spell/en.utf-8.add"
+ln -sf "$here/en.utf-8.add" "$HOME/.vim/spell/en.utf-8.add"
 mkdir -p "$HOME/.config/cspell/"
-ln -sf "$PWD/cspell.json" "$HOME/.config/cspell/cspell.json"
+ln -sf "$here/cspell.json" "$HOME/.config/cspell/cspell.json"
 
 mkdir -p "$HOME/.config/rumdl/"
-ln -sf "$PWD/rumdl.toml" "$HOME/.config/rumdl/rumdl.toml"
+ln -sf "$here/rumdl.toml" "$HOME/.config/rumdl/rumdl.toml"
 
 mkdir -p "$HOME/.config/nvim"
-ln -sf "$PWD/init.lua" "$HOME/.config/nvim/init.lua"
+ln -sf "$here/init.lua" "$HOME/.config/nvim/init.lua"

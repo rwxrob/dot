@@ -8,6 +8,7 @@
 |[ageof](ageof)| Prints seconds since first argument was last modified
 |[allcow](allcow)| Cycle through display of all different cows
 |[allfigl](allfigl)| Cycle through display of all different figlet fonts
+|[ask](ask)| Run `opencode` from `~/.local/share/ask`, continuing the last session
 |[banner](banner)| Colorful text banner in `figlet` futura font
 |[bannerfishies](bannerfishies)| Banner with fishies in TMUX pane
 |[bannerlights](bannerlights)| Banner with `lights` in TMUX pane

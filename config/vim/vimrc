@@ -1,10 +1,14 @@
 " designed for vim 8+
 
-set nocompatible
+scriptencoding utf-8
+
+augroup vimrc
+  autocmd!
+augroup END
 
 set background=dark
 
-if has("eval")                               " vim-tiny lacks 'eval'
+if has('eval')                               " vim-tiny lacks 'eval'
   let skip_defaults_vim = 1
 endif
 
@@ -42,9 +46,9 @@ set showmode
 " disable bell (also disable in .inputrc)
 set noerrorbells
 set visualbell
-set vb t_vb=
+set visualbell t_vb=
 
-let mapleader=","
+let mapleader=','
 
 set softtabstop=2
 
@@ -72,7 +76,7 @@ endif
 
 " mark trailing spaces as errors (break Makefiles, etc.)
 " (matchadd is per window, so add it to every window once)
-if has("eval")
+if has('eval')
   augroup VimrcTrailing
     autocmd!
     autocmd VimEnter,WinEnter,BufWinEnter * if !exists('w:trail_match')
@@ -89,7 +93,7 @@ set textwidth=72
 set norelativenumber
 
 " disable spellcapcheck
-set spc=
+set spellcapcheck=
 
 " more risky, but cleaner
 set nobackup
@@ -110,7 +114,7 @@ set shortmess=aoOtTI
 set viminfo='20,<1000,s1000
 
 " not a fan of bracket matching or folding
-if has("eval") " vim-tiny detection
+if has('eval') " vim-tiny detection
   let g:loaded_matchparen=1
 endif
 set noshowmatch
@@ -123,23 +127,23 @@ set wrapscan
 " use of modern simplified pandoc for capturing knowledge source instead
 " of arbitrary raw text files.
 
-set fo-=t   " don't auto-wrap text using text width
-set fo+=c   " autowrap comments using textwidth with leader
-set fo-=r   " don't auto-insert comment leader on enter in insert
-set fo-=o   " don't auto-insert comment leader on o/O in normal
-set fo+=q   " allow formatting of comments with gq
-set fo-=w   " don't use trailing whitespace for paragraphs
-set fo-=a   " disable auto-formatting of paragraph changes
-set fo-=n   " don't recognized numbered lists
-set fo+=j   " delete comment prefix when joining
-set fo-=2   " don't use the indent of second paragraph line
-set fo-=v   " don't use broken 'vi-compatible auto-wrapping'
-set fo-=b   " don't use broken 'vi-compatible auto-wrapping'
-set fo+=l   " long lines not broken in insert mode
-set fo+=m   " multi-byte character line break support
-set fo+=M   " don't add space before or after multi-byte char
-set fo-=B   " don't add space between two multi-byte chars
-set fo+=1   " don't break a line after a one-letter word
+set formatoptions-=t   " don't auto-wrap text using text width
+set formatoptions+=c   " autowrap comments using textwidth with leader
+set formatoptions-=r   " don't auto-insert comment leader on enter in insert
+set formatoptions-=o   " don't auto-insert comment leader on o/O in normal
+set formatoptions+=q   " allow formatting of comments with gq
+set formatoptions-=w   " don't use trailing whitespace for paragraphs
+set formatoptions-=a   " disable auto-formatting of paragraph changes
+set formatoptions-=n   " don't recognized numbered lists
+set formatoptions+=j   " delete comment prefix when joining
+set formatoptions-=2   " don't use the indent of second paragraph line
+set formatoptions-=v   " don't use broken 'vi-compatible auto-wrapping'
+set formatoptions-=b   " don't use broken 'vi-compatible auto-wrapping'
+set formatoptions+=l   " long lines not broken in insert mode
+set formatoptions+=m   " multi-byte character line break support
+set formatoptions+=M   " don't add space before or after multi-byte char
+set formatoptions-=B   " don't add space between two multi-byte chars
+set formatoptions+=1   " don't break a line after a one-letter word
 
 " stop complaints about switching buffer with changes
 set hidden
@@ -165,7 +169,7 @@ nnoremap <leader>ce :e $MYVIMRC<CR>
 nnoremap <leader>cr :source $MYVIMRC<CR>
 nnoremap <leader>cd i_In development..._<Esc>
 
-set ruf=%30(%=%#LineNr#%.50F\ [%{strlen(&ft)?&ft:'none'}]\ %l:%c\ %p%%%)
+set rulerformat=%30(%=%#LineNr#%.50F\ [%{strlen(&ft)?&ft:'none'}]\ %l:%c\ %p%%%)
 
 " base default color changes (gruvbox dark friendly); reapplied after
 " every colorscheme load so they are not wiped out
@@ -200,7 +204,7 @@ augroup VimrcColors
 augroup END
 
 " only load plugins if Plug detected
-if filereadable(expand("~/.vim/autoload/plug.vim"))
+if filereadable(expand('~/.vim/autoload/plug.vim'))
 
   " github.com/junegunn/vim-plug
   " There can only be one plug#begin block so all this
@@ -246,6 +250,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
         \'go': ['gopls','staticcheck','gofmt','gobuild'],
         \'perl': ['perl','perlcritic'],
         \'sh': ['shellcheck'],
+        \'vim': ['vint'],
         \'bash': ['shellcheck'],
         \'lua': ['luacheck'],
         \'python': ['ruff'],
@@ -300,8 +305,8 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   set updatetime=100
 
   " common go macros
-  au FileType go nmap <leader>m ilog.Print("made")<CR><ESC>
-  au FileType go nmap <leader>n iif err != nil {return err}<CR><ESC>
+  autocmd vimrc FileType go nmap <leader>m ilog.Print("made")<CR><ESC>
+  autocmd vimrc FileType go nmap <leader>n iif err != nil {return err}<CR><ESC>
 
   if !exists('g:colors_name') || g:colors_name !=# 'gruvbox-material'
     try
@@ -312,22 +317,20 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   endif
 
 else
-  " backup if fatih fails
-  autocmd vimleavepre *.go silent !gofmt -w %
   call s:Colors() " no colorscheme loaded, so apply directly
 endif
 
-au FileType markdown,pandoc hi Title ctermfg=yellow ctermbg=NONE
-au FileType markdown,pandoc hi Operator ctermfg=yellow ctermbg=NONE
-au FileType markdown,pandoc setlocal tw=0
-au FileType markdown,pandoc setlocal wrap
-au FileType yaml hi yamlBlockMappingKey ctermfg=NONE
-au FileType yaml setlocal sw=2
-au FileType sh,bash setlocal sw=2
-au FileType c setlocal sw=8
-au FileType markdown,pandoc,asciidoc nnoremap <buffer> j gj
-au FileType markdown,pandoc,asciidoc nnoremap <buffer> k gk
-au FileType sh,bash setlocal noet
+autocmd vimrc FileType markdown,pandoc hi Title ctermfg=yellow ctermbg=NONE
+autocmd vimrc FileType markdown,pandoc hi Operator ctermfg=yellow ctermbg=NONE
+autocmd vimrc FileType markdown,pandoc setlocal tw=0
+autocmd vimrc FileType markdown,pandoc setlocal wrap
+autocmd vimrc FileType yaml hi yamlBlockMappingKey ctermfg=NONE
+autocmd vimrc FileType yaml setlocal sw=2
+autocmd vimrc FileType sh,bash setlocal sw=2
+autocmd vimrc FileType c setlocal sw=8
+autocmd vimrc FileType markdown,pandoc,asciidoc nnoremap <buffer> j gj
+autocmd vimrc FileType markdown,pandoc,asciidoc nnoremap <buffer> k gk
+autocmd vimrc FileType sh,bash setlocal noet
 
 " force loclist to always close when buffer does (affects vim-go, etc.)
 augroup CloseLoclistWindowGroup
@@ -363,43 +366,43 @@ nnoremap zw zw:ALELint<CR>
 nnoremap zug zug:ALELint<CR>
 
 " force some files to be specific file type
-au bufnewfile,bufRead .goreleaser set ft=yaml
-au bufnewfile,bufRead *.tf,*.tfvars set ft=terraform
-au bufnewfile,bufRead *.props set ft=jproperties
-au bufnewfile,bufRead *.ddl set ft=sql
-au bufnewfile,bufRead *.sh,*.bash set ft=sh
-au bufnewfile,bufRead *.{peg,pegn} set ft=config
-au bufnewfile,bufRead *.gotmpl set ft=go
-au bufnewfile,bufRead *.profile set filetype=sh
-au bufnewfile,bufRead *.crontab set filetype=crontab
-au bufnewfile,bufRead *ssh/config set filetype=sshconfig
-au bufnewfile,bufRead .dockerignore set filetype=gitignore
-au bufnewfile,bufRead .bashrc,.bash_profile set filetype=bash
-au bufnewfile,bufRead *gitconfig set filetype=gitconfig
-au bufnewfile,bufRead /tmp/psql.edit.* set syntax=sql
-au bufnewfile,bufRead *.go set spell spellcapcheck=0
-au bufnewfile,bufRead commands.yaml set spell
-au bufnewfile,bufRead *.{txt,md,adoc} set spell
-au FileType sh,bash,zsh setlocal nospell
+autocmd vimrc bufnewfile,bufRead .goreleaser set filetype=yaml
+autocmd vimrc bufnewfile,bufRead *.tf,*.tfvars set filetype=terraform
+autocmd vimrc bufnewfile,bufRead *.props set filetype=jproperties
+autocmd vimrc bufnewfile,bufRead *.ddl set filetype=sql
+autocmd vimrc bufnewfile,bufRead *.sh,*.bash set filetype=sh
+autocmd vimrc bufnewfile,bufRead *.{peg,pegn} set filetype=config
+autocmd vimrc bufnewfile,bufRead *.gotmpl set filetype=go
+autocmd vimrc bufnewfile,bufRead *.profile set filetype=sh
+autocmd vimrc bufnewfile,bufRead *.crontab set filetype=crontab
+autocmd vimrc bufnewfile,bufRead *ssh/config set filetype=sshconfig
+autocmd vimrc bufnewfile,bufRead .dockerignore set filetype=gitignore
+autocmd vimrc bufnewfile,bufRead .bashrc,.bash_profile set filetype=bash
+autocmd vimrc bufnewfile,bufRead *gitconfig set filetype=gitconfig
+autocmd vimrc bufnewfile,bufRead /tmp/psql.edit.* set syntax=sql
+autocmd vimrc bufnewfile,bufRead *.go set spell spellcapcheck=0
+autocmd vimrc bufnewfile,bufRead commands.yaml set spell
+autocmd vimrc bufnewfile,bufRead *.{txt,md,adoc} set spell
+autocmd vimrc FileType sh,bash,zsh setlocal nospell
 
 "fix bork bash detection
-if has("eval")  " vim-tiny detection
+if has('eval')  " vim-tiny detection
 fun! s:DetectBash()
-    if getline(1) == '#!/usr/bin/bash' 
-          \ || getline(1) == '#!/bin/bash'
-          \ || getline(1) == '#!/usr/bin/env bash'
-        set ft=bash
+    if getline(1) ==# '#!/usr/bin/bash' 
+          \ || getline(1) ==# '#!/bin/bash'
+          \ || getline(1) ==# '#!/usr/bin/env bash'
+        set filetype=bash
         setlocal shiftwidth=2
     endif
 endfun
-autocmd BufNewFile,BufRead * call s:DetectBash()
+autocmd vimrc BufNewFile,BufRead * call s:DetectBash()
 endif
 
 " displays all the syntax rules for current position, useful
 " when writing vimscript syntax plugins
-if has("syntax")
+if has('syntax')
 function! s:SynStack()
-  if !exists("*synstack")
+  if !exists('*synstack')
     return
   endif
     echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
@@ -456,7 +459,7 @@ if exists('$TMUX')
 endif
 
 " read personal/private vim configuration (keep last to override)
-set rtp^=~/.vimpersonal
-set rtp^=~/.vimprivate
-set rtp^=~/.vimwork
+set runtimepath^=~/.vimpersonal
+set runtimepath^=~/.vimprivate
+set runtimepath^=~/.vimwork
 

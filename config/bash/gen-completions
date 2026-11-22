@@ -1,0 +1,85 @@
+#!/bin/sh
+# Generate static bash completion files so bashrc never has to run
+# `<tool> completion bash` at shell startup. bash-completion v2 loads
+# <dir>/<command> the first time you press TAB on that command.
+#
+# Run again after installing or upgrading any of these tools. Tools that
+# are not installed are skipped. Set BASH_COMPLETION_USER_DIR to write
+# somewhere else.
+
+out=${BASH_COMPLETION_USER_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/bash-completion}/completions
+mkdir -p "$out"
+
+made=0
+skipped=""
+
+# gen <name> <tool> <command...>
+#   writes the output of <command...> to completions/<name> if <tool> exists
+gen() {
+	name=$1 tool=$2
+	shift 2
+	if ! command -v "$tool" >/dev/null 2>&1; then
+		skipped="$skipped $name"
+		return 0
+	fi
+	if "$@" >"$out/$name.tmp" 2>/dev/null && [ -s "$out/$name.tmp" ]; then
+		mv "$out/$name.tmp" "$out/$name"
+		made=$((made + 1))
+	else
+		rm -f "$out/$name.tmp"
+		echo "failed: $name" >&2
+	fi
+}
+
+gen gh gh gh completion -s bash
+gen glow glow glow completion bash
+gen goreleaser goreleaser goreleaser completion bash
+gen klogin klogin klogin completion bash
+gen pandoc pandoc pandoc --completion=bash
+gen kubeadm kubeadm kubeadm completion bash
+gen istioctl istioctl istioctl completion bash
+gen kind kind kind completion bash
+gen kompose kompose kompose completion bash
+gen helm helm helm completion bash
+gen minikube minikube minikube completion bash
+gen conftest conftest conftest completion bash
+gen yq yq yq completion bash
+gen kuti kuti kuti completion bash
+gen mkdocs mkdocs env _MKDOCS_COMPLETE=bash_source mkdocs
+
+# kubectl and its cnpg plugin share one file
+gen kubectl kubectl kubectl completion bash
+if [ -f "$out/kubectl" ] && command -v kubectl >/dev/null 2>&1; then
+	kubectl cnpg completion bash >>"$out/kubectl" 2>/dev/null || true
+fi
+
+# aliases need their own file since the loader looks up the typed name
+if [ -f "$out/kubectl" ]; then
+	cat >"$out/k" <<-'EOM'
+		. "${BASH_SOURCE[0]%/*}/kubectl"
+		complete -o default -F __start_kubectl k
+	EOM
+fi
+if [ -f "$out/minikube" ]; then
+	cat >"$out/mk" <<-'EOM'
+		. "${BASH_SOURCE[0]%/*}/minikube"
+		complete -o default -F __start_minikube mk
+	EOM
+fi
+
+# ansible tools all use argcomplete
+if command -v register-python-argcomplete3 >/dev/null 2>&1; then
+	for c in ansible ansible-config ansible-console ansible-doc \
+		ansible-galaxy ansible-inventory ansible-playbook \
+		ansible-pull ansible-vault; do
+		gen "$c" "$c" register-python-argcomplete3 "$c"
+	done
+fi
+
+# podman installs its own static file
+if command -v podman >/dev/null 2>&1 && [ -r "$HOME/.local/share/podman/completion" ]; then
+	ln -sf "$HOME/.local/share/podman/completion" "$out/podman"
+fi
+
+echo "wrote $made completion files to $out"
+[ -z "$skipped" ] || echo "skipped (not installed):$skipped"

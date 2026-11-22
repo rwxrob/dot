@@ -61,6 +61,7 @@ $SIG{"INT"}  = \&handle;
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #############################################################################
 
+use lib "$ENV{HOME}/perl5/lib/perl5";
 use Term::Animation 2.0;
 use Term::Animation::Entity;
 use Data::Dumper;

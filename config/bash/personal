@@ -1,0 +1,46 @@
+# shellcheck shell=bash
+#
+# rwxrob's personal bash customizations. Sourced automatically by bashrc
+# from the dot repo. Fork the repo and edit this file to make it yours;
+# bashrc itself stays generic. (Private, per-machine things belong in
+# ~/.bash_personal, ~/.bash_private and ~/.bash_work, which are not in git.)
+
+# ----------------------------- environment --------------------------
+
+export TWITCH_BROADCASTER_ID=447179030
+export PDFS="$HOME/usb/pdfs"
+export VIRTUALMACHINES="$HOME/VirtualMachines"
+
+export CLIP_DIR="$VIDEOS/clips"
+export CLIP_DATA="$GHREPOS/clip/data"
+export CLIP_VOLUME=0
+export CLIP_SCREEN=0
+
+export NVIM_SCREENKEY=1
+
+# ------------------------------- aliases ----------------------------
+
+alias todo='vi ~/.todo'
+alias sshh='sshpass -f $HOME/.sshpass ssh '
+alias km="kimono"
+alias s=wee
+alias x=clip
+alias t=topic
+alias gp="git push"
+alias gptags="git push origin --tags"
+alias oc=opencode
+alias cusage='claude -p "/usage"'
+_have neo && alias neo="neo -D -c gold"
+
+# ----------------------------- completion ---------------------------
+
+# my own commands that complete themselves (nothing runs until you press TAB)
+owncomp=(
+	pdf zet keg kn yt gl auth pomo config live iam sshkey ws x clip
+	./build build b ./k8sapp k8sapp ./setup ./cmd run ./run
+	foo ./foo cmds ./cmds z bon openapi obs vault var sunrise multicall
+	kimono tag cm ytwee
+)
+
+for i in "${owncomp[@]}"; do complete -C "$i" "$i"; done
+unset owncomp i
