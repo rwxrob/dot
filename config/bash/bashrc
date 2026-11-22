@@ -357,14 +357,22 @@ clone() {
 
 # ------------- source external dependencies / completion ------------
 
+# bash-completion v2 lazy-loads ~/.local/share/bash-completion/completions/<cmd>
+# on first TAB, so nothing is run per shell. Generate those files with
+# config/bash/gen-completions (rerun after installing or upgrading tools).
+
 # for mac
 if [[ "$OSTYPE" == "darwin"* ]]; then
-	brew_prefix="$(brew --prefix)"
-	if [[ -r "$brew_prefix/etc/profile.d/bash_completion.sh" ]]; then
-		source "$brew_prefix/etc/profile.d/bash_completion.sh"
-	fi
+	for f in /opt/homebrew/etc/profile.d/bash_completion.sh \
+		/usr/local/etc/profile.d/bash_completion.sh; do
+		[[ -r "$f" ]] && {
+			source "$f"
+			break
+		}
+	done
 fi
 
+# commands that complete themselves (nothing runs until you press TAB)
 owncomp=(
 	pdf zet keg kn yt gl auth pomo config live iam sshkey ws x clip
 	./build build b ./k8sapp k8sapp ./setup ./cmd run ./run
@@ -374,39 +382,11 @@ owncomp=(
 
 for i in "${owncomp[@]}"; do complete -C "$i" "$i"; done
 
-_have gh && . <(gh completion -s bash)
-_have glow && . <(glow completion bash)
-_have goreleaser && . <(goreleaser completion bash 2>/dev/null)
-_have klogin && . <(klogin completion bash 2>/dev/null)
-_have pandoc && . <(pandoc --completion=bash)
-_have kubectl && . <(kubectl completion bash 2>/dev/null)
-_have kubectl && . <(kubectl cnpg completion bash 2>/dev/null)
-_have kubeadm && . <(kubeadm completion bash 2>/dev/null)
-_have k && complete -o default -F __start_kubectl k
-_have istioctl && . <(istioctl completion bash 2>/dev/null)
-_have kind && . <(kind completion bash)
-_have kompose && . <(kompose completion bash)
-_have helm && . <(helm completion bash)
-_have minikube && . <(minikube completion bash)
-_have conftest && . <(conftest completion bash)
-_have yq && . <(yq completion bash)
-_have mk && complete -o default -F __start_minikube mk
-_have podman && _source_if "$HOME/.local/share/podman/completion" # d
-_have mkdocs && . <(_MKDOCS_COMPLETE=bash_source mkdocs)
-_have kuti && . <(kuti completion bash)
-
-if _have register-python-argcomplete3; then
-	for i in ansible ansible-config ansible-console ansible-doc \
-		ansible-galaxy ansible-inventory ansible-playbook \
-		ansible-pull ansible-vault; do
-		_have "$i" && . <(register-python-argcomplete3 "$i")
-	done
-fi
-
 if _have terraform; then
 	complete -C "$(command -v terraform)" terraform
 	complete -C "$(command -v terraform)" tf
 fi
+#_have ssh-agent && test -z "$SSH_AGENT_PID" && . <(ssh-agent)
 
 # -------------------- personalized configuration --------------------
 
