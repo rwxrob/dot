@@ -6,10 +6,11 @@ src=$(CDPATH= cd -- "$(dirname -- "$0")" && { realpath . 2>/dev/null || pwd; })
 ln -sf "$src/wezterm.lua" "$HOME/.wezterm.lua"
 
 # wezterm.lua uses 'UbuntuMono Nerd Font'; install it if it is missing
-if command -v fc-list >/dev/null 2>&1; then
+if [ "$(uname)" = Darwin ]; then
+	# only the real font folders count; fc-list can see fonts wezterm cannot
+	have=$(ls "$HOME/Library/Fonts" /Library/Fonts 2>/dev/null | grep -c 'UbuntuMonoNerdFont' || true)
+elif command -v fc-list >/dev/null 2>&1; then
 	have=$(fc-list | grep -c 'UbuntuMono Nerd Font' || true)
-elif [ "$(uname)" = Darwin ]; then
-	have=$(ls "$HOME/Library/Fonts" /Library/Fonts 2>/dev/null | grep -c 'UbuntuMono.*Nerd' || true)
 else
 	have=0
 fi
