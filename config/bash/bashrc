@@ -217,45 +217,55 @@ wd() {
 # cdd [-f] NAME: cd into the first directory called NAME (or ending in a path
 # like owner/repo) found by descending below each root in $CDD (colon-separated
 # like PATH; "." is the current directory; defaults to "."). Roots are tried in
-# order and the shallowest hit within a root wins. Hidden directories and
-# node_modules are never searched. $CDD_DEPTH (default 4) limits how deep to
-# look. Every hit is remembered in ${XDG_CACHE_HOME:-~/.cache}/cdd/paths and
-# reused while the directory still exists; -f ignores the memory and searches
-# again (and refreshes it). Plain cd is never changed, so scripts are
-# unaffected.
+# order and the shallowest hit within a root wins. If no root has an exact
+# match, a second pass accepts any directory whose name merely contains NAME
+# (ignoring case), so "trace" finds "hpc.k8s.k8sapp-dyntrace". Hidden
+# directories and node_modules are never searched. $CDD_DEPTH (default 4)
+# limits how deep to look. Every hit is remembered in
+# ${XDG_CACHE_HOME:-~/.cache}/cdd/paths and reused while the directory still
+# exists; -f ignores the memory and searches again (and refreshes it). Plain
+# cd is never changed, so scripts are unaffected.
 cdd() {
-	local force=0 name root dir max="${CDD_DEPTH:-4}"
+	local force=0 name root dir mode max="${CDD_DEPTH:-4}"
 	local cache="${XDG_CACHE_HOME:-$HOME/.cache}/cdd/paths" tmp
-	local -a roots
+	local -a roots match
 	[[ "$1" == -f ]] && { force=1; shift; }
 	name="${1%/}"
 	[[ -z "$name" ]] && { echo "usage: cdd [-f] NAME" >&2; return 2; }
 
 	if ((!force)) && [[ -r "$cache" ]]; then
 		dir=$(N="$name" awk -F'\t' '$1 == ENVIRON["N"] { print $2; exit }' "$cache")
-		if [[ -n "$dir" && -d "$dir" && "$dir" == */"$name" ]]; then
+		if [[ -n "$dir" && -d "$dir" ]]; then
 			cd -- "$dir" || return
 			return
 		fi
 	fi
 
 	IFS=: read -ra roots <<<"${CDD:-.}"
-	for root in "${roots[@]}"; do
-		[[ -d "$root" ]] || continue
-		dir=$(find "$root" -mindepth 1 -maxdepth "$max" \
-			\( -name '.?*' -o -name node_modules \) -prune -o \
-			-type d -path "*/$name" -print 2>/dev/null |
-			awk -F/ '{print NF, $0}' | sort -n -s | head -n1 | cut -d' ' -f2-)
-		if [[ -n "$dir" ]]; then
-			mkdir -p "${cache%/*}"
-			tmp="$cache.$$"
-			{
-				N="$name" awk -F'\t' '$1 != ENVIRON["N"]' "$cache" 2>/dev/null
-				printf '%s\t%s\n' "$name" "$dir"
-			} >"$tmp" && mv -f "$tmp" "$cache"
-			cd -- "$dir" || return
-			return
+	for mode in exact partial; do
+		if [[ "$mode" == exact ]]; then
+			match=(-path "*/$name")
+		else
+			match=(-ipath "*/*$name*")
+			[[ "$name" == */* ]] || match=(-iname "*$name*")
 		fi
+		for root in "${roots[@]}"; do
+			[[ -d "$root" ]] || continue
+			dir=$(find "$root" -mindepth 1 -maxdepth "$max" \
+				\( -name '.?*' -o -name node_modules \) -prune -o \
+				-type d "${match[@]}" -print 2>/dev/null |
+				awk -F/ '{print NF, $0}' | sort -n -s | head -n1 | cut -d' ' -f2-)
+			if [[ -n "$dir" ]]; then
+				mkdir -p "${cache%/*}"
+				tmp="$cache.$$"
+				{
+					N="$name" awk -F'\t' '$1 != ENVIRON["N"]' "$cache" 2>/dev/null
+					printf '%s\t%s\n' "$name" "$dir"
+				} >"$tmp" && mv -f "$tmp" "$cache"
+				cd -- "$dir" || return
+				return
+			fi
+		done
 	done
 	echo "cdd: no directory named $name below ${CDD:-.}" >&2
 	return 1
