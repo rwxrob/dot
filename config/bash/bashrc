@@ -117,6 +117,7 @@ pathprepend() {
 pathprepend \
 	"$HOME/.local/bin" \
 	"$HOME/.local/go/bin" \
+	"$HOME/.opencode/bin" \
 	"$GHREPOS/cmd-"* \
 	/usr/local/go/bin \
 	/usr/local/opt/openjdk/bin \
