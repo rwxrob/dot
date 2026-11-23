@@ -196,7 +196,7 @@
 |[off](off)| Description
 |[onchange](onchange)| Description
 |[opacity](opacity)| Description
-|[open](open)| Description
+|[open](open)| Drop-in for the system `open`: passes options and paths through, adds `https://` to bare URLs
 |[openlast](openlast)| Description
 |[openlastvid](openlastvid)| Description
 |[origins](origins)| Description
