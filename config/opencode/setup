@@ -10,7 +10,7 @@ ln -sf "$src/cli.json" "$config_dir/cli.json"
 ln -sf "$src/opencode.jsonc" "$config_dir/opencode.jsonc"
 ls -l "$config_dir/cli.json" "$config_dir/opencode.jsonc"
 
-# working directory for the ask script (see scripts/ask)
+# working directory for the ask script (see bin/ask)
 mkdir -p "$ask_dir"
 ln -sf "$src/ask/AGENTS.md" "$ask_dir/AGENTS.md"
 ls -l "$ask_dir/AGENTS.md"

@@ -38,5 +38,5 @@ scenario.
 ## Use `tmuxin` to Enable TMUX-ception
 
 Remember to `unset TMUX` to allow starting the nested TMUX session. To
-make it easier [`tmuxin`](../scripts/tmuxin) can be used instead of
+make it easier [`tmuxin`](../../bin/tmuxin) can be used instead of
 `tmux`.

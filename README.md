@@ -10,7 +10,7 @@ Don't forget to install [fonts](https://github.com/rwxrob/fonts) as well if you 
 | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [`config/`](config)      | Configuration, one directory per tool ([`bash`](config/bash), [`vim`](config/vim), [`tmux`](config/tmux), [`git`](config/git), ...), each with a `setup`                                       |
 | [`install/`](install)    | `install-*` scripts that install tools ([`mac`](install/mac), [`ubuntu`](install/ubuntu), [`redhat`](install/redhat), [`windows`](install/windows))                                           |
-| [`scripts/`](scripts)    | Small standalone commands that go on your `PATH`                                                                                                                                               |
+| [`bin/`](bin)                | Small standalone commands that go on your `PATH`                                                                                                                                               |
 
 Nothing in the repo is a hidden file. Files like `config/bash/bashrc` are plain names so they show up in `ls`, and each tool's `setup` script creates the dotted symlink in `$HOME` (`~/.bashrc`, `~/.tmux.conf`, ...).
 

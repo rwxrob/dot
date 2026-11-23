@@ -24,7 +24,7 @@
         "**/bashrc",
         "**/profile",
         "**/inputrc",
-        "**/scripts/*",
+        "**/bin/*",
         "**/install/**/install-*"
       ],
       "languageId": "shellscript"

@@ -3,7 +3,10 @@ set -e
 
 root=$(CDPATH= cd -- "$(dirname -- "$0")" && { realpath . 2>/dev/null || pwd; })
 
-ln -sfn "$root/scripts" "$HOME/Scripts"
+# the old ~/Scripts link points at the former scripts/ directory; drop it
+if [ -L "$HOME/Scripts" ] && [ ! -e "$HOME/Scripts" ]; then
+	rm -f "$HOME/Scripts"
+fi
 
 for i in bash wezterm vim lynx gh git tmux docker podman iam opencode; do
 	(cd "$root/config/$i" && ./setup)

@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Create a new script next to this one, so it lands in the same directory
+# as every other command wherever the repo is cloned, and edit it.
+
+if [[ -z $1 ]]; then
+	echo "usage: newx <name>" >&2
+	exit 1
+fi
+if [[ $1 == */* ]]; then
+	echo "newx: name cannot contain /" >&2
+	exit 1
+fi
+
+self=$(realpath "$0" 2>/dev/null) || self=$0
+dir=$(CDPATH= cd -- "$(dirname -- "$self")" && pwd -P)
+path="$dir/$1"
+editor=${EDITOR:-vi}
+
+yes_answer() {
+	case $1 in y | yes | yep | yeppers | yeah | ok | okay) return 0 ;; *) return 1 ;; esac
+}
+
+if [[ -e $path ]]; then
+	read -rp "$1 already exists. Edit? " answer
+	yes_answer "$answer" && exec "$editor" "$path"
+	exit 0
+fi
+
+# this directory is first on PATH, so a new script would hide any command
+# of the same name that lives elsewhere
+others=$(printf %s "$PATH" | tr ':' '\n' | grep -vxF "$dir" | paste -sd: -)
+other=$(PATH=$others command -v "$1")
+if [[ $other == /* ]]; then
+	read -rp "$1 already exists as $other; shadow it? " answer
+	yes_answer "$answer" || exit 0
+fi
+
+printf '#!/bin/sh\n\n' >"$path"
+chmod +x "$path"
+exec "$editor" +2 "$path"

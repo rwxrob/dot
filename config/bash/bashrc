@@ -30,7 +30,6 @@ export DESKTOP="$HOME/Desktop"
 export DOCUMENTS="$HOME/Documents"
 export DOWNLOADS="$HOME/Downloads"
 export TEMPLATES="$HOME/Templates"
-export SCRIPTS="$HOME/Scripts"
 export PUBLIC="$HOME/Public"
 export PRIVATE="$HOME/Private"
 export PICTURES="$HOME/Pictures"
@@ -123,7 +122,7 @@ pathprepend \
 	/usr/local/opt/openjdk/bin \
 	/usr/local/bin \
 	/opt/homebrew/bin \
-	"$SCRIPTS"
+	"$DOTFILES/bin"
 
 pathappend \
 	/usr/local/opt/coreutils/libexec/gnubin \
