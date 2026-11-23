@@ -385,6 +385,12 @@ autocmd vimrc bufnewfile,bufRead commands.yaml set spell
 autocmd vimrc bufnewfile,bufRead *.{txt,md,adoc} set spell
 autocmd vimrc FileType sh,bash,zsh setlocal nospell
 
+" Neovim loads the file given on the command line (and plugin loading
+" re-detects its filetype) before the FileType autocmds above exist, so
+" the j/k, wrap, and other filetype settings never applied to it. Replay
+" them once startup is done; they are all idempotent.
+autocmd vimrc VimEnter * doautoall vimrc FileType
+
 "fix bork bash detection
 if has('eval')  " vim-tiny detection
 fun! s:DetectBash()
