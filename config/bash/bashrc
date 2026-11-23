@@ -214,7 +214,8 @@ wd() {
 	echo "$parent/$dir"
 } && export -f wd
 
-# cdd NAME: cd into the first directory called NAME found by descending
+# cdd NAME: cd into the first directory called NAME (or ending in a path like
+# owner/repo) found by descending
 # below each root in $CDD (colon-separated like PATH; "." is the current
 # directory; defaults to "."). Roots are tried in order and the shallowest
 # hit within a root wins. Hidden directories and node_modules are never
@@ -229,7 +230,7 @@ cdd() {
 		[[ -d "$root" ]] || continue
 		dir=$(find "$root" -mindepth 1 -maxdepth "$max" \
 			\( -name '.?*' -o -name node_modules \) -prune -o \
-			-type d -name "$name" -print 2>/dev/null |
+			-type d -path "*/$name" -print 2>/dev/null |
 			awk -F/ '{print NF, $0}' | sort -n -s | head -n1 | cut -d' ' -f2-)
 		if [[ -n "$dir" ]]; then
 			cd -- "$dir" || return
