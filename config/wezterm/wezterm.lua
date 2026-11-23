@@ -1,4 +1,16 @@
 local wezterm = require 'wezterm'
+
+-- open the first window where I like it
+wezterm.on('gui-startup', function(cmd)
+  local args = cmd or {}
+  args.position = args.position or {
+    x = 340,
+    y = 240,
+    origin = 'MainScreen',
+  }
+  wezterm.mux.spawn_window(args)
+end)
+
 return {
   audible_bell = "Disabled",
   window_close_confirmation = 'NeverPrompt',
@@ -12,8 +24,8 @@ return {
     'Menlo',
   }),
   font_size = 26,
-  initial_cols = 80,
-  initial_rows = 24,
+  initial_cols = 91,
+  initial_rows = 27,
 send_composed_key_when_left_alt_is_pressed = true,
 send_composed_key_when_right_alt_is_pressed = true,
   colors = {
