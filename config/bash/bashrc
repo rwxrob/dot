@@ -214,17 +214,31 @@ wd() {
 	echo "$parent/$dir"
 } && export -f wd
 
-# cdd NAME: cd into the first directory called NAME (or ending in a path like
-# owner/repo) found by descending
-# below each root in $CDD (colon-separated like PATH; "." is the current
-# directory; defaults to "."). Roots are tried in order and the shallowest
-# hit within a root wins. Hidden directories and node_modules are never
-# searched. $CDD_DEPTH (default 4) limits how deep to look. Plain cd is never
-# changed, so scripts are unaffected.
+# cdd [-f] NAME: cd into the first directory called NAME (or ending in a path
+# like owner/repo) found by descending below each root in $CDD (colon-separated
+# like PATH; "." is the current directory; defaults to "."). Roots are tried in
+# order and the shallowest hit within a root wins. Hidden directories and
+# node_modules are never searched. $CDD_DEPTH (default 4) limits how deep to
+# look. Every hit is remembered in ${XDG_CACHE_HOME:-~/.cache}/cdd/paths and
+# reused while the directory still exists; -f ignores the memory and searches
+# again (and refreshes it). Plain cd is never changed, so scripts are
+# unaffected.
 cdd() {
-	local name="${1%/}" root dir max="${CDD_DEPTH:-4}"
+	local force=0 name root dir max="${CDD_DEPTH:-4}"
+	local cache="${XDG_CACHE_HOME:-$HOME/.cache}/cdd/paths" tmp
 	local -a roots
-	[[ -z "$name" ]] && { echo "usage: cdd NAME" >&2; return 2; }
+	[[ "$1" == -f ]] && { force=1; shift; }
+	name="${1%/}"
+	[[ -z "$name" ]] && { echo "usage: cdd [-f] NAME" >&2; return 2; }
+
+	if ((!force)) && [[ -r "$cache" ]]; then
+		dir=$(N="$name" awk -F'\t' '$1 == ENVIRON["N"] { print $2; exit }' "$cache")
+		if [[ -n "$dir" && -d "$dir" && "$dir" == */"$name" ]]; then
+			cd -- "$dir" || return
+			return
+		fi
+	fi
+
 	IFS=: read -ra roots <<<"${CDD:-.}"
 	for root in "${roots[@]}"; do
 		[[ -d "$root" ]] || continue
@@ -233,6 +247,12 @@ cdd() {
 			-type d -path "*/$name" -print 2>/dev/null |
 			awk -F/ '{print NF, $0}' | sort -n -s | head -n1 | cut -d' ' -f2-)
 		if [[ -n "$dir" ]]; then
+			mkdir -p "${cache%/*}"
+			tmp="$cache.$$"
+			{
+				N="$name" awk -F'\t' '$1 != ENVIRON["N"]' "$cache" 2>/dev/null
+				printf '%s\t%s\n' "$name" "$dir"
+			} >"$tmp" && mv -f "$tmp" "$cache"
 			cd -- "$dir" || return
 			return
 		fi
