@@ -18,6 +18,9 @@ export CLIP_SCREEN=0
 
 export NVIM_SCREENKEY=1
 
+# roots that cdd searches below, in order (see cdd in bashrc)
+export CDD=".:$GHREPOS:$REPOS:$HOME"
+
 # ------------------------------- aliases ----------------------------
 
 alias todo='vi ~/.todo'

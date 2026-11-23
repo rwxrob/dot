@@ -213,6 +213,32 @@ wd() {
 	echo "$parent/$dir"
 } && export -f wd
 
+# cdd NAME: cd into the first directory called NAME found by descending
+# below each root in $CDD (colon-separated like PATH; "." is the current
+# directory; defaults to "."). Shallower hits win within a root, roots are
+# tried in order, and $CDD_DEPTH (default 4) limits how deep to look. Unlike
+# Plain cd is never changed, so scripts are unaffected.
+cdd() {
+	local name="${1%/}" root dir depth max="${CDD_DEPTH:-4}"
+	local -a roots
+	[[ -z "$name" ]] && { echo "usage: cdd NAME" >&2; return 2; }
+	IFS=: read -ra roots <<<"${CDD:-.}"
+	for root in "${roots[@]}"; do
+		[[ -d "$root" ]] || continue
+		for ((depth = 1; depth <= max; depth++)); do
+			dir=$(find "$root" -mindepth "$depth" -maxdepth "$depth" \
+				\( -name .git -o -name node_modules \) -prune -o \
+				-type d -name "$name" -print -quit 2>/dev/null)
+			if [[ -n "$dir" ]]; then
+				cd -- "$dir" || return
+				return
+			fi
+		done
+	done
+	echo "cdd: no directory named $name below ${CDD:-.}" >&2
+	return 1
+}
+
 # -------------------- python virtual environments -------------------
 #      (get rid of this when you finally remember to do uv run)
 
