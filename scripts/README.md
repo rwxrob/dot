@@ -314,7 +314,7 @@
 |[urls](urls)| Description
 |[usageln](usageln)| Description
 |[v](v)| Description
-|[vic](vic)| Description
+|[vic](vic)| Edit a command found in PATH (names the tmux window when inside tmux)
 |[vidoffset](vidoffset)| Description
 |[vidoffsetsec](vidoffsetsec)| Description
 |[vids](vids)| Description

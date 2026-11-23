@@ -1,3 +1,24 @@
 #!/bin/sh
+# Edit a command found in PATH. Inside tmux the window is named after it.
+
+if [ $# -eq 0 ]; then
+	echo "usage: vic <command>" >&2
+	exit 2
+fi
+
 cmd=$(command -v "$1")
-test -n "$cmd" && tmux rename-window "$1" && exec "$EDITOR" "$cmd"
+if [ -z "$cmd" ]; then
+	echo "vic: $1: not found" >&2
+	exit 1
+fi
+if [ ! -f "$cmd" ]; then
+	echo "vic: $1: not a file ($cmd)" >&2
+	exit 1
+fi
+
+# only inside tmux: outside it, rename-window would hit some other session
+if [ -n "$TMUX" ]; then
+	tmux rename-window "$1" 2>/dev/null
+fi
+
+exec "${EDITOR:-vi}" "$cmd"
