@@ -11,7 +11,9 @@ return {
     'Ubuntu Mono',
     'Menlo',
   }),
-  font_size = 35.2,
+  font_size = 26,
+  initial_cols = 80,
+  initial_rows = 24,
 send_composed_key_when_left_alt_is_pressed = true,
 send_composed_key_when_right_alt_is_pressed = true,
   colors = {
