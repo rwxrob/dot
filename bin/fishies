@@ -128,7 +128,7 @@ sub main {
     while (1) {
 
         add_environment($anim);
-        #add_castle($anim);
+        add_castle($anim);
         add_all_seaweed($anim);
         add_all_fish($anim);
         random_object( undef, $anim );
