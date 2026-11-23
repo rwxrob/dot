@@ -22,7 +22,6 @@
 |[buildadoc](buildadoc)| Build adoc stuff in `.` or `./docs/`
 |[bullets](bullets)| Joins all fields of line with bullets
 |[cal](cal)| Three month calendar with current date
-|[cdpath](cdpath)| Prints the `CDPATH` one per line
 |[changed](changed)| Print full path to all changed files in directory
 |[checkurls](checkurls)| Check for broken URLs in web sites
 |[close](close)| Close GitHub issue with `gh`

@@ -1,4 +1,4 @@
 #!/bin/bash
-here=$(CDPATH= cd -- "$(dirname -- "$0")" && { realpath . 2>/dev/null || pwd; })
+here=$(cd -- "$(dirname -- "$0")" && { realpath . 2>/dev/null || pwd; })
 mkdir -p ~/.config/iam
 ln -fs "$here/config.yaml" ~/.config/iam/config.yaml

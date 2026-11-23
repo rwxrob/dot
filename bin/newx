@@ -12,7 +12,7 @@ if [[ $1 == */* ]]; then
 fi
 
 self=$(realpath "$0" 2>/dev/null) || self=$0
-dir=$(CDPATH= cd -- "$(dirname -- "$self")" && pwd -P)
+dir=$(cd -- "$(dirname -- "$self")" && pwd -P)
 path="$dir/$1"
 editor=${EDITOR:-vi}
 

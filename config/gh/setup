@@ -1,5 +1,5 @@
 #!/bin/sh
-here=$(CDPATH= cd -- "$(dirname -- "$0")" && { realpath . 2>/dev/null || pwd; })
+here=$(cd -- "$(dirname -- "$0")" && { realpath . 2>/dev/null || pwd; })
 mkdir -p ~/.config/gh 2>/dev/null
 ln -fs "$here/config.yml" "$HOME/.config/gh/config.yml"
 ls -l ~/.config/gh

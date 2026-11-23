@@ -1,4 +1,4 @@
 #!/bin/sh
-here=$(CDPATH= cd -- "$(dirname -- "$0")" && { realpath . 2>/dev/null || pwd; })
+here=$(cd -- "$(dirname -- "$0")" && { realpath . 2>/dev/null || pwd; })
 mkdir -p ~/.local/share/podman
 ln -fs "$here/completion" ~/.local/share/podman/completion

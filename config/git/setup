@@ -1,5 +1,5 @@
 #!/bin/sh
-here=$(CDPATH= cd -- "$(dirname -- "$0")" && { realpath . 2>/dev/null || pwd; })
+here=$(cd -- "$(dirname -- "$0")" && { realpath . 2>/dev/null || pwd; })
 rm -rf "$HOME/.git-templates"
 ln -sf "$here/git-templates" "$HOME/.git-templates"
 

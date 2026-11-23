@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-here=$(CDPATH= cd -- "$(dirname -- "$0")" && { realpath . 2>/dev/null || pwd; })
+here=$(cd -- "$(dirname -- "$0")" && { realpath . 2>/dev/null || pwd; })
 if [[ ! $(type tmux) ]]; then
 	echo "TMUX isn't installed. Skipping."
 	exit 1

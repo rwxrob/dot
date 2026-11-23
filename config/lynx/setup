@@ -1,5 +1,5 @@
 #!/bin/sh
-here=$(CDPATH= cd -- "$(dirname -- "$0")" && { realpath . 2>/dev/null || pwd; })
+here=$(cd -- "$(dirname -- "$0")" && { realpath . 2>/dev/null || pwd; })
 
 # WARNING: This setup requires a custom form of lynx (a shell script in
 # scripts) be installed as well as lynx. [For an easier text browsing

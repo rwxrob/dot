@@ -1,8 +1,8 @@
 #!/bin/sh
 set -e
 
-src=$(CDPATH= cd -- "$(dirname -- "$0")" && { realpath . 2>/dev/null || pwd; })
-root=$(CDPATH= cd -- "$src/../.." && { realpath . 2>/dev/null || pwd; })
+src=$(cd -- "$(dirname -- "$0")" && { realpath . 2>/dev/null || pwd; })
+root=$(cd -- "$src/../.." && { realpath . 2>/dev/null || pwd; })
 
 ln -sf "$src/bashrc" "$HOME/.bashrc"
 ln -sf "$src/profile" "$HOME/.profile"

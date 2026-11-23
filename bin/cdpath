@@ -1,3 +1,0 @@
-#!/usr/bin/perl
-use v5.10;
-map { say } split( /:/, $ENV{CDPATH} );

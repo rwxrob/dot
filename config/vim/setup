@@ -1,5 +1,5 @@
 #!/bin/bash
-here=$(CDPATH= cd -- "$(dirname -- "$0")" && { realpath . 2>/dev/null || pwd; })
+here=$(cd -- "$(dirname -- "$0")" && { realpath . 2>/dev/null || pwd; })
 
 if [[ -z "$(which vim)" || -z "$(which vimtutor)" ]]; then
 	echo "Warning, doesn't look like you have full Vim version."
