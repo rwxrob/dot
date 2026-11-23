@@ -4,3 +4,35 @@ set -e
 src=$(CDPATH= cd -- "$(dirname -- "$0")" && { realpath . 2>/dev/null || pwd; })
 
 ln -sf "$src/wezterm.lua" "$HOME/.wezterm.lua"
+
+# wezterm.lua uses 'UbuntuMono Nerd Font'; install it if it is missing
+if command -v fc-list >/dev/null 2>&1; then
+	have=$(fc-list | grep -c 'UbuntuMono Nerd Font' || true)
+elif [ "$(uname)" = Darwin ]; then
+	have=$(ls "$HOME/Library/Fonts" /Library/Fonts 2>/dev/null | grep -c 'UbuntuMono.*Nerd' || true)
+else
+	have=0
+fi
+
+if [ "$have" -gt 0 ]; then
+	echo "UbuntuMono Nerd Font already installed"
+	exit 0
+fi
+
+echo "Installing UbuntuMono Nerd Font"
+if [ "$(uname)" = Darwin ]; then
+	if ! command -v brew >/dev/null 2>&1; then
+		echo "Homebrew not found; install it or get the font from https://www.nerdfonts.com/font-downloads" >&2
+		exit 1
+	fi
+	brew install --cask font-ubuntu-mono-nerd-font
+else
+	dest="$HOME/.local/share/fonts/UbuntuMonoNerd"
+	tmp=$(mktemp -d)
+	trap 'rm -rf "$tmp"' EXIT
+	mkdir -p "$dest"
+	curl -fsSL -o "$tmp/UbuntuMono.tar.xz" \
+		https://github.com/ryanoasis/nerd-fonts/releases/latest/download/UbuntuMono.tar.xz
+	tar -xJf "$tmp/UbuntuMono.tar.xz" -C "$dest"
+	command -v fc-cache >/dev/null 2>&1 && fc-cache -f "$dest"
+fi
