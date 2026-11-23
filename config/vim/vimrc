@@ -124,8 +124,8 @@ set wrapscan
 
 " Just the formatoptions defaults, these are changed per filetype by
 " plugins. Most of the utility of all of this has been superceded by the
-" use of modern simplified pandoc for capturing knowledge source instead
-" of arbitrary raw text files.
+" use of markdown for capturing knowledge source instead of arbitrary
+" raw text files.
 
 set formatoptions-=t   " don't auto-wrap text using text width
 set formatoptions+=c   " autowrap comments using textwidth with leader
@@ -214,9 +214,7 @@ if filereadable(expand('~/.vim/autoload/plug.vim'))
     Plug 'conradirwin/vim-bracketed-paste'
     Plug 'sainnhe/gruvbox-material'
     Plug 'fatih/vim-go' " GoInstallBinaries separately
-    Plug 'vim-pandoc/vim-pandoc'
     "Plug 'hashivim/vim-terraform'
-    Plug 'rwxrob/vim-pandoc-syntax-simple'
     "Plug 'habamax/vim-asciidoctor'
     "Plug 'mjakl/vim-asciidoc'
     Plug 'dense-analysis/ale'
@@ -279,10 +277,6 @@ if filereadable(expand('~/.vim/autoload/plug.vim'))
   let g:ale_lua_language_server_executable = 'lua-language-server'
   let g:ale_perl_perlcritic_options = '--severity 3'
 
-  " pandoc
-  let g:pandoc#formatting#mode = 'h' " A'
-  let g:pandoc#formatting#textwidth = 72
-
   " golang
   let g:go_fmt_fail_silently = 0
   "let g:go_fmt_options = '-s'
@@ -320,16 +314,16 @@ else
   call s:Colors() " no colorscheme loaded, so apply directly
 endif
 
-autocmd vimrc FileType markdown,pandoc hi Title ctermfg=yellow ctermbg=NONE
-autocmd vimrc FileType markdown,pandoc hi Operator ctermfg=yellow ctermbg=NONE
-autocmd vimrc FileType markdown,pandoc setlocal tw=0
-autocmd vimrc FileType markdown,pandoc setlocal wrap
+autocmd vimrc FileType markdown hi Title ctermfg=yellow ctermbg=NONE
+autocmd vimrc FileType markdown hi Operator ctermfg=yellow ctermbg=NONE
+autocmd vimrc FileType markdown setlocal tw=0
+autocmd vimrc FileType markdown setlocal wrap
 autocmd vimrc FileType yaml hi yamlBlockMappingKey ctermfg=NONE
 autocmd vimrc FileType yaml setlocal sw=2
 autocmd vimrc FileType sh,bash setlocal sw=2
 autocmd vimrc FileType c setlocal sw=8
-autocmd vimrc FileType markdown,pandoc,asciidoc nnoremap <buffer> j gj
-autocmd vimrc FileType markdown,pandoc,asciidoc nnoremap <buffer> k gk
+autocmd vimrc FileType markdown,asciidoc nnoremap <buffer> j gj
+autocmd vimrc FileType markdown,asciidoc nnoremap <buffer> k gk
 autocmd vimrc FileType sh,bash setlocal noet
 
 " force loclist to always close when buffer does (affects vim-go, etc.)
