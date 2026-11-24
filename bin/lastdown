@@ -1,8 +1,8 @@
-#/usr/bin/bash
+#!/usr/bin/env bash
 
 if [ -z "$DOWNLOADS" ];then
   echo "DOWNLOADS env variable not set"
   exit 1
 fi
 
-echo "$(newest $DOWNLOADS)"
+newest "$DOWNLOADS"

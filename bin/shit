@@ -1,8 +1,12 @@
 #!/usr/bin/env sh
 
-/usr/bin/open -a /opt/homebrew/bin/mpv --args \
+# Play a clip full screen, always on top, with mpv: shit CLIP
+
+[ -n "$1" ] || { echo "usage: shit CLIP" >&2; exit 2; }
+
+exec /usr/bin/open -a /opt/homebrew/bin/mpv --args \
   --fs \
   --force-window=immediate \
   --ontop \
   --no-border \
-	"/Users/rwxrob/Movies/clips/-AYUB3tQs80"
+  "$1"
