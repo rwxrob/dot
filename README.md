@@ -16,7 +16,7 @@ Nothing in the repo is a hidden file. Files like `config/bash/bashrc` are plain 
 
 To link everything into place run `./setup` from the repo root. A tool whose `setup` fails (usually because the tool is not installed) is reported at the end and never stops the others. To set up just one tool run `./setup` inside its directory, for example `config/vim/setup`.
 
-These are not part of `./setup`: [`cowsay`](config/cowsay), [`fortunes`](config/fortunes), [`obs`](config/obs) and [`snippets`](config/snippets) are just files to use or copy.
+These are not part of `./setup`: [`cowsay`](config/cowsay), [`fortunes`](config/fortunes) and [`obs`](config/obs) are just files to use or copy.
 
 ## Where things live
 
@@ -62,6 +62,10 @@ Aliases are nice to same typing on the command line, but that is the only place 
 ### The `cdd` function
 
 `cdd NAME` changes into the first directory called `NAME` (or whose name contains it, ignoring case) found below the roots in `$CDD`, a `PATH`-like list set in `config/bash/personal`. It is a function because only a function can change your directory, and unlike `CDPATH` it never changes plain `cd`, so scripts are unaffected. Hits are cached; `cdd -f NAME` searches again. See the comment above `cdd` in `bashrc` for the details.
+
+## Checking changes
+
+Run `./check` before committing. It changes nothing and checks shell syntax, `shellcheck` errors, Markdown (with `rumdl`) and a few repo rules, such as every script in `bin/` having a row in its index. It needs `shellcheck` and `rumdl`.
 
 ## More info
 

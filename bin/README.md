@@ -246,7 +246,6 @@ directory). Retired scripts live in [`deprecated`](deprecated).
 |[showcursor](showcursor)| |
 |[skeys](skeys)| |
 |[slugify](slugify)| Convert arguments or stdin lines to slugs |
-|[snip](snip)| |
 |[snodes](snodes)| |
 |[song](song)| |
 |[songnext](songnext)| |

@@ -1,7 +1,7 @@
-# Snippets and Templates Library
+# Snippets and templates library
 
 Code templates and other snippets that I often find myself needing to
-source or paste. I use them with a `snip` script. Your mileage may vary.
+source or paste. Your mileage may vary.
 
 ## Conventions
 

@@ -1,4 +1,4 @@
-# Agent Instructions
+# Agent instructions
 
 ## General
 
@@ -24,6 +24,16 @@
 
 - Prune conservatively: move retired scripts to `bin/deprecated/` (off `PATH`) instead of deleting them, and remove their rows from `bin/README.md`
 - The Twitch scripts are retired; nomadirl replaces them, so do not add Twitch tooling back
+
+## Checks and repo rules
+
+- Run `./check` before committing; it must pass (syntax, `shellcheck` errors, `rumdl`, and the rules it enforces). `git add` new files first, since it only sees what git knows about
+- Never use `CDPATH`; `cdd` in `config/bash/bashrc` (roots in `$CDD`) does that job without changing plain `cd`
+- Paths use lowercase `repos`, never `Repos` (macOS ignores the difference, Linux does not)
+- `bin/open` shadows the system `open`, so it must stay a drop-in: every option and path passes straight through
+- Use `#!/usr/bin/env bash` (`/usr/bin/bash` does not exist on macOS)
+- Every script in `bin/` is executable and has exactly one row in `bin/README.md`
+- Lint and format Markdown with `rumdl` (config in `config/vim/rumdl.toml`)
 
 ## Commits
 

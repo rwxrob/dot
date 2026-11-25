@@ -1,0 +1,108 @@
+#!/usr/bin/env bash
+#
+# Regression checks for this repo. Changes nothing. Exits non-zero if any
+# check fails or a required tool (shellcheck, rumdl) is missing.
+#
+#   ./check
+#
+# Everything under bin/deprecated/ is ignored. Only files git knows about
+# are checked, so `git add` a new file before checking it.
+
+set -u
+cd -- "$(dirname -- "$0")" || exit 1
+
+failed=0
+fail() {
+	echo "FAIL: $1" >&2
+	[[ -n "${2:-}" ]] && printf '%s\n' "$2" | sed 's/^/    /' >&2
+	failed=1
+}
+
+# tracked regular files (no symlinks, nothing retired, nothing deleted)
+files=()
+while IFS= read -r file; do
+	[[ -f "$file" ]] && files+=("$file")
+done < <(git ls-files -s | awk '$1 != "120000"' | cut -f2- | grep -v '^bin/deprecated/')
+
+# shell scripts by shebang, plus the bash files that are sourced, not run
+sh_files=()
+bash_files=(config/bash/bashrc config/bash/personal config/bash/profile)
+markdown=()
+for file in "${files[@]}"; do
+	[[ "$file" == *.md ]] && markdown+=("$file")
+	# the sourced bash files are already listed
+	[[ " config/bash/bashrc config/bash/personal config/bash/profile " == *" $file "* ]] && continue
+	first=
+	IFS= read -r first 2>/dev/null <"$file"
+	case "$first" in
+	'#!'*bash*) bash_files+=("$file") ;;
+	'#!/bin/sh'* | '#!'*'env sh'*) sh_files+=("$file") ;;
+	esac
+done
+
+# ------------------------------- syntax -----------------------------
+
+for file in "${sh_files[@]}"; do
+	out=$(/bin/sh -n "$file" 2>&1) || fail "sh syntax: $file" "$out"
+done
+for file in "${bash_files[@]}"; do
+	out=$(bash -n "$file" 2>&1) || fail "bash syntax: $file" "$out"
+done
+
+# ----------------------------- shellcheck ---------------------------
+
+if type shellcheck &>/dev/null; then
+	out=$(shellcheck -S error -f gcc "${sh_files[@]}" 2>&1) ||
+		fail "shellcheck (sh)" "$out"
+	out=$(shellcheck -S error -f gcc -s bash "${bash_files[@]}" 2>&1) ||
+		fail "shellcheck (bash)" "$out"
+else
+	fail "shellcheck is not installed"
+fi
+
+# ------------------------------ markdown ----------------------------
+
+if type rumdl &>/dev/null; then
+	out=$(rumdl check --config config/vim/rumdl.toml "${markdown[@]}" 2>&1) ||
+		fail "rumdl" "$out"
+else
+	fail "rumdl is not installed"
+fi
+
+# ------------------------------ repo rules --------------------------
+
+# forbid DESCRIPTION REGEX: no line of any file may match (docs that state
+# the rules, and this script, are allowed to name what they forbid)
+forbid() {
+	local out
+	out=$(printf '%s\0' "${files[@]}" |
+		xargs -0 grep -nIE -e "$2" -- /dev/null 2>/dev/null |
+		grep -vE '^(check|AGENTS\.md|README\.md):')
+	[[ -n "$out" ]] && fail "$1" "$out"
+}
+
+forbid "CDPATH is never used" 'CDPATH'
+# shellcheck disable=SC2016 # a literal pattern
+forbid "use lowercase repos" '(~|\$HOME|\$\{HOME\}|/Users/[^/]+)/Repos([/":]|$)'
+forbid "there is no SCRIPTS variable" '\$\{?SCRIPTS([^A-Za-z0-9_]|$)|export SCRIPTS='
+forbid "/usr/bin/bash does not exist everywhere" '^#! */usr/bin/bash'
+
+# every command in bin/ is executable and has exactly one row in the index
+for file in "${files[@]}"; do
+	[[ "$file" == bin/* && "$file" != *.md && ! -x "$file" ]] &&
+		fail "not executable: $file"
+done
+
+actual=$(for file in bin/*; do
+	[[ -f "$file" && "$file" != bin/README.md ]] && echo "${file#bin/}"
+done | LC_ALL=C sort)
+indexed=$(sed -n 's/^|\[\([^]]*\)\](.*/\1/p' bin/README.md | LC_ALL=C sort)
+out=$(diff <(echo "$actual") <(echo "$indexed")) ||
+	fail "bin/README.md is out of step (< only in bin, > only in index)" "$out"
+
+# --------------------------------------------------------------------
+
+if ((failed)); then
+	exit 1
+fi
+echo "ok: ${#sh_files[@]} sh, ${#bash_files[@]} bash, ${#markdown[@]} markdown files"

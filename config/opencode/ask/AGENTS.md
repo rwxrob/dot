@@ -7,4 +7,3 @@ This file lives in the dot repo at `config/opencode/ask/AGENTS.md` and is
 symlinked into place by `config/opencode/setup`. Edit it there.
 
 ## Rules
-

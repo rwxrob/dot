@@ -4,5 +4,5 @@
 # a directory file structure that models chronological data. Accepts
 # anything that can be passed to `date -d`.
 
-date +%4Y/%m/%d "-d $@"
+date +%4Y/%m/%d "-d $*"
 

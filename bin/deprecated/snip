@@ -33,9 +33,9 @@ snip() {
       return
     fi
 
-    if [[ $# > 0 ]]; then
+    if (( $# > 0 )); then
       local -i n=1
-      for arg in $@; do
+      for arg in "$@"; do
         buf=${buf//\{$n\}/$arg}
         ((n++))
       done

@@ -70,12 +70,12 @@ if [ -z "$subcommand" ]; then
 fi
 
 commands () {
-    echo ${commands[@]}
+    echo "${commands[@]}"
 }
 
 declare -a commands=(delete commands post graphql ping create list)
 
-for i in ${commands[@]}; do
+for i in "${commands[@]}"; do
     if [[ "$i" == "$subcommand" ]]; then
         "$subcommand" "$@"
         exit 0
@@ -86,7 +86,7 @@ done
 
 # remember COMP_LINE is changed by shift
 if [ -n "$COMP_LINE" ]; then
-    for cmd in ${commands[@]}; do 
+    for cmd in "${commands[@]}"; do 
         [[ "${cmd:0:${#1}}" == "$1" ]] && echo $cmd
     done
     exit 0

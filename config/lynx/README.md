@@ -1,8 +1,8 @@
-# Lynx Text Browser FTW!
+# Lynx text browser FTW
 
 *New and Improved! You can now test this as a [container]:*
 
-```
+```text
 docker run -it --rm rwxrob/lynx
 ```
 
