@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
 [[ -z "$PDFS" ]] && echo 'PDFS dir path not set' && exit 1
 

@@ -1,2 +1,2 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 exec basenc -w 0 --base2lsbf < /dev/stdin
