@@ -5,5 +5,9 @@ if [[ ! $(type tmux) ]]; then
 	exit 1
 fi
 ln -sf "$here/tmux.conf" "$HOME/.tmux.conf"
-ln -sf "$here/tmux-live.conf" "$HOME/.tmux-live.conf"
 ln -sf "$here/tmux-plain.conf" "$HOME/.tmux-plain.conf"
+
+# drop the link to the retired live config once it dangles
+if [[ -L "$HOME/.tmux-live.conf" && ! -e "$HOME/.tmux-live.conf" ]]; then
+	rm -f "$HOME/.tmux-live.conf"
+fi

@@ -26,7 +26,6 @@ export CDD=".:$GHREPOS:$REPOS:$HOME"
 alias todo='vi ~/.todo'
 alias sshh='sshpass -f $HOME/.sshpass ssh '
 alias km="kimono"
-alias s=wee
 alias x=clip
 alias t=topic
 alias gp="git push"

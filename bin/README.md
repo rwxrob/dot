@@ -53,7 +53,6 @@ directory). Retired scripts live in [`deprecated`](deprecated).
 |[dockerclean](dockerclean)| |
 |[document](document)| |
 |[doh](doh)| |
-|[doris](doris)| |
 |[dprune](dprune)| |
 |[dquote](dquote)| |
 |[dstopall](dstopall)| |
@@ -65,8 +64,6 @@ directory). Retired scripts live in [`deprecated`](deprecated).
 |[ending](ending)| |
 |[enhancement](enhancement)| |
 |[ex](ex)| |
-|[faq](faq)| |
-|[faqoff](faqoff)| |
 |[fields](fields)| Split lines of input into fields (`1..3,5`) |
 |[figl](figl)| Set the figlet default font, font directory, and centering as well as |
 |[fiocheck](fiocheck)| |
@@ -78,10 +75,7 @@ directory). Retired scripts live in [`deprecated`](deprecated).
 |[ghc](ghc)| |
 |[ghtable](ghtable)| |
 |[gidof](gidof)| |
-|[giveabout](giveabout)| |
-|[givediscord](givediscord)| |
 |[giveperl](giveperl)| |
-|[giver](giver)| |
 |[giveraw](giveraw)| Get the repository remote URL |
 |[gl](gl)| |
 |[gmi](gmi)| |
@@ -99,7 +93,7 @@ directory). Retired scripts live in [`deprecated`](deprecated).
 |[gologtestoutput](gologtestoutput)| adjust log output for testing |
 |[gomethods](gomethods)| |
 |[goodfirst](goodfirst)| |
-|[google](google)| chat "$url" |
+|[google](google)| Search Google in lynx |
 |[goprintasjson](goprintasjson)| |
 |[gor](gor)| |
 |[gosetget](gosetget)| |
@@ -121,7 +115,6 @@ directory). Retired scripts live in [`deprecated`](deprecated).
 |[hex2rgb](hex2rgb)| |
 |[hlog](hlog)| |
 |[hnow](hnow)| |
-|[host](host)| open "`https://twitch.tv/$1`" |
 |[hrule](hrule)| |
 |[hsep](hsep)| Produces a centered title in the middle of a horizontal rule of text. |
 |[htbtasks](htbtasks)| |
@@ -139,7 +132,6 @@ directory). Retired scripts live in [`deprecated`](deprecated).
 |[issuedev](issuedev)| |
 |[issues](issues)| |
 |[istext](istext)| |
-|[ix](ix)| The world's best pastebin terminal replacement. I'm so in love.  You |
 |[jsonesc](jsonesc)| note, unicode is passed as is (as it should be, imho) |
 |[justhelm](justhelm)| |
 |[k](k)| |
@@ -162,7 +154,6 @@ directory). Retired scripts live in [`deprecated`](deprecated).
 |[lastbookmark](lastbookmark)| |
 |[lastdown](lastdown)| |
 |[lastpic](lastpic)| |
-|[lasturl](lasturl)| |
 |[latest](latest)| |
 |[latest-gh-release](latest-gh-release)| |
 |[lh](lh)| |
@@ -175,7 +166,6 @@ directory). Retired scripts live in [`deprecated`](deprecated).
 |[lynx](lynx)| be sure to install the ca-certificates package |
 |[lynxa](lynxa)| |
 |[lynxar](lynxar)| |
-|[lynxlast](lynxlast)| |
 |[m](m)| |
 |[mark](mark)| |
 |[marquee](marquee)| |
@@ -209,7 +199,6 @@ directory). Retired scripts live in [`deprecated`](deprecated).
 |[onchange](onchange)| |
 |[opacity](opacity)| |
 |[open](open)| Drop-in for the system `open`: passes options and paths through, adds `https://` to bare URLs |
-|[openlast](openlast)| |
 |[openlastvid](openlastvid)| |
 |[origins](origins)| |
 |[outline1](outline1)| |
@@ -221,7 +210,6 @@ directory). Retired scripts live in [`deprecated`](deprecated).
 |[pdhas](pdhas)| |
 |[phone](phone)| |
 |[pkghas](pkghas)| |
-|[post](post)| |
 |[powerzones](powerzones)| maintained in <https://github.com/rwxrob/skilstak/> in |
 |[ppae](ppae)| |
 |[ppie](ppie)| |
@@ -239,7 +227,6 @@ directory). Retired scripts live in [`deprecated`](deprecated).
 |[qreview](qreview)| |
 |[question](question)| |
 |[quotes](quotes)| Opens the default quotes file with vim. Prompts to commit. |
-|[raid](raid)| open "`https://twitch.tv/$1`" |
 |[randcol](randcol)| |
 |[recording](recording)| |
 |[regrepos](regrepos)| |
@@ -262,10 +249,8 @@ directory). Retired scripts live in [`deprecated`](deprecated).
 |[semispace2nl](semispace2nl)| |
 |[semver-sort](semver-sort)| Sorts simple semantic versions. |
 |[sentencecase](sentencecase)| |
-|[sgoget](sgoget)| |
 |[shit](shit)| force-window=immediate \ |
 |[showcursor](showcursor)| |
-|[sing](sing)| |
 |[skeys](skeys)| |
 |[slugify](slugify)| Convert arguments or stdin lines to slugs |
 |[snip](snip)| |
@@ -294,7 +279,6 @@ directory). Retired scripts live in [`deprecated`](deprecated).
 |[tmatrix](tmatrix)| exec /usr/local/bin/tmatrix -s 15 --fade -c default -C red |
 |[tmuxin](tmuxin)| |
 |[tmuxinplain](tmuxinplain)| |
-|[tmuxlive](tmuxlive)| exec /usr/bin/tmux -L live -f ~/.tmux-live.conf new -s live -n parent \ weechat \; split-window \; resize-pane -t 1 -y 17 \; split-window -h \; resize-pane -x 16 \; swap-pane -s 1 -t 2 \; send -t 3 "blankpane" Enter |
 |[tobase2](tobase2)| |
 |[toduck](toduck)| |
 |[toemoji](toemoji)| |
@@ -330,7 +314,6 @@ directory). Retired scripts live in [`deprecated`](deprecated).
 |[untag](untag)| Remove a git tag locally and remotely |
 |[upre](upre)| Remove a prefix (default: #) |
 |[urlencode](urlencode)| yeah, i totally stole this from stack exchange, no shame |
-|[urls](urls)| |
 |[usageln](usageln)| |
 |[v](v)| |
 |[vic](vic)| Edit a command found in PATH (names the tmux window when inside tmux) |
@@ -340,15 +323,11 @@ directory). Retired scripts live in [`deprecated`](deprecated).
 |[vilast](vilast)| |
 |[vimcheat](vimcheat)| |
 |[vimpluginstall](vimpluginstall)| |
-|[w](w)| |
 |[watchcow](watchcow)| |
-|[watching](watching)| |
 |[wd](wd)| |
 |[weather](weather)| |
-|[wee](wee)| |
 |[wiki](wiki)| |
 |[win2nixpath](win2nixpath)| |
-|[wipe](wipe)| |
 |[ws](ws)| This is an unoptimized prototype with lots of subshells in preparation |
 |[x](x)| |
 |[x_cmds](x_cmds)| |

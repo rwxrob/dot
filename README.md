@@ -16,7 +16,7 @@ Nothing in the repo is a hidden file. Files like `config/bash/bashrc` are plain 
 
 To link everything into place run `./setup` from the repo root. A tool whose `setup` fails (usually because the tool is not installed) is reported at the end and never stops the others. To set up just one tool run `./setup` inside its directory, for example `config/vim/setup`.
 
-These are not part of `./setup`: [`cowsay`](config/cowsay), [`fortunes`](config/fortunes), [`obs`](config/obs) and [`snippets`](config/snippets) are just files to use or copy, and [`weechat`](config/weechat) is a Twitch-specific, interactive setup to run by hand.
+These are not part of `./setup`: [`cowsay`](config/cowsay), [`fortunes`](config/fortunes), [`obs`](config/obs) and [`snippets`](config/snippets) are just files to use or copy.
 
 ## Where things live
 

@@ -5,7 +5,6 @@ function have {
   return $?
 }
 
-have chat && chat '!song'
 if have spotify; then
   out=$(spotify status 2>&1)
   if [[ ! $out =~ Error ]]; then
