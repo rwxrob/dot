@@ -36,7 +36,6 @@ directory). Retired scripts live in [`deprecated`](deprecated).
 |[countmin](countmin)| |
 |[countmin.tdy](countmin.tdy)| |
 |[countweeks](countweeks)| |
-|[covid](covid)| Reports the corona virus stats in a terminal friendly format taking an |
 |[coworking](coworking)| |
 |[cozycoding](cozycoding)| |
 |[crnd](crnd)| |
@@ -164,13 +163,12 @@ directory). Retired scripts live in [`deprecated`](deprecated).
 |[lorem](lorem)| |
 |[lslinks](lslinks)| |
 |[lynx](lynx)| be sure to install the ca-certificates package |
-|[lynxa](lynxa)| |
-|[lynxar](lynxar)| |
+|[lynxa](lynxa)| Print the last N lynx bookmarks as a Markdown list |
+|[lynxar](lynxar)| Print the last N lynx bookmarks as Markdown reference links |
 |[m](m)| |
 |[mark](mark)| |
 |[marquee](marquee)| |
 |[md](md)| |
-|[mdold](mdold)| |
 |[mentor](mentor)| |
 |[mimetype](mimetype)| |
 |[mk](mk)| |
