@@ -1,11 +1,12 @@
 local wezterm = require 'wezterm'
 
--- open the first window where I like it
+-- open the first window where I like it: filling the laptop screen below the
+-- main display (pixel offsets from the main screen)
 wezterm.on('gui-startup', function(cmd)
   local args = cmd or {}
   args.position = args.position or {
-    x = 340,
-    y = 240,
+    x = 420,
+    y = 2282,
     origin = 'MainScreen',
   }
   wezterm.mux.spawn_window(args)
@@ -23,9 +24,9 @@ return {
     'Ubuntu Mono',
     'Menlo',
   }),
-  font_size = 26,
-  initial_cols = 91,
-  initial_rows = 27,
+  font_size = 32,
+  initial_cols = 94,
+  initial_rows = 29,
 send_composed_key_when_left_alt_is_pressed = true,
 send_composed_key_when_right_alt_is_pressed = true,
   colors = {
