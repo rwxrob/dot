@@ -121,9 +121,7 @@ directory). Retired scripts live in [`deprecated`](deprecated).
 |[humm](humm)| |
 |[indent](indent)| |
 |[inow](inow)| |
-|[install-gh](install-gh)| |
-|[install-go](install-go)| |
-|[install-jq](install-jq)| repo "stedolan/jq" \\ |
+|[install-go](install-go)| Install the latest Go into `~/.local` on macOS and Linux |
 |[ips](ips)| complete -W "$(ips)" ips |
 |[isosec](isosec)| |
 |[isosec2plain](isosec2plain)| |

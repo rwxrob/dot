@@ -1,6 +1,9 @@
 #!/usr/bin/perl
 use v5.26;
 
+# Installs the latest Go release into ~/.local/go (no root needed) on macOS
+# and Linux.
+
 not `command -v jq`   and die "jq not found";
 not `command -v tar`  and die "tar not found";
 not `command -v curl` and die "curl not found";
@@ -9,6 +12,10 @@ sub lookup_file {
     my $os   = lc(`uname -s`);
     my $arch = `uname -m`;
     chomp( $arch, $os );
+
+    # uname and Go name some architectures differently
+    my %goarch = ( x86_64 => 'amd64', aarch64 => 'arm64' );
+    $arch = $goarch{$arch} // $arch;
     my $file = `curl -sSL "https://go.dev/dl/?mode=json" \\
        | jq -r '.[0].files[]
        | select(.os == "$os")
@@ -34,9 +41,11 @@ my $dir       = $ENV{HOME} . "/.local";
 
 say "Installing Go into $dir ... ";
 
-`curl -fL "https://go.dev/dl/$file" -o "$path"`;
+# never remove the installed Go unless the new one has arrived
+system( 'curl', '-fL', "https://go.dev/dl/$file", '-o', $path ) == 0
+  or die "download failed";
 `mkdir -p "$dir"`;
 `rm -rf $dir/go`;
-`tar -C "$dir" -xzf "$path"`;
+system( 'tar', '-C', $dir, '-xzf', $path ) == 0 or die "unpacking failed";
 
 say "Installed.";
