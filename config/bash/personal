@@ -29,7 +29,7 @@ alias x=clip
 alias t=topic
 alias gp="git push"
 alias gptags="git push origin --tags"
-alias oc=opencode
+alias oc='opencode -c'
 alias cusage='claude -p "/usage"'
 _have neo && alias neo="neo -D -c gold"
 
