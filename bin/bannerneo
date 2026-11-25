@@ -16,6 +16,18 @@ if ( not $what ) {
     chomp $what;
 }
 
+# lights stays short, so it goes on top (this pane) with the text under it
+if ( $proggy eq 'lights' ) {
+    my $top    = $ENV{TMUX_PANE} or die "not inside tmux\n";
+    my $bottom = `tmux split-window -v -t $top -P -F '#{pane_id}'`;
+    chomp $bottom;
+    system 'tmux', 'resize-pane', '-t', $top, '-y', 9;
+    system 'tmux', 'send-keys', '-t', $bottom, "banner $what", 'Enter';
+    sleep 1;
+    system 'tmux', 'send-keys', '-t', $top, $proggy, 'Enter';
+    exit;
+}
+
 `tmux split-window`;
 `tmux resize-pane -y $lines`;
 `tmux send -t 1 "banner $what" Enter`;

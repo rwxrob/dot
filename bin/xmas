@@ -1,0 +1,530 @@
+#!/usr/bin/perl
+
+# Random, colorful ASCII Christmas animations in the terminal. Ctrl-C quits.
+#
+#   xmas              play every scene in random order
+#   xmas tree         stay on one scene
+#   xmas -t 30        seconds per scene when playing them all (default 15)
+#   xmas -w           add the words; by default it is pictures only
+#   xmas -l           list the scenes
+#
+# Completes itself: complete -C xmas xmas
+#
+# Each frame is built off screen and written in one go, so it does not flicker.
+
+use v5.26;
+use strict;
+use warnings;
+use List::Util qw(shuffle min max);
+
+# ------------------------------- canvas -----------------------------
+
+my ( $W, $H, @chars, @inks ) = ( 80, 24 );
+my $words = 0;    # turned on by -w
+
+my %ink = (
+    white  => 231,
+    snow   => 195,
+    grey   => 244,
+    dim    => 240,
+    red    => 196,
+    dred   => 124,
+    green  => 34,
+    dgreen => 22,
+    lime   => 46,
+    yellow => 226,
+    gold   => 214,
+    orange => 208,
+    blue   => 33,
+    cyan   => 51,
+    pink   => 205,
+    purple => 135,
+    brown  => 94,
+    tan    => 180,
+);
+my @bright = qw(red yellow blue cyan pink purple gold lime);
+
+sub pick { return $_[ rand @_ ] }
+
+sub blank {
+    @chars = map { [ (' ') x $W ] } 1 .. $H;
+    @inks  = map { [ ('white') x $W ] } 1 .. $H;
+}
+
+# put one character, ignoring anything off screen
+sub dot {
+    my ( $x, $y, $char, $color ) = @_;
+    ( $x, $y ) = ( int $x, int $y );
+    return if $x < 0 || $y < 0 || $x >= $W || $y >= $H;
+    $chars[$y][$x] = $char;
+    $inks[$y][$x]  = $color;
+}
+
+sub text {
+    my ( $x, $y, $string, $color ) = @_;
+    my $i = 0;
+    dot( $x + $i++, $y, $_, $color ) for split //, $string;
+}
+
+# draw multi-line art; leading spaces on each line are see-through. The color
+# is a name or a code reference given the character, column and row.
+sub sprite {
+    my ( $x, $y, $color, @art ) = @_;
+    for my $row ( 0 .. $#art ) {
+        my ($indent) = $art[$row] =~ /^( *)/;
+        my @line = split //, $art[$row];
+        for my $col ( length($indent) .. $#line ) {
+            my $c = ref $color ? $color->( $line[$col], $col, $row ) : $color;
+            dot( $x + $col, $y + $row, $line[$col], $c );
+        }
+    }
+}
+
+sub centered {
+    my ( $y, $string, $color ) = @_;
+    text( ( $W - length $string ) / 2, $y, $string, $color );
+}
+
+# each letter takes the next color, shifting over time
+sub rainbow {
+    my ( $y, $string, $tick ) = @_;
+    return unless $words;
+    my @cycle = qw(red white lime white);
+    my $x     = int( ( $W - length $string ) / 2 );
+    my $i     = 0;
+    for my $char ( split //, $string ) {
+        dot( $x + $i, $y, $char, $cycle[ ( $i + int( $tick / 2 ) ) % @cycle ] );
+        $i++;
+    }
+}
+
+sub render {
+    my $out = "\e[H";
+    my $last = '';
+    for my $y ( 0 .. $H - 1 ) {
+        for my $x ( 0 .. $W - 1 ) {
+            my $color = $inks[$y][$x];
+            if ( $chars[$y][$x] ne ' ' && $color ne $last ) {
+                $out .= "\e[1;38;5;$ink{$color}m";
+                $last = $color;
+            }
+            $out .= $chars[$y][$x];
+        }
+        $out .= "\n" if $y < $H - 1;    # a final newline would scroll
+    }
+    print "$out\e[0m";
+}
+
+# ------------------------------ weather -----------------------------
+
+sub flakes {
+    my ($count) = @_;
+    return [
+        map {
+            {
+                x     => rand $W,
+                y     => rand $H,
+                speed => 0.15 + rand 0.5,
+                char  => pick( '.', '.', '*', '+', 'o', '`' ),
+            }
+        } 1 .. $count
+    ];
+}
+
+sub fall {
+    my ( $flakes, $floor ) = @_;
+    for my $f (@$flakes) {
+        $f->{y} += $f->{speed};
+        $f->{x} += ( rand() - 0.5 ) * 0.8;
+        if ( $f->{y} >= $floor ) {
+            ( $f->{x}, $f->{y} ) = ( rand $W, 0 );
+        }
+        dot( $f->{x}, $f->{y}, $f->{char}, $f->{speed} > 0.4 ? 'white' : 'snow' );
+    }
+}
+
+sub stars {
+    my ($count) = @_;
+    return [ map { [ int rand $W, int rand( $H * 0.7 ) ] } 1 .. $count ];
+}
+
+sub twinkle {
+    my ($stars) = @_;
+    for my $s (@$stars) {
+        my $roll = rand;
+        dot( @$s,
+            $roll < 0.05 ? ( '*', 'white' )
+            : $roll < 0.12 ? ( '+', 'yellow' )
+            : ( '.', 'grey' ) );
+    }
+}
+
+# ------------------------------- scenes -----------------------------
+
+sub tree {
+    my $snow = flakes( $W / 3 );
+    my %baubles;
+    return sub {
+        my ($tick) = @_;
+        fall( $snow, $H - 2 );
+
+        my $height = max( 4, min( 15, $H - 8 ) );
+        my $cx     = int( $W / 2 );
+        my $top    = max( 1, $H - $height - 6 );
+        for my $row ( 0 .. $height - 1 ) {
+
+            # the branches step back in every five rows, like tiers
+            my $half = 1 + $row + int( $row / 5 ) * 2 - ( $row % 5 == 0 ? 2 : 0 );
+            $half = max( 0, $half );
+            for my $dx ( -$half .. $half ) {
+                my $edge = abs($dx) == $half;
+                my $key  = "$row,$dx";
+                $baubles{$key} //= rand() < 0.14 ? 1 : 0;
+                if ( $baubles{$key} && !$edge ) {
+                    dot( $cx + $dx, $top + $row,
+                        pick( 'o', 'o', 'O', '@' ),
+                        $bright[ ( $row + $dx + int( $tick / 4 ) ) % @bright ] );
+                }
+                else {
+                    my $char = !$edge ? '*' : $dx < 0 ? '/' : '\\';
+                    dot( $cx + $dx, $top + $row, $char,
+                        $edge ? 'dgreen' : 'green' );
+                }
+            }
+        }
+        text( $cx, $top - 1, '*', int( $tick / 3 ) % 2 ? 'yellow' : 'white' );
+
+        my $base = $top + $height;
+        text( $cx - 2, $base + $_, '|||||', 'brown' ) for 0 .. 1;
+        sprite( $cx - 17, $base,     'red',    ' _\\/_', '|_||_|', '|_||_|' );
+        sprite( $cx - 10, $base + 1, 'blue',   '_\\/_',  '|_||_|' );
+        sprite( $cx + 6,  $base + 1, 'purple', '_\\/_',  '|_||_|' );
+        sprite( $cx + 13, $base,     'gold',   ' _\\/_', '|_||_|', '|_||_|' );
+        rainbow( $H - 1, '* * *  M E R R Y   C H R I S T M A S  * * *', $tick );
+    };
+}
+
+sub village {
+    my $snow  = flakes( $W / 1.5 );
+    my $stars = stars( $W / 5 );
+    my @house = (
+        '    /\\      ',
+        '   /  \\     ',
+        '  /    \\    ',
+        ' /______\\   ',
+        ' | [] [] |  ',
+        ' |  __   |  ',
+        ' |_|  |__|  ',
+    );
+    my @pile = (0) x $W;
+    return sub {
+        my ($tick) = @_;
+        twinkle($stars);
+        sprite( $W - 14, 1, 'yellow', '   _..', ' .\' .\'', ' |  |', ' \'. \'.', '   \'\'\'' );
+        my $ground = $H - 3;
+        my $i      = 0;
+        for ( my $x = 1 ; $x + 11 <= $W ; $x += 14 ) {
+            my $wall = ( qw(red blue tan purple dred green) )[ $i++ % 6 ];
+            sprite(
+                $x, $ground - @house + 1,
+                sub {
+                    my ( $char, $col, $row ) = @_;
+                    return 'white' if $row <= 3;    # snowy roof
+                    return rand() < 0.03 ? 'orange' : 'yellow'
+                      if $row == 4 && ( $char eq '[' || $char eq ']' )
+                      && $col > 1 && $col < 9;
+                    return $wall;
+                },
+                @house
+            );
+        }
+        fall( $snow, $ground + 1 );
+
+        # drifts slowly build up, then melt and start over
+        $pile[ int rand $W ] += 0.25 for 1 .. 3;
+        for my $x ( 0 .. $W - 1 ) {
+            $pile[$x] = 0 if $pile[$x] > 2;
+            text( $x, $ground + 1, '~', 'white' );
+            text( $x, $ground + 2, $pile[$x] > 1 ? '#' : ':', 'snow' );
+        }
+        rainbow( 0, 'SILENT NIGHT', $tick ) if $H > 14;
+    };
+}
+
+sub santa {
+    my $stars = stars( $W / 3 );
+
+    # each part of the picture is drawn with its own color: column, row, color
+    # and the art
+    my @parts = (
+        [ 8,  0, 'white',  q{o__} ],
+        [ 11, 0, 'red',    q{.--.} ],
+        [ 10, 1, 'red',    q{/    \\} ],
+        [ 9,  2, 'white',  q{(@@@@@@)} ],
+        [ 9,  3, 'tan',    q{| o  o |} ],
+        [ 9,  4, 'white',  q{\\~~()~~/} ],
+        [ 13, 4, 'pink',   q{()} ],
+        [ 10, 5, 'white',  q{\\VVVV/} ],
+        [ 11, 6, 'white',  q{\\VV/} ],
+        [ 2,  3, 'brown',  q{_\\/_} ],
+        [ 0,  4, 'brown',  q{.'    '.} ],
+        [ 0,  5, 'brown',  q{(  []  )} ],
+        [ 0,  6, 'brown',  q{ '.__.'} ],
+        [ 17, 5, 'red',    q{\\___(@)} ],
+        [ 8,  5, 'red',    q{ /} ],
+        [ 8,  6, 'red',    q{|_ } ],
+        [ 15, 6, 'red',    q{ |_____} ],
+        [ 0,  7, 'red',    q{(\\_____________________/} ],
+        [ 3,  8, 'gold',   q{_|_____________|___/} ],
+    );
+    my @deer = (
+        q{__/\\__      __/\\__      __/\\__},
+        q{(oo   )~~~~(oo   )~~~~(oo   )>*},
+        q{/|  |\\      /|  |\\      /|  |\\},
+    );
+    my $deer_at = 32;
+    my $length  = $deer_at + max map { length } @deer;
+    my ( @sparks, @gifts );
+    return sub {
+        my ($tick) = @_;
+        twinkle($stars);
+        my $x = ( $tick * 2 ) % ( $W + $length ) - $length;
+        my $y = max( 1, int( $H / 4 + sin( $tick / 6 ) * 2 ) );
+
+        push @sparks, map { [ $x + 2 + rand 3, $y + 5 + rand 4, 12 ] } 1 .. 3;
+        for my $s (@sparks) {
+            $s->[0] -= 1;
+            $s->[2]--;
+            dot( $s->[0], $s->[1], pick( '*', '+', '.', '\'' ), pick(@bright) );
+        }
+        @sparks = grep { $_->[2] > 0 } @sparks;
+
+        for my $part (@parts) {
+            my ( $col, $row, $color, $art ) = @$part;
+            sprite( $x + $col, $y + $row, $color, $art );
+        }
+        text( $x + 24, $y + 5, '~' x ( $deer_at - 24 ), 'grey' );    # reins
+        sprite(
+            $x + $deer_at,
+            $y + 4,
+            sub {
+                my ( $char, $col, $row ) = @_;
+                return $tick % 4 < 2 ? 'red' : 'pink' if $char eq '*';    # nose
+                return $char eq '~' ? 'grey' : 'tan';
+            },
+            @deer
+        );
+
+        push @gifts, [ $x + 2, $y + 9, pick(@bright) ]
+          if $tick % 9 == 0 && $x > 0 && $x < $W - 20;
+        for my $g (@gifts) {
+            $g->[1] += 0.5;
+            text( $g->[0], $g->[1], '[+]', $g->[2] );
+        }
+        @gifts = grep { $_->[1] < $H - 3 } @gifts;
+
+        for my $x ( 0 .. $W - 1 ) {
+            my $roof = 2 - abs( $x % 10 - 5 ) / 2;
+            dot( $x, $H - 2 - ( $roof > 1 ? 1 : 0 ), '^', 'white' );
+            dot( $x, $H - 1, '#', 'dim' );
+        }
+        rainbow( 0, 'HO  HO  HO!', $tick );
+    };
+}
+
+sub snowman {
+    my $snow = flakes( $W / 2 );
+    my @pine = ( '    *', '   /_\\', '  /___\\', ' /_____\\', '/_______\\', '   |||' );
+    return sub {
+        my ($tick) = @_;
+        fall( $snow, $H - 2 );
+        my $cx = int( $W / 2 ) - 9;
+        my $y  = max( 1, $H - 17 );
+
+        for my $x ( 3, 14, $W - 24, $W - 12 ) {
+            sprite( $x, $H - 8, sub { $_[0] eq '*' ? 'yellow' : $_[0] eq '|' ? 'brown' : 'green' }, @pine );
+        }
+
+        my $wink = $tick % 20 < 2 ? '-' : 'o';
+        sprite(
+            $cx, $y,
+            sub {
+                my ( $char, $col, $row ) = @_;
+                return 'purple' if $row < 3;
+                return 'orange' if $char eq '>' || ( $char eq '-' && $row == 4 );
+                return 'cyan'   if $char eq 'o' || $char eq '-';
+                return 'white';
+            },
+            '      _____',
+            '     |     |',
+            '   __|_____|__',
+            "     ( o $wink )",
+            '    (   >--  )',
+            '     ( \'--\' )',
+        );
+        text( $cx + 3, $y + 6, '~=~=~=~=~=~~', 'red' );
+        text( $cx + 12, $y + 7 + $_, '|=|', $_ % 2 ? 'white' : 'red' ) for 0 .. 2;
+        sprite(
+            $cx, $y + 7,
+            sub { $_[0] eq 'O' ? 'red' : 'white' },
+            '    /        \\',
+            '   (    O     )',
+            '   (    O     )',
+            '    \\   O    /',
+            '  .-\'\'      \'\'-.',
+            ' /              \\',
+            '(                )',
+            ' \\              /',
+            '  \'-..______..-\'',
+        );
+
+        # one arm waves
+        if ( int( $tick / 4 ) % 2 ) {
+            sprite( $cx - 3, $y + 6, 'brown', '\\|', ' \\__', '    \\_' );
+        }
+        else {
+            sprite( $cx - 5, $y + 8, 'brown', '>-------' );
+        }
+        sprite( $cx + 17, $y + 8, 'brown', '___/-<' );
+
+        text( 0, $H - 1, '~' x $W, 'snow' );
+        rainbow( 0, 'LET IT SNOW, LET IT SNOW, LET IT SNOW', $tick );
+    };
+}
+
+sub fireplace {
+    return sub {
+        my ($tick) = @_;
+        my $width = min( 60, $W - 4 );
+        my $left  = int( ( $W - $width ) / 2 );
+        my $top   = max( 2, int( ( $H - 18 ) / 2 ) );
+        my $floor = min( $H - 2, $top + 18 );
+
+        # bricks, then the mantel and the dark opening
+        for my $y ( $top + 2 .. $floor - 1 ) {
+            my $brick = $y % 2 ? '|___' : '__|_';
+            text( $left + 2, $y, substr( $brick x $W, 0, $width - 4 ), 'dred' );
+        }
+        text( $left, $top,     '=' x $width, 'brown' );
+        text( $left, $top + 1, '=' x $width, 'tan' );
+
+        # a garland of blinking lights along the mantel
+        for ( my $x = 1 ; $x < $width - 1 ; $x += 3 ) {
+            dot( $left + $x, $top + 1, 'o',
+                $bright[ ( $x + int( $tick / 3 ) ) % @bright ] );
+        }
+
+        my $open  = int( $width / 2 );
+        my $inner = $left + int( ( $width - $open ) / 2 );
+        my $roof  = min( $top + 7, $floor - 4 );
+        text( $inner, $_, ' ' x $open, 'white' ) for $roof .. $floor - 1;
+        text( $inner, $roof - 1, '_' x $open, 'grey' );
+
+        # flames are tallest and hottest in the middle
+        my $tallest = $floor - 1 - $roof;
+        for my $x ( 1 .. $open - 2 ) {
+            my $middle = 1 - abs( $x - $open / 2 ) / ( $open / 2 );
+            my $reach  = $tallest * $middle * ( 0.5 + rand 0.7 );
+            for my $h ( 0 .. int($reach) ) {
+                last if $h >= $tallest;
+                my $heat = $h / ( $reach + 1 );
+                dot(
+                    $inner + $x,
+                    $floor - 2 - $h,
+                    $heat < 0.35 ? pick( '#', '&', '$' )
+                    : $heat < 0.65 ? pick( '(', ')', '*' )
+                    : pick( '\'', '^', '.', ' ' ),
+                    $heat < 0.35 ? 'yellow' : $heat < 0.65 ? 'orange' : 'red'
+                );
+            }
+        }
+        text( $inner + 2, $floor - 1,
+            substr( '(@@)===' x 10, 0, $open - 4 ), 'brown' );
+
+        # stockings hang beside the opening and sway a little
+        my $sway = int( $tick / 8 ) % 2;
+        my $i    = 0;
+        for my $x ( $left + 3, $inner - 8, $inner + $open + 2, $left + $width - 9 )
+        {
+            my $color = ( qw(red green red green) )[ $i++ ];
+            sprite( $x + ( $i % 2 ? $sway : 0 ), $top + 2,
+                sub { $_[2] < 2 ? 'white' : $color },
+                '  |', '[####]', ' |##|', ' |##|_', ' |####)' );
+        }
+        text( 0, $floor, '_' x $W, 'brown' );
+        rainbow( 0, 'CHESTNUTS ROASTING ON AN OPEN FIRE', $tick );
+    };
+}
+
+my %scenes = (
+    tree      => \&tree,
+    village   => \&village,
+    santa     => \&santa,
+    snowman   => \&snowman,
+    fireplace => \&fireplace,
+);
+
+# -------------------------------- main ------------------------------
+
+# bash runs this with the command, the word being typed and the one before it
+if ( $ENV{COMP_LINE} ) {
+    my ( $word, $previous ) = ( $ARGV[1] // '', $ARGV[2] // '' );
+    exit if $previous eq '-t';    # a number of seconds goes here
+    say for grep { index( $_, $word ) == 0 }
+      ( sort( keys %scenes ), qw(-h -l -t -w) );
+    exit;
+}
+
+my $usage = "usage: xmas [-l] [-w] [-t SECONDS] [SCENE]\n";
+my ( $seconds, $only ) = (15);
+
+while (@ARGV) {
+    my $arg = shift @ARGV;
+    if    ( $arg eq '-l' ) { say for sort keys %scenes; exit }
+    elsif ( $arg eq '-h' || $arg eq '--help' ) { print $usage; exit }
+    elsif ( $arg eq '-w' ) { $words = 1 }
+    elsif ( $arg eq '-t' ) {
+        $seconds = shift @ARGV // '';
+        die $usage unless $seconds =~ /^[1-9]\d*$/;
+    }
+    elsif ( $scenes{$arg} ) { $only = $arg }
+    else                    { die $usage }
+}
+
+sub size {
+    my ( $rows, $cols ) =
+      ( qx{stty size 2>/dev/null </dev/tty} // '' ) =~ /^(\d+) (\d+)/;
+    ( $H, $W ) = ( $rows || 24, $cols || 80 );
+}
+
+my ( $done, $resized ) = ( 0, 0 );
+$SIG{INT} = $SIG{TERM} = $SIG{HUP} = sub { $done = 1 };
+$SIG{WINCH} = sub { $resized = 1 };
+
+$| = 1;
+size();
+print "\e[?25l\e[2J";    # hide the cursor, clear once
+
+my @queue;
+until ($done) {
+    @queue = shuffle( keys %scenes ) unless @queue;
+    my $name  = $only // shift @queue;
+    my $scene = $scenes{$name}->();
+    my $ends  = time + $seconds;
+    print "\e[0m\e[2J";
+    for ( my $tick = 0 ; !$done ; $tick++ ) {
+        if ($resized) {
+            $resized = 0;
+            size();
+            print "\e[0m\e[2J";
+            last;    # start a scene again at the new size
+        }
+        last if !$only && time >= $ends;
+        blank();
+        $scene->($tick);
+        render();
+        select undef, undef, undef, 0.12;
+    }
+}
+
+print "\e[0m\e[2J\e[H\e[?25h";    # clear up and show the cursor again

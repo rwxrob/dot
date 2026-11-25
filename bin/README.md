@@ -13,7 +13,7 @@ directory). Retired scripts live in [`deprecated`](deprecated).
 |[ask](ask)| Run `opencode` from `~/.local/share/ask`, continuing the last session |
 |[banner](banner)| Colorful text banner in `figlet` futura font |
 |[bannerfishies](bannerfishies)| Banner with fishies in TMUX pane |
-|[bannerlights](bannerlights)| Banner with `lights` in TMUX pane |
+|[bannerlights](bannerlights)| `lights` in a TMUX pane on top with a banner under it |
 |[bannerneo](bannerneo)| Banner with `neo` in TMUX pane |
 |[bannerwatchcow](bannerwatchcow)| Banner with `watchcow` in TMUX pane |
 |[batc](batc)| Find command in PATH and send to `bat` |
@@ -306,6 +306,7 @@ directory). Retired scripts live in [`deprecated`](deprecated).
 |[ws](ws)| This is an unoptimized prototype with lots of subshells in preparation |
 |[x](x)| |
 |[x_cmds](x_cmds)| |
+|[xmas](xmas)| Random, colorful ASCII Christmas animations |
 |[youtube-dl-audio](youtube-dl-audio)| ignore-errors --output "%(title)s.%(ext)s" \ |
 |[yqdiff](yqdiff)| This script reliably compares the differences between two YAML files |
 |[yt-transcribe](yt-transcribe)| |
