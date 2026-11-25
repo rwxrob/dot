@@ -23,7 +23,7 @@
 ## Pruning
 
 - Prune conservatively: move retired scripts to `bin/deprecated/` (off `PATH`) instead of deleting them, and remove their rows from `bin/README.md`
-- All Twitch tooling (`bin/twitch-*` and other Twitch bits) is to be replaced by nomadirl; leave it in place until nomadirl is installed and working
+- The Twitch scripts are retired; nomadirl replaces them, so do not add Twitch tooling back
 
 ## Commits
 

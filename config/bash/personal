@@ -7,7 +7,6 @@
 
 # ----------------------------- environment --------------------------
 
-export TWITCH_BROADCASTER_ID=447179030
 export PDFS="$HOME/usb/pdfs"
 export VIRTUALMACHINES="$HOME/VirtualMachines"
 

@@ -23,7 +23,6 @@ directory). Retired scripts live in [`deprecated`](deprecated).
 |[buildadoc](buildadoc)| Build adoc stuff in `.` or `./docs/` |
 |[bullets](bullets)| Joins all fields of line with bullets |
 |[cal](cal)| Three month calendar with current date |
-|[categories](categories)| |
 |[changed](changed)| Print full path to all changed files in directory |
 |[checkurls](checkurls)| Check for broken URLs in web sites |
 |[close](close)| Close GitHub issue with `gh` |
@@ -40,7 +39,6 @@ directory). Retired scripts live in [`deprecated`](deprecated).
 |[cozycoding](cozycoding)| |
 |[crnd](crnd)| |
 |[cronoji](cronoji)| |
-|[curllast](curllast)| |
 |[currently](currently)| |
 |[d](d)| |
 |[dancing](dancing)| |
@@ -103,7 +101,6 @@ directory). Retired scripts live in [`deprecated`](deprecated).
 |[gpt](gpt)| Submit ChatGPT API query through `mods` |
 |[grep-repo-names](grep-repo-names)| |
 |[grepall](grepall)| |
-|[gstreamd](gstreamd)| Starts up an nginx server in a docker container on localhost enabling |
 |[haschanged](haschanged)| |
 |[hasissue](hasissue)| |
 |[hboostdates](hboostdates)| |
@@ -288,22 +285,6 @@ directory). Retired scripts live in [`deprecated`](deprecated).
 |[trapterm](trapterm)| |
 |[trimfirst](trimfirst)| Remove first line of all files given as arguments |
 |[trimlast](trimlast)| Remove last line of all files given as arguments |
-|[twitch-channel](twitch-channel)| Return Twitch channel data |
-|[twitch-formats](twitch-formats)| Return available Twitch stream quality formats |
-|[twitch-id](twitch-id)| Return Twitch broacast_id for a Twitch channel |
-|[twitch-last](twitch-last)| |
-|[twitch-mark](twitch-mark)| |
-|[twitch-marks](twitch-marks)| |
-|[twitch-mock-app-token](twitch-mock-app-token)| Fetch an app token from running twitch mock API server |
-|[twitch-mock-clientid](twitch-mock-clientid)| Fetch a client ID from running twitch mock API server |
-|[twitch-mock-clientsecret](twitch-mock-clientsecret)| Fetch a client secret from running twitch mock API server |
-|[twitch-mock-users-logins](twitch-mock-users-logins)| Fetch list of all users on mock API server |
-|[twitch-status](twitch-status)| |
-|[twitch-streams](twitch-streams)| arg red $ \ |
-|[twitch-title](twitch-title)| |
-|[twitch-user](twitch-user)| Return Twitch login user data |
-|[twitch-videos](twitch-videos)| |
-|[twitch-view](twitch-view)| View a Twitch channel with mvp |
 |[txt](txt)| Render standard input Markdown as plain text with pandoc |
 |[uidof](uidof)| Print owner UID of file |
 |[unbase](unbase)| |
@@ -316,7 +297,6 @@ directory). Retired scripts live in [`deprecated`](deprecated).
 |[vidoffset](vidoffset)| local vids="$HOME/Videos/Recordings" |
 |[vidoffsetsec](vidoffsetsec)| |
 |[vids](vids)| |
-|[vilast](vilast)| |
 |[vimcheat](vimcheat)| |
 |[vimpluginstall](vimpluginstall)| |
 |[watchcow](watchcow)| |
@@ -330,6 +310,5 @@ directory). Retired scripts live in [`deprecated`](deprecated).
 |[youtube-dl-audio](youtube-dl-audio)| ignore-errors --output "%(title)s.%(ext)s" \ |
 |[yqdiff](yqdiff)| This script reliably compares the differences between two YAML files |
 |[yt-transcribe](yt-transcribe)| |
-|[ytfoot](ytfoot)| |
 |[yyy](yyy)| |
 |[zet4mkv](zet4mkv)| |
