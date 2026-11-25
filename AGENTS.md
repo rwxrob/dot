@@ -35,6 +35,10 @@
 - Every script in `bin/` is executable and has exactly one row in `bin/README.md`
 - Lint and format Markdown with `rumdl` (config in `config/vim/rumdl.toml`)
 
+## Streaming and clips
+
+- Clips are always portrait with two regions: my face on top and the relevant section of the screen on the bottom; judge terminal font size and OBS layout for phone readability with that in mind
+
 ## Commits
 
 - Never add `Co-authored-by: Copilot` or any Copilot trailer to commits
