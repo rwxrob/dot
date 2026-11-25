@@ -1,29 +1,70 @@
 #!/usr/bin/perl
 
-my $clear  = "[2J";
-my $curoff = "[?25l";
-my $curon  = "[?25h";
+# Colorful blinking holiday lights until interrupted. Each frame is drawn over
+# the previous one in a single write, clearing the screen only at the start, so
+# that it does not flicker.
 
-sub cleanup {
-    print "$curon$clear";
-    exit 0;
+use v5.26;
+use strict;
+use warnings;
+
+my $reset = "\e[0m";
+my $wire  = "\e[1;32m";    # solarized base01
+
+# yellow orange red magenta violet blue cyan green base3
+my @colors = map {"\e[${_}m"}
+  qw(0;33 1;31 0;31 0;35 1;35 0;34 0;36 0;32 1;37);
+
+# one bulb: the first three rows are wire and socket, the rest is glass
+my @socket = ( q{.--._.--}, q{   _Y_  }, q{  [___] } );
+my @glass  = (
+    q{  /:' \ },
+    q{ |::   |},
+    q{ \::.  /},
+    q{  \::./ },
+    q{   '='  },
+);
+my $bulbs  = 8;
+my $margin = ' ' x 7;
+
+sub frame {
+    my @lit   = map { $colors[ rand @colors ] } 1 .. $bulbs;
+    my @lines = ('');
+    for my $row (@socket) {
+        push @lines, $margin . ( $wire . $row ) x $bulbs;
+    }
+    for my $row (@glass) {
+        push @lines, $margin . join '', map { $_ . $row } @lit;
+    }
+    $lines[-1] .= $reset;
+    return @lines;
 }
-$SIG{'INT'}  = \&cleanup;
-$SIG{'TERM'} = \&cleanup;
 
-print $curoff;
-
-my $pid = fork();
-if ( !defined $pid ) {
-    die "Failed to fork: $!";
+# a frame taller than the terminal would scroll it on every draw
+sub height {
+    my ($rows) = ( qx{stty size 2>/dev/null </dev/tty} // '' ) =~ /^(\d+)/;
+    return $rows || 1000;
 }
 
-if ( $pid == 0 ) {
-    exec 'python3', "$ENV{REPOS}/github.com/skilstak/pyfun/lib/pylights.py"
-      or die "Failed to exec pylights";
-}
-else {
-    waitpid( $pid, 0 );
-    print $curon;
+my ( $done, $resized, $rows ) = ( 0, 1, 0 );
+$SIG{INT} = $SIG{TERM} = $SIG{HUP} = sub { $done = 1 };
+$SIG{WINCH} = sub { $resized = 1 };
+
+$| = 1;
+print "\e[?25l";    # hide the cursor
+
+until ($done) {
+    my $clear = '';
+    if ($resized) {
+        ( $resized, $rows, $clear ) = ( 0, height(), "\e[2J" );
+    }
+    my @lines = frame();
+    splice @lines, $rows if @lines > $rows;
+
+    # home, draw over the old frame, then erase anything left below it; no
+    # final newline, which could scroll
+    print $clear . "\e[H" . join( "\n", @lines ) . "$reset\e[J";
+    select undef, undef, undef, 0.5;
 }
 
+print "$reset\e[2J\e[H\e[?25h";    # clear up and show the cursor again

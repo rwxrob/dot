@@ -151,7 +151,7 @@ directory). Retired scripts live in [`deprecated`](deprecated).
 |[latest](latest)| |
 |[latest-gh-release](latest-gh-release)| |
 |[lh](lh)| |
-|[lights](lights)| |
+|[lights](lights)| Blinking holiday lights in the terminal |
 |[listening](listening)| |
 |[livecal](livecal)| |
 |[liveicon](liveicon)| |
