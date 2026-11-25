@@ -20,6 +20,11 @@
 - There is no `SCRIPTS` variable: `bashrc` puts `$DOTFILES/bin` on `PATH`, and scripts that need their own directory (like `newx`) find it with `realpath "$0"`; never reintroduce `$SCRIPTS` or depend on `~/Scripts`
 - Scripts and `gh` aliases that need the GitHub owner should ask `gh api user -q .login` or use `$GITUSER`, not `$USER`
 
+## Pruning
+
+- Prune conservatively: move retired scripts to `bin/deprecated/` (off `PATH`) instead of deleting them, and remove their rows from `bin/README.md`
+- All Twitch tooling (`bin/twitch-*` and other Twitch bits) is to be replaced by nomadirl; leave it in place until nomadirl is installed and working
+
 ## Commits
 
 - Never add `Co-authored-by: Copilot` or any Copilot trailer to commits
