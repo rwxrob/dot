@@ -1,0 +1,35 @@
+#!/bin/sh
+set -e
+
+# Ubuntu's apt repos do not ship rumdl. Install the free community .deb
+# from https://github.com/dariogriffo/rumdl-debian with apt (no subscription).
+
+die() {
+	echo "install-rumdl: $*" >&2
+	exit 1
+}
+
+command -v curl >/dev/null || die "curl is required"
+command -v jq >/dev/null || die "jq is required"
+
+case $(uname -m) in
+x86_64) arch=amd64 ;;
+aarch64 | arm64) arch=arm64 ;;
+*) die "unsupported architecture: $(uname -m)" ;;
+esac
+
+api=https://api.github.com/repos/dariogriffo/rumdl-debian/releases/latest
+url=$(
+	curl -fsSL "$api" |
+		jq -r --arg arch "$arch" \
+			'.assets[] | select(.name | endswith("_" + $arch + ".deb")) | .browser_download_url' |
+		head -n 1
+)
+[ -n "$url" ] || die "no rumdl .deb found for $arch"
+
+dir=$(mktemp -d)
+trap 'rm -rf "$dir"' EXIT
+cd "$dir"
+curl -fsSLO "$url"
+sudo apt install -y ./*.deb
+rumdl --version

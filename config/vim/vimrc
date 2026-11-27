@@ -450,11 +450,11 @@ noremap <C-p> <C-b>
 
 " set TMUX window name to name of file
 if exists('$TMUX')
-    " list form avoids the shell, so odd filenames can't break or inject
+    " shellescape avoids injection; string form also avoids the
+    " system({List}) E730 bug when 'verbose' is 4 or higher
     augroup VimrcTmux
       autocmd!
-      autocmd BufEnter * call system(['tmux', 'rename-window',
-            \ expand('%:p:h:t') . '/' . expand('%:t')])
+      autocmd BufEnter * call system('tmux rename-window ' . shellescape(expand('%:p:h:t') . '/' . expand('%:t')))
     augroup END
 endif
 

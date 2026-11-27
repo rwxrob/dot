@@ -1,0 +1,70 @@
+#!/bin/sh
+set -e
+
+# Use a Claude Pro (or Max/Ultra) subscription from OpenCode through its
+# Claude Agent provider. Both login steps are interactive, so run this from
+# a terminal. See https://dev.opencode.ai/docs/claude-agent
+
+die() {
+	echo "install-claude-agent: $*" >&2
+	exit 1
+}
+
+command -v curl >/dev/null || die "curl is required"
+command -v dpkg >/dev/null || die "dpkg is required"
+command -v opencode >/dev/null ||
+	die "install OpenCode first with install/ubuntu/install-opencode"
+
+on_path=yes
+claude=$(command -v claude || true)
+if [ -z "$claude" ]; then
+	on_path=no
+	claude=$HOME/.local/bin/claude
+fi
+
+if [ ! -x "$claude" ]; then
+	echo "Installing Claude Code..."
+	curl -fsSL https://claude.ai/install.sh | bash
+	[ -x "$claude" ] || die "claude not found at $claude after install"
+fi
+
+ver=$("$claude" --version | awk '{print $1}')
+if ! dpkg --compare-versions "$ver" ge 2.1.248; then
+	echo "Updating Claude Code ($ver)..."
+	"$claude" update || true
+	ver=$("$claude" --version | awk '{print $1}')
+	dpkg --compare-versions "$ver" ge 2.1.248 ||
+		die "Claude Code $ver is too old (need 2.1.248+); try $claude update or sudo apt upgrade claude-code"
+fi
+echo "Claude Code $ver"
+
+# The native installer puts claude in ~/.local/bin, which the shared
+# OpenCode server may not have on its PATH.
+if [ "$on_path" = no ]; then
+	echo "Pointing OpenCode at $claude"
+	opencode service set env OPENCODE_CLAUDE_PATH "$claude"
+fi
+
+if "$claude" auth status --text >/dev/null 2>&1; then
+	echo "Claude Code is already signed in"
+else
+	[ -t 0 ] && [ -t 1 ] ||
+		die "run from a terminal to sign in: $claude auth login"
+	echo "Sign in to Claude Code with your Claude Pro account..."
+	"$claude" auth login
+fi
+
+if opencode auth list 2>/dev/null | grep -qi claude-agent; then
+	echo "Claude Agent is already connected to OpenCode"
+else
+	[ -t 0 ] && [ -t 1 ] ||
+		die "run from a terminal to connect: opencode auth login claude-agent"
+	echo "Connecting Claude Agent to OpenCode..."
+	opencode auth login claude-agent
+fi
+
+models=$(opencode models 2>/dev/null | grep '^claude-agent/' || true)
+[ -n "$models" ] || die "no claude-agent models listed; try /connect in OpenCode"
+printf '%s\n' "$models" | head
+
+echo "Done. These dotfiles default to claude-agent/sonnet; use /models to change it."
