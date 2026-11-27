@@ -17,6 +17,11 @@ export LANG=en_US.UTF-8
 
 _have w3m && export HELP_BROWSER=w3m
 
+# under WSL with no Linux opener, gh and others need the Windows one for URLs
+# (not explorer.exe, which can report failure even when it works)
+[[ -z "$BROWSER" ]] && ! _have xdg-open && _have rundll32.exe &&
+	export BROWSER='rundll32.exe url.dll,FileProtocolHandler'
+
 export USER="${USER:-$(whoami)}"
 
 # GITUSER, DOTFILES and TZ are recorded by config/bash/setup so the login name
