@@ -1,0 +1,9 @@
+#!/bin/sh
+set -e
+
+# what fishies and bannerfishies need; apt has Curses but not Term::Animation
+sudo apt-get update
+sudo apt-get -y install libcurses-perl cpanminus make figlet lolcat
+
+# into ~/perl5, where fishies looks, so CPAN never needs root
+cpanm --local-lib "$HOME/perl5" Term::Animation

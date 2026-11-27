@@ -1,0 +1,10 @@
+#!/bin/sh
+set -e
+
+# what fishies and bannerfishies need
+brew install figlet lolcat
+
+# fishies runs with /usr/bin/perl, so build for that one (not Homebrew's), into
+# ~/perl5, where fishies looks, so CPAN never needs root
+curl -fsSL https://cpanmin.us |
+	/usr/bin/perl - --local-lib "$HOME/perl5" Curses Term::Animation

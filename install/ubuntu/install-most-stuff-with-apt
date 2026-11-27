@@ -1,7 +1,10 @@
 #!/bin/sh
 
-sudo apt-install update
-sudo apt-get -y install nmap jq yq pcregrep lynx make uidmap ruby python-is-python3 libcurses-perl build-essential libncurses-dev autoconf entr pip curl bash-completion skopeo buildah postgresql-client-common apt-transport-https ca-certificates curl gpg shellcheck shfmt tree fio neovim
+sudo apt-get update
+sudo apt-get -y install nmap jq yq pcregrep lynx make uidmap ruby python-is-python3 libcurses-perl build-essential libncurses-dev autoconf entr pip curl bash-completion skopeo buildah postgresql-client-common apt-transport-https ca-certificates curl shellcheck shfmt tree fio neovim tmux locales
+
+# bashrc sets LANG=en_US.UTF-8, which a new Ubuntu (as under WSL) may lack
+sudo locale-gen en_US.UTF-8
 
 # yq is missing because the apt version is the shitty python version
 
