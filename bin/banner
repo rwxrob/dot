@@ -2,8 +2,9 @@
 use v5.26;
 use File::Basename;
 
-not `command -v figl` and say 'figl not found' and exit 1;
-not `command -v lolcat` and say 'lolcat not found' and exit 1;
+# the redirect makes Perl use a shell; "command" is a builtin, not a program
+not `command -v figl 2>/dev/null` and say 'figl not found' and exit 1;
+not `command -v lolcat 2>/dev/null` and say 'lolcat not found' and exit 1;
 
 my $clear  = "[2J";
 my $curoff = "[?25l";

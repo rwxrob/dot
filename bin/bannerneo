@@ -6,8 +6,9 @@ my $script   = basename($0);
 my ($proggy) = $script =~ /^banner(\S+)/;
 my $lines    = `tput lines` - 6;
 
-not `command -v $proggy` and say "$proggy not found" and exit 1;
-not `command -v lolcat`  and say 'lolcat not found'  and exit 1;
+# the redirect makes Perl use a shell; "command" is a builtin, not a program
+not `command -v $proggy 2>/dev/null` and say "$proggy not found" and exit 1;
+not `command -v lolcat 2>/dev/null`  and say 'lolcat not found'  and exit 1;
 
 my $what = join ' ', @ARGV;
 if ( not $what ) {

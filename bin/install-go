@@ -4,9 +4,10 @@ use v5.26;
 # Installs the latest Go release into ~/.local/go (no root needed) on macOS
 # and Linux.
 
-not `command -v jq`   and die "jq not found";
-not `command -v tar`  and die "tar not found";
-not `command -v curl` and die "curl not found";
+# the redirect makes Perl use a shell; "command" is a builtin, not a program
+not `command -v jq 2>/dev/null` and die "jq not found";
+not `command -v tar 2>/dev/null` and die "tar not found";
+not `command -v curl 2>/dev/null` and die "curl not found";
 
 sub lookup_file {
     my $os   = lc(`uname -s`);
