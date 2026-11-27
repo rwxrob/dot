@@ -184,9 +184,18 @@ __ps1() {
 	B=$(git branch --show-current 2>/dev/null)
 	[[ $dir = "$B" ]] && B=.
 	countme="$USER$PROMPT_AT$(hostname):$dir($B)\$ "
+	[[ "${VENVS[$PWD]}" =~ ^y ]] && P=${P/\$/🐍}
 
 	[[ $B == master || $B == main ]] && b="$r"
-	[[ -n "$B" ]] && B="$g($b$B$g)"
+
+	# SECURITY: bash expands $(...) in PS1 every time it shows it, and anyone
+	# can name a directory or branch that way. So PS1 gets only references to
+	# these variables, never their values, which are not expanded again.
+	# Control characters could send escape codes to the terminal.
+	_PS1_DIR=${dir//[[:cntrl:]]/?}
+	_PS1_BRANCH=$B
+	dir='${_PS1_DIR}'
+	[[ -n "$B" ]] && B="$g($b"'${_PS1_BRANCH}'"$g)"
 
 	short="$u\u$g$PROMPT_AT$h\h$g:$w$dir$B$p$P$x "
 	long="${g}╔$u\u$g$PROMPT_AT$h\h$g:$w$dir$B\n${g}╚$p$P$x "
@@ -200,10 +209,10 @@ __ps1() {
 		PS1="$short"
 	fi
 
-	[[ "${VENVS[$PWD]}" =~ ^y ]] && PS1="${PS1//\$/🐍}"
-
 	if _have tmux && [[ -n "$TMUX" ]]; then
-		tmux rename-window "$(wd)"
+		local name
+		name=$(wd)
+		tmux rename-window "${name//\#/##}" # tmux expands a lone #
 	fi
 }
 
@@ -223,19 +232,29 @@ wd() {
 # directories and node_modules are never searched. $CDD_DEPTH (default 4)
 # limits how deep to look. Every hit is remembered in
 # ${XDG_CACHE_HOME:-~/.cache}/cdd/paths and reused while the directory still
-# exists; -f ignores the memory and searches again (and refreshes it). Plain
-# cd is never changed, so scripts are unaffected.
+# exists; -f ignores the memory and searches again (and refreshes it). NAME may
+# also be a full path, or one that tab completion shortened with …. Plain cd is
+# never changed, so scripts are unaffected.
 cdd() {
-	local force=0 name root dir mode max="${CDD_DEPTH:-4}"
+	local force=0 name root dir mode max="${CDD_DEPTH:-4}" REPLY
 	local cache="${XDG_CACHE_HOME:-$HOME/.cache}/cdd/paths" tmp
 	local -a roots match
 	[[ "$1" == -f ]] && { force=1; shift; }
+	# a full path (as tab completion inserts) needs no search or memory
+	if [[ "$1" == /* && -d "$1" ]]; then
+		cd -- "$1" || return
+		return
+	fi
+	if [[ "$1" == *…* ]] && _cdd_expand "$1"; then
+		cd -- "$REPLY" || return
+		return
+	fi
 	name="${1%/}"
 	[[ -z "$name" ]] && { echo "usage: cdd [-f] NAME" >&2; return 2; }
 
 	if ((!force)) && [[ -r "$cache" ]]; then
 		dir=$(N="$name" awk -F'\t' '$1 == ENVIRON["N"] { print $2; exit }' "$cache")
-		if [[ -n "$dir" && -d "$dir" ]]; then
+		if [[ "$dir" == /* && -d "$dir" ]]; then
 			cd -- "$dir" || return
 			return
 		fi
@@ -256,6 +275,8 @@ cdd() {
 				-type d "${match[@]}" -print 2>/dev/null |
 				awk -F/ '{print NF, $0}' | sort -n -s | head -n1 | cut -d' ' -f2-)
 			if [[ -n "$dir" ]]; then
+				# a relative root such as "." must not end up in the memory
+				[[ "$dir" == /* ]] || dir="$PWD/${dir#./}"
 				mkdir -p "${cache%/*}"
 				tmp="$cache.$$"
 				{
@@ -270,6 +291,96 @@ cdd() {
 	echo "cdd: no directory named $name below ${CDD:-.}" >&2
 	return 1
 }
+
+# sets REPLY to the one remembered directory that a path shortened with …
+# stands for; fails if there is none or more than one
+_cdd_expand() {
+	local short="$1" pre post dir found=""
+	local cache="${XDG_CACHE_HOME:-$HOME/.cache}/cdd/paths"
+	[[ "$short" == "~/"* ]] && short="$HOME/${short#??}"
+	pre="${short%%…*}" post="${short#*…}"
+	[[ -r "$cache" ]] || return 1
+	while IFS=$'\t' read -r _ dir; do
+		[[ "$dir" == "$pre"*"$post" && -d "$dir" ]] || continue
+		[[ -z "$found" || "$found" == "$dir" ]] || return 1
+		found="$dir"
+	done <"$cache"
+	[[ -n "$found" ]] && REPLY="$found"
+}
+
+# shell-quotes a path into REPLY, leaving a leading ~/ and any … bare so that
+# they stay readable
+_cdd_quote() {
+	local rest="$1" lead="" a b
+	plain="$1" # for the caller: the same text before quoting
+	[[ "$rest" == "~/"* ]] && lead="~/" rest="${rest#??}"
+	if [[ "$rest" == *…* ]]; then
+		a="${rest%%…*}" b="${rest#*…}"
+		[[ -n "$a" ]] && printf -v a '%q' "$a"
+		printf -v b '%q' "$b"
+		REPLY="$lead$a…$b"
+	else
+		printf -v rest '%q' "$rest"
+		REPLY="$lead$rest"
+	fi
+}
+
+# sets REPLY to DIR quoted to fit in MAX columns: whole if possible, then with
+# ~, then with directories in the middle (or front) replaced by …
+_cdd_fit() {
+	local dir="$1" max="$2" short head tail i
+	local -a parts
+	_cdd_quote "$dir"
+	((${#REPLY} <= max)) && return
+	short="$dir"
+	[[ "$dir" == "$HOME/"* ]] && short="~/${dir#"$HOME/"}"
+	_cdd_quote "$short"
+	((${#REPLY} <= max)) && return
+	IFS=/ read -ra parts <<<"$short"
+	head="${parts[0]}/${parts[1]}/"
+	# keep the start and as many trailing directories as fit
+	for ((i = 3; i < ${#parts[@]}; i++)); do
+		printf -v tail '/%s' "${parts[@]:i}"
+		_cdd_quote "$head…$tail"
+		((${#REPLY} <= max)) && return
+	done
+	_cdd_quote "…/${parts[-1]}"
+	((${#REPLY} <= max))
+}
+
+# tab completes cdd with the names it remembers (a loop, because compgen -W
+# would expand, and so could run, whatever is in a cached name); a lone match
+# becomes its path, shortened to fit on the line, if that still exists, except
+# after -f
+_cdd_complete() {
+	local cur="${COMP_WORDS[COMP_CWORD]}" name dir path
+	local cache="${XDG_CACHE_HOME:-$HOME/.cache}/cdd/paths"
+	COMPREPLY=()
+	[[ -r "$cache" ]] || return 0
+	while IFS=$'\t' read -r name dir; do
+		[[ "$name" == "$cur"* ]] || continue
+		COMPREPLY+=("$(printf '%q' "$name")")
+		path="$dir"
+	done <"$cache"
+	if ((${#COMPREPLY[@]} == 1)) && [[ "${COMP_WORDS[1]}" != -f &&
+		"$path" == /* && -d "$path" ]]; then
+		# room left after the prompt's last line, "cdd " and a space
+		local prompt="${PS1@P}" REPLY full short plain
+		prompt="${prompt##*$'\n'}"
+		while [[ "$prompt" == *$'\001'*$'\002'* ]]; do
+			prompt="${prompt%%$'\001'*}${prompt#*$'\002'}"
+		done
+		_cdd_fit "$path" $((${COLUMNS:-80} - ${#prompt} - 6)) || return 0
+		short="$REPLY"
+		printf -v full '%q' "$path"
+		# only shorten if cdd can find its way back; otherwise keep the name
+		if [[ "$short" == *…* ]]; then
+			_cdd_expand "$plain" && [[ "$REPLY" == "$path" ]] || return 0
+		fi
+		COMPREPLY=("$short")
+	fi
+}
+complete -F _cdd_complete cdd
 
 # -------------------- python virtual environments -------------------
 #      (get rid of this when you finally remember to do uv run)
