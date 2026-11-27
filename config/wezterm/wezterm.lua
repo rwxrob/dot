@@ -1,21 +1,24 @@
 local wezterm = require 'wezterm'
+local is_mac = wezterm.target_triple:find('darwin') ~= nil
+local is_windows = wezterm.target_triple:find('windows') ~= nil
 
 -- open the first window where I like it: filling the laptop screen below the
 -- main display (pixel offsets from the main screen)
-wezterm.on('gui-startup', function(cmd)
-  local args = cmd or {}
-  args.position = args.position or {
-    x = 420,
-    y = 2282,
-    origin = 'MainScreen',
-  }
-  wezterm.mux.spawn_window(args)
-end)
+if is_mac then
+  wezterm.on('gui-startup', function(cmd)
+    local args = cmd or {}
+    args.position = args.position or {
+      x = 420,
+      y = 2282,
+      origin = 'MainScreen',
+    }
+    wezterm.mux.spawn_window(args)
+  end)
+end
 
-return {
+local config = {
   audible_bell = "Disabled",
   window_close_confirmation = 'NeverPrompt',
-  default_prog = {'/opt/homebrew/bin/bash','--login'},
   color_scheme = 'Gruvbox Material (Gogh)',
   font = wezterm.font_with_fallback({
     'UbuntuMono Nerd Font',
@@ -44,7 +47,11 @@ send_composed_key_when_right_alt_is_pressed = true,
   },
 }
 
+if is_mac then
+  config.default_prog = {'/opt/homebrew/bin/bash', '--login'}
+elseif is_windows then
+  -- bash in the default WSL distribution, starting in its home directory
+  config.default_prog = {'wsl.exe', '--cd', '~', '--exec', 'bash', '--login'}
+end
 
-
-
-
+return config

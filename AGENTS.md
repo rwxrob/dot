@@ -32,8 +32,15 @@
 - Paths use lowercase `repos`, never `Repos` (macOS ignores the difference, Linux does not)
 - `bin/open` shadows the system `open`, so it must stay a drop-in: every option and path passes straight through
 - Use `#!/usr/bin/env bash` (`/usr/bin/bash` does not exist on macOS)
+- In Perl, write `` `command -v NAME 2>/dev/null` ``: without the redirect Perl runs it with no shell, which fails on Linux because `command` is a builtin
+- CPAN modules go in `~/perl5` (never `sudo cpan`); what `fishies` needs is installed by `install/{ubuntu,mac}/install-fishies`
 - Every script in `bin/` is executable and has exactly one row in `bin/README.md`
 - Lint and format Markdown with `rumdl` (config in `config/vim/rumdl.toml`)
+
+## WezTerm
+
+- Under WSL, WezTerm is the Windows program: `config/wezterm/setup` copies `wezterm.lua` to `%USERPROFILE%\.wezterm.lua` (never a link into WSL; a differing file is backed up first) and installs missing fonts on the Windows host for the current user only, without administrator rights; rerun it after editing `wezterm.lua`
+- One `wezterm.lua` serves every OS; guard OS-specific settings (shell path, window position) with `wezterm.target_triple`
 
 ## Streaming and clips
 
