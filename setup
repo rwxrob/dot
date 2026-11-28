@@ -10,7 +10,7 @@ fi
 
 # one tool failing (usually because it is not installed) never stops the rest
 failed=
-for i in bash wezterm vim lynx gh git tmux k9s docker podman iam opencode; do
+for i in bash wsl wezterm vim lynx gh git tmux k9s docker podman iam opencode; do
 	if ! (cd "$root/config/$i" && ./setup); then
 		failed="$failed $i"
 	fi

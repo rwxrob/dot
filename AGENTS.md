@@ -37,6 +37,12 @@
 - Every script in `bin/` is executable and has exactly one row in `bin/README.md`
 - Lint and format Markdown with `rumdl` (config in `config/vim/rumdl.toml`)
 
+## WSL
+
+- `config/wsl/setup` acts only on WSL2 (`WSL2` in `/proc/sys/kernel/osrelease`) and silently does nothing elsewhere, including WSL1; do not loosen this to a `microsoft` match
+- `config/wsl/wslconfig` is the source for `%USERPROFILE%\.wslconfig`; `config/wsl/setup` copies it (never a link; a differing file is backed up first), so keep any host settings worth keeping in the repo copy
+- Setup never runs `wsl --shutdown`; it stops every running distribution, so leave that to the person at the keyboard
+
 ## WezTerm
 
 - Under WSL, WezTerm is the Windows program: `config/wezterm/setup` copies `wezterm.lua` to `%USERPROFILE%\.wezterm.lua` (never a link into WSL; a differing file is backed up first) and installs missing fonts on the Windows host for the current user only, without administrator rights; rerun it after editing `wezterm.lua`

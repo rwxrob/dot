@@ -1,0 +1,7 @@
+# Settings for every WSL2 distribution, copied to %USERPROFILE%\.wslconfig
+# by config/wsl/setup. They take effect after `wsl --shutdown`.
+
+[wsl2]
+# share the Windows network, so localhost works in both directions
+# (needs Windows 11 22H2 or later)
+networkingMode=mirrored

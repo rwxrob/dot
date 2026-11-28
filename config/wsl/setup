@@ -1,0 +1,39 @@
+#!/bin/sh
+set -e
+
+src=$(cd -- "$(dirname -- "$0")" && { realpath . 2>/dev/null || pwd; })
+
+# only WSL2 has anything to set up here: not WSL1, plain Linux or macOS (which
+# has no /proc); the same test bashrc uses
+if ! grep -qs WSL2 /proc/sys/kernel/osrelease; then
+	exit 0
+fi
+
+powershell=$(command -v powershell.exe ||
+	echo "$(wslpath -u 'C:\Windows')/System32/WindowsPowerShell/v1.0/powershell.exe")
+
+# run from a Windows drive so that Windows never sees a WSL path as its
+# current directory
+profile=$(cd "$(dirname -- "$powershell")" &&
+	"$powershell" -NoProfile -NonInteractive -Command \
+		'[Console]::OutputEncoding = [Text.Encoding]::UTF8; $env:USERPROFILE' \
+		</dev/null | tr -d '\r') || profile=
+if [ -z "$profile" ]; then
+	echo "cannot run PowerShell on the Windows host; is WSL interop enabled?" >&2
+	exit 1
+fi
+
+# a copy, because Windows reads this before any distribution is running
+dest="$(wslpath -u "$profile")/.wslconfig"
+if cmp -s "$src/wslconfig" "$dest"; then
+	echo "$dest is up to date"
+	exit 0
+fi
+if [ -e "$dest" ]; then
+	backup="$dest.$(date +%Y%m%d%H%M%S).bak"
+	cp "$dest" "$backup"
+	echo "Saved the old config as $backup"
+fi
+cp "$src/wslconfig" "$dest"
+echo "Copied wslconfig to $dest"
+echo "To apply it, run 'wsl --shutdown' (stops everything running in WSL)"

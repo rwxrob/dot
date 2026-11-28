@@ -40,6 +40,8 @@ When I use Windows, it is with one of two setups:
 - VS Code with Git Bash
 - WSL2 running Ubuntu, so the [Ubuntu install scripts](install/ubuntu) and the configurations in [`config/`](config) apply, with [WezTerm](https://wezterm.org) installed on Windows and opening Bash in WSL (see [`config/wezterm`](config/wezterm))
 
+Under WSL2, [`config/wsl/setup`](config/wsl/setup) copies [`wslconfig`](config/wsl/wslconfig) to `%USERPROFILE%\.wslconfig`, which turns on mirrored networking (Windows 11 22H2 or later) so `localhost` works in both directions. An existing file that differs is backed up and replaced. Apply changes with `wsl --shutdown`, which stops everything running in WSL.
+
 ## Core dependencies
 
 Before running any [`install-*`](install) script make sure the system has:
