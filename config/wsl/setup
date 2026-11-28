@@ -37,3 +37,4 @@ fi
 cp "$src/wslconfig" "$dest"
 echo "Copied wslconfig to $dest"
 echo "To apply it, run 'wsl --shutdown' (stops everything running in WSL)"
+echo "Read $src/README.md first"
