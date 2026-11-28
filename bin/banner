@@ -28,8 +28,13 @@ sub cleanup {
 $SIG{'INT'}  = \&cleanup;
 $SIG{'TERM'} = \&cleanup;
 
-print $clear. $curoff;
+print $curoff;
+my $size = '';
 while (1) {
-    print $top. `echo " $what" | figl | lolcat -f`;
+    # clear after a resize, or the text centered for the old width stays behind
+    my $now = `stty size 2>/dev/null </dev/tty`;
+    print $clear if $now ne $size or not $size;
+    $size = $now;
+    print $top. `echo "$what" | figl | lolcat -f`;
     sleep 1;
 }
