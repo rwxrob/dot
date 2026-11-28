@@ -9,6 +9,11 @@
 - `bin/ask` (and the `?` alias) always runs from `~/.local/share/ask` so there is one ongoing session
 - The standing rules for that session live in `config/opencode/ask/AGENTS.md`, symlinked there by `config/opencode/setup`; edit the repo copy, never the symlink target
 
+## OpenCode windows in tmux
+
+- In the tmux `w` list, 🤖 marks an OpenCode window and 🔔 one waiting on a response; the 🔔 is tmux's bell flag, rung by the `config/opencode/plugins/tmux-bell` CLI plugin (linked by `config/opencode/setup`)
+- The plugin rings only for the session a window is showing (and its subagents), because every window hears every session's events and windows in one directory share tabs
+
 ## GitHub user and repo location
 
 - Never assume the login name (`$USER`) is the GitHub user or that the repo is under `~/repos/github.com/<user>/dot`

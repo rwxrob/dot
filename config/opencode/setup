@@ -10,6 +10,12 @@ ln -sf "$src/cli.json" "$config_dir/cli.json"
 ln -sf "$src/opencode.jsonc" "$config_dir/opencode.jsonc"
 ls -l "$config_dir/cli.json" "$config_dir/opencode.jsonc"
 
+# local plugins, which OpenCode finds on its own (-n replaces an old link
+# instead of creating another one inside the directory it points to)
+mkdir -p "$config_dir/plugins"
+ln -sfn "$src/plugins/tmux-bell" "$config_dir/plugins/tmux-bell"
+ls -l "$config_dir/plugins/tmux-bell"
+
 # working directory for the ask script (see bin/ask)
 mkdir -p "$ask_dir"
 ln -sf "$src/ask/AGENTS.md" "$ask_dir/AGENTS.md"
