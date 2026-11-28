@@ -443,6 +443,13 @@ alias more="less -R"
 alias gitl="git log -n 5 --graph --decorate --oneline"
 alias reload='exec $SHELL -l'
 
+# pbcopy and pbpaste as on macOS, only under WSL2
+if [[ -r /proc/sys/kernel/osrelease ]] &&
+	[[ $(</proc/sys/kernel/osrelease) == *WSL2* ]]; then
+	alias pbcopy='iconv -f utf-8 -t utf-16le | clip.exe'
+	alias pbpaste="powershell.exe -NoProfile -Command Get-Clipboard | tr -d '\r'"
+fi
+
 # python/pip default to python3/pip3 except inside an activated venv,
 # where the venv's own tools must win (uv venvs have no pip3 at all)
 python() {
