@@ -1,7 +1,26 @@
 #!/usr/bin/env bash
 
 # Set the figlet default font, font directory, and centering as well as
-# defaults to passing it to lolcat for coloring.
+# defaults to passing it to lolcat for coloring. Offers to clone the fonts if
+# they are missing; run with no input to do only that.
+
+fonts="${REPOS:-$HOME/repos}/github.com/rwxrob/fonts"
+
+# asks on /dev/tty because stdin is usually the text and stdout a pipe
+need_fonts() {
+  [[ -d "$fonts/figlet" ]] && return
+  local url=https://github.com/rwxrob/fonts answer
+  echo "figl: fonts not found in $fonts" >&2
+  if [[ -t 2 ]] && { true </dev/tty; } 2>/dev/null; then
+    read -r -p "Clone $url there now? [y/N] " answer </dev/tty
+    if [[ "$answer" == [yY]* ]]; then
+      git clone --depth 1 "$url" "$fonts" >&2
+      return
+    fi
+  fi
+  echo "To get them: git clone --depth 1 $url '$fonts'" >&2
+  return 1
+}
 
 figl() {
   #font=${FIGL_FONT:-ansi-shadow}
@@ -14,8 +33,9 @@ figl() {
   done
   #clear
   for line in "${buf[@]}"; do
-    figlet -d "$REPOS/github.com/rwxrob/fonts/figlet" -f "$font" -c  "${line}" | head -6
+    figlet -d "$fonts/figlet" -f "$font" -c  "${line}" | head -6
   done
 }
 
+need_fonts || exit 1
 figl "$*"

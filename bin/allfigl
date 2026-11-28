@@ -18,6 +18,9 @@ sub cleanup {
 $SIG{'INT'}  = \&cleanup;
 $SIG{'TERM'} = \&cleanup;
 
+# offers to clone the fonts if they are missing
+system('figl </dev/null') == 0 or exit 1;
+
 print $curoff;
 
 for my $font ( glob("$fontsd/*.flf") ) {

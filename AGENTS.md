@@ -34,6 +34,7 @@
 - Use `#!/usr/bin/env bash` (`/usr/bin/bash` does not exist on macOS)
 - In Perl, write `` `command -v NAME 2>/dev/null` ``: without the redirect Perl runs it with no shell, which fails on Linux because `command` is a builtin
 - CPAN modules go in `~/perl5` (never `sudo cpan`); what `fishies` needs is installed by `install/{ubuntu,mac}/install-fishies`
+- `figl` (used by `banner`) needs the fonts in `$REPOS/github.com/rwxrob/fonts`; the `install-fishies` scripts clone it if missing, and `figl` asks before cloning it at a terminal; scripts that use those fonts run `figl </dev/null` first, before drawing anything
 - Every script in `bin/` is executable and has exactly one row in `bin/README.md`
 - Lint and format Markdown with `rumdl` (config in `config/vim/rumdl.toml`)
 

@@ -8,3 +8,7 @@ brew install figlet lolcat
 # ~/perl5, where fishies looks, so CPAN never needs root
 curl -fsSL https://cpanmin.us |
 	/usr/bin/perl - --local-lib "$HOME/perl5" Curses Term::Animation
+
+# the banner text fonts, where figl looks for them
+fonts="${REPOS:-$HOME/repos}/github.com/rwxrob/fonts"
+[ -d "$fonts" ] || git clone --depth 1 https://github.com/rwxrob/fonts "$fonts"
